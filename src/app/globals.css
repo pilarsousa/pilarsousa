@@ -1,26 +1,79 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+  RESET IDENTIDAD — Design tokens
+  Palette and typography derived from the brand moodboard.
+  Tailwind v4: tokens are declared here with @theme so they become
+  utility classes (e.g. bg-ink, text-gold, font-display).
+*/
+
+@theme {
+  /* ---- Raw brand palette (source of truth) ---- */
+  --color-ink: #080808; /* deep black — primary background */
+  --color-forest-900: #24342d; /* near-black green — secondary background */
+  --color-forest-700: #3f5d47; /* deep green — cards, accents */
+  --color-olive: #7e9d63; /* olive green — natural accents (sparing) */
+  --color-earth-900: #5a4433; /* dark brown — shadows, earth blocks */
+
+  --color-gold: #c8a45a; /* primary gold — CTAs, fine lines, icons */
+  --color-gold-soft: #e2c27a; /* soft gold — hover, warm details */
+  --color-cream-gold: #f3e2b0; /* light cream gold — soft blocks, highlights */
+  --color-earth-gold: #7a6442; /* gold brown — sober warm details */
+  --color-sand: #b39a72; /* beige earth — alt backgrounds, elegant accent */
+
+  --color-cream: #f3f1eb; /* warm white — light backgrounds, light text */
+  --color-stone: #7a7a7a; /* neutral gray — secondary text only */
+
+  /* ---- Semantic aliases (use these in components) ---- */
+  --color-background: var(--color-ink);
+  --color-surface: var(--color-forest-900);
+  --color-surface-alt: var(--color-forest-700);
+  --color-foreground: var(--color-cream);
+  --color-muted: var(--color-stone);
+  --color-accent: var(--color-gold);
+  --color-accent-soft: var(--color-gold-soft);
+
+  /* ---- Typography ---- */
+  --font-display: var(--font-cinzel); /* titles — ritual, ancient, authority */
+  --font-sans: var(--font-manrope); /* body — modern, refined, readable */
+
+  /* ---- Layout rhythm ---- */
+  --spacing-section: 7rem; /* vertical breathing room between sections */
+
+  /* ---- Animations ---- */
+  /* Slow, premium gold shimmer that drifts a gradient across text. */
+  --animate-gold-drift: gold-drift 6s ease-in-out infinite;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes gold-drift {
+  0%,
+  100% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 100% center;
   }
 }
 
+:root {
+  color-scheme: dark;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Respect users who prefer reduced motion — animations stay subtle/off. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

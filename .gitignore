@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# internal tooling & client briefing (not part of the deliverable)
+.atl/
+branding.jpeg
+colores.jpeg
+contexto-landing-reset-identidad.md
+CLAUDE.md
+AGENTS.md
