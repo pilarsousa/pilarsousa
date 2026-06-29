@@ -89,7 +89,7 @@ export function Hero() {
               alt="Volver al Origen — Bootcamp"
               priority
               sizes="(min-width: 1024px) 240px, 180px"
-              className="mb-4 h-auto w-45 lg:w-60"
+              className="mb-2 h-auto w-45 lg:w-60"
             />
           </Reveal>
 
