@@ -41,9 +41,7 @@ export function Pilar() {
             than the Hero because the copy here is long and must be read. */}
         <div className="absolute inset-0 bg-[linear-gradient(to_top,var(--color-ink)_0%,color-mix(in_oklab,var(--color-ink)_60%,transparent)_35%,transparent_70%)] lg:bg-[linear-gradient(to_right,var(--color-ink)_0%,color-mix(in_oklab,var(--color-ink)_70%,transparent)_38%,transparent_62%)]" />
 
-        {/* Top separator: a black fade from the previous section + a thin gold
-            hairline, easing the transition into this banner. */}
-        <div className="absolute inset-x-0 top-0 h-28 bg-[linear-gradient(to_bottom,#0A0908,transparent)]" />
+        {/* Thin gold hairline separating from the previous section. */}
         <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(to_right,transparent,var(--color-accent),transparent)] opacity-50" />
       </div>
 
@@ -51,18 +49,18 @@ export function Pilar() {
         {/* text-shadow on the whole column: the copy partly sits over the photo
             transition on mobile, so a soft ink shadow keeps it readable. */}
         <div className="max-w-xl [text-shadow:0_2px_16px_rgba(8,8,8,0.7)]">
+          {/* Name + opening line fused as one presentation block. */}
           <Reveal>
             <h2
               id="pilar-title"
               className="font-display text-3xl font-semibold leading-tight text-foreground sm:text-4xl lg:text-5xl"
             >
-              Soy{" "}
-              <span className="text-accent">Pilar Sousa</span>
+              Soy <span className="text-accent">Pilar Sousa</span>
             </h2>
           </Reveal>
 
           <Reveal delay={0.2}>
-            <div className="mt-8 space-y-4 text-base leading-relaxed text-foreground/85">
+            <div className="mt-2 space-y-4 text-base leading-relaxed text-foreground/85">
               <p>
                 Hubo un tiempo en el que me sentía perdida, sin un rumbo ni un
                 objetivo claro en la vida.

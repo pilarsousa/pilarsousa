@@ -33,8 +33,13 @@ export function MatrixRain() {
       const { clientWidth: w, clientHeight: h } = canvas.parentElement!;
       canvas.width = w;
       canvas.height = h;
-      columns = Math.floor(w / fontSize);
-      drops = Array(columns).fill(1);
+      const newColumns = Math.floor(w / fontSize);
+      if (newColumns > columns) {
+        drops = [...drops, ...Array(newColumns - columns).fill(1)];
+      } else {
+        drops = drops.slice(0, newColumns);
+      }
+      columns = newColumns;
     };
     resize();
 
@@ -79,12 +84,14 @@ export function MatrixRain() {
       { threshold: 0 },
     );
     io.observe(canvas);
-    window.addEventListener("resize", resize);
+
+    const ro = new ResizeObserver(resize);
+    ro.observe(canvas.parentElement!);
 
     return () => {
       stop();
       io.disconnect();
-      window.removeEventListener("resize", resize);
+      ro.disconnect();
     };
   }, []);
 
