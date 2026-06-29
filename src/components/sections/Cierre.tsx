@@ -100,7 +100,7 @@ export function Cierre() {
             </p>
             <p className="mt-4 text-xl font-light leading-snug text-foreground sm:text-2xl">
               <GoldText className="font-display font-semibold">4,8</GoldText> de
-              valoración media entre nuestras alumnas.
+              valoración media entre nuestros alumnos.
             </p>
             <p className="mt-4 text-base leading-relaxed text-foreground/70">
               En la primera edición solo dejamos entrar{" "}

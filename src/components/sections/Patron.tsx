@@ -95,7 +95,7 @@ export function Patron() {
           transition={{ duration: 0.7, delay: 0.1 }}
           className="mx-auto mt-6 max-w-xl text-center text-base leading-relaxed text-forest-900/70"
         >
-          Porque, en lo profundo, una parte de ti todavía:
+          Y seguramente te pase lo siguiente:
         </motion.p>
 
         {/* The six patterns as carved cards — inset shadows on a light face. */}
