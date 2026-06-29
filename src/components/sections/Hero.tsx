@@ -1,11 +1,13 @@
 import Image from "next/image";
-import { CalendarDays, Radio, Compass, Tag } from "lucide-react";
+import { CalendarDays, Radio, Compass } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { CtaButton } from "@/components/ui/CtaButton";
+import { PriceTag } from "@/components/ui/PriceTag";
 import { FactBadge } from "@/components/ui/FactBadge";
 import { GoldText } from "@/components/ui/GoldText";
 import { SideRays } from "@/components/ui/SideRays";
+import { CHECKOUT_URL } from "@/lib/links";
 import bgDesktop from "@/../public/bg-pilarsousa.jpg";
 import bgMobile from "@/../public/bg-pilarsousa-mobile.jpg";
 import logo from "@/../public/LOGO.png";
@@ -15,7 +17,6 @@ const FACTS = [
   { label: "10 · 11 · 12 de julio", icon: <CalendarDays size={16} /> },
   { label: "3 días en vivo", icon: <Radio size={16} /> },
   { label: "Metafísica práctica", icon: <Compass size={16} /> },
-  { label: "44 €", icon: <Tag size={16} /> },
 ];
 
 /**
@@ -58,7 +59,7 @@ export function Hero() {
             rays stay near Pilar's head and don't run down to the text; on lg+
             they fill the whole hero. The canvas itself is masked to fade at its
             lower edge so the cropped bottom isn't a hard line. */}
-        <div className="absolute inset-x-0 top-0 z-1 h-[45%] mask-[linear-gradient(to_bottom,black_70%,transparent)] lg:bottom-0 lg:h-auto lg:mask-none">
+        <div className="absolute inset-x-0 top-0 z-1 h-[45%] opacity-20 mask-[linear-gradient(to_bottom,black_70%,transparent)] lg:bottom-0 lg:h-auto lg:opacity-100 lg:mask-none">
           <SideRays
             origin="top-right"
             rayColor1="#c8a45a"
@@ -71,6 +72,9 @@ export function Hero() {
             opacity={0.85}
           />
         </div>
+
+        {/* Bottom fade into the next section (#0A0908) so the cut isn't abrupt. */}
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-[linear-gradient(to_bottom,transparent,#0A0908)]" />
       </div>
 
       {/* Mobile pushes content down ~200px so Pilar's photo breathes at the
@@ -85,7 +89,7 @@ export function Hero() {
               alt="Volver al Origen — Bootcamp"
               priority
               sizes="(min-width: 1024px) 240px, 180px"
-              className="h-auto w-[180px] lg:w-[240px]"
+              className="mb-4 h-auto w-45 lg:w-60"
             />
           </Reveal>
 
@@ -127,9 +131,14 @@ export function Hero() {
           </Reveal>
 
           <Reveal delay={0.4}>
-            <CtaButton href="#inscripcion" className="mt-8">
-              Resetear mi identidad
-            </CtaButton>
+            {/* w-fit wraps the button's width; the price below is centered
+                within it, so it sits under the (left-aligned) CTA. */}
+            <div className="mt-8 w-fit">
+              <CtaButton href={CHECKOUT_URL} external>
+                Resetear mi identidad
+              </CtaButton>
+              <PriceTag className="mt-4" />
+            </div>
           </Reveal>
         </div>
       </Container>
