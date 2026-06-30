@@ -84,7 +84,7 @@ export function Hero() {
         <div className="max-w-2xl">
           {/* Program logotype + format badge. */}
           <Reveal>
-            <div className="mb-2 flex items-center gap-4">
+            <div className="mb-2 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
               <Image
                 src={logo}
                 alt="Volver al Origen — Bootcamp"
