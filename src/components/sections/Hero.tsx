@@ -121,7 +121,7 @@ export function Hero() {
             <p className="mt-5 max-w-xl leading-relaxed text-foreground/95 text-[clamp(1rem,0.95rem+0.3vw,1.125rem)]">
               Un entrenamiento práctico de tres días para ir al origen de la
               identidad que está creando tu realidad actual, eliminar el bloqueo
-              invisible que te mantiene estancada y salir con un plan de acción
+              invisible que te mantiene estancado y salir con un plan de acción
               concreto para manifestar resultados tangibles.
             </p>
           </Reveal>
