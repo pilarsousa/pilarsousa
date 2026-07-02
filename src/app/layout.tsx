@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import { Cinzel, Manrope, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 
@@ -87,6 +88,8 @@ fbq('track', 'PageView');`}
             src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
           />
         </noscript>
+
+        <Analytics />
       </body>
     </html>
   );
