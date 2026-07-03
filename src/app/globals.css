@@ -44,6 +44,54 @@
   /* ---- Animations ---- */
   /* Slow, premium gold shimmer that drifts a gradient across text. */
   --animate-gold-drift: gold-drift 6s ease-in-out infinite;
+  /* Continuous light sheen sweeping across a surface (badges, pills). */
+  --animate-sheen: sheen 4.5s linear infinite;
+  /* Rotating gold beam that travels the perimeter of a badge border. */
+  --animate-border-spin: border-spin 4s linear infinite;
+  /* Soft breathing glow — a halo that gently swells and fades (never fully
+     off), for the ambient light behind the pricing card. */
+  --animate-glow-pulse: glow-pulse 7s ease-in-out infinite;
+  /* Pulsing gold ring — a box-shadow halo that expands and fades outward,
+     for continuous attention on control buttons (carousel arrows). */
+  --animate-pulse-ring: pulse-ring 2.8s ease-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-gold) 45%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 10px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.08);
+  }
+}
+
+/* Animatable angle for the conic-gradient border beam. Registering it as a
+   typed custom property is what lets the browser tween the rotation smoothly. */
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes border-spin {
+  to {
+    --border-angle: 360deg;
+  }
 }
 
 @keyframes gold-drift {
@@ -53,6 +101,19 @@
   }
   50% {
     background-position: 100% center;
+  }
+}
+
+@keyframes sheen {
+  /* The reflection sweeps fully across in the first ~30% of the cycle and
+     then stays OFF-SCREEN (invisible) for the rest — so the pause happens
+     out of view instead of parking a frozen highlight on the surface. */
+  0% {
+    transform: translateX(-150%) skewX(-20deg);
+  }
+  30%,
+  100% {
+    transform: translateX(450%) skewX(-20deg);
   }
 }
 
@@ -66,6 +127,24 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/*
+  Pointillist texture — a faint dot grain over the whole page.
+  z-index:1 keeps it BEHIND the content; pointer-events:none lets clicks
+  pass straight through. plus-lighter blends the dots as light so they lift
+  the dark surfaces subtly (degrades gracefully where unsupported).
+*/
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: radial-gradient(at 20% 80%, #fff 1px, transparent 0);
+  background-size: 2px 2px;
+  opacity: 0.08;
+  mix-blend-mode: plus-lighter;
 }
 
 /* Respect users who prefer reduced motion — animations stay subtle/off. */

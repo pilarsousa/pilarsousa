@@ -55,22 +55,28 @@ export function TestimonialCarousel({ items }: TestimonialCarouselProps) {
       </ul>
 
       {/* Arrow controls — shown on all sizes (swipe also works on touch). */}
-      <div className="mt-6 flex justify-center gap-3">
+      <div className="flex justify-center gap-3">
+        {/* A thin rotating gold beam travels the border (same conic-gradient
+            ring as the badges/chips), on a dark round face. */}
         <button
           type="button"
           onClick={() => scrollByCards(-1)}
           aria-label="Testimonio anterior"
-          className="flex size-11 cursor-pointer items-center justify-center rounded-full border border-accent/30 text-accent transition-colors hover:border-accent hover:bg-accent/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="group relative flex size-11 cursor-pointer rounded-full p-px bg-[conic-gradient(from_var(--border-angle),transparent_0%,var(--color-gold)_15%,var(--color-gold-soft)_25%,transparent_40%,transparent_100%)] animate-border-spin focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
-          <ChevronLeft size={20} />
+          <span className="flex size-full items-center justify-center rounded-full bg-background text-accent transition-colors group-hover:bg-forest-700">
+            <ChevronLeft size={20} />
+          </span>
         </button>
         <button
           type="button"
           onClick={() => scrollByCards(1)}
           aria-label="Testimonio siguiente"
-          className="flex size-11 cursor-pointer items-center justify-center rounded-full border border-accent/30 text-accent transition-colors hover:border-accent hover:bg-accent/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="group relative flex size-11 cursor-pointer rounded-full p-px bg-[conic-gradient(from_var(--border-angle),transparent_0%,var(--color-gold)_15%,var(--color-gold-soft)_25%,transparent_40%,transparent_100%)] animate-border-spin focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
-          <ChevronRight size={20} />
+          <span className="flex size-full items-center justify-center rounded-full bg-background text-accent transition-colors group-hover:bg-forest-700">
+            <ChevronRight size={20} />
+          </span>
         </button>
       </div>
     </div>
