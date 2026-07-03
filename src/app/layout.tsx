@@ -34,11 +34,11 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Bootcamp RESET IDENTIDAD — Pilar Sousa",
+  title: "Bootcamp Reset Identidad | Pilar Sousa",
   description:
     "No manifiestas lo que deseas. Manifiestas quien eres. Un campamento de metafísica práctica para resetear tu identidad y volver al origen.",
   openGraph: {
-    title: "Bootcamp RESET IDENTIDAD — Pilar Sousa",
+    title: "Bootcamp Reset Identidad | Pilar Sousa",
     description:
       "No manifiestas lo que deseas. Manifiestas quien eres. Un campamento de metafísica práctica para resetear tu identidad.",
     type: "website",
