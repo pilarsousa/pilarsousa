@@ -53,6 +53,38 @@
   }
 }
 
+/*
+  Luminous top border — a partial gold bar centered on the card's top edge,
+  fading out at both ends (not full width). Lit on hover.
+*/
+.card::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    #c8a45a 30%,
+    #f3e2b0 50%,
+    #c8a45a 70%,
+    transparent
+  );
+  box-shadow: 0 0 12px 1px rgba(200, 164, 90, 0.6);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.card:hover::after,
+.card.lit::after {
+  opacity: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .card:hover::before {
     animation: none;

@@ -78,7 +78,7 @@ export function MatrixRain({ fade = 0.08, opacity = 0.25 }: MatrixRainProps = {}
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
       ctx.globalCompositeOperation = "source-over";
-      ctx.fillStyle = "#41a75c"; // brighter, more vivid green glyphs
+      ctx.fillStyle = "#2a6b3c"; // deeper, darker green so it reads as texture
       ctx.font = `${fontSize}px monospace`;
 
       for (let i = 0; i < drops.length; i++) {
