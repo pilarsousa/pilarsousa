@@ -1,9 +1,9 @@
-import { CalendarDays, PlayCircle, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { CtaButton } from "@/components/ui/CtaButton";
 import { GoldText } from "@/components/ui/GoldText";
-import { FactBadge } from "@/components/ui/FactBadge";
 import { GlowBadge } from "@/components/ui/GlowBadge";
 import { Countdown } from "@/components/ui/Countdown";
+import { ScheduleReferenceCard } from "@/components/ui/ScheduleReferenceCard";
 import { CHECKOUT_URL, BOOTCAMP_START } from "@/lib/links";
 
 /**
@@ -70,6 +70,10 @@ export function PricingCard() {
           </p>
         </div>
 
+        <div className="mt-8 flex justify-center">
+          <ScheduleReferenceCard />
+        </div>
+
         {/* Countdown to the bootcamp start — drives urgency. Given its own
             padded box so the unit tiles breathe instead of hugging the edges. */}
         <div className="mt-9 rounded-2xl border border-accent/15 bg-ink/30 px-4 py-6 sm:px-6">
@@ -77,19 +81,6 @@ export function PricingCard() {
             La experiencia comienza en
           </p>
           <Countdown target={BOOTCAMP_START} />
-        </div>
-
-        {/* Gold hairline separator (dark → gold → dark). */}
-        <div className="mx-auto mt-8 h-px w-full [background:linear-gradient(to_right,transparent,var(--color-accent),transparent)]" />
-
-        {/* Concrete facts — reusing the brand FactBadge. */}
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <FactBadge icon={<CalendarDays size={16} />}>
-            10 · 11 · 12 de julio
-          </FactBadge>
-          <FactBadge icon={<PlayCircle size={16} />}>
-            3 días en vivo
-          </FactBadge>
         </div>
 
         {/* Primary CTA — forced to a single line. */}

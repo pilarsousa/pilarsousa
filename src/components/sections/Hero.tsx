@@ -1,22 +1,14 @@
 import Image from "next/image";
-import { CalendarDays, Radio, Compass } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { CtaButton } from "@/components/ui/CtaButton";
-import { FactBadge } from "@/components/ui/FactBadge";
 import { GoldText } from "@/components/ui/GoldText";
+import { ScheduleReferenceCard } from "@/components/ui/ScheduleReferenceCard";
 import { SideRays } from "@/components/ui/SideRays";
 import { CHECKOUT_URL } from "@/lib/links";
 import bgDesktop from "@/../public/bg-pilarsousa.jpg";
 import bgMobile from "@/../public/bg-pilarsousa-mobile.jpg";
 import logo from "@/../public/LOGO.png";
-
-// Key offer facts — real text (SEO + a11y), each with a sober icon.
-const FACTS = [
-  { label: "10 · 11 · 12 de julio", icon: <CalendarDays size={16} /> },
-  { label: "3 días en vivo", icon: <Radio size={16} /> },
-  { label: "Metafísica práctica", icon: <Compass size={16} /> },
-];
 
 /**
  * Section 1 — Hero / Offer.
@@ -135,17 +127,8 @@ export function Hero() {
             </p>
           </Reveal>
 
-          {/* Offer facts as authoritative badges with icons. */}
           <Reveal delay={0.3}>
-            <ul className="mt-4 flex flex-wrap gap-3 sm:mt-8">
-              {FACTS.map((fact, i) => (
-                <li key={fact.label}>
-                  <FactBadge icon={fact.icon} index={i}>
-                    {fact.label}
-                  </FactBadge>
-                </li>
-              ))}
-            </ul>
+            <ScheduleReferenceCard className="mt-4 sm:mt-8" />
           </Reveal>
 
           <Reveal delay={0.4}>
