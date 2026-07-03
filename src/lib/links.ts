@@ -11,3 +11,7 @@ export const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/GO8DZzC2o5bJotgoAZ9
 
 // Direct WhatsApp support line (thank-you page).
 export const WHATSAPP_SUPPORT_URL = "https://wa.link/i8qdol";
+
+// Bootcamp start — the countdown target. July 10, 2026, 00:00 Spain time
+// (CEST = UTC+2), the landing's target market (locale es_ES).
+export const BOOTCAMP_START = "2026-07-10T00:00:00+02:00";
