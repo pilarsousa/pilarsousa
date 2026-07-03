@@ -1,13 +1,19 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Gift } from "lucide-react";
+import { Layers, Route, ClipboardCheck, type LucideIcon } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { SectionTitle } from "@/components/ui/SectionTitle";
 import banner from "@/../public/banner-web-bonos.jpg";
 import bannerMobile from "@/../public/banner-web-bonos-mobile.jpg";
 
-// The three bonuses, named as a compact list below the artwork.
-const BONUSES = ["Sistema", "Roadmap", "Plan de ejecución"];
+// The three takeaway resources the user keeps after the bootcamp, each with
+// an icon so they read as concrete, valuable deliverables — not a plain list.
+const BONUSES: Array<{ name: string; icon: LucideIcon }> = [
+  { name: "Sistema", icon: Layers },
+  { name: "Roadmap", icon: Route },
+  { name: "Plan de ejecución", icon: ClipboardCheck },
+];
 
 /**
  * Section 5 — Bonuses, reframed as a compact banner (not a full section).
@@ -24,6 +30,15 @@ export function Bonos() {
       className="bg-background pt-2 pb-[clamp(4rem,2rem+8vh,7rem)]"
     >
       <Container>
+        {/* Title above the banner (client direction): the bonus framing promoted
+            from a small in-image pill to a proper section headline. */}
+        <SectionTitle tone="dark" className="mb-6 sm:mb-10">
+          Bonus extra por acceder al{" "}
+          <em className="font-accent font-medium italic text-accent-soft">
+            bootcamp
+          </em>
+        </SectionTitle>
+
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -44,41 +59,59 @@ export function Bonos() {
             className="absolute inset-0 hidden bg-cover bg-center bg-no-repeat sm:block"
           />
 
-          {/* Bottom gradient strip — guarantees the copy reads over any image. */}
+          {/* Diagonal "gift" ribbon across the top-right corner, clipped clean
+              by the card's overflow — text centered, gold-on-dark + sheen. */}
           <div
             aria-hidden
-            className="absolute inset-x-0 bottom-0 h-1/2 bg-[linear-gradient(to_top,var(--color-ink)_10%,color-mix(in_oklab,var(--color-ink)_70%,transparent)_45%,transparent)]"
+            className="pointer-events-none absolute -right-13 top-8 z-20 rotate-45"
+          >
+            <div className="relative flex w-52 items-center justify-center overflow-hidden border-y border-accent/40 bg-ink/90 py-1.5 text-center shadow-[0_6px_16px_-6px_rgba(0,0,0,0.7)] backdrop-blur-sm">
+              {/* Continuous light sheen sweeping across the ribbon. */}
+              <span className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 bg-linear-to-r from-transparent via-cream-gold/60 to-transparent animate-sheen" />
+              <span className="relative font-display text-[0.7rem] font-bold uppercase tracking-[0.18em] text-cream-gold">
+                Bonus extras
+              </span>
+            </div>
+          </div>
+
+          {/* Bottom gradient strip — a deeper, taller fade so the bonus copy
+              reads as a solid premium block, not text fighting the artwork. */}
+          <div
+            aria-hidden
+            className="absolute inset-x-0 bottom-0 h-2/3 bg-[linear-gradient(to_top,var(--color-ink)_0%,var(--color-ink)_30%,color-mix(in_oklab,var(--color-ink)_80%,transparent)_60%,transparent)]"
           />
 
           {/* Copy, seated in the bottom strip. */}
-          <div className="absolute inset-x-0 bottom-0 p-8 text-center sm:p-10">
-            {/* Gift label — frosted glass over the artwork, white text+icon. */}
-            <span className="mx-auto mb-4 flex w-fit items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs text-white backdrop-blur-md">
-              <Gift size={14} />
-              <span className="font-display font-semibold uppercase tracking-[0.2em]">
-                Regalos para ti
-              </span>
-            </span>
-
+          <div className="absolute inset-x-0 bottom-0 z-10 p-8 text-center sm:p-10">
             <h2 className="font-display text-2xl font-semibold text-foreground sm:text-3xl">
               Diseñado para generar{" "}
+              {/* Force a 2-line break on mobile; single line on sm+. */}
+              <br className="sm:hidden" />
               <em className="font-accent font-medium italic text-accent-soft">
                 resultados tangibles
               </em>
             </h2>
 
-            {/* The three bonuses as a single row of gold-separated labels. */}
-            <ul className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-              {BONUSES.map((name, i) => (
-                <li key={name} className="flex items-center gap-4">
-                  <span className="font-accent text-lg italic text-foreground sm:text-xl">
-                    {name}
-                  </span>
-                  {i < BONUSES.length - 1 && (
-                    <span aria-hidden className="text-accent/50">
-                      ✶
+            {/* The three takeaway resources as premium icon chips with a
+                rotating gold border (same beam as the limited-time badge).
+                Mobile uses a 2-column grid (never a single stacked column),
+                with the third chip centered on its own row; sm+ is a centered
+                inline row. */}
+            <ul className="mx-auto mt-6 grid max-w-sm grid-cols-2 place-items-center gap-2 sm:flex sm:max-w-none sm:flex-wrap sm:justify-center sm:gap-3 [&>li:last-child]:col-span-2 sm:[&>li:last-child]:col-span-1">
+              {BONUSES.map(({ name, icon: Icon }) => (
+                <li key={name} className="w-full sm:w-auto">
+                  {/* Rotating gold beam wrapper — a thin gradient ring behind
+                      the dark chip face. */}
+                  <span className="relative flex rounded-full p-px bg-[conic-gradient(from_var(--border-angle),transparent_0%,var(--color-gold)_15%,var(--color-gold-soft)_25%,transparent_40%,transparent_100%)] animate-border-spin sm:inline-flex">
+                    <span className="flex w-full items-center justify-center gap-2 rounded-full bg-ink/85 py-2 pl-2 pr-3 backdrop-blur-sm sm:justify-start sm:gap-2.5 sm:pr-4">
+                      <span className="flex size-8 shrink-0 items-center justify-center rounded-full border border-accent/40 bg-accent/15 text-accent">
+                        <Icon size={16} strokeWidth={1.75} />
+                      </span>
+                      <span className="font-display text-sm font-medium tracking-wide text-foreground">
+                        {name}
+                      </span>
                     </span>
-                  )}
+                  </span>
                 </li>
               ))}
             </ul>
