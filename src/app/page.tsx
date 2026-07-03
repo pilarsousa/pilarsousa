@@ -13,7 +13,10 @@ import { PricingCard } from "@/components/ui/PricingCard";
 export default function Home() {
   return (
     <>
-      <main>
+      {/* overflow-x-clip: a global belt so decorative overflow (ambient glows,
+          sheens, ribbons) can bleed past a section without ever producing a
+          horizontal scrollbar on mobile. */}
+      <main className="overflow-x-clip">
         <Hero />
         <Manifiesto />
         <Patron />

@@ -1,0 +1,22 @@
+const { spawn } = require('child_process');
+const WebSocket = require('ws');
+const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe';
+const chrome = spawn(CHROME, ['--headless=new','--disable-gpu','--remote-debugging-port=9223','--window-size=375,800','--user-data-dir=C:/Users/Chuky/AppData/Local/Temp/chrome-prof-ov']);
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+(async () => {
+  await sleep(3000);
+  const list = await fetch('http://localhost:9223/json').then(r=>r.json());
+  const page = list.find(t=>t.type==='page') || list[0];
+  const ws = new WebSocket(page.webSocketDebuggerUrl);
+  let id=0; const pending={};
+  const send=(method,params={})=>new Promise(res=>{const i=++id;pending[i]=res;ws.send(JSON.stringify({id:i,method,params}));});
+  ws.on('message',d=>{const m=JSON.parse(d);if(m.id&&pending[m.id]){pending[m.id](m.result);delete pending[m.id];}});
+  await new Promise(r=>ws.on('open',r));
+  await send('Runtime.enable');
+  await send('Page.navigate',{url:'http://localhost:3000/'});
+  await sleep(6000);
+  const expr = `(()=>{const vw=window.innerWidth;const out=[];document.querySelectorAll('body *').forEach(el=>{const r=el.getBoundingClientRect();if(r.width>0&&(r.right>vw+0.5||r.left<-0.5)){out.push(el.tagName+' | '+String(el.className).slice(0,65)+' | L'+Math.round(r.left)+' R'+Math.round(r.right)+' W'+Math.round(r.width));}});return JSON.stringify({vw,scrollWidth:document.documentElement.scrollWidth,count:out.length,offenders:out.slice(0,12)},null,1);})()`;
+  const res = await send('Runtime.evaluate',{expression:expr,returnByValue:true});
+  console.log(res.result.value);
+  chrome.kill(); process.exit(0);
+})().catch(e=>{console.error(e.message);process.exit(1);});
