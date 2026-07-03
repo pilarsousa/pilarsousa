@@ -62,11 +62,20 @@ export function Cierre() {
   return (
     <section id="cierre" className="bg-surface py-[clamp(4rem,2rem+8vh,7rem)]">
       <Container>
-        <SectionTitle tone="dark">
-          Historias de{" "}
+        {/* Personal, larger opening title (client direction). Size override
+            here only — SectionTitle stays the shared default everywhere else. */}
+        {/* Single opening title (client direction): the founding line and the
+            "transformation stories" framing merged into one. Size override
+            here only — SectionTitle stays the shared default everywhere else. */}
+        <SectionTitle
+          tone="dark"
+          className="max-w-4xl text-[1.45rem] leading-snug sm:text-4xl lg:text-5xl"
+        >
+          Hace tres meses fundé mi academia{" "}
           <em className="font-accent font-medium italic text-accent-soft">
-            transformación
-          </em>
+            Volver al Origen
+          </em>{" "}
+          y son algunas de las historias de transformación
         </SectionTitle>
 
         {/* Intro body — distilled from the client's notes. The "+60%" metric and

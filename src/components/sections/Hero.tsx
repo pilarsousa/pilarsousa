@@ -3,7 +3,6 @@ import { CalendarDays, Radio, Compass } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { CtaButton } from "@/components/ui/CtaButton";
-import { PriceTag } from "@/components/ui/PriceTag";
 import { FactBadge } from "@/components/ui/FactBadge";
 import { GoldText } from "@/components/ui/GoldText";
 import { SideRays } from "@/components/ui/SideRays";
@@ -84,7 +83,7 @@ export function Hero() {
         <div className="max-w-2xl">
           {/* Program logotype + format badge. */}
           <Reveal>
-            <div className="mb-2 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
+            <div className="mb-2 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-4">
               <Image
                 src={logo}
                 alt="Volver al Origen — Bootcamp"
@@ -92,10 +91,20 @@ export function Hero() {
                 sizes="(min-width: 1024px) 240px, 180px"
                 className="h-auto w-45 lg:w-60"
               />
-              <span className="inline-flex items-center gap-2 rounded-full border border-accent/60 bg-accent/20 px-3.5 py-2 font-display text-xs font-bold uppercase tracking-[0.15em] text-foreground shadow-[0_6px_24px_-4px_rgba(0,0,0,0.7)] backdrop-blur-md">
-                <span aria-hidden className="size-2 animate-pulse rounded-full bg-white shadow-[0_0_8px_2px_rgba(255,255,255,0.7)]" />
-                Bootcamp{" "}
-                <span className="text-white">Online</span>
+              <span className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full border border-accent/60 bg-accent/20 px-3.5 py-2 font-display text-xs font-bold uppercase tracking-[0.15em] text-foreground shadow-[0_6px_24px_-4px_rgba(0,0,0,0.7)] backdrop-blur-md">
+                {/* Continuous light sheen sweeping across the badge. */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 bg-linear-to-r from-transparent via-cream-gold/40 to-transparent animate-sheen"
+                />
+                {/* Live "on air" dot: a pulsing core with an expanding ring. */}
+                <span aria-hidden className="relative flex size-2">
+                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-white/70" />
+                  <span className="relative inline-flex size-2 rounded-full bg-white shadow-[0_0_8px_2px_rgba(255,255,255,0.7)]" />
+                </span>
+                <span className="relative">
+                  Bootcamp <span className="text-white">Online</span>
+                </span>
               </span>
             </div>
           </Reveal>
@@ -110,7 +119,7 @@ export function Hero() {
               <span className="font-sans font-normal text-foreground">
                 Sabes lo que quieres y tienes el potencial.
               </span>{" "}
-              <GoldText className="font-display font-semibold">
+              <GoldText glow className="font-display font-bold">
                 Entonces, ¿por qué sigues repitiendo los mismos patrones?
               </GoldText>
             </h1>
@@ -118,7 +127,7 @@ export function Hero() {
 
           {/* Description — fluid 16→18px, brighter. */}
           <Reveal delay={0.2}>
-            <p className="mt-5 max-w-xl leading-relaxed text-foreground/95 text-[clamp(1rem,0.95rem+0.3vw,1.125rem)]">
+            <p className="mt-4 max-w-xl leading-relaxed text-foreground/95 text-[clamp(1rem,0.95rem+0.3vw,1.125rem)] sm:mt-5">
               Un entrenamiento práctico de tres días para ir al origen de la
               identidad que está creando tu realidad actual, eliminar el bloqueo
               invisible que te mantiene estancado y salir con un plan de acción
@@ -128,23 +137,25 @@ export function Hero() {
 
           {/* Offer facts as authoritative badges with icons. */}
           <Reveal delay={0.3}>
-            <ul className="mt-8 flex flex-wrap gap-3">
-              {FACTS.map((fact) => (
+            <ul className="mt-4 flex flex-wrap gap-3 sm:mt-8">
+              {FACTS.map((fact, i) => (
                 <li key={fact.label}>
-                  <FactBadge icon={fact.icon}>{fact.label}</FactBadge>
+                  <FactBadge icon={fact.icon} index={i}>
+                    {fact.label}
+                  </FactBadge>
                 </li>
               ))}
             </ul>
           </Reveal>
 
           <Reveal delay={0.4}>
-            {/* w-fit wraps the button's width; the price below is centered
-                within it, so it sits under the (left-aligned) CTA. */}
-            <div className="mt-8 w-fit">
+            {/* Full-width on mobile so the CTA fills the column; on sm+ it
+                shrinks to its content. Width is driven from the wrapper so it
+                beats the button's own inline-flex without fighting .block. */}
+            <div className="mt-4 w-full sm:mt-8 sm:w-fit [&>a]:flex [&>a]:w-full sm:[&>a]:w-fit">
               <CtaButton href={CHECKOUT_URL} external>
                 Resetear mi identidad
               </CtaButton>
-              <PriceTag className="mt-4" />
             </div>
           </Reveal>
         </div>

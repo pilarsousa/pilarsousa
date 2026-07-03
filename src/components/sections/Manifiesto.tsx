@@ -94,22 +94,36 @@ export function Manifiesto() {
             word rises and de-blurs into place. */}
         <p
           data-line="1"
-          className="font-sans text-3xl font-light leading-tight text-foreground/85 lg:text-4xl"
+          className="font-sans text-3xl font-light leading-tight text-foreground lg:text-4xl"
         >
           No manifiestas lo que deseas.
         </p>
 
-        <p
-          data-line="2"
-          className="mt-6 font-display text-4xl font-semibold leading-tight text-accent sm:text-5xl lg:text-5xl"
-        >
-          Manifiestas quien eres.
-        </p>
+        {/* "Selector frame" around line 2 — a thin white hairline box with the
+            four corners picked out in brand gold, like a camera viewfinder /
+            target. The frame wraps the <p>; the <p data-line="2"> itself stays
+            intact so GSAP's SplitText still finds and animates it. */}
+        <div className="mt-6 flex justify-center">
+          <div className="relative inline-flex border border-white/30 px-6 py-4 sm:px-8 sm:py-5">
+            {/* Four gold corner brackets. */}
+            <span aria-hidden className="pointer-events-none absolute -left-px -top-px size-3.5 border-l-2 border-t-2 border-accent sm:size-4" />
+            <span aria-hidden className="pointer-events-none absolute -right-px -top-px size-3.5 border-r-2 border-t-2 border-accent sm:size-4" />
+            <span aria-hidden className="pointer-events-none absolute -bottom-px -left-px size-3.5 border-b-2 border-l-2 border-accent sm:size-4" />
+            <span aria-hidden className="pointer-events-none absolute -bottom-px -right-px size-3.5 border-b-2 border-r-2 border-accent sm:size-4" />
+
+            <p
+              data-line="2"
+              className="font-display text-4xl font-semibold leading-tight text-accent sm:text-5xl lg:text-5xl"
+            >
+              Manifiestas quien eres.
+            </p>
+          </div>
+        </div>
 
         {/* Bridging body copy — appears last with the same timeline. */}
         <p
           data-body
-          className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-foreground/60 sm:text-lg"
+          className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-foreground/90 sm:text-lg"
         >
           Tu realidad no responde solo a lo que quieres. Responde a la identidad
           desde la que eliges, decides y sostienes tu vida.

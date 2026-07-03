@@ -54,37 +54,44 @@ export function Patron() {
       className="bg-cream text-forest-900 py-[clamp(4rem,2rem+8vh,7rem)]"
     >
       <Container>
-        {/* Reframing headline — now leads with the conscious/unconscious split
-            (client direction). Emphasis via Cormorant italic, never Cinzel caps. */}
+        {/* Reframing headline — conscious/unconscious split, reworded per
+            client so it reads clearly. Emphasis via Cormorant italic. */}
         <SectionTitle tone="light">
-          Conscientemente quieres cambiar, pero{" "}
+          Conscientemente dices que quieres cambiar, pero{" "}
           <em className="font-accent font-medium italic text-earth-gold">
-            inconscientemente
-          </em>{" "}
-          no.
+            tu inconsciente te frena
+          </em>
+          .
         </SectionTitle>
 
-        {/* Highlighted truth — the invisible block. */}
+        {/* Highlighted truth — the invisible block. A marker-style highlight
+            sits behind just the words (not a card): a soft gold band painted
+            with box-decoration-break so it hugs each line of text. */}
         <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.7, delay: 0.15 }}
-          className="mx-auto mt-8 max-w-2xl text-center font-accent text-2xl italic text-earth-gold sm:text-3xl"
+          className="mx-auto mt-4 max-w-2xl text-center font-accent text-2xl italic sm:text-3xl"
         >
-          Se crea, en el plano espiritual, un bloqueo invisible.
+          <span className="box-decoration-clone bg-[linear-gradient(120deg,color-mix(in_oklab,var(--color-cream-gold)_60%,transparent),color-mix(in_oklab,var(--color-cream-gold)_30%,transparent))] px-3 py-1 font-semibold leading-relaxed text-earth-gold">
+            Se crea un bloqueo invisible.
+          </span>
         </motion.p>
 
-        {/* The old headline, now demoted to a body line after the block. */}
+        {/* The full explanation (client copy), in readable body type so the
+            long sentence stays legible instead of fighting the italic. */}
         <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.7, delay: 0.25 }}
-          className="mx-auto mt-6 max-w-2xl text-center text-base leading-relaxed text-forest-900/70"
+          className="mx-auto mt-4 max-w-2xl text-center text-base leading-relaxed text-forest-900/70"
         >
-          Quieres una nueva realidad, pero una parte de ti todavía protege la
-          identidad que sostiene tu vieja realidad.
+          Esto sucede porque en tu identidad actual, dentro del plano espiritual,
+          se crea un bloqueo que hace que repitas ciertos patrones por más que
+          quieras crear una nueva realidad — ya que tu vieja identidad sostiene
+          tu vieja realidad.
         </motion.p>
 
         {/* Re-introduces the list. */}
