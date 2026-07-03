@@ -59,7 +59,7 @@ export function Patron() {
         <SectionTitle tone="light">
           Conscientemente dices que quieres cambiar, pero{" "}
           <em className="font-accent font-medium italic text-earth-gold">
-            tu inconsciente te frena
+            tu identidad actual te autosabotea
           </em>
           .
         </SectionTitle>
@@ -88,10 +88,9 @@ export function Patron() {
           transition={{ duration: 0.7, delay: 0.25 }}
           className="mx-auto mt-4 max-w-2xl text-center text-base leading-relaxed text-forest-900/70"
         >
-          Esto sucede porque en tu identidad actual, dentro del plano espiritual,
-          se crea un bloqueo que hace que repitas ciertos patrones por más que
-          quieras crear una nueva realidad — ya que tu vieja identidad sostiene
-          tu vieja realidad.
+          Esto pasa porque tu realidad siempre obedece a quien crees ser.
+          Mientras no cambies tu identidad, el mundo seguirá devolviéndote los
+          mismos resultados.
         </motion.p>
 
         {/* Re-introduces the list. */}
