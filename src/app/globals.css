@@ -117,6 +117,27 @@
   }
 }
 
+.moving-gold-title,
+.moving-gold-title .mf-word {
+  background-image: linear-gradient(
+    110deg,
+    #c8912f 0%,
+    #f3e2b0 24%,
+    #fff4d6 45%,
+    #e2c27a 62%,
+    #c8912f 100%
+  );
+  background-size: 220% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: gold-drift 5.5s ease-in-out infinite;
+}
+
+.moving-gold-title {
+  filter: drop-shadow(0 0 12px rgba(226, 194, 122, 0.34));
+}
+
 :root {
   color-scheme: dark;
 }

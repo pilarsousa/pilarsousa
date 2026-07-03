@@ -113,7 +113,7 @@ export function Manifiesto() {
 
             <p
               data-line="2"
-              className="font-display text-4xl font-semibold leading-tight text-accent sm:text-5xl lg:text-5xl"
+              className="moving-gold-title font-display text-4xl font-semibold leading-tight text-accent sm:text-5xl lg:text-5xl"
             >
               Manifiestas quien eres.
             </p>
