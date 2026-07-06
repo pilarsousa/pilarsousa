@@ -54,6 +54,27 @@
   /* Pulsing gold ring — a box-shadow halo that expands and fades outward,
      for continuous attention on control buttons (carousel arrows). */
   --animate-pulse-ring: pulse-ring 2.8s ease-out infinite;
+  /* Scroll cue impulse — a subtle premium downward nudge with a soft pause. */
+  --animate-scroll-cue: scroll-cue 2.4s ease-in-out infinite;
+}
+
+@keyframes scroll-cue {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  24% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  46% {
+    transform: translate3d(0, 6px, 0) scale(1.01);
+  }
+  64% {
+    transform: translate3d(0, 2px, 0) scale(1);
+  }
+  78% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
 }
 
 @keyframes pulse-ring {
