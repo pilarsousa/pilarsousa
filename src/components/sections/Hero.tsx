@@ -109,7 +109,7 @@ export function Hero() {
               className="text-foreground text-[clamp(1.6rem,1rem+2.2vw,2.75rem)] leading-[1.15]"
             >
               <span className="font-sans font-normal text-foreground">
-                Sabes lo que quieres y tienes el potencial.
+                Llevas años consumiendo espiritualidad.
               </span>{" "}
               <GoldText glow className="font-display font-bold">
                 Entonces, ¿por qué sigues repitiendo los mismos patrones?
@@ -120,10 +120,9 @@ export function Hero() {
           {/* Description — fluid 16→18px, brighter. */}
           <Reveal delay={0.2}>
             <p className="mt-4 max-w-xl leading-relaxed text-foreground/95 text-[clamp(1rem,0.95rem+0.3vw,1.125rem)] sm:mt-5">
-              Un entrenamiento práctico de tres días para ir al origen de la
-              identidad que está creando tu realidad actual, eliminar el bloqueo
-              invisible que te mantiene estancado y salir con un plan de acción
-              concreto para manifestar resultados tangibles.
+              Un entrenamiento práctico de 3 días para romper el viejo patrón
+              que está creando tu realidad, salir del estancamiento y manifestar
+              resultados tangibles.
             </p>
           </Reveal>
 
@@ -135,10 +134,16 @@ export function Hero() {
             {/* Full-width on mobile so the CTA fills the column; on sm+ it
                 shrinks to its content. Width is driven from the wrapper so it
                 beats the button's own inline-flex without fighting .block. */}
-            <div className="mt-4 w-full sm:mt-8 sm:w-fit [&>a]:flex [&>a]:w-full sm:[&>a]:w-fit">
-              <CtaButton href={CHECKOUT_URL} external>
-                Resetear mi identidad
-              </CtaButton>
+            <div className="mt-4 w-full sm:mt-8 sm:w-fit">
+              <div className="[&>a]:flex [&>a]:w-full sm:[&>a]:w-fit">
+                <CtaButton href={CHECKOUT_URL} external>
+                  Acceder al Bootcamp
+                </CtaButton>
+              </div>
+              <p className="mt-3 text-center text-sm font-medium tracking-wide text-foreground/85 sm:text-left">
+                Inversión de la experiencia:{" "}
+                <span className="font-display text-accent-soft">44 €</span>
+              </p>
             </div>
           </Reveal>
         </div>

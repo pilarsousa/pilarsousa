@@ -86,7 +86,7 @@ export function PricingCard() {
         {/* Primary CTA — forced to a single line. */}
         <div className="mt-9 flex justify-center">
           <CtaButton href={CHECKOUT_URL} external block>
-            Resetear mi identidad
+            Acceder al bootcamp
           </CtaButton>
         </div>
       </div>

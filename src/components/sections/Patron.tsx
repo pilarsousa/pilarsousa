@@ -2,27 +2,40 @@
 
 import { motion, type Variants } from "framer-motion";
 import {
-  BookOpen,
-  Flame,
-  Compass,
-  Lightbulb,
-  RotateCcw,
-  Lock,
+  BrainCircuit,
+  CloudFog,
+  EyeOff,
+  LibraryBig,
+  Repeat2,
   type LucideIcon,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 
-// The six recognizable symptoms of the invisible block — written for
-// identification ("this happens to you"), not deep diagnosis. Icons are
-// abstract: each suggests the symptom without illustrating it literally.
+// Five recognizable pain points for the right-fit audience. Icons stay
+// symbolic: each one reinforces the pattern without turning the card into a
+// literal illustration.
 const PATTERNS: Array<{ icon: LucideIcon; text: string }> = [
-  { icon: BookOpen, text: "Consumes mucha información, pero no ves resultados." },
-  { icon: Flame, text: "Tienes motivación un día, pero no logras sostenerla." },
-  { icon: Compass, text: "Te falta claridad sobre cómo dar los siguientes pasos." },
-  { icon: Lightbulb, text: "Sabes mucho, pero te cuesta aplicarlo en el día a día." },
-  { icon: RotateCcw, text: "Empiezas con todo, pero a las semanas vuelves a lo de siempre." },
-  { icon: Lock, text: "Sientes que algo invisible te frena, aunque no sabes qué es." },
+  {
+    icon: LibraryBig,
+    text: "Llevas años consumiendo espiritualidad… pero tu vida sigue sin cambiar.",
+  },
+  {
+    icon: Repeat2,
+    text: "Sabes lo que tienes que hacer… pero siempre vuelves al mismo patrón.",
+  },
+  {
+    icon: BrainCircuit,
+    text: "Sientes que te autosaboteas, aunque no entiendes por qué.",
+  },
+  {
+    icon: CloudFog,
+    text: "Cada vez consumes más información… y cada vez tienes menos claridad.",
+  },
+  {
+    icon: EyeOff,
+    text: "Estás cansado de entender la teoría y no verla reflejada en tu realidad.",
+  },
 ];
 
 const container: Variants = {
@@ -40,12 +53,11 @@ const card: Variants = {
 };
 
 /**
- * Section 3 — Problem / Unconscious pattern.
+ * Section 3 — Right-fit audience / Pain points.
  *
- * The emotional core, on a warm-cream stage (a deliberate light break between
- * dark sections). A gold divider opens it. Emphasis comes from Cormorant
- * italic on short phrases — never Cinzel on long copy. Six carved cards name
- * the patterns; the closing truth lands in plain, readable body type.
+ * The emotional core, on a warm-cream stage (a deliberate light break after
+ * the dark manifesto). Five carved cards name the pains that qualify the
+ * reader for the bootcamp.
  */
 export function Patron() {
   return (
@@ -54,57 +66,14 @@ export function Patron() {
       className="bg-cream text-forest-900 py-[clamp(4rem,2rem+8vh,7rem)]"
     >
       <Container>
-        {/* Reframing headline — conscious/unconscious split, reworded per
-            client so it reads clearly. Emphasis via Cormorant italic. */}
         <SectionTitle tone="light">
-          Conscientemente dices que quieres cambiar, pero{" "}
+          Este bootcamp es para ti{" "}
           <em className="font-accent font-medium italic text-earth-gold">
-            tu identidad actual te autosabotea
+            si…
           </em>
-          .
         </SectionTitle>
 
-        {/* Highlighted truth — the invisible block. A marker-style highlight
-            sits behind just the words (not a card): a soft gold band painted
-            with box-decoration-break so it hugs each line of text. */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.7, delay: 0.15 }}
-          className="mx-auto mt-4 max-w-2xl text-center font-accent text-2xl italic sm:text-3xl"
-        >
-          <span className="box-decoration-clone bg-[linear-gradient(120deg,color-mix(in_oklab,var(--color-cream-gold)_60%,transparent),color-mix(in_oklab,var(--color-cream-gold)_30%,transparent))] px-3 py-1 font-semibold leading-relaxed text-earth-gold">
-            Se crea un bloqueo invisible.
-          </span>
-        </motion.p>
-
-        {/* The full explanation (client copy), in readable body type so the
-            long sentence stays legible instead of fighting the italic. */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.7, delay: 0.25 }}
-          className="mx-auto mt-4 max-w-2xl text-center text-base leading-relaxed text-forest-900/70"
-        >
-          Esto pasa porque tu realidad siempre obedece a quien crees ser.
-          Mientras no cambies tu identidad, el mundo seguirá devolviéndote los
-          mismos resultados.
-        </motion.p>
-
-        {/* Re-introduces the list. */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-          className="mx-auto mt-6 max-w-xl text-center text-base leading-relaxed text-forest-900/70"
-        >
-          Y seguramente te pase lo siguiente:
-        </motion.p>
-
-        {/* The six patterns as carved cards — inset shadows on a light face. */}
+        {/* Pain points as carved cards — inset shadows on a light face. */}
         <motion.ul
           variants={container}
           initial="hidden"

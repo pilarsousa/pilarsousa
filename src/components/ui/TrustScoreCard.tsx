@@ -38,7 +38,10 @@ export function TrustScoreCard() {
       {/* Score + label + stars + count. */}
       <div className="text-center">
         <p className="font-display text-5xl font-semibold leading-none text-forest-900">
-          4,8
+          4,8{" "}
+          <span className="align-baseline text-3xl font-medium text-forest-900/70">
+            / 5
+          </span>
         </p>
         <h3 className="mt-2 text-lg font-semibold text-forest-900">Excelente</h3>
 
