@@ -52,34 +52,23 @@ const TESTIMONIALS = [
 ];
 
 /**
- * Section 6 — Testimonials + opening of 100 spaces + final CTA.
+ * Section 6 — Testimonials and social proof.
  *
- * The close. A horizontal carousel of real Trustpilot review screenshots, then
- * the emotional peak: a dark panel announcing the 100 spaces with the number
- * "100" in living gold, framed as an invitation — not aggressive scarcity.
+ * A Trustpilot proof block followed by a horizontal carousel of real review
+ * screenshots. The invitation to Volver al Origen is kept in the proof copy so
+ * it does not repeat below the carousel.
  */
 export function Cierre() {
   return (
     <section id="cierre" className="bg-surface py-[clamp(4rem,2rem+8vh,7rem)]">
       <Container>
-        {/* Personal, larger opening title (client direction). Size override
-            here only — SectionTitle stays the shared default everywhere else. */}
-        {/* Single opening title (client direction): the founding line and the
-            "transformation stories" framing merged into one. Size override
-            here only — SectionTitle stays the shared default everywhere else. */}
         <SectionTitle
           tone="dark"
           className="max-w-4xl text-[1.45rem] leading-snug sm:text-4xl lg:text-5xl"
         >
-          Hace tres meses fundé mi academia{" "}
-          <em className="font-accent font-medium italic text-accent-soft">
-            Volver al Origen
-          </em>{" "}
-          y son algunas de las historias de transformación
+          Historias de transformación
         </SectionTitle>
 
-        {/* Intro body — distilled from the client's notes. The "+60%" metric and
-            Trustpilot integration are intentionally left out until verified. */}
         <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -87,9 +76,11 @@ export function Cierre() {
           transition={{ duration: 0.7, delay: 0.1 }}
           className="mx-auto mt-8 max-w-2xl text-center text-base leading-relaxed text-foreground/70"
         >
-          Volver al Origen nació para bajar la espiritualidad a lo práctico: un
-          sistema para reprogramar tu identidad y usarlo en la vida real. Y no lo
-          decimos nosotros — lo dicen las personas que ya hicieron el proceso.
+          Hace tres meses fundé mi academia{" "}
+          <em className="font-accent text-[1.12em] italic text-accent-soft">
+            Volver al Origen
+          </em>{" "}
+          y estas son algunas de las historias de transformación.
         </motion.p>
 
         {/* TrustScore as the lead proof, centered; the validation + first-edition
@@ -108,49 +99,25 @@ export function Cierre() {
               Validado por quienes ya lo vivieron
             </p>
             <p className="mt-4 text-xl font-light leading-snug text-foreground sm:text-2xl">
-              <GoldText className="font-display font-semibold">4,8</GoldText> de
-              valoración media entre nuestros alumnos.
+              <GoldText className="font-display font-semibold">4,8 / 5</GoldText>{" "}
+              media de valoración entre nuestros alumnos.
             </p>
             <p className="mt-4 text-base leading-relaxed text-foreground/70">
               En la primera edición solo dejamos entrar{" "}
               <span className="font-semibold text-foreground">150 personas</span>.
-              Esta es tu oportunidad de formar parte desde el origen.
+              Este será el único espacio donde abriré plazas para acceder a{" "}
+              <em className="font-accent text-[1.12em] italic text-accent-soft">
+                Volver al Origen
+              </em>
+              .
             </p>
           </div>
         </motion.div>
 
         {/* Real Trustpilot review screenshots in a horizontal carousel. */}
-        <div className="mt-16">
+        <div className="mt-8">
           <TestimonialCarousel items={TESTIMONIALS} />
         </div>
-
-        {/* Closing invitation — no frame, flowing as a natural continuation.
-            Reframed per client: no fixed number of spots, the bootcamp as the
-            only place plazas open and the filter for the most committed. */}
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-20 text-center"
-        >
-          <p className="mx-auto max-w-3xl font-sans text-2xl font-light leading-snug text-foreground sm:text-3xl lg:text-4xl">
-            Al terminar el tercer día, abriré plazas para{" "}
-            <GoldText className="font-display font-semibold">
-              trabajar conmigo
-            </GoldText>
-            .
-          </p>
-
-          <p className="mx-auto mt-8 max-w-2xl text-base leading-relaxed text-foreground/70">
-            Este será el único espacio donde abriré plazas para acceder a{" "}
-            <em className="font-accent text-[1.15em] italic text-accent-soft">
-              Volver al Origen
-            </em>{" "}
-            — el filtro para elegir a las personas más comprometidas con su
-            proceso de transformación y con la excelencia.
-          </p>
-        </motion.div>
       </Container>
     </section>
   );
