@@ -125,7 +125,7 @@ export function Bonos() {
               {/* Opaque face — must fully hide the conic gradient behind it so
                   only the 1px ring at the edge reads as a moving gold border,
                   not a glow bleeding through the card's center. */}
-              <div className="relative h-full overflow-hidden rounded-[calc(1rem-1px)] bg-surface p-4 text-left">
+              <div className="relative h-full overflow-hidden rounded-[calc(1rem-1px)] bg-ink p-4 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
                 <span
                   aria-hidden="true"
                   className="pointer-events-none absolute inset-px rounded-[calc(1rem-2px)] border border-white/8"

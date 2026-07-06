@@ -14,11 +14,11 @@ const FAQS: Array<{ q: string; a: string }> = [
   },
   {
     q: "¿Las clases quedan grabadas?",
-    a: "Sí. Cada encuentro queda grabado y vas a tener acceso a la grabación de por vida.",
+    a: "Sí. Cada encuentro queda grabado y vas a tener el acceso a las grabaciones.",
   },
   {
     q: "¿Cuánto dura cada encuentro?",
-    a: "Cada uno de los 3 días tiene una sesión en vivo de aproximadamente 2 horas.",
+    a: "Cada sesión dura entre 1h y 1h 30min.",
   },
   {
     q: "¿Qué pasa si no puedo asistir en vivo?",
@@ -30,7 +30,7 @@ const FAQS: Array<{ q: string; a: string }> = [
   },
   {
     q: "¿Este bootcamp es lo mismo que Volver al Origen?",
-    a: "No. Este bootcamp te da todo lo necesario para resetear tu identidad en 3 días, y al finalizar vas a tener acceso a la posibilidad de sumarte al programa Volver al Origen si querés seguir profundizando el proceso.",
+    a: "No. Este bootcamp te da todo lo necesario para resetear tu identidad en 3 días, y al finalizar vas a tener la posibilidad de sumarte al entrenamiento de 40 días de Volver al Origen si quieres seguir evolucionando.",
   },
   {
     q: "¿Qué pasa después de los 3 días?",
@@ -42,7 +42,7 @@ const FAQS: Array<{ q: string; a: string }> = [
   },
   {
     q: "¿Cómo accedo después de comprar?",
-    a: "Al confirmar tu inscripción vas a recibir acceso a un grupo privado de WhatsApp donde te compartimos las fechas, los accesos y todo lo que necesitás para el bootcamp.",
+    a: "Al confirmar tu inscripción vas a recibir acceso a un grupo privado de WhatsApp mediante email, (revisa spam o promociones) y mediante WhatsApp donde te compartimos las fechas, los accesos y todo lo que necesitás para el bootcamp.",
   },
   {
     q: "¿Cuánto tiempo tengo para inscribirme?",
