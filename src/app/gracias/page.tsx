@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Script from "next/script";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { GoldText } from "@/components/ui/GoldText";
@@ -124,24 +123,6 @@ export default function GraciasPage() {
           </Reveal>
         </Container>
       </section>
-
-      {/* Meta Pixel Purchase event — reaching this page = a completed purchase
-          (FastPayDirect redirects here after payment). Waits for fbq from the
-          base pixel (root layout) before firing, so script order can't drop it. */}
-      <Script id="meta-pixel-purchase" strategy="afterInteractive">
-        {`(function firePurchase(tries){
-  if (typeof window.fbq === 'function') {
-    window.fbq('track', 'Purchase', {
-      value: 44.00,
-      currency: 'EUR',
-      content_type: 'product',
-      num_items: 1
-    });
-  } else if (tries < 50) {
-    setTimeout(function(){ firePurchase(tries + 1); }, 100);
-  }
-})(0);`}
-      </Script>
     </main>
   );
 }
