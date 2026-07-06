@@ -1,21 +1,22 @@
 "use client";
 
+import Image from "next/image";
 import { useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
 import { Container } from "@/components/ui/Container";
+import flecha from "@/../public/flecha.png";
 
 gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
 
 /**
  * Section 2 — Central phrase / Reframe.
  *
- * A cinematic beat. On a near-black stage the manifesto reveals itself as you
- * scroll in: line one rises word by word, a hairline of gold draws across,
- * then the reframe ("Manifiestas quien eres.") lands in gold Cinzel — the
- * truth that stays. Driven by GSAP ScrollTrigger + SplitText.
+ * A cinematic beat. On a near-black stage the manifesto reveals itself as a
+ * compact headline, with the outcome framed like a viewfinder. Driven by GSAP
+ * ScrollTrigger + SplitText.
  */
 export function Manifiesto() {
   const root = useRef<HTMLDivElement>(null);
@@ -29,7 +30,7 @@ export function Manifiesto() {
       const lineOne = root.current!.querySelector<HTMLElement>("[data-line='1']")!;
       const lineTwo = root.current!.querySelector<HTMLElement>("[data-line='2']")!;
 
-      // Split both lines into words for staggered reveals.
+      // Split both headline parts into words for a staggered reveal.
       const splitOne = new SplitText(lineOne, { type: "words", wordsClass: "mf-word" });
       const splitTwo = new SplitText(lineTwo, { type: "words", wordsClass: "mf-word" });
 
@@ -40,8 +41,6 @@ export function Manifiesto() {
         opacity: 0,
         filter: "blur(10px)",
       });
-      const body = root.current!.querySelector<HTMLElement>("[data-body]")!;
-      gsap.set(body, { opacity: 0, y: 16 });
 
       // Fire the reveal as soon as the section enters view (no scrub) so the
       // text appears quickly — the user shouldn't have to scroll it into place.
@@ -67,13 +66,12 @@ export function Manifiesto() {
             y: 0,
             opacity: 1,
             filter: "blur(0px)",
-            duration: 0.6,
+            duration: 0.55,
             ease: "power4.out",
-            stagger: 0.08,
+            stagger: 0.05,
           },
-          "-=0.2",
-        )
-        .to(body, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, "-=0.1");
+          "-=0.12",
+        );
 
       return () => {
         splitOne.revert();
@@ -87,48 +85,47 @@ export function Manifiesto() {
     <section
       id="manifiesto"
       ref={root}
-      className="flex items-center bg-[#0A0908] pb-[clamp(7rem,4rem+12vh,12rem)] pt-[clamp(3rem,2rem+6vh,12rem)]"
+      className="relative flex items-center overflow-visible bg-[#0A0908] pb-[clamp(7rem,4rem+12vh,12rem)] pt-[clamp(3rem,2rem+6vh,12rem)]"
     >
-      <Container narrow className="text-center">
+      <Container className="text-center">
         {/* No overflow clip here: the blur halo needs room to breathe as each
             word rises and de-blurs into place. */}
-        <p
-          data-line="1"
-          className="font-sans text-3xl font-light leading-tight text-foreground lg:text-4xl"
+        <h2
+          className="mx-auto max-w-6xl font-sans text-[1.15rem] font-light leading-tight text-foreground sm:text-[clamp(1.55rem,1rem+2.3vw,2.65rem)]"
         >
-          No manifiestas lo que deseas.
-        </p>
+          <span data-line="1" className="block">
+            Has leído libros, visto vídeos y escuchado podcasts…
+          </span>
 
-        {/* "Selector frame" around line 2 — a thin white hairline box with the
-            four corners picked out in brand gold, like a camera viewfinder /
-            target. The frame wraps the <p>; the <p data-line="2"> itself stays
-            intact so GSAP's SplitText still finds and animates it. */}
-        <div className="mt-6 flex justify-center">
-          <div className="relative inline-flex border border-white/30 px-6 py-4 sm:px-8 sm:py-5">
-            {/* Four gold corner brackets. */}
-            <span aria-hidden className="pointer-events-none absolute -left-px -top-px size-3.5 border-l-2 border-t-2 border-accent sm:size-4" />
-            <span aria-hidden className="pointer-events-none absolute -right-px -top-px size-3.5 border-r-2 border-t-2 border-accent sm:size-4" />
-            <span aria-hidden className="pointer-events-none absolute -bottom-px -left-px size-3.5 border-b-2 border-l-2 border-accent sm:size-4" />
-            <span aria-hidden className="pointer-events-none absolute -bottom-px -right-px size-3.5 border-b-2 border-r-2 border-accent sm:size-4" />
+          <span className="mt-4 flex justify-center sm:mt-5">
+            <span className="relative inline-flex max-w-[21rem] border border-white/30 px-4 py-3 sm:max-w-full sm:px-5 sm:py-3">
+              <span aria-hidden className="pointer-events-none absolute -left-px -top-px size-3 border-l-2 border-t-2 border-accent sm:size-4" />
+              <span aria-hidden className="pointer-events-none absolute -right-px -top-px size-3 border-r-2 border-t-2 border-accent sm:size-4" />
+              <span aria-hidden className="pointer-events-none absolute -bottom-px -left-px size-3 border-b-2 border-l-2 border-accent sm:size-4" />
+              <span aria-hidden className="pointer-events-none absolute -bottom-px -right-px size-3 border-b-2 border-r-2 border-accent sm:size-4" />
 
-            <p
-              data-line="2"
-              className="moving-gold-title font-display text-4xl font-semibold leading-tight text-accent sm:text-5xl lg:text-5xl"
-            >
-              Manifiestas quien eres.
-            </p>
-          </div>
-        </div>
-
-        {/* Bridging body copy — appears last with the same timeline. */}
-        <p
-          data-body
-          className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-foreground/90 sm:text-lg"
-        >
-          Tu realidad no responde solo a lo que quieres. Responde a la identidad
-          desde la que eliges, decides y sostienes tu vida.
-        </p>
+              <span
+                data-line="2"
+                className="moving-gold-title whitespace-normal font-display text-[clamp(1.35rem,6vw,1.7rem)] font-semibold leading-tight tracking-[-0.03em] text-accent sm:whitespace-nowrap sm:text-[clamp(1rem,2.6vw,2.25rem)] sm:tracking-normal"
+              >
+                pero no consigues manifestar resultados.
+              </span>
+            </span>
+          </span>
+        </h2>
       </Container>
+
+      <a
+        href="#patron"
+        aria-label="Continuar hacia la siguiente sección"
+        className="group absolute bottom-0 left-1/2 z-20 block size-14 -translate-x-1/2 translate-y-1/2 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-[#0A0908] sm:size-16"
+      >
+        <Image
+          src={flecha}
+          alt=""
+          className="size-full animate-scroll-cue drop-shadow-[0_10px_24px_rgba(200,164,90,0.35)] transition-transform duration-300 group-hover:scale-105"
+        />
+      </a>
     </section>
   );
 }
