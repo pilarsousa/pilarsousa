@@ -4,17 +4,14 @@ import Image, { type StaticImageData } from "next/image";
 import { motion, type Variants } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { SectionTitle } from "@/components/ui/SectionTitle";
-import { CtaButton } from "@/components/ui/CtaButton";
-import { MatrixRain } from "@/components/ui/MatrixRain";
 import { cn } from "@/lib/cn";
-import { CHECKOUT_URL } from "@/lib/links";
 import styles from "./Experiencia.module.css";
 import img1 from "@/../public/img1-pilar.jpg";
 import img2 from "@/../public/img2-pilar.jpg";
 import img3 from "@/../public/img3-pilar.jpg";
 
-// The three day covers — each 600×338 image already carries its own title and
-// copy, so the card is just the artwork with the Matrix cascade over it.
+// The three day covers — each 600×450 (4:3) image already carries its own
+// title and copy, so the card is just the artwork, no overlay.
 const DAYS: StaticImageData[] = [img1, img2, img3];
 
 const grid: Variants = {
@@ -42,10 +39,10 @@ const card: Variants = {
  * the image into the card and carries the copy. Cards enter with a sober 3D
  * tilt, staggered. Three columns on desktop, stacked on mobile.
  */
-/** One card's inner content — image + Matrix cascade. Shared by both layouts. */
+/** One card's inner content — just the cover artwork. */
 function CardMedia({ image }: { image: StaticImageData }) {
   return (
-    <div className="relative aspect-video w-full overflow-hidden rounded-2xl">
+    <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl">
       <Image
         src={image}
         alt=""
@@ -54,23 +51,23 @@ function CardMedia({ image }: { image: StaticImageData }) {
         className="object-cover transition-transform duration-700 group-hover:scale-105"
         placeholder="blur"
       />
-      {/* Matrix glyphs over the cover — fade=0 fades old glyphs to transparent
-          (destination-out), so the cascade forms without darkening the art. */}
-      <MatrixRain fade={0} opacity={0.45} />
     </div>
   );
 }
 
 export function Experiencia() {
   return (
-    <section id="experiencia" className="bg-background py-[clamp(4rem,2rem+8vh,7rem)]">
+    <section
+      id="experiencia"
+      className="bg-background pt-[clamp(4rem,2rem+8vh,7rem)] pb-[clamp(2rem,1rem+4vh,3.5rem)]"
+    >
       <Container>
         <SectionTitle tone="dark">
           Lo que{" "}
           <em className="font-accent font-medium italic text-accent-soft">
             experimentarás
           </em>{" "}
-          dentro
+          dentro:
         </SectionTitle>
 
         <motion.p
@@ -80,9 +77,10 @@ export function Experiencia() {
           transition={{ duration: 0.7, delay: 0.15 }}
           className="mx-auto mt-4 max-w-2xl text-center text-base leading-relaxed text-foreground/60 sm:mt-8"
         >
-          Una experiencia para verte con honestidad, reconocer la verdad que
-          llevas tiempo evitando y dejar de alimentar aquello que ya no
-          representa quién eres.
+          Una experiencia práctica de 3 días para identificar por qué tu vieja
+          identidad bloquea tus manifestaciones, romper el patrón que limita tu
+          potencial y acceder a una nueva identidad capaz de manifestar la
+          realidad que deseas.
         </motion.p>
 
         {/* Clean responsive grid: 1 column on mobile, 3 on desktop. The
@@ -111,18 +109,6 @@ export function Experiencia() {
           ))}
         </motion.ul>
 
-        {/* Central CTA below the three days, with the price tag under it. */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-8 flex justify-center"
-        >
-          <CtaButton href={CHECKOUT_URL} external>
-            Resetear mi identidad
-          </CtaButton>
-        </motion.div>
       </Container>
     </section>
   );
