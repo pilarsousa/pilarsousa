@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+
+/*
+  MISIÓN ORIGEN — Design tokens
+  Palette and typography for the futuristic, neon-lit cyberpunk direction.
+  Tailwind v4: tokens declared in @theme become utility classes automatically
+  (e.g. bg-background, text-cyan, font-display).
+*/
+
+@theme {
+  /* ---- Raw brand palette (source of truth) ---- */
+  --color-void: #000000;          /* pure black — deepest backgrounds */
+  --color-card: #212646;          /* deep violet-navy — cards, surfaces */
+  --color-hot-pink: #f90281;      /* primary CTA — maximum conversion urgency */
+  --color-neon-pink: #f00eb8;     /* secondary neon — electric accents */
+  --color-violet: #872478;        /* deep violet — mystery, depth */
+  --color-electric-blue: #495cc4; /* electric blue — tech, precision */
+  --color-cyan: #28bff1;          /* cyan — activation, clarity */
+  --color-ice-blue: #aef0fe;      /* ice blue — lightest highlight */
+
+  /* ---- Semantic aliases (use these in components) ---- */
+  --color-background: var(--color-void);
+  --color-surface: var(--color-card);
+  --color-foreground: #ffffff;
+  --color-accent: var(--color-hot-pink);
+  --color-muted: rgba(255, 255, 255, 0.5);
+
+  /* ---- Typography ---- */
+  /*
+    Display  → Zen Dots (Google Fonts) — futurista, tecnológica, cyberpunk.
+               Usada en títulos H1/H2/H3, logo, números grandes, labels especiales.
+    Sans     → Jost (Google Fonts) — Futura Light / Book / Medium.
+               Usada en párrafos, subtítulos corridos, botones, formularios.
+  */
+  --font-display: var(--font-zen-dots), system-ui, sans-serif;
+  --font-sans: var(--font-jost), system-ui, sans-serif;
+
+  /* ---- Layout rhythm ---- */
+  --spacing-section: 7rem;
+
+  /* ---- Animations ---- */
+  --animate-neon-drift: neon-drift 6s ease-in-out infinite;
+  --animate-scan-pulse: scan-pulse 3s ease-in-out infinite;
+}
+
+@keyframes neon-drift {
+  0%,
+  100% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 100% center;
+  }
+}
+
+@keyframes scan-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
