@@ -1,6 +1,8 @@
+import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { NeonText } from "@/components/ui/NeonText";
 import { Reveal } from "@/components/ui/Reveal";
+import fotoPilar from "@/../public/mision-origen/foto-pilar.jpg";
 
 const BULLETS = [
   "+500.000 personas impactadas.",
@@ -43,21 +45,26 @@ export function Pilar() {
 
         <div className="flex flex-col gap-12 lg:flex-row lg:items-center lg:gap-16">
 
-          {/* Image placeholder */}
+          {/* Retrato de Pilar */}
           <Reveal className="lg:w-5/12">
-            <div className="relative w-full max-w-sm rounded-sm border border-electric-blue/20 bg-surface/60">
-              {/* Aspect ratio box for the future photo */}
-              <div className="aspect-[3/4] w-full" />
+            {/* mx-auto centra el retrato en mobile, donde la columna es más
+                ancha que el max-w-sm de la tarjeta. */}
+            <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-sm border border-electric-blue/20 bg-surface/60 lg:mx-0">
+              {/* La foto es 3:5 y la caja 3:4: object-cover recorta arriba y
+                  abajo por igual, que es donde no hay nada — el encuadre está
+                  centrado en la cara. */}
+              <Image
+                src={fotoPilar}
+                alt="Pilar Sousa"
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 24rem, 100vw"
+                placeholder="blur"
+                className="aspect-[3/4] w-full object-cover object-top"
+              />
               {/* Neon corner accents */}
               <span aria-hidden className="absolute left-0 top-0 h-8 w-px bg-gradient-to-b from-cyan to-transparent" />
               <span aria-hidden className="absolute left-0 top-0 h-px w-8 bg-gradient-to-r from-cyan to-transparent" />
               <span aria-hidden className="absolute bottom-0 right-0 h-8 w-px bg-gradient-to-t from-neon-pink to-transparent" />
               <span aria-hidden className="absolute bottom-0 right-0 h-px w-8 bg-gradient-to-l from-neon-pink to-transparent" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="font-sans text-xs font-medium uppercase tracking-[0.3em] text-foreground/25">
-                  Foto de Pilar
-                </span>
-              </div>
             </div>
           </Reveal>
 
