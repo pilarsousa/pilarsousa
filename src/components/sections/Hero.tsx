@@ -1,57 +1,75 @@
 import Image from "next/image";
-import { CalendarDays, Radio, Zap, Tag } from "lucide-react";
+import { CalendarDays, Radio, Footprints, Gift } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { FactBadge } from "@/components/ui/FactBadge";
 import { NeonText } from "@/components/ui/NeonText";
 import { ReservaForm } from "@/components/ui/ReservaForm";
+import heroDesktop from "@/../public/mision-origen/fondo-hero.jpg";
+import heroMobile from "@/../public/mision-origen/fondo-hero-movil.jpg";
 
+/* La fecha debe coincidir con el countdown de AnnouncementBar (TARGET) y el
+   precio con la barra: si cambia uno, actualizar el otro. */
 const FACTS = [
-  { label: "Fecha por confirmar", icon: <CalendarDays size={15} /> },
+  { label: "23 de julio · 19:00", icon: <CalendarDays size={15} /> },
   { label: "Online en vivo", icon: <Radio size={15} /> },
-  { label: "3 días intensivos", icon: <Zap size={15} /> },
-  { label: "Inversión por revelar", icon: <Tag size={15} /> },
+  { label: "3 pasos aplicables", icon: <Footprints size={15} /> },
+  { label: "Acceso gratuito", icon: <Gift size={15} /> },
 ];
-
-/*
-  Foto del Hero. Cuando exista el archivo en /public con este nombre, se muestra
-  sobre el fondo neon. Mientras no exista, el bloque queda con la atmósfera
-  cyberpunk como fallback y no se renderiza un <Image> roto (evita el 404).
-*/
-const HERO_IMAGE_SRC = "";
 
 /**
  * Section 1 — Hero / Offer.
  *
- * Layout (según wireframe):
- *  - Columna IZQUIERDA: eyebrow → logo "Misión Origen" → promesa → descripción →
- *    badges de detalles → formulario → CTA principal. Todo apilado en orden de lectura.
- *  - Columna DERECHA: bloque visual con la foto (next/image) sobre una atmósfera
- *    neon que sirve de fallback cuando aún no hay imagen.
- *
- * Responsive: una columna en mobile/tablet (copy → imagen → form → CTA), dos
- * columnas en desktop. La promesa y el CTA quedan above the fold.
- * DOM = orden de lectura; el acomodo visual se hace con CSS.
+ * La foto de Pilar va a sangre como fondo de la sección: está compuesta con el
+ * sujeto a la derecha y espacio negativo a la izquierda, así que el contenido
+ * (eyebrow → wordmark → promesa → descripción → badges → formulario) se apila
+ * sobre ese hueco y nadie tapa a nadie. En mobile el recorte deja de dar ancho
+ * libre, así que el contenido pasa a ancho completo sobre la foto oscurecida.
  */
 export function Hero() {
   return (
     <section
       id="hero"
       aria-labelledby="hero-title"
-      className="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-background"
+      className="relative isolate flex min-h-[100svh] items-start overflow-hidden bg-background lg:items-center"
     >
-      {/* ── Neon atmosphere (fondo global de la sección) ── */}
+      {/* ── Foto de fondo a sangre ──
+          Dos encuadres distintos, no el mismo recortado: el panorámico deja a
+          Pilar a la derecha con hueco a la izquierda para el contenido; el
+          vertical la pone arriba y deja libre el tercio inferior. <picture>
+          resuelve cuál baja el navegador, así que solo se descarga una.
+          quality 90 (el default es 75) porque en desktop la foto se escala por
+          encima de su tamaño real y no sobra margen para recomprimir. */}
+      {/* Mobile: la foto ocupa el 72% superior y el contenido cae debajo, sobre
+          negro — no compiten por el mismo espacio. Desktop: pasa a cubrir toda
+          la sección, porque ahí el hueco para el texto es lateral. */}
+      <picture aria-hidden className="absolute inset-x-0 top-0 -z-10 block h-[72svh] lg:h-full">
+        <source
+          media="(min-width: 1024px)"
+          srcSet={heroDesktop.src}
+          width={heroDesktop.width}
+          height={heroDesktop.height}
+        />
+        <Image
+          src={heroMobile}
+          alt=""
+          fill
+          priority
+          quality={90}
+          sizes="100vw"
+          placeholder="blur"
+          className="object-cover object-top lg:object-right"
+        />
+      </picture>
+
+      {/* ── Capa de legibilidad ──
+          Mobile: funde el pie de la foto con el negro de abajo, para que el
+          corte no se vea como una línea. Ocupa sólo la franja de la foto.
+          Desktop: cubre la sección entera, fuerte a la izquierda y desvaneciendo
+          antes de Pilar. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          background: `
-            radial-gradient(ellipse 60% 80% at 10% 50%, rgba(135,36,120,0.32) 0%, transparent 60%),
-            radial-gradient(ellipse 55% 70% at 88% 35%, rgba(73,92,196,0.28) 0%, transparent 60%),
-            radial-gradient(ellipse 50% 40% at 50% 100%, rgba(40,191,241,0.12) 0%, transparent 50%),
-            #000000
-          `,
-        }}
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[72svh] bg-[linear-gradient(to_top,#000000_0%,rgba(0,0,0,0.55)_12%,transparent_32%)] lg:inset-0 lg:h-full lg:bg-[linear-gradient(to_right,#000000_0%,rgba(0,0,0,0.85)_30%,rgba(0,0,0,0.45)_55%,transparent_80%)]"
       />
 
       {/* Cyberpunk grid */}
@@ -73,12 +91,12 @@ export function Hero() {
         className="pointer-events-none absolute inset-x-0 bottom-0 h-32 -z-10 bg-gradient-to-t from-background to-transparent"
       />
 
-      <Container className="py-12 lg:py-16">
-        {/*
-          Desktop: 2 columnas — contenido a la izquierda, imagen a la derecha.
-          Mobile: una columna, orden DOM natural (copy → imagen → form → CTA).
-        */}
-        <div className="grid gap-8 lg:grid-cols-2 lg:items-center lg:gap-14">
+      {/* pt-[68svh] arranca el contenido justo antes de que termine la foto
+          (72svh), así el copy pisa sólo la franja ya fundida a negro. */}
+      <Container className="pb-12 pt-[68svh] lg:py-16 lg:pt-16">
+        {/* El contenido ocupa la mitad izquierda en desktop: es el hueco que la
+            foto de fondo deja libre. En mobile pasa a ancho completo. */}
+        <div className="lg:max-w-[52%]">
 
           {/* ══════════ Columna izquierda — todo el contenido ══════════ */}
           <div className="flex flex-col [text-shadow:0_2px_20px_rgba(0,0,0,0.6)]">
@@ -184,54 +202,6 @@ export function Hero() {
             </Reveal>
 
           </div>
-
-          {/* ══════════ Columna derecha — bloque visual / imagen ══════════ */}
-          <Reveal delay={0.2} className="w-full">
-            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-md border border-violet/20 sm:aspect-[16/10] lg:aspect-auto lg:h-[28rem]">
-              {/* Fallback neon — visible siempre; queda detrás de la imagen si existe */}
-              <div
-                aria-hidden
-                className="absolute inset-0"
-                style={{
-                  background: `
-                    radial-gradient(ellipse 70% 60% at 50% 30%, rgba(249,2,129,0.28) 0%, transparent 65%),
-                    radial-gradient(ellipse 60% 70% at 40% 90%, rgba(40,191,241,0.22) 0%, transparent 60%),
-                    linear-gradient(160deg, #212646 0%, #000000 100%)
-                  `,
-                }}
-              />
-              {/* Grid sutil sobre el fallback */}
-              <div
-                aria-hidden
-                className="absolute inset-0 opacity-[0.06]"
-                style={{
-                  backgroundImage: `
-                    linear-gradient(rgba(174,240,254,1) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(174,240,254,1) 1px, transparent 1px)
-                  `,
-                  backgroundSize: "48px 48px",
-                }}
-              />
-
-              {/* Foto real — sólo cuando exista el archivo (evita 404) */}
-              {HERO_IMAGE_SRC && (
-                <Image
-                  src={HERO_IMAGE_SRC}
-                  alt="Pilar Sousa — Misión Origen"
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-cover"
-                />
-              )}
-
-              {/* Neon corner accents del bloque de imagen */}
-              <span aria-hidden className="absolute left-0 top-0 h-14 w-px bg-gradient-to-b from-cyan/60 to-transparent" />
-              <span aria-hidden className="absolute left-0 top-0 h-px w-14 bg-gradient-to-r from-cyan/60 to-transparent" />
-              <span aria-hidden className="absolute bottom-0 right-0 h-14 w-px bg-gradient-to-t from-neon-pink/50 to-transparent" />
-              <span aria-hidden className="absolute bottom-0 right-0 h-px w-14 bg-gradient-to-l from-neon-pink/50 to-transparent" />
-            </div>
-          </Reveal>
 
         </div>
       </Container>
