@@ -4,6 +4,7 @@ import { Codigo } from "@/components/sections/Codigo";
 import { Protocolo } from "@/components/sections/Protocolo";
 import { Pilar } from "@/components/sections/Pilar";
 import { Acceso } from "@/components/sections/Acceso";
+import { Footer } from "@/components/sections/Footer";
 import { ScrollArrow } from "@/components/ui/ScrollArrow";
 
 export default function Home() {
@@ -37,6 +38,7 @@ export default function Home() {
       <Protocolo />
       <Pilar />
       <Acceso />
+      <Footer />
     </main>
   );
 }

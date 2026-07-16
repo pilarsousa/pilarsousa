@@ -45,6 +45,7 @@
   --animate-bounce-soft: bounce-soft 2s ease-in-out infinite;
   --animate-bar-shimmer: bar-shimmer 5s ease-in-out infinite;
   --animate-tick-pulse: tick-pulse 0.45s ease-out 1;
+  --animate-neon-glow: neon-glow 3.5s ease-in-out infinite;
 }
 
 @keyframes neon-drift {
@@ -74,6 +75,23 @@
   }
   50% {
     transform: translateY(6px);
+  }
+}
+
+/* Neon sign glow that pulses in and out — footer wordmark. */
+@keyframes neon-glow {
+  0%,
+  100% {
+    text-shadow:
+      0 0 8px rgba(249, 2, 129, 0.5),
+      0 0 20px rgba(249, 2, 129, 0.3),
+      0 0 40px rgba(40, 191, 241, 0.2);
+  }
+  50% {
+    text-shadow:
+      0 0 14px rgba(249, 2, 129, 0.85),
+      0 0 34px rgba(249, 2, 129, 0.55),
+      0 0 64px rgba(40, 191, 241, 0.45);
   }
 }
 

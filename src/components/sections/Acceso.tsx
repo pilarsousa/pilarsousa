@@ -4,6 +4,10 @@ import { CtaButton } from "@/components/ui/CtaButton";
 import { NeonText } from "@/components/ui/NeonText";
 import { Reveal } from "@/components/ui/Reveal";
 
+/* Plazas vendidas — edit these to update the progress bar and its labels. */
+const SOLD = 150;
+const TOTAL = 250;
+
 const TESTIMONIALS = [
   {
     quote:
@@ -38,12 +42,89 @@ export function Acceso() {
       <Container>
         <div className="flex flex-col gap-20">
 
+          {/* ── Qué es Volver al Origen + Plazas vendidas ── */}
+          <Reveal className="w-full">
+            <div className="flex w-full flex-col gap-8 lg:flex-row lg:items-stretch lg:gap-0">
+              {/* Left — ¿Qué es Volver al Origen? */}
+              <div className="flex flex-col gap-5 lg:w-1/2 lg:pr-12">
+                <h2 className="font-display text-2xl font-semibold leading-tight text-foreground sm:text-3xl">
+                  ¿Qué es{" "}
+                  <NeonText variant="pink">Volver al Origen</NeonText>?
+                </h2>
+                <p className="font-sans text-base font-light leading-relaxed text-foreground/70 sm:text-lg">
+                  El entrenamiento práctico de metafísica en habla hispana diseñado
+                  para ayudarte a reescribir tu identidad y manifestar un estilo de
+                  vida extraordinario en tan solo 40 días.
+                </p>
+                <p className="font-sans text-base font-light leading-relaxed text-foreground/70 sm:text-lg">
+                  Más del 60% de nuestros alumnos ya se han convertido en grandes
+                  casos de éxito.
+                </p>
+              </div>
+
+              {/* Divider — vertical on desktop, horizontal on mobile */}
+              <div
+                aria-hidden
+                className="h-px w-full shrink-0 bg-white/10 lg:h-auto lg:w-px"
+              />
+
+              {/* Right — Plazas vendidas + progress bar (placeholder) */}
+              <div className="flex flex-col gap-5 lg:w-1/2 lg:pl-12">
+                <h3 className="text-center font-display text-2xl font-semibold leading-tight text-foreground sm:text-3xl">
+                  <NeonText variant="cyan">Plazas vendidas</NeonText>
+                </h3>
+
+                {/* Progress bar with 0 / total markers, a ✦ head at the fill
+                    end, and the current value below it. sold/total drive both
+                    the width and the labels. */}
+                <div className="mt-3 flex items-center gap-3">
+                  {/* Left marker — start (0) */}
+                  <span className="font-display text-sm text-foreground/50">0</span>
+
+                  {/* Track */}
+                  <div className="relative h-3 flex-1 rounded-full bg-white/5">
+                    {/* Fill */}
+                    <div
+                      className="h-full rounded-full bg-[linear-gradient(90deg,#f90281,#28bff1)]"
+                      style={{ width: `${(SOLD / TOTAL) * 100}%` }}
+                      role="progressbar"
+                      aria-valuenow={SOLD}
+                      aria-valuemin={0}
+                      aria-valuemax={TOTAL}
+                      aria-label="Plazas vendidas"
+                    />
+                    {/* ✦ head at the fill end */}
+                    <span
+                      aria-hidden
+                      className="absolute top-1/2 z-10 flex h-6 w-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-background text-lg text-ice-blue filter-[drop-shadow(0_0_8px_rgba(40,191,241,0.9))]"
+                      style={{ left: `${(SOLD / TOTAL) * 100}%` }}
+                    >
+                      ✦
+                    </span>
+                    {/* Current value below the fill end */}
+                    <span
+                      className="absolute top-full mt-3 -translate-x-1/2 font-display text-sm text-cyan"
+                      style={{ left: `${(SOLD / TOTAL) * 100}%` }}
+                    >
+                      {SOLD}
+                    </span>
+                  </div>
+
+                  {/* Right marker — total */}
+                  <span className="font-display text-sm text-foreground/50">
+                    {TOTAL}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+
           {/* ── Testimonials ── */}
           <div className="flex flex-col gap-10">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col items-center gap-4 text-center">
               <Reveal>
                 <p className="font-sans text-xs font-medium uppercase tracking-[0.3em] text-hot-pink">
-                  Las que ya activaron
+                  Testimonios
                 </p>
               </Reveal>
               <Reveal delay={0.1}>
