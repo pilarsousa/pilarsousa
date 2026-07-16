@@ -57,7 +57,7 @@ export function CtaButton({
          * Transition: 400ms on shadow, 350ms on the overlay opacity.
          */
         variant === "pill" &&
-          "h-14 rounded-full px-8 text-xs tracking-[0.12em] text-white bg-[linear-gradient(180deg,#8b5cf6_0%,#6d28d9_45%,#4c1d95_100%)] shadow-[0_0_22px_rgba(109,40,217,0.6),0_4px_18px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_0_55px_rgba(139,92,246,0.95),0_0_100px_rgba(109,40,217,0.45),0_8px_22px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.28)]",
+          "h-14 rounded-full px-8 text-xs tracking-[0.12em] text-white bg-[linear-gradient(180deg,#8b5cf6_0%,#6d28d9_45%,#4c1d95_100%)] shadow-[0_0_22px_rgba(109,40,217,0.6),0_4px_18px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_0_36px_rgba(139,92,246,0.55),0_0_64px_rgba(109,40,217,0.22),0_8px_22px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.24)]",
 
         block ? "flex w-full" : "inline-flex",
         className,
@@ -79,7 +79,7 @@ export function CtaButton({
          */
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity duration-350 ease-out group-hover:opacity-100 bg-[linear-gradient(180deg,#a78bfa_0%,#8b5cf6_45%,#6d28d9_100%)]"
+          className="pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity duration-350 ease-out group-hover:opacity-60 bg-[linear-gradient(180deg,#a78bfa_0%,#8b5cf6_45%,#6d28d9_100%)]"
         />
       )}
 

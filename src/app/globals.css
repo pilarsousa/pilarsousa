@@ -42,6 +42,7 @@
   /* ---- Animations ---- */
   --animate-neon-drift: neon-drift 6s ease-in-out infinite;
   --animate-scan-pulse: scan-pulse 3s ease-in-out infinite;
+  --animate-bounce-soft: bounce-soft 2s ease-in-out infinite;
 }
 
 @keyframes neon-drift {
@@ -61,6 +62,16 @@
   }
   50% {
     opacity: 0.7;
+  }
+}
+
+@keyframes bounce-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
   }
 }
 

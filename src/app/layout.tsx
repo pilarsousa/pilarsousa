@@ -1,20 +1,21 @@
 import type { Metadata } from "next";
-import { Zen_Dots, Jost } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
 /* Títulos y subtítulos — futurista, tecnológica, cyberpunk */
-const zenDots = Zen_Dots({
+const zenDots = localFont({
   variable: "--font-zen-dots",
-  subsets: ["latin"],
+  src: "../../public/fonts/Zen_Dots/ZenDots-Regular.ttf",
   weight: "400",
   display: "swap",
 });
 
-/* Textos, párrafos, labels, botones — Futura Light / Book / Medium */
-const jost = Jost({
+/* Textos, párrafos, labels, botones — Futura Light / Book / Medium.
+   Variable font: a single file covers the 300–700 range used across the site. */
+const jost = localFont({
   variable: "--font-jost",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  src: "../../public/fonts/Jost/Jost-VariableFont_wght.ttf",
+  weight: "300 700",
   display: "swap",
 });
 

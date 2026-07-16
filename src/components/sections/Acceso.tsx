@@ -86,7 +86,7 @@ export function Acceso() {
                 <p className="font-sans text-xs font-medium uppercase tracking-[0.3em] text-cyan">
                   El acceso
                 </p>
-                <h3 className="font-display text-3xl font-semibold text-foreground sm:text-4xl lg:text-5xl">
+                <h3 className="font-display text-2xl font-semibold leading-tight text-foreground sm:text-3xl">
                   Las puertas se abren.{" "}
                   <NeonText variant="cyan">¿Estás lista?</NeonText>
                 </h3>
