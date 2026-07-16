@@ -1,32 +1,55 @@
-import { Quote } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { CtaButton } from "@/components/ui/CtaButton";
 import { NeonText } from "@/components/ui/NeonText";
 import { Reveal } from "@/components/ui/Reveal";
+import { TestimonialCarousel } from "@/components/ui/TestimonialCarousel";
+import { TrustScoreCard } from "@/components/ui/TrustScoreCard";
+import img5250 from "@/../public/Testimonios/IMG_5250.png";
+import img5243 from "@/../public/Testimonios/IMG_5243.png";
+import img5244 from "@/../public/Testimonios/IMG_5244.png";
+import img5245 from "@/../public/Testimonios/IMG_5245.png";
+import img5246 from "@/../public/Testimonios/IMG_5246.png";
+import img5247 from "@/../public/Testimonios/IMG_5247.png";
+import img5248 from "@/../public/Testimonios/IMG_5248.png";
+import img5249 from "@/../public/Testimonios/IMG_5249.png";
+import t0 from "@/../public/Testimonios/testimonio.png";
+import t1 from "@/../public/Testimonios/testimonio1.png";
+import t2 from "@/../public/Testimonios/testimonio2.png";
+import t3 from "@/../public/Testimonios/testimonio3.png";
+import t4 from "@/../public/Testimonios/testimonio4.png";
+import t5 from "@/../public/Testimonios/testimonio5.png";
+import t6 from "@/../public/Testimonios/testimonio6.png";
+import t7 from "@/../public/Testimonios/testimonio7.png";
+import t8 from "@/../public/Testimonios/testimonio8.png";
+import t9 from "@/../public/Testimonios/testimonio9.png";
+import t10 from "@/../public/Testimonios/testimonio10.png";
 
 /* Plazas vendidas — edit these to update the progress bar and its labels. */
 const SOLD = 150;
 const TOTAL = 250;
 
+// Capturas reales de reseñas de Trustpilot — prueba social verificable.
+// IMG_5250 abre, luego el resto del lote nuevo, después las originales.
 const TESTIMONIALS = [
-  {
-    quote:
-      "Texto provisional — testimonio 1. Describe la transformación, el resultado concreto o el cambio de perspectiva que experimentó esta persona.",
-    name: "Nombre Apellido",
-    role: "Profesión o contexto",
-  },
-  {
-    quote:
-      "Texto provisional — testimonio 2. Describe la transformación, el resultado concreto o el cambio de perspectiva que experimentó esta persona.",
-    name: "Nombre Apellido",
-    role: "Profesión o contexto",
-  },
-  {
-    quote:
-      "Texto provisional — testimonio 3. Describe la transformación, el resultado concreto o el cambio de perspectiva que experimentó esta persona.",
-    name: "Nombre Apellido",
-    role: "Profesión o contexto",
-  },
+  img5250,
+  img5243,
+  img5244,
+  img5245,
+  img5246,
+  img5247,
+  img5248,
+  img5249,
+  t0,
+  t1,
+  t2,
+  t3,
+  t4,
+  t5,
+  t6,
+  t7,
+  t8,
+  t9,
+  t10,
 ];
 
 /**
@@ -135,28 +158,27 @@ export function Acceso() {
               </Reveal>
             </div>
 
-            <div className="grid gap-6 sm:grid-cols-3">
-              {TESTIMONIALS.map((t, i) => (
-                <Reveal key={i} delay={0.1 + i * 0.1}>
-                  <blockquote className="flex flex-col gap-4 rounded-sm border border-hot-pink/15 bg-background/50 p-6 transition-all duration-500 hover:border-hot-pink/40 hover:shadow-[0_0_24px_rgba(249,2,129,0.1)]">
-                    <Quote
-                      className="h-5 w-5 text-hot-pink/45"
-                      strokeWidth={1.5}
-                    />
-                    <p className="font-sans text-sm font-light leading-relaxed text-foreground/65">
-                      &ldquo;{t.quote}&rdquo;
-                    </p>
-                    <footer className="flex flex-col gap-0.5 border-t border-white/10 pt-4">
-                      <cite className="not-italic font-sans text-sm font-medium text-foreground">
-                        {t.name}
-                      </cite>
-                      <span className="font-sans text-xs text-foreground/35">
-                        {t.role}
-                      </span>
-                    </footer>
-                  </blockquote>
-                </Reveal>
-              ))}
+            {/* TrustScore como prueba principal, centrado; la validación y la
+                nota de primera edición van debajo como copy de apoyo. */}
+            <Reveal delay={0.1} className="flex flex-col items-center">
+              <TrustScoreCard />
+
+              <div className="mt-10 max-w-xl text-center">
+                <p className="font-sans text-xs font-medium uppercase tracking-[0.3em] text-cyan">
+                  Validado por quienes ya lo vivieron
+                </p>
+                <p className="mt-4 font-sans text-xl font-light leading-snug text-foreground sm:text-2xl">
+                  <NeonText variant="cyan" className="font-display font-semibold">
+                    4,8 / 5
+                  </NeonText>{" "}
+                  media de valoración entre nuestros alumnos.
+                </p>
+              </div>
+            </Reveal>
+
+            {/* Capturas reales de reseñas de Trustpilot en carrusel horizontal. */}
+            <div className="mt-8">
+              <TestimonialCarousel items={TESTIMONIALS} />
             </div>
           </div>
 
