@@ -43,6 +43,8 @@
   --animate-neon-drift: neon-drift 6s ease-in-out infinite;
   --animate-scan-pulse: scan-pulse 3s ease-in-out infinite;
   --animate-bounce-soft: bounce-soft 2s ease-in-out infinite;
+  --animate-bar-shimmer: bar-shimmer 5s ease-in-out infinite;
+  --animate-tick-pulse: tick-pulse 0.45s ease-out 1;
 }
 
 @keyframes neon-drift {
@@ -72,6 +74,30 @@
   }
   50% {
     transform: translateY(6px);
+  }
+}
+
+/* Light streak that sweeps across the announcement bar. */
+@keyframes bar-shimmer {
+  0% {
+    transform: translateX(-120%);
+  }
+  /* Sweep quickly, then wait out the rest of the cycle. */
+  35%,
+  100% {
+    transform: translateX(320%);
+  }
+}
+
+/* Subtle heartbeat on the ticking seconds. */
+@keyframes tick-pulse {
+  0% {
+    transform: scale(1.12);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
   }
 }
 

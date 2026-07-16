@@ -2,6 +2,14 @@ import { Container } from "@/components/ui/Container";
 import { NeonText } from "@/components/ui/NeonText";
 import { Reveal } from "@/components/ui/Reveal";
 
+const BULLETS = [
+  "+500.000 personas impactadas.",
+  "Referente en Metafísica Práctica y Manifestación.",
+  "Fundadora de Volver al Origen.",
+  "Cientos de alumnos han pasado por sus procesos de transformación.",
+  "(Falta completar)",
+];
+
 /**
  * Section 5 — La guía / Soy Pilar Sousa.
  * Goal: present authority, trust, and personal connection.
@@ -12,6 +20,15 @@ export function Pilar() {
   return (
     <section id="pilar" className="bg-background py-section">
       <Container>
+        {/* Eyebrow "La guía" — solo mobile, encabeza la sección arriba de la
+            imagen. En desktop se muestra dentro de la columna de bio (lg:hidden
+            aquí, lg:block allá). */}
+        <Reveal className="lg:hidden">
+          <p className="mb-1.25 font-sans text-xs font-medium uppercase tracking-[0.3em] text-electric-blue">
+            La guía
+          </p>
+        </Reveal>
+
         <div className="flex flex-col gap-12 lg:flex-row lg:items-center lg:gap-16">
 
           {/* Image placeholder */}
@@ -34,37 +51,33 @@ export function Pilar() {
 
           {/* Bio copy */}
           <div className="flex flex-col gap-6 lg:w-7/12">
-            <Reveal>
+            <Reveal className="hidden lg:block">
               <p className="font-sans text-xs font-medium uppercase tracking-[0.3em] text-electric-blue">
                 La guía
               </p>
             </Reveal>
             <Reveal delay={0.1}>
               <h2 className="font-display text-3xl font-semibold text-foreground sm:text-4xl">
-                Soy{" "}
-                <NeonText variant="violet">Pilar Sousa</NeonText>
+                ¿Quién es{" "}
+                <NeonText variant="violet">Pilar Sousa</NeonText>?
               </h2>
             </Reveal>
             <Reveal delay={0.2}>
-              <p className="font-sans text-base font-light leading-relaxed text-foreground/60">
-                [Párrafo 1 — Introducción de Pilar. Texto provisional que será
-                reemplazado con la bio definitiva. Quién es, su historia y la
-                misión que la mueve.]
-              </p>
-            </Reveal>
-            <Reveal delay={0.3}>
-              <p className="font-sans text-base font-light leading-relaxed text-foreground/60">
-                [Párrafo 2 — Credenciales y metodología. Años de experiencia,
-                formaciones, número de personas acompañadas, resultados obtenidos.
-                Texto provisional — será reemplazado con datos reales.]
-              </p>
-            </Reveal>
-            <Reveal delay={0.4}>
-              <p className="font-sans text-base font-light leading-relaxed text-foreground/60">
-                [Párrafo 3 — Conexión personal con la audiencia. Por qué creó
-                Misión Origen y cuál es su promesa para quienes se unan.
-                Texto provisional — será reemplazado con copy definitivo.]
-              </p>
+              <ul className="flex flex-col gap-4">
+                {BULLETS.map((text) => (
+                  <li key={text} className="flex items-start gap-3">
+                    <span
+                      aria-hidden
+                      className="mt-0.5 shrink-0 font-display text-lg text-neon-pink"
+                    >
+                      ✦
+                    </span>
+                    <span className="font-sans text-lg font-light leading-relaxed text-foreground/75 sm:text-xl">
+                      {text}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </Reveal>
           </div>
 

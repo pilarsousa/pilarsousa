@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { AnnouncementBar } from "@/components/ui/AnnouncementBar";
 
 /* Títulos y subtítulos — futurista, tecnológica, cyberpunk */
 const zenDots = localFont({
@@ -39,7 +40,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${zenDots.variable} ${jost.variable} h-full antialiased`}>
-      <body className="min-h-full bg-background text-foreground">{children}</body>
+      {/* pt-* offsets the fixed AnnouncementBar so it never covers page content.
+          Taller on mobile (stacked layout), shorter once it lays out in a row. */}
+      <body className="min-h-full bg-background pt-18 text-foreground sm:pt-12">
+        <AnnouncementBar />
+        {children}
+      </body>
     </html>
   );
 }

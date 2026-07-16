@@ -103,25 +103,25 @@ export function Hero() {
                 id="hero-title"
                 className="mt-4 font-display text-base leading-snug tracking-tight text-white/90 sm:text-lg lg:text-xl"
               >
-                La versión que eres ahora{" "}
-                <NeonText variant="cyan">no es la versión</NeonText>{" "}
-                que fuiste enviada a ser.
+                Te revelo los 3 pasos de mi{" "}
+                <NeonText variant="cyan">Sistema Práctico de Manifestación</NeonText>{" "}
+                para dar un nuevo Salto Cuántico cada 90 días.
               </h1>
             </Reveal>
 
             {/* Descripción */}
             <Reveal delay={0.25}>
               <p className="mt-4 max-w-xl font-sans text-xs font-light leading-relaxed text-white/65 sm:text-sm">
-                Un programa de 3 días para reprogramar tu identidad, activar tu
-                misión y alinearte con la versión de ti que ya existe — solo está
-                esperando ser desbloqueada.
+                Ya no necesitas más información o teoría. Necesitas un sistema
+                práctico que te permita sostener los resultados que quieres
+                manifestar.
               </p>
             </Reveal>
 
             {/* Badges de detalles — ARRIBA del formulario */}
             <Reveal delay={0.35}>
               <ul
-                className="mt-5 grid max-w-md grid-cols-2 gap-2.5"
+                className="mt-5 grid max-w-md grid-cols-2 gap-2.5 justify-items-center sm:justify-items-start"
                 aria-label="Detalles del programa"
               >
                 {FACTS.map((fact) => (

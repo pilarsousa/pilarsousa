@@ -12,9 +12,18 @@ import { NeonText } from "@/components/ui/NeonText";
 */
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+/*
+  Phone: allow only digits, an optional leading "+", plus common separators
+  (spaces, hyphens, parentheses) for readability. Requires at least 7 digits
+  so it's a plausible number, not just a "+".
+*/
+const PHONE_ALLOWED_RE = /[^\d+\s()-]/g;
+const PHONE_VALID_RE = /^\+?[\d\s()-]{7,}$/;
+
 type Errors = {
   nombre?: string;
   email?: string;
+  telefono?: string;
 };
 
 type Status = "idle" | "submitting" | "success";
@@ -25,8 +34,14 @@ const FIELD_CLASS =
 export function ReservaForm() {
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
+  const [telefono, setTelefono] = useState("");
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<Status>("idle");
+
+  // Strip anything that isn't a digit, "+", or a common separator as the user types.
+  function handleTelefonoChange(value: string) {
+    setTelefono(value.replace(PHONE_ALLOWED_RE, ""));
+  }
 
   function validate(): Errors {
     const next: Errors = {};
@@ -37,6 +52,11 @@ export function ReservaForm() {
       next.email = "El correo es obligatorio.";
     } else if (!EMAIL_RE.test(email.trim())) {
       next.email = "Ingresá un correo válido, por ejemplo: nombre@mail.com";
+    }
+    if (!telefono.trim()) {
+      next.telefono = "El teléfono es obligatorio.";
+    } else if (!PHONE_VALID_RE.test(telefono.trim())) {
+      next.telefono = "Ingresá un teléfono válido, por ejemplo: +34 600 000 000";
     }
     return next;
   }
@@ -153,6 +173,42 @@ export function ReservaForm() {
         )}
       </div>
 
+      {/* Teléfono — solo dígitos, "+" y separadores comunes */}
+      <div className="flex flex-col gap-1.5">
+        <label
+          htmlFor="hero-telefono"
+          className="font-sans text-xs font-medium uppercase tracking-[0.15em] text-foreground/45"
+        >
+          Teléfono
+        </label>
+        <input
+          id="hero-telefono"
+          type="tel"
+          name="telefono"
+          inputMode="tel"
+          autoComplete="tel"
+          placeholder="+34 600 000 000"
+          value={telefono}
+          onChange={(e) => handleTelefonoChange(e.target.value)}
+          aria-invalid={!!errors.telefono}
+          aria-describedby={errors.telefono ? "hero-telefono-error" : undefined}
+          className={cn(
+            FIELD_CLASS,
+            errors.telefono
+              ? "border-hot-pink/70 focus:border-hot-pink focus:shadow-[0_0_18px_rgba(249,2,129,0.3)]"
+              : "border-cyan/20 focus:border-cyan/70 focus:bg-cyan/4 focus:shadow-[0_0_18px_rgba(40,191,241,0.25)]",
+          )}
+        />
+        {errors.telefono && (
+          <p
+            id="hero-telefono-error"
+            className="font-sans text-xs font-light text-hot-pink"
+          >
+            {errors.telefono}
+          </p>
+        )}
+      </div>
+
       {/* Submit — real button that fires the form, same pill styling */}
       <div className="pt-1">
         <button
@@ -167,14 +223,10 @@ export function ReservaForm() {
           <span className="relative">
             {status === "submitting"
               ? "Reservando…"
-              : "✦ Reservar mi plaza ahora ✦"}
+              : "✦ Quiero dar mi Salto Cuántico ✦"}
           </span>
         </button>
       </div>
-
-      <p className="text-center font-sans text-xs font-light text-foreground/30">
-        [Nota de privacidad o garantía — texto provisional]
-      </p>
     </form>
   );
 }
