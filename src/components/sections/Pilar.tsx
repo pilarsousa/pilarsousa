@@ -18,7 +18,19 @@ const BULLETS = [
  */
 export function Pilar() {
   return (
-    <section id="pilar" className="bg-background py-section">
+    <section id="pilar" className="relative bg-background py-section">
+      {/* Degradé de transición superior: funde el azul noche de la sección
+          anterior (Protocolo) con el negro de esta, suavizando el corte. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[linear-gradient(to_top,transparent,#212646)]"
+      />
+      {/* Degradé de transición inferior: funde el negro con el azul noche de la
+          sección siguiente (Acceso). */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(to_bottom,transparent,#212646)]"
+      />
       <Container>
         {/* Eyebrow "La guía" — solo mobile, encabeza la sección arriba de la
             imagen. En desktop se muestra dentro de la columna de bio (lg:hidden
