@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/mision-origen",
+      "destination": "https://mision-origen.vercel.app"
+    },
+    {
+      "source": "/mision-origen/:path*",
+      "destination": "https://mision-origen.vercel.app/:path*"
+    }
+  ]
+}
