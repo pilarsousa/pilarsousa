@@ -84,6 +84,12 @@ export function ReservaForm({ source = "mision-origen" }: { source?: string }) {
       // Only show success once the lead is actually stored — never on a failed
       // request, or the visitor thinks they reserved a spot that was never saved.
       if (!res.ok) throw new Error(`register failed: ${res.status}`);
+
+      // Notify the analytics layer that a real lead was stored. GTM listens for
+      // this event and fires the Meta "Lead" conversion; keeping it here (not on
+      // page load) ensures only completed registrations count as conversions.
+      window.dataLayer?.push({ event: "lead_registered", lead_source: source });
+
       setStatus("success");
     } catch {
       setStatus("error");
