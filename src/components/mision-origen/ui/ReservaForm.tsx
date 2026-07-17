@@ -107,14 +107,14 @@ export function ReservaForm({
       // the event is pushed.
       window.dataLayer?.push({ event: "lead_registered", lead_source: source });
 
-      // Let the host (e.g. the modal) react — typically to close itself — before
-      // we navigate away.
-      onSuccess?.();
-
-      // Free event: registration IS the conversion, so send the visitor to the
-      // thank-you page instead of showing an inline confirmation. Keep status
-      // "submitting" so the button stays disabled during the navigation.
-      router.push("/gracias-mision-origen");
+      // Show a brief "¡Reservado!" confirmation on the button so the click feels
+      // resolved, THEN close the modal and navigate. Without the pause the modal
+      // vanishes mid-request and the success never registers visually.
+      setStatus("success");
+      setTimeout(() => {
+        onSuccess?.(); // e.g. the modal closes itself
+        router.push("/gracias-mision-origen");
+      }, 900);
     } catch {
       setStatus("error");
     }
@@ -248,15 +248,24 @@ export function ReservaForm({
       <div className="pt-1">
         <button
           type="submit"
-          disabled={status === "submitting"}
-          className="group relative flex h-14 w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-full px-6 font-sans text-[0.65rem] font-medium uppercase tracking-[0.08em] text-white transition-all duration-500 ease-out active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-70 bg-[linear-gradient(180deg,#8b5cf6_0%,#6d28d9_45%,#4c1d95_100%)] shadow-[0_0_22px_rgba(109,40,217,0.6),0_4px_18px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_0_36px_rgba(139,92,246,0.55),0_0_64px_rgba(109,40,217,0.22),0_8px_22px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.24)] sm:text-xs sm:tracking-[0.12em] sm:px-8"
+          disabled={status === "submitting" || status === "success"}
+          className={cn(
+            "group relative flex h-14 w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-full px-6 font-sans text-[0.65rem] font-medium uppercase tracking-[0.08em] text-white transition-all duration-500 ease-out active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent disabled:cursor-not-allowed sm:text-xs sm:tracking-[0.12em] sm:px-8",
+            status === "success"
+              ? "bg-[linear-gradient(180deg,#22c55e_0%,#15803d_100%)] shadow-[0_0_28px_rgba(34,197,94,0.55)]"
+              : "bg-[linear-gradient(180deg,#8b5cf6_0%,#6d28d9_45%,#4c1d95_100%)] shadow-[0_0_22px_rgba(109,40,217,0.6),0_4px_18px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_0_36px_rgba(139,92,246,0.55),0_0_64px_rgba(109,40,217,0.22),0_8px_22px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.24)] disabled:opacity-70",
+          )}
         >
           <span
             aria-hidden
             className="pointer-events-none absolute inset-0 rounded-full bg-[linear-gradient(180deg,#a78bfa_0%,#8b5cf6_45%,#6d28d9_100%)] opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-60"
           />
           <span className="relative">
-            {status === "submitting" ? "Reservando…" : submitLabel}
+            {status === "submitting"
+              ? "Reservando…"
+              : status === "success"
+                ? "✦ ¡Reservado! ✦"
+                : submitLabel}
           </span>
         </button>
       </div>

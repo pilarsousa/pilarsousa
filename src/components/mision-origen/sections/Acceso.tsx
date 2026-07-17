@@ -155,20 +155,11 @@ export function Acceso() {
                   Las puertas se abren.{" "}
                   <NeonText variant="cyan">¿Estás lista?</NeonText>
                 </h3>
-                <p className="max-w-lg font-sans text-base font-light leading-relaxed text-zinc-300">
-                  [Texto de cierre — provisional. Llamada emocional final, urgencia
-                  o escasez según la estrategia de ventas. Será reemplazado con el
-                  copy definitivo.]
-                </p>
                 <div className="flex flex-wrap items-center justify-center gap-4">
                   <CtaButton variant="pill">
                     ✦ Reservar mi plaza ahora ✦
                   </CtaButton>
                 </div>
-                <p className="font-sans text-xs text-foreground/30">
-                  [Garantía, política de devolución o nota de confianza — texto
-                  provisional]
-                </p>
               </div>
             </div>
           </Reveal>
