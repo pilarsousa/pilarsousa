@@ -26,12 +26,14 @@ type Errors = {
   telefono?: string;
 };
 
-type Status = "idle" | "submitting" | "success";
+type Status = "idle" | "submitting" | "success" | "error";
 
 const FIELD_CLASS =
   "h-11 w-full rounded-sm border bg-white/3 px-4 font-sans text-sm font-light text-white placeholder:text-white/25 outline-none transition-all duration-300";
 
-export function ReservaForm() {
+/* `source` tags the lead in the CRM by which landing it came from. Defaults to
+   this landing; set it explicitly if the form is reused elsewhere. */
+export function ReservaForm({ source = "mision-origen" }: { source?: string }) {
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
@@ -68,13 +70,24 @@ export function ReservaForm() {
     if (Object.keys(found).length > 0) return;
 
     setStatus("submitting");
-    /*
-      No backend yet: this simulates the round-trip so the UX (loading →
-      success) is complete. When the destination is defined (email, sheet,
-      Mailchimp, etc.), replace this with the real request.
-    */
-    await new Promise((r) => setTimeout(r, 900));
-    setStatus("success");
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombre: nombre.trim(),
+          email: email.trim(),
+          telefono: telefono.trim(),
+          source,
+        }),
+      });
+      // Only show success once the lead is actually stored — never on a failed
+      // request, or the visitor thinks they reserved a spot that was never saved.
+      if (!res.ok) throw new Error(`register failed: ${res.status}`);
+      setStatus("success");
+    } catch {
+      setStatus("error");
+    }
   }
 
   if (status === "success") {
@@ -208,6 +221,16 @@ export function ReservaForm() {
           </p>
         )}
       </div>
+
+      {/* Submit failed — let the visitor retry instead of leaving them stuck. */}
+      {status === "error" && (
+        <p
+          role="alert"
+          className="font-sans text-xs font-light text-hot-pink"
+        >
+          No pudimos registrar tu reserva. Revisá tu conexión y probá de nuevo.
+        </p>
+      )}
 
       {/* Submit — real button that fires the form, same pill styling */}
       <div className="pt-1">
