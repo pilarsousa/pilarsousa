@@ -2,7 +2,8 @@ import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { NeonText } from "@/components/mision-origen/ui/NeonText";
 import { Reveal } from "@/components/mision-origen/ui/Reveal";
-import fotoPilar from "@/../public/mision-origen/foto-pilar.jpg";
+import pilarDesktop from "@/../public/mision-origen/Fondo-PilarSousaPC.jpg";
+import pilarMobile from "@/../public/mision-origen/foto-pilar.jpg";
 
 const BULLETS = [
   "+500.000 personas impactadas.",
@@ -14,55 +15,81 @@ const BULLETS = [
 
 /**
  * Section 5 — La guía / Soy Pilar Sousa.
- * Goal: present authority, trust, and personal connection.
- * Two-column layout: image placeholder left, bio copy right.
- * Placeholder — to be developed together. Real bio and photo pending.
+ *
+ * Mismo patrón que el Hero pero ESPEJADO: la foto de Pilar va a sangre como
+ * fondo, con ella a la izquierda y el texto sobre el hueco de la derecha. En
+ * mobile se comporta igual que el Hero (foto arriba, contenido debajo sobre
+ * negro). <picture> elige el encuadre: panorámico en desktop, vertical en
+ * mobile — solo se descarga uno.
  */
 export function Pilar() {
   return (
-    <section id="pilar" className="relative bg-background py-section">
-      {/* Degradé de transición superior: funde el azul noche de la sección
-          anterior (Protocolo) con el negro de esta, suavizando el corte. */}
+    <section
+      id="pilar"
+      aria-labelledby="pilar-title"
+      className="relative isolate flex min-h-[100svh] items-start overflow-hidden bg-background lg:items-center"
+    >
+      {/* ── Foto de fondo a sangre ──
+          Desktop: panorámica, Pilar a la izquierda, hueco a la derecha para el
+          texto (object-left). Mobile: vertical, Pilar arriba, se funde abajo. */}
+      <picture aria-hidden className="absolute inset-x-0 top-0 -z-10 block h-[72svh] md:h-[84svh] lg:h-full">
+        <source
+          media="(min-width: 1024px)"
+          srcSet={pilarDesktop.src}
+          width={pilarDesktop.width}
+          height={pilarDesktop.height}
+        />
+        <Image
+          src={pilarMobile}
+          alt="Pilar Sousa"
+          fill
+          quality={90}
+          sizes="100vw"
+          placeholder="blur"
+          className="object-cover object-top lg:object-[38%_center] xl:object-[30%_center]"
+        />
+      </picture>
+
+      {/* ── Capa de legibilidad ── (espejada respecto al Hero)
+          Mobile: funde el pie de la foto con el negro de abajo.
+          Desktop: fuerte a la DERECHA (donde va el texto), desvaneciendo antes
+          de llegar a Pilar (izquierda). */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[linear-gradient(to_top,transparent,#170f22)]"
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[72svh] md:h-[84svh] bg-[linear-gradient(to_top,#000000_0%,#000000_28%,rgba(0,0,0,0.55)_40%,transparent_58%)] lg:inset-0 lg:h-full lg:bg-[linear-gradient(to_left,#000000_0%,rgba(0,0,0,0.85)_30%,rgba(0,0,0,0.45)_55%,transparent_80%)]"
       />
-      {/* Degradé de transición inferior: funde el negro con el azul noche de la
-          sección siguiente (Acceso). */}
+
+      {/* Cyberpunk grid */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(to_bottom,transparent,#170f22)]"
+        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.035]"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(174,240,254,1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(174,240,254,1) 1px, transparent 1px)
+          `,
+          backgroundSize: "64px 64px",
+        }}
       />
-      <Container>
-        <div className="flex flex-col gap-12 lg:flex-row lg:items-center lg:gap-16">
 
-          {/* Retrato de Pilar */}
-          <Reveal className="lg:w-5/12">
-            {/* mx-auto centra el retrato en mobile, donde la columna es más
-                ancha que el max-w-sm de la tarjeta. */}
-            <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-sm border border-electric-blue/20 bg-surface/60 lg:mx-0">
-              {/* La foto es 3:5 y la caja 3:4: object-cover recorta arriba y
-                  abajo por igual, que es donde no hay nada — el encuadre está
-                  centrado en la cara. */}
-              <Image
-                src={fotoPilar}
-                alt="Pilar Sousa"
-                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 24rem, 100vw"
-                placeholder="blur"
-                className="aspect-[3/4] w-full object-cover object-top"
-              />
-              {/* Neon corner accents */}
-              <span aria-hidden className="absolute left-0 top-0 h-8 w-px bg-gradient-to-b from-cyan to-transparent" />
-              <span aria-hidden className="absolute left-0 top-0 h-px w-8 bg-gradient-to-r from-cyan to-transparent" />
-              <span aria-hidden className="absolute bottom-0 right-0 h-8 w-px bg-gradient-to-t from-neon-pink to-transparent" />
-              <span aria-hidden className="absolute bottom-0 right-0 h-px w-8 bg-gradient-to-l from-neon-pink to-transparent" />
-            </div>
-          </Reveal>
+      {/* Bottom vignette — funde con el fondo de la sección siguiente */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-32 -z-10 bg-gradient-to-t from-background to-transparent"
+      />
 
-          {/* Bio copy */}
-          <div className="flex flex-col gap-6 lg:w-7/12">
+      {/* Mobile: el contenido arranca en la costura donde la figura se funde a
+          negro (pt-[52svh]). Desktop: centrado vertical, alineado a la derecha. */}
+      <Container className="pb-12 pt-[56svh] md:pt-[76svh] lg:py-16 lg:pt-16">
+        {/* Contenido sobre el hueco de la derecha en desktop (ml-auto); ancho
+            completo en mobile. */}
+        <div className="lg:ml-auto lg:max-w-[52%]">
+          <div className="flex flex-col gap-6 [text-shadow:0_2px_20px_rgba(0,0,0,0.6)]">
             <Reveal delay={0.1}>
-              <h2 className="font-display text-3xl font-semibold text-foreground sm:text-4xl">
+              <h2
+                id="pilar-title"
+                className="font-display text-3xl font-semibold text-foreground sm:text-4xl"
+              >
                 ¿Quién es{" "}
                 <NeonText variant="violet">Pilar Sousa</NeonText>?
               </h2>
@@ -85,7 +112,6 @@ export function Pilar() {
               </ul>
             </Reveal>
           </div>
-
         </div>
       </Container>
     </section>

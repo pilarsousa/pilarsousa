@@ -165,9 +165,6 @@ export function Acceso() {
                   <CtaButton href="#inscripcion" variant="pill">
                     ✦ Reservar mi plaza ahora ✦
                   </CtaButton>
-                  <CtaButton href="#protocolo" variant="ghost">
-                    Ver el protocolo
-                  </CtaButton>
                 </div>
                 <p className="font-sans text-xs text-foreground/30">
                   [Garantía, política de devolución o nota de confianza — texto

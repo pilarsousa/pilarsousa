@@ -103,16 +103,9 @@ export function Hero() {
           {/* ══════════ Columna izquierda — todo el contenido ══════════ */}
           <div className="flex flex-col [text-shadow:0_2px_20px_rgba(0,0,0,0.6)]">
 
-            {/* Eyebrow — presentación */}
-            <Reveal>
-              <span className="font-sans text-xs font-medium uppercase tracking-[0.35em] text-cyan/75">
-                Pilar Sousa presenta
-              </span>
-            </Reveal>
-
             {/* Logo / nombre del programa — jerarquía máxima, aureola neon que recorre la frase */}
-            <Reveal delay={0.05}>
-              <p className="mt-2 whitespace-nowrap font-display text-3xl leading-tight tracking-tight sm:text-4xl lg:text-5xl filter-[drop-shadow(0_0_28px_rgba(249,2,129,0.35))]">
+            <Reveal>
+              <p className="whitespace-nowrap font-display text-3xl leading-tight tracking-tight sm:text-4xl lg:text-5xl filter-[drop-shadow(0_0_28px_rgba(249,2,129,0.35))]">
                 <NeonText variant="multi">Misión Origen</NeonText>
               </p>
             </Reveal>
