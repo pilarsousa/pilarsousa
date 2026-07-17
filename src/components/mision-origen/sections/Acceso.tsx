@@ -152,7 +152,9 @@ export function Acceso() {
                   El acceso
                 </p>
                 <h3 className="font-display text-2xl font-semibold leading-tight text-foreground sm:text-3xl">
-                  Las puertas se abren.{" "}
+                  Las puertas se abren.
+                  {/* En mobile parte tras el punto; en desktop fluye con espacio */}
+                  <br className="sm:hidden" />{" "}
                   <NeonText variant="cyan">¿Estás lista?</NeonText>
                 </h3>
                 <div className="flex flex-wrap items-center justify-center gap-4">

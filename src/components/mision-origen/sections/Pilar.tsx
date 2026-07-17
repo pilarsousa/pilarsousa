@@ -90,7 +90,7 @@ export function Pilar() {
 
       {/* Mobile: el contenido arranca en la costura donde la figura se funde a
           negro (pt-[52svh]). Desktop: centrado vertical, alineado a la derecha. */}
-      <Container className="pb-12 pt-[70svh] md:pt-[76svh] lg:py-16 lg:pt-16">
+      <Container className="pb-14 pt-[70svh] md:pt-[76svh] lg:py-16 lg:pt-16">
         {/* Contenido sobre el hueco de la derecha en desktop (ml-auto); ancho
             completo en mobile. */}
         <div className="lg:ml-auto lg:max-w-[52%]">

@@ -107,14 +107,15 @@ export function ReservaForm({
       // the event is pushed.
       window.dataLayer?.push({ event: "lead_registered", lead_source: source });
 
-      // Show a brief "¡Reservado!" confirmation on the button so the click feels
-      // resolved, THEN close the modal and navigate. Without the pause the modal
-      // vanishes mid-request and the success never registers visually.
+      // Show the "¡Reservado!" confirmation for ~3s so it clearly registers,
+      // then close the modal and navigate to the thank-you page. This redirect
+      // fires on the timer regardless of whether the user closes the modal
+      // manually in the meantime — closing early just gets them there sooner.
       setStatus("success");
       setTimeout(() => {
         onSuccess?.(); // e.g. the modal closes itself
         router.push("/gracias-mision-origen");
-      }, 900);
+      }, 3000);
     } catch {
       setStatus("error");
     }
