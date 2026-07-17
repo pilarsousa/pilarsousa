@@ -69,7 +69,7 @@ export function Hero() {
           antes de Pilar. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[72svh] bg-[linear-gradient(to_top,#000000_0%,rgba(0,0,0,0.55)_12%,transparent_32%)] lg:inset-0 lg:h-full lg:bg-[linear-gradient(to_right,#000000_0%,rgba(0,0,0,0.85)_30%,rgba(0,0,0,0.45)_55%,transparent_80%)]"
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[72svh] bg-[linear-gradient(to_top,#000000_0%,#000000_28%,rgba(0,0,0,0.55)_40%,transparent_58%)] lg:inset-0 lg:h-full lg:bg-[linear-gradient(to_right,#000000_0%,rgba(0,0,0,0.85)_30%,rgba(0,0,0,0.45)_55%,transparent_80%)]"
       />
 
       {/* Cyberpunk grid */}
@@ -91,9 +91,11 @@ export function Hero() {
         className="pointer-events-none absolute inset-x-0 bottom-0 h-32 -z-10 bg-gradient-to-t from-background to-transparent"
       />
 
-      {/* pt-[68svh] arranca el contenido justo antes de que termine la foto
-          (72svh), así el copy pisa sólo la franja ya fundida a negro. */}
-      <Container className="pb-12 pt-[68svh] lg:py-16 lg:pt-16">
+      {/* La figura de Pilar se funde en negro alrededor del ~50% de la foto; de
+          ahí para abajo la imagen ya es negro puro. Arrancamos el contenido en
+          esa costura (pt-[52svh]) en vez de al final de la foto (72svh), para no
+          dejar una franja negra vacía entre la imagen y el copy. */}
+      <Container className="pb-12 pt-[52svh] lg:py-16 lg:pt-16">
         {/* El contenido ocupa la mitad izquierda en desktop: es el hueco que la
             foto de fondo deja libre. En mobile pasa a ancho completo. */}
         <div className="lg:max-w-[52%]">
@@ -110,7 +112,7 @@ export function Hero() {
 
             {/* Logo / nombre del programa — jerarquía máxima, aureola neon que recorre la frase */}
             <Reveal delay={0.05}>
-              <p className="mt-2 whitespace-nowrap font-display text-4xl leading-tight tracking-tight sm:text-5xl lg:text-6xl filter-[drop-shadow(0_0_28px_rgba(249,2,129,0.35))]">
+              <p className="mt-2 whitespace-nowrap font-display text-3xl leading-tight tracking-tight sm:text-4xl lg:text-5xl filter-[drop-shadow(0_0_28px_rgba(249,2,129,0.35))]">
                 <NeonText variant="multi">Misión Origen</NeonText>
               </p>
             </Reveal>
@@ -119,7 +121,7 @@ export function Hero() {
             <Reveal delay={0.15}>
               <h1
                 id="hero-title"
-                className="mt-4 font-display text-base leading-snug tracking-tight text-white/90 sm:text-lg lg:text-xl"
+                className="mt-4 font-display text-lg leading-snug tracking-tight text-white/90 sm:text-xl lg:text-2xl"
               >
                 Te revelo los 3 pasos de mi{" "}
                 <NeonText variant="cyan">Sistema Práctico de Manifestación</NeonText>{" "}
@@ -129,7 +131,7 @@ export function Hero() {
 
             {/* Descripción */}
             <Reveal delay={0.25}>
-              <p className="mt-4 max-w-xl font-sans text-xs font-light leading-relaxed text-white/65 sm:text-sm">
+              <p className="mt-4 max-w-xl font-sans text-sm font-light leading-relaxed text-white/65 sm:text-base">
                 Ya no necesitas más información o teoría. Necesitas un sistema
                 práctico que te permita sostener los resultados que quieres
                 manifestar.

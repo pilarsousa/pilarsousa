@@ -94,6 +94,7 @@
   --animate-bar-shimmer: bar-shimmer 5s ease-in-out infinite;
   --animate-tick-pulse: tick-pulse 0.45s ease-out 1;
   --animate-marquee: marquee 14s linear infinite;
+  --animate-badge-pulse: badge-pulse 3s ease-in-out infinite;
   /* Note: --animate-border-spin is declared above. Both landings defined it
      identically (border-spin 4s linear infinite) and both use it for a beam
      travelling around a border, so it is shared rather than duplicated. */
@@ -232,6 +233,20 @@
   }
   to {
     transform: translateX(-50%);
+  }
+}
+
+/* Soft border + glow heartbeat for the fact badges. On mobile there is no
+   hover state, so this keeps the pills feeling alive with a gentle pulse. */
+@keyframes badge-pulse {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--color-cyan) 25%, transparent);
+    box-shadow: 0 0 0 rgba(40, 191, 241, 0);
+  }
+  50% {
+    border-color: color-mix(in srgb, var(--color-cyan) 60%, transparent);
+    box-shadow: 0 0 14px rgba(40, 191, 241, 0.2);
   }
 }
 
