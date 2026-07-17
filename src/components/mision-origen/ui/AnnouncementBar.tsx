@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/cn";
-import GradualBlur from "@/components/mision-origen/ui/GradualBlur";
 
 /*
   Target: 23 July 2026, 19:00 in Europe/Madrid.
@@ -99,23 +98,24 @@ function TimeCell({
         // key forces a remount each tick so the pulse animation replays.
         key={pulse ? value : undefined}
         className={cn(
-          "font-display text-sm tabular-nums text-[#0a1a2e] sm:text-base",
+          "font-display text-sm tabular-nums text-white sm:text-base",
           pulse && "inline-block animate-tick-pulse",
         )}
       >
         {pad(value)}
       </span>
-      <span className="text-[0.55rem] font-semibold uppercase tracking-wider text-[#0a1a2e]/70">
+      <span className="text-[0.55rem] font-semibold uppercase tracking-wider text-white/70">
         {label}
       </span>
     </div>
   );
 }
 
-// Split into two logical parts so mobile can break between them on its own line,
-// while desktop keeps everything inline with the "·" separator.
+// Split into two logical parts so desktop keeps everything inline with the "·"
+// separator. Mobile instead scrolls the full single-line phrase as a marquee.
 const MESSAGE_MAIN = "EVENTO ONLINE GRATUITO - MISIÓN ORIGEN";
 const MESSAGE_DETAIL = "23 DE JULIO / 19:00PM (ESPAÑA)";
+const MESSAGE_FULL = `${MESSAGE_MAIN} · ${MESSAGE_DETAIL}`;
 
 export function AnnouncementBar() {
   // Resolve the target once; it never changes across renders.
@@ -138,28 +138,9 @@ export function AnnouncementBar() {
       aria-label="Anuncio del evento"
       className="fixed inset-x-0 top-0 z-100"
     >
-      {/* GradualBlur bajo el borde inferior de la barra: difumina el contenido
-          de la página que pasa por debajo al scrollear. Sobresale hacia abajo
-          desde la costura, por eso vive fuera del overflow-hidden de la barra.
-          Alto y con muchos divs para que el desenfoque se desvanezca en degradé,
-          sin corte duro. El wrapper NO limita la altura (deja fluir el blur). */}
-      <div className="pointer-events-none absolute inset-x-0 top-full">
-        {/* position="top": el blur es fuerte pegado a la barra (arriba) y se
-            desvanece en degradé hacia abajo, sin línea de corte.
-            Franja de ~25px por debajo del announcement. */}
-        <GradualBlur
-          target="parent"
-          position="top"
-          height="1.5625rem"
-          strength={2}
-          divCount={6}
-          curve="ease-out"
-          opacity={1}
-        />
-      </div>
-
-      {/* Barra visual — su overflow-hidden recorta shimmer y degradés internos */}
-      <div className="relative overflow-hidden bg-[#28BFF1]">
+      {/* Barra visual — fondo glass (semitransparente + backdrop-blur).
+          Su overflow-hidden recorta shimmer y degradés internos. */}
+      <div className="relative overflow-hidden border-b border-white/10 bg-[#28BFF1]/38 backdrop-blur-md">
       {/* Degradé negro en los bordes izquierdo y derecho (viñeteado lateral).
           Más angosto en mobile para no comerse el ancho del texto. */}
       <div
@@ -178,11 +159,32 @@ export function AnnouncementBar() {
       />
 
       <div className="relative mx-auto flex max-w-6xl flex-col items-center justify-between gap-1.5 px-3 py-2 text-center sm:flex-row sm:gap-4 sm:px-4 sm:text-left">
-        <p className="w-full min-w-0 whitespace-normal px-2 font-sans text-[0.7rem] font-semibold leading-tight tracking-wide text-wrap text-[#0a1a2e] [overflow-wrap:anywhere] sm:w-auto sm:px-0 sm:text-[0.68rem] md:text-xs lg:text-sm">
-          <span className="block sm:inline">{MESSAGE_MAIN}</span>
-          {/* Separador solo en desktop (en mobile el salto de línea lo separa) */}
-          <span aria-hidden className="hidden sm:inline">{" · "}</span>
-          <span className="block sm:inline">{MESSAGE_DETAIL}</span>
+        {/* Mobile: marquee — la frase completa se desplaza en loop. El track
+            lleva dos copias idénticas; al moverse -50% el corte es invisible.
+            aria-hidden en las copias visibles + texto accesible aparte. */}
+        <div className="w-full min-w-0 overflow-hidden sm:hidden">
+          <div className="flex w-max animate-marquee whitespace-nowrap will-change-transform">
+            <span
+              aria-hidden
+              className="px-4 font-sans text-[0.7rem] font-semibold tracking-wide text-white"
+            >
+              {MESSAGE_FULL}
+            </span>
+            <span
+              aria-hidden
+              className="px-4 font-sans text-[0.7rem] font-semibold tracking-wide text-white"
+            >
+              {MESSAGE_FULL}
+            </span>
+          </div>
+          <span className="sr-only">{MESSAGE_FULL}</span>
+        </div>
+
+        {/* Desktop: frase inline, estática, con separador "·" */}
+        <p className="hidden min-w-0 font-sans font-semibold leading-tight tracking-wide text-white sm:block sm:w-auto sm:text-[0.68rem] md:text-xs lg:text-sm">
+          <span>{MESSAGE_MAIN}</span>
+          <span aria-hidden>{" · "}</span>
+          <span>{MESSAGE_DETAIL}</span>
         </p>
 
         {/* Countdown — hidden numbers until mounted to avoid layout shift */}
@@ -193,15 +195,15 @@ export function AnnouncementBar() {
           {remaining && !remaining.done ? (
             <>
               <TimeCell value={remaining.days} label="días" pulse />
-              <span aria-hidden className="font-display text-sm text-[#0a1a2e]/40">:</span>
+              <span aria-hidden className="font-display text-sm text-white/40">:</span>
               <TimeCell value={remaining.hours} label="hs" pulse />
-              <span aria-hidden className="font-display text-sm text-[#0a1a2e]/40">:</span>
+              <span aria-hidden className="font-display text-sm text-white/40">:</span>
               <TimeCell value={remaining.minutes} label="min" pulse />
-              <span aria-hidden className="font-display text-sm text-[#0a1a2e]/40">:</span>
+              <span aria-hidden className="font-display text-sm text-white/40">:</span>
               <TimeCell value={remaining.seconds} label="seg" pulse />
             </>
           ) : remaining?.done ? (
-            <span className="font-display text-sm font-semibold text-[#0a1a2e]">
+            <span className="font-display text-sm font-semibold text-white">
               ¡El evento ha comenzado!
             </span>
           ) : (

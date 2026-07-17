@@ -93,6 +93,7 @@
   --animate-bounce-soft: bounce-soft 2s ease-in-out infinite;
   --animate-bar-shimmer: bar-shimmer 5s ease-in-out infinite;
   --animate-tick-pulse: tick-pulse 0.45s ease-out 1;
+  --animate-marquee: marquee 14s linear infinite;
   /* Note: --animate-border-spin is declared above. Both landings defined it
      identically (border-spin 4s linear infinite) and both use it for a beam
      travelling around a border, so it is shared rather than duplicated. */
@@ -219,6 +220,18 @@
   35%,
   100% {
     transform: translateX(320%);
+  }
+}
+
+/* Continuous horizontal scroll for the mobile announcement marquee.
+   The track holds two identical copies of the message side by side, so
+   shifting it by exactly -50% loops seamlessly with no visible jump. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }
 
