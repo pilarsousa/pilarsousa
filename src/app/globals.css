@@ -79,7 +79,7 @@
 
   /* ---- Raw brand palette (source of truth) ---- */
   --color-void: #000000; /* pure black — deepest backgrounds */
-  --color-card: #212646; /* deep violet-navy — cards, surfaces */
+  --color-card: #170f22; /* deep violet, near-black — cards, surfaces */
   --color-hot-pink: #f90281; /* primary CTA — maximum conversion urgency */
   --color-neon-pink: #f00eb8; /* secondary neon — electric accents */
   --color-violet: #872478; /* deep violet — mystery, depth */
@@ -292,6 +292,74 @@
      Bootcamp's Manrope. Restate it here so the cascade hands Jost to
      everything inside the scope. */
   font-family: var(--font-sans);
+}
+
+/*
+  Fancy card — the "Recompensa" benefit cards. A rounded neon-bordered panel
+  with a tilted, overlay-blended ::after behind it that gives a subtle
+  stacked/offset depth. Adapted from a teal reference to Misión Origen's neon
+  palette; the reference's noise/conic background is intentionally dropped.
+  The tilt sits BEHIND content (z-index) so text stays crisp and upright.
+*/
+.fancy-card {
+  position: relative;
+  isolation: isolate;
+  border: 1px solid color-mix(in srgb, var(--color-neon-pink) 30%, transparent);
+  border-radius: 1.5rem;
+  background-color: color-mix(in srgb, var(--color-card) 70%, transparent);
+  box-shadow:
+    0 0.5rem 1rem rgb(0 0 0 / 0.2),
+    0 1rem 3rem rgb(0 0 0 / 0.25);
+  transition:
+    border-color 0.5s ease,
+    box-shadow 0.5s ease;
+}
+
+.fancy-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--color-neon-pink) 40%, #000000);
+  rotate: 7deg;
+  scale: 0.95;
+  mix-blend-mode: overlay;
+  opacity: 0.55;
+  transition:
+    rotate 0.5s ease,
+    opacity 0.5s ease;
+}
+
+.fancy-card:hover {
+  border-color: color-mix(in srgb, var(--color-neon-pink) 60%, transparent);
+  box-shadow:
+    0 0.5rem 1rem rgb(0 0 0 / 0.2),
+    0 1rem 3rem rgb(0 0 0 / 0.25),
+    0 0 28px color-mix(in srgb, var(--color-neon-pink) 22%, transparent);
+}
+
+.fancy-card:hover::after {
+  rotate: 9deg;
+  opacity: 0.68;
+}
+
+/*
+  Section eyebrow — the small uppercase label that opens each Misión Origen
+  section ("Recompensa", "La Proyección", …). Realzado para que marque el
+  inicio de sección sin pasar desapercibido: algo más grande, semibold, y con
+  un glow neon. El text-shadow usa currentColor, así hereda el color de la
+  clase text-* que cada eyebrow ya trae (cyan, electric-blue, hot-pink, …).
+*/
+.section-eyebrow {
+  font-size: 0.875rem; /* 14px — un paso arriba del text-xs original */
+  line-height: 1.2;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  text-shadow:
+    0 0 8px color-mix(in srgb, currentColor 55%, transparent),
+    0 0 20px color-mix(in srgb, currentColor 30%, transparent);
 }
 
 .moving-gold-title,

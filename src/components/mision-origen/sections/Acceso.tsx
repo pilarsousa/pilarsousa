@@ -2,6 +2,7 @@ import { Container } from "@/components/ui/Container";
 import { CtaButton } from "@/components/mision-origen/ui/CtaButton";
 import { NeonText } from "@/components/mision-origen/ui/NeonText";
 import { Reveal } from "@/components/mision-origen/ui/Reveal";
+import { PlazasBar } from "@/components/mision-origen/ui/PlazasBar";
 import { TestimonialCarousel } from "@/components/mision-origen/ui/TestimonialCarousel";
 import { TrustScoreCard } from "@/components/mision-origen/ui/TrustScoreCard";
 import img5250 from "@/../public/Testimonios/IMG_5250.png";
@@ -97,47 +98,9 @@ export function Acceso() {
                   <NeonText variant="cyan">Plazas vendidas</NeonText>
                 </h3>
 
-                {/* Progress bar with 0 / total markers, a ✦ head at the fill
-                    end, and the current value below it. sold/total drive both
-                    the width and the labels. */}
-                <div className="mt-3 flex items-center gap-3">
-                  {/* Left marker — start (0) */}
-                  <span className="font-display text-sm text-foreground/50">0</span>
-
-                  {/* Track */}
-                  <div className="relative h-3 flex-1 rounded-full bg-white/5">
-                    {/* Fill */}
-                    <div
-                      className="h-full rounded-full bg-[linear-gradient(90deg,#f90281,#28bff1)]"
-                      style={{ width: `${(SOLD / TOTAL) * 100}%` }}
-                      role="progressbar"
-                      aria-valuenow={SOLD}
-                      aria-valuemin={0}
-                      aria-valuemax={TOTAL}
-                      aria-label="Plazas vendidas"
-                    />
-                    {/* ✦ head at the fill end */}
-                    <span
-                      aria-hidden
-                      className="absolute top-1/2 z-10 flex h-6 w-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-background text-lg text-ice-blue filter-[drop-shadow(0_0_8px_rgba(40,191,241,0.9))]"
-                      style={{ left: `${(SOLD / TOTAL) * 100}%` }}
-                    >
-                      ✦
-                    </span>
-                    {/* Current value below the fill end */}
-                    <span
-                      className="absolute top-full mt-3 -translate-x-1/2 font-display text-sm text-cyan"
-                      style={{ left: `${(SOLD / TOTAL) * 100}%` }}
-                    >
-                      {SOLD}
-                    </span>
-                  </div>
-
-                  {/* Right marker — total */}
-                  <span className="font-display text-sm text-foreground/50">
-                    {TOTAL}
-                  </span>
-                </div>
+                {/* Progress bar — animates from 0 to SOLD when it scrolls into
+                    view (see PlazasBar). sold/total drive fill, ✦ head, value. */}
+                <PlazasBar sold={SOLD} total={TOTAL} />
               </div>
             </div>
           </Reveal>
@@ -146,7 +109,7 @@ export function Acceso() {
           <div className="flex flex-col gap-10">
             <div className="flex flex-col items-center gap-4 text-center">
               <Reveal>
-                <p className="font-sans text-xs font-medium uppercase tracking-[0.3em] text-hot-pink">
+                <p className="font-sans section-eyebrow text-hot-pink">
                   Testimonios
                 </p>
               </Reveal>
@@ -164,7 +127,7 @@ export function Acceso() {
               <TrustScoreCard />
 
               <div className="mt-10 max-w-xl text-center">
-                <p className="font-sans text-xs font-medium uppercase tracking-[0.3em] text-cyan">
+                <p className="font-sans section-eyebrow text-cyan">
                   Validado por quienes ya lo vivieron
                 </p>
                 <p className="mt-4 font-sans text-xl font-light leading-snug text-foreground sm:text-2xl">
@@ -186,14 +149,14 @@ export function Acceso() {
           <Reveal>
             <div className="rounded-sm border border-cyan/20 p-px bg-[linear-gradient(135deg,rgba(73,92,196,0.15),rgba(40,191,241,0.06))]">
               <div className="flex flex-col items-center gap-6 rounded-sm bg-background/85 px-8 py-14 text-center sm:px-16">
-                <p className="font-sans text-xs font-medium uppercase tracking-[0.3em] text-cyan">
+                <p className="font-sans section-eyebrow text-cyan">
                   El acceso
                 </p>
                 <h3 className="font-display text-2xl font-semibold leading-tight text-foreground sm:text-3xl">
                   Las puertas se abren.{" "}
                   <NeonText variant="cyan">¿Estás lista?</NeonText>
                 </h3>
-                <p className="max-w-lg font-sans text-base font-light leading-relaxed text-foreground/55">
+                <p className="max-w-lg font-sans text-base font-light leading-relaxed text-zinc-300">
                   [Texto de cierre — provisional. Llamada emocional final, urgencia
                   o escasez según la estrategia de ventas. Será reemplazado con el
                   copy definitivo.]

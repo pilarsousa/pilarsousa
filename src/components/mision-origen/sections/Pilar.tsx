@@ -25,24 +25,15 @@ export function Pilar() {
           anterior (Protocolo) con el negro de esta, suavizando el corte. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[linear-gradient(to_top,transparent,#212646)]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[linear-gradient(to_top,transparent,#170f22)]"
       />
       {/* Degradé de transición inferior: funde el negro con el azul noche de la
           sección siguiente (Acceso). */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(to_bottom,transparent,#212646)]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(to_bottom,transparent,#170f22)]"
       />
       <Container>
-        {/* Eyebrow "La guía" — solo mobile, encabeza la sección arriba de la
-            imagen. En desktop se muestra dentro de la columna de bio (lg:hidden
-            aquí, lg:block allá). */}
-        <Reveal className="lg:hidden">
-          <p className="mb-1.25 font-sans text-xs font-medium uppercase tracking-[0.3em] text-electric-blue">
-            La guía
-          </p>
-        </Reveal>
-
         <div className="flex flex-col gap-12 lg:flex-row lg:items-center lg:gap-16">
 
           {/* Retrato de Pilar */}
@@ -70,11 +61,6 @@ export function Pilar() {
 
           {/* Bio copy */}
           <div className="flex flex-col gap-6 lg:w-7/12">
-            <Reveal className="hidden lg:block">
-              <p className="font-sans text-xs font-medium uppercase tracking-[0.3em] text-electric-blue">
-                La guía
-              </p>
-            </Reveal>
             <Reveal delay={0.1}>
               <h2 className="font-display text-3xl font-semibold text-foreground sm:text-4xl">
                 ¿Quién es{" "}

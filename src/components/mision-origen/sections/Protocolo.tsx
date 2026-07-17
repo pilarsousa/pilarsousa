@@ -49,14 +49,20 @@ export function Protocolo() {
           {/* Header */}
           <div className="flex flex-col gap-4">
             <Reveal>
-              <p className="font-sans text-xs font-medium uppercase tracking-[0.3em] text-electric-blue">
+              <p className="font-sans section-eyebrow text-electric-blue">
                 La Proyección
               </p>
             </Reveal>
             <Reveal delay={0.1}>
-              <h2 className="font-display text-3xl font-semibold leading-snug text-foreground sm:text-4xl lg:text-5xl">
-                Este evento es{" "}
-                <NeonText variant="multi">para ti</NeonText> si...
+              <h2 className="text-balance font-display text-3xl font-semibold leading-snug text-foreground sm:text-4xl lg:text-5xl">
+                {/* En mobile forzamos el quiebre después de "es" para que no
+                    parta "para ti si..." de forma torpe contra el borde. El
+                    salto solo existe abajo de sm; en desktop fluye normal. */}
+                Este evento es
+                <br className="sm:hidden" />{" "}
+                <span className="whitespace-nowrap">
+                  <NeonText variant="multi">para ti</NeonText> si...
+                </span>
               </h2>
             </Reveal>
           </div>

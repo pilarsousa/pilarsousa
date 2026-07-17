@@ -3,12 +3,34 @@ import { Container } from "@/components/ui/Container";
 import { CtaButton } from "@/components/mision-origen/ui/CtaButton";
 import { NeonText } from "@/components/mision-origen/ui/NeonText";
 import { Reveal } from "@/components/mision-origen/ui/Reveal";
+import paso1Icon from "@/components/mision-origen/regalo-mision/1.png";
+import paso2Icon from "@/components/mision-origen/regalo-mision/2.png";
+import paso3Icon from "@/components/mision-origen/regalo-mision/3.png";
 import regaloIcon from "@/components/mision-origen/regalo-mision/regalo-icon.png";
 
-const BENEFITS = [
-  "Descubrirás los 3 pasos de mi Sistema Práctico de Manifestación para dar un nuevo salto cuántico cada 90 días.",
-  "Desbloquea el patrón que te mantiene en estancamiento y que por más que intentas avanzar te mantiene en el mismo lugar.",
-  "Aprenderás cómo reprogramar tu identidad para poder vencer los miedos y caminar con propósito, coherencia y facilidad.",
+/* Cada card lleva un ícono 3D como título y su párrafo como descripción.
+   Cuatro cards → grid 2×2. */
+const CARDS = [
+  {
+    icon: paso1Icon,
+    alt: "Paso 1",
+    text: "Descubrirás los 3 pasos de mi Sistema Práctico de Manifestación para dar un nuevo salto cuántico cada 90 días.",
+  },
+  {
+    icon: paso2Icon,
+    alt: "Paso 2",
+    text: "Desbloquea el patrón que te mantiene en estancamiento y que por más que intentas avanzar te mantiene en el mismo lugar.",
+  },
+  {
+    icon: paso3Icon,
+    alt: "Paso 3",
+    text: "Aprenderás cómo reprogramar tu identidad para poder vencer los miedos y caminar con propósito, coherencia y facilidad.",
+  },
+  {
+    icon: regaloIcon,
+    alt: "Regalo",
+    text: "Recibirás el Certificado Digital de Participación del Evento Misión Origen con Pilar Sousa.",
+  },
 ];
 
 /**
@@ -24,15 +46,15 @@ export function Codigo() {
           siguiente (Protocolo), suavizando el corte entre secciones. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(to_bottom,transparent,#212646)]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(to_bottom,transparent,#170f22)]"
       />
       <Container>
-        <div className="flex flex-col gap-12 lg:flex-row lg:items-start lg:gap-16">
+        <div className="flex flex-col gap-12">
 
-          {/* Left column — headline and intro */}
-          <div className="flex flex-col gap-6 lg:w-1/2">
+          {/* Header — headline centrado arriba, ancho completo */}
+          <div className="flex flex-col items-center gap-6 text-center">
             <Reveal>
-              <p className="font-sans text-xs font-medium uppercase tracking-[0.3em] text-neon-pink">
+              <p className="font-sans section-eyebrow text-neon-pink">
                 Recompensa
               </p>
             </Reveal>
@@ -42,58 +64,39 @@ export function Codigo() {
                 <NeonText variant="pink">Masterclass?</NeonText>
               </h2>
             </Reveal>
-            {/* Botón bajo el título — solo desktop. En mobile aparece al final,
-                debajo de las cards (ver instancia lg:hidden más abajo). */}
-            <Reveal delay={0.2}>
-              <div className="mt-6 hidden lg:block">
-                <CtaButton href="#inscripcion" variant="pill">
-                  ✦ Quiero acceder al evento ✦
-                </CtaButton>
-              </div>
-            </Reveal>
           </div>
 
-          {/* Right column — numbered benefit cards + gift card */}
-          <div className="flex flex-col gap-4 lg:w-1/2">
-            {BENEFITS.map((text, i) => (
-              <Reveal key={i} delay={0.2 + i * 0.1}>
-                <div className="group flex items-start gap-4 rounded-sm border border-neon-pink/20 bg-surface/50 p-5 transition-all duration-500 hover:border-neon-pink/50 hover:shadow-[0_0_24px_rgba(240,14,184,0.12)]">
-                  <span className="shrink-0 font-display text-2xl font-semibold tabular-nums text-neon-pink/50">
-                    0{i + 1}
-                  </span>
-                  <p className="pt-1 font-sans text-sm font-light leading-relaxed text-foreground/65">
-                    {text}
+          {/* Cards — grid 2×2 con buen espacio. El número (o el ícono de regalo)
+              hace de título; el párrafo es la descripción. */}
+          <div className="mx-auto grid w-full max-w-3xl grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
+            {CARDS.map((card, i) => (
+              <Reveal key={i} delay={0.1 + i * 0.1}>
+                <div className="fancy-card group flex h-full flex-col gap-3 p-7">
+                  {/* Título — ícono 3D del paso (o el regalo en la última) */}
+                  <Image
+                    src={card.icon}
+                    alt={card.alt}
+                    width={44}
+                    height={44}
+                    className="h-11 w-11 object-contain"
+                  />
+                  {/* Descripción */}
+                  <p className="font-sans text-base font-light leading-relaxed text-zinc-300">
+                    {card.text}
                   </p>
                 </div>
               </Reveal>
             ))}
-
-            {/* Gift card — same layout, but the gift icon replaces the number */}
-            <Reveal delay={0.2 + BENEFITS.length * 0.1}>
-              <div className="group flex items-start gap-4 rounded-sm border border-neon-pink/20 bg-surface/50 p-5 transition-all duration-500 hover:border-neon-pink/50 hover:shadow-[0_0_24px_rgba(240,14,184,0.12)]">
-                <Image
-                  src={regaloIcon}
-                  alt="Regalo"
-                  width={40}
-                  height={40}
-                  className="h-10 w-10 shrink-0 object-contain"
-                />
-                <p className="pt-1 font-sans text-sm font-light leading-relaxed text-foreground/65">
-                  Recibirás el Certificado Digital de Participación del Evento
-                  Misión Origen con Pilar Sousa.
-                </p>
-              </div>
-            </Reveal>
-
-            {/* Botón — solo mobile, al final debajo de todas las cards */}
-            <Reveal delay={0.2 + (BENEFITS.length + 1) * 0.1}>
-              <div className="mt-2 lg:hidden">
-                <CtaButton href="#inscripcion" variant="pill" block>
-                  ✦ Quiero acceder al evento ✦
-                </CtaButton>
-              </div>
-            </Reveal>
           </div>
+
+          {/* CTA — centrado al final */}
+          <Reveal delay={0.1 + CARDS.length * 0.1}>
+            <div className="flex justify-center">
+              <CtaButton href="#inscripcion" variant="pill">
+                ✦ Quiero acceder al evento ✦
+              </CtaButton>
+            </div>
+          </Reveal>
 
         </div>
       </Container>

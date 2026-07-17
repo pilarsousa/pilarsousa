@@ -19,7 +19,7 @@ export function Transmision() {
       />
       <Container narrow>
         <Reveal>
-          <p className="font-sans text-xs font-medium uppercase tracking-[0.3em] text-cyan">
+          <p className="font-sans section-eyebrow text-cyan">
             Te entiendo...
           </p>
         </Reveal>

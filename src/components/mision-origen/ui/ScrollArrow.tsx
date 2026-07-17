@@ -72,7 +72,7 @@ export function ScrollArrow({ className, size = 64 }: ScrollArrowProps) {
       {/* Down arrow — dark glyph, reads on the bright fill */}
       <path
         d="M32 20V42M32 42L23 33M32 42L41 33"
-        stroke="#212646"
+        stroke="#170f22"
         strokeWidth="3.5"
         strokeLinecap="round"
         strokeLinejoin="round"
