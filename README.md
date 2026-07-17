@@ -103,6 +103,21 @@ than inlining values. Two consequences:
 The dot-grain texture is on `.bc-scope::before` for the same reason — it used to
 be on `body::before`, which would now cover both landings.
 
+## Lead registration (Go High Level)
+
+Misión Origen's Hero form posts to `src/app/api/register/route.ts`, a
+server-side route handler that forwards the lead to a Go High Level inbound
+webhook. The webhook URL is read from the `GHL_WEBHOOK_URL` env var and never
+ships to the browser. Until that var is set (in Vercel, and in `.env.local` for
+local dev), the form returns an error on submit instead of a false success.
+
+The `source` field on the payload tags each lead by landing in the CRM. The
+endpoint re-validates server-side and returns 400 (bad input), 502 (GHL
+unreachable) or 500 (webhook URL not configured).
+
+Step-by-step setup — creating the webhook, mapping fields, adding the env var:
+**[docs/conectar-go-high-level.md](docs/conectar-go-high-level.md)**.
+
 ## Conventions
 
 - Use the semantic utilities (`bg-background`, `text-cyan`) rather than raw hex.
