@@ -1,9 +1,22 @@
-import type { Metadata } from "next";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { Cinzel, Manrope, Cormorant_Garamond } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
+/*
+  Shared by both landings. This layout owns only what is genuinely common:
+  the document shell, analytics/GTM, and the font variables. Anything that
+  belongs to a single landing — palette, metadata, chrome — lives in that
+  landing's own layout: (bootcamp)/layout.tsx and mision-origen/layout.tsx.
+
+  All five font variables are declared here because next/font must run in a
+  layout, and the two landings each need their own pair. Declaring a variable
+  costs nothing on the routes that never reference it: the font only downloads
+  once a rule actually uses the family.
+*/
+
+// ---- Bootcamp ----
 
 // Display font for titles — ritual, ancient, authoritative.
 const cinzel = Cinzel({
@@ -31,18 +44,24 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "Bootcamp Reset Identidad | Pilar Sousa",
-  description:
-    "No manifiestas lo que deseas. Manifiestas quien eres. Un campamento de metafísica práctica para resetear tu identidad y volver al origen.",
-  openGraph: {
-    title: "Bootcamp Reset Identidad | Pilar Sousa",
-    description:
-      "No manifiestas lo que deseas. Manifiestas quien eres. Un campamento de metafísica práctica para resetear tu identidad.",
-    type: "website",
-    locale: "es_ES",
-  },
-};
+// ---- Misión Origen ----
+
+/* Títulos y subtítulos — futurista, tecnológica, cyberpunk */
+const zenDots = localFont({
+  variable: "--font-zen-dots",
+  src: "../../public/fonts/Zen_Dots/ZenDots-Regular.ttf",
+  weight: "400",
+  display: "swap",
+});
+
+/* Textos, párrafos, labels, botones — Futura Light / Book / Medium.
+   Variable font: a single file covers the 300–700 range used across the site. */
+const jost = localFont({
+  variable: "--font-jost",
+  src: "../../public/fonts/Jost/Jost-VariableFont_wght.ttf",
+  weight: "300 700",
+  display: "swap",
+});
 
 export default function RootLayout({
   children,
@@ -52,7 +71,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${cinzel.variable} ${manrope.variable} ${cormorant.variable} h-full antialiased`}
+      className={`${cinzel.variable} ${manrope.variable} ${cormorant.variable} ${zenDots.variable} ${jost.variable} h-full antialiased`}
     >
       {/* suppressHydrationWarning: browser extensions (e.g. ColorZilla) inject
           attributes like cz-shortcut-listen on <body> before React hydrates,
@@ -79,7 +98,7 @@ export default function RootLayout({
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s);j.async=true;j.src="https://sgtm.pilarsousa.es/b9gbrcrbhb.js?"+i;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','11=CwxfNTc%2FT1IhJjMoVkU6QRRVUFxSVAYJXxgLHgIAEQgXGwNcBgE%3D');`}
         </Script>
         {/* End Google Tag Manager */}
-        
+
         <Analytics />
       </body>
     </html>

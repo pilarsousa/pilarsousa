@@ -1,13 +1,28 @@
 @import "tailwindcss";
 
 /*
-  RESET IDENTIDAD — Design tokens
-  Palette and typography derived from the brand moodboard.
-  Tailwind v4: tokens are declared here with @theme so they become
-  utility classes (e.g. bg-ink, text-gold, font-display).
+  Design tokens for BOTH landings.
+
+  Tailwind v4: tokens declared in @theme become utility classes (e.g. bg-ink,
+  text-gold, font-display). @theme is global — there is one build and one
+  :root — so the two landings cannot each own a `background`.
+
+  The split:
+  - Raw palettes never collide (gold/forest vs neon/cyan), so both live here.
+  - The SEMANTIC aliases (--color-background, --color-accent, --font-display, …)
+    collide: same names, different values. The Bootcamp's win at :root because
+    it is the landing at the domain root. Misión Origen's are redefined in the
+    .mo-scope block further down, which its layout wraps around itself.
+
+  This works because Tailwind compiles utilities to var(--token) rather than
+  inlining the value, so bg-background resolves per-subtree. Adding a new
+  semantic token means deciding whether it needs a .mo-scope counterpart.
 */
 
 @theme {
+  /* ================= BOOTCAMP RESET IDENTIDAD ================= */
+  /* Palette and typography derived from the brand moodboard. */
+
   /* ---- Raw brand palette (source of truth) ---- */
   --color-ink: #080808; /* deep black — primary background */
   --color-forest-900: #24342d; /* near-black green — secondary background */
@@ -56,6 +71,31 @@
   --animate-pulse-ring: pulse-ring 2.8s ease-out infinite;
   /* Scroll cue impulse — a subtle premium downward nudge with a soft pause. */
   --animate-scroll-cue: scroll-cue 2.4s ease-in-out infinite;
+
+  /* ================= MISIÓN ORIGEN ================= */
+  /* Futuristic, neon-lit cyberpunk direction. Raw tokens only — the semantic
+     aliases and fonts are in .mo-scope, since those names are already taken
+     above by the Bootcamp. */
+
+  /* ---- Raw brand palette (source of truth) ---- */
+  --color-void: #000000; /* pure black — deepest backgrounds */
+  --color-card: #212646; /* deep violet-navy — cards, surfaces */
+  --color-hot-pink: #f90281; /* primary CTA — maximum conversion urgency */
+  --color-neon-pink: #f00eb8; /* secondary neon — electric accents */
+  --color-violet: #872478; /* deep violet — mystery, depth */
+  --color-electric-blue: #495cc4; /* electric blue — tech, precision */
+  --color-cyan: #28bff1; /* cyan — activation, clarity */
+  --color-ice-blue: #aef0fe; /* ice blue — lightest highlight */
+
+  /* ---- Animations ---- */
+  --animate-neon-drift: neon-drift 6s ease-in-out infinite;
+  --animate-scan-pulse: scan-pulse 3s ease-in-out infinite;
+  --animate-bounce-soft: bounce-soft 2s ease-in-out infinite;
+  --animate-bar-shimmer: bar-shimmer 5s ease-in-out infinite;
+  --animate-tick-pulse: tick-pulse 0.45s ease-out 1;
+  /* Note: --animate-border-spin is declared above. Both landings defined it
+     identically (border-spin 4s linear infinite) and both use it for a beam
+     travelling around a border, so it is shared rather than duplicated. */
 }
 
 @keyframes scroll-cue {
@@ -138,6 +178,94 @@
   }
 }
 
+/* ---- Misión Origen keyframes ---- */
+
+@keyframes neon-drift {
+  0%,
+  100% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 100% center;
+  }
+}
+
+@keyframes scan-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes bounce-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+/* Light streak that sweeps across the announcement bar. */
+@keyframes bar-shimmer {
+  0% {
+    transform: translateX(-120%);
+  }
+  /* Sweep quickly, then wait out the rest of the cycle. */
+  35%,
+  100% {
+    transform: translateX(320%);
+  }
+}
+
+/* Subtle heartbeat on the ticking seconds. */
+@keyframes tick-pulse {
+  0% {
+    transform: scale(1.12);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/*
+  Misión Origen's semantic layer. Its layout wraps the whole landing in
+  .mo-scope, so these override the Bootcamp values from @theme for that
+  subtree only. Keep this list in sync with the semantic aliases above:
+  a Bootcamp token added there without a counterpart here will bleed into
+  Misión Origen with the wrong value.
+
+  Tokens deliberately NOT overridden: --color-surface-alt, --color-accent-soft
+  and --font-accent are Bootcamp-only and unused by Misión Origen.
+*/
+.mo-scope {
+  --color-background: var(--color-void);
+  --color-surface: var(--color-card);
+  --color-foreground: #ffffff;
+  --color-accent: var(--color-hot-pink);
+  --color-muted: rgba(255, 255, 255, 0.5);
+
+  /*
+    Display  → Zen Dots — futurista, tecnológica, cyberpunk.
+               Usada en títulos H1/H2/H3, logo, números grandes, labels.
+    Sans     → Jost — Futura Light / Book / Medium.
+               Usada en párrafos, subtítulos corridos, botones, formularios.
+  */
+  --font-display: var(--font-zen-dots), system-ui, sans-serif;
+  --font-sans: var(--font-jost), system-ui, sans-serif;
+
+  /* body sets font-family from the :root value, which resolves to the
+     Bootcamp's Manrope. Restate it here so the cascade hands Jost to
+     everything inside the scope. */
+  font-family: var(--font-sans);
+}
+
 .moving-gold-title,
 .moving-gold-title .mf-word {
   background-image: linear-gradient(
@@ -172,12 +300,17 @@ body {
 }
 
 /*
-  Pointillist texture — a faint dot grain over the whole page.
+  Pointillist texture — a faint dot grain over the Bootcamp landing.
   z-index:1 keeps it BEHIND the content; pointer-events:none lets clicks
   pass straight through. plus-lighter blends the dots as light so they lift
   the dark surfaces subtly (degrades gracefully where unsupported).
+
+  Scoped to .bc-scope rather than body: Misión Origen shares this document and
+  was not designed with the grain, and a descendant cannot switch off an
+  ancestor's pseudo-element. Still position:fixed — it is viewport-anchored,
+  not element-anchored, so the grain stays put while the page scrolls.
 */
-body::before {
+.bc-scope::before {
   content: "";
   position: fixed;
   inset: 0;
