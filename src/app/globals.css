@@ -95,6 +95,11 @@
   --animate-tick-pulse: tick-pulse 0.45s ease-out 1;
   --animate-marquee: marquee 14s linear infinite;
   --animate-badge-pulse: badge-pulse 3s ease-in-out infinite;
+  /* Slow-drifting neon aurora blobs (thank-you page). Three offset timings so
+     the cyan / magenta / violet blobs never sync up. */
+  --animate-aurora-1: aurora-1 18s ease-in-out infinite;
+  --animate-aurora-2: aurora-2 22s ease-in-out infinite;
+  --animate-aurora-3: aurora-3 26s ease-in-out infinite;
   /* Note: --animate-border-spin is declared above. Both landings defined it
      identically (border-spin 4s linear infinite) and both use it for a beam
      travelling around a border, so it is shared rather than duplicated. */
@@ -224,6 +229,54 @@
   }
 }
 
+/* Fade-in for the reservation modal (backdrop + panel). */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Neon aurora blobs drifting slowly across the thank-you background. Each blob
+   travels a different path and scale so the composition never freezes. */
+@keyframes aurora-1 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(12%, 8%) scale(1.15);
+  }
+  66% {
+    transform: translate(-8%, 4%) scale(0.95);
+  }
+}
+
+@keyframes aurora-2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(-14%, -6%) scale(1.1);
+  }
+  66% {
+    transform: translate(6%, -10%) scale(1.2);
+  }
+}
+
+@keyframes aurora-3 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(10%, -8%) scale(1.18);
+  }
+}
+
 /* Continuous horizontal scroll for the mobile announcement marquee.
    The track holds two identical copies of the message side by side, so
    shifting it by exactly -50% loops seamlessly with no visible jump. */
@@ -292,6 +345,26 @@
      Bootcamp's Manrope. Restate it here so the cascade hands Jost to
      everything inside the scope. */
   font-family: var(--font-sans);
+}
+
+/*
+  Textura de malla fina sobre TODA la landing de Misión Origen (no el Bootcamp).
+  Fija al viewport, muy tenue (opacity 0.02), no intercepta clics. El z-index se
+  mantiene por DEBAJO del AnnouncementBar (z-100) a propósito: es una textura de
+  fondo, no una capa que deba tapar la UI. .mo-scope no tiene transform/filter,
+  así que el `fixed` se ancla al viewport correctamente.
+*/
+.mo-scope::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0.02;
+  background-image:
+    linear-gradient(#fff 1px, transparent 1px),
+    linear-gradient(to right, #fff 1px, transparent 1px);
+  background-size: 8px 8px;
 }
 
 /*

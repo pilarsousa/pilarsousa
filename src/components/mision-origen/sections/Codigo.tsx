@@ -92,7 +92,7 @@ export function Codigo() {
           {/* CTA — centrado al final */}
           <Reveal delay={0.1 + CARDS.length * 0.1}>
             <div className="flex justify-center">
-              <CtaButton href="#inscripcion" variant="pill">
+              <CtaButton variant="pill">
                 ✦ Quiero acceder al evento ✦
               </CtaButton>
             </div>

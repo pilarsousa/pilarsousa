@@ -10,7 +10,6 @@ const BULLETS = [
   "Referente en Metafísica Práctica y Manifestación.",
   "Fundadora de Volver al Origen.",
   "Cientos de alumnos han pasado por sus procesos de transformación.",
-  "(Falta completar)",
 ];
 
 /**
@@ -29,10 +28,19 @@ export function Pilar() {
       aria-labelledby="pilar-title"
       className="relative isolate flex min-h-[100svh] items-start overflow-hidden bg-background lg:items-center"
     >
+      {/* Degradé de costura superior: funde el violeta de la sección anterior
+          (Protocolo, #170f22) con el borde de arriba de la foto, para que la
+          imagen no corte en seco contra la sección. Va por encima de la foto
+          (-z-10) pero debajo del contenido. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-24 bg-[linear-gradient(to_bottom,#170f22,transparent)]"
+      />
+
       {/* ── Foto de fondo a sangre ──
           Desktop: panorámica, Pilar a la izquierda, hueco a la derecha para el
           texto (object-left). Mobile: vertical, Pilar arriba, se funde abajo. */}
-      <picture aria-hidden className="absolute inset-x-0 top-0 -z-10 block h-[72svh] md:h-[84svh] lg:h-full">
+      <picture aria-hidden className="absolute inset-x-0 top-0 -z-20 block h-[78svh] md:h-[84svh] lg:h-full">
         <source
           media="(min-width: 1024px)"
           srcSet={pilarDesktop.src}
@@ -56,7 +64,7 @@ export function Pilar() {
           de llegar a Pilar (izquierda). */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[72svh] md:h-[84svh] bg-[linear-gradient(to_top,#000000_0%,#000000_28%,rgba(0,0,0,0.55)_40%,transparent_58%)] lg:inset-0 lg:h-full lg:bg-[linear-gradient(to_left,#000000_0%,rgba(0,0,0,0.85)_30%,rgba(0,0,0,0.45)_55%,transparent_80%)]"
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[78svh] md:h-[84svh] bg-[linear-gradient(to_top,#000000_0%,#000000_28%,rgba(0,0,0,0.55)_40%,transparent_58%)] lg:inset-0 lg:h-full lg:bg-[linear-gradient(to_left,#000000_0%,rgba(0,0,0,0.85)_30%,rgba(0,0,0,0.45)_55%,transparent_80%)]"
       />
 
       {/* Cyberpunk grid */}
@@ -80,7 +88,7 @@ export function Pilar() {
 
       {/* Mobile: el contenido arranca en la costura donde la figura se funde a
           negro (pt-[52svh]). Desktop: centrado vertical, alineado a la derecha. */}
-      <Container className="pb-12 pt-[56svh] md:pt-[76svh] lg:py-16 lg:pt-16">
+      <Container className="pb-12 pt-[62svh] md:pt-[76svh] lg:py-16 lg:pt-16">
         {/* Contenido sobre el hueco de la derecha en desktop (ml-auto); ancho
             completo en mobile. */}
         <div className="lg:ml-auto lg:max-w-[52%]">

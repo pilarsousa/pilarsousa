@@ -56,8 +56,7 @@ const TESTIMONIALS = [
 /**
  * Section 6 — Acceso / Testimonios + CTA de cierre.
  * Goal: social proof and final emotional push.
- * The registration form now lives in the Hero section (#inscripcion).
- * CTAs here deep-link back up to the hero form.
+ * The registration form lives in a modal (ReservaModal); the CTAs here open it.
  * Placeholder — to be developed together.
  */
 export function Acceso() {
@@ -162,7 +161,7 @@ export function Acceso() {
                   copy definitivo.]
                 </p>
                 <div className="flex flex-wrap items-center justify-center gap-4">
-                  <CtaButton href="#inscripcion" variant="pill">
+                  <CtaButton variant="pill">
                     ✦ Reservar mi plaza ahora ✦
                   </CtaButton>
                 </div>

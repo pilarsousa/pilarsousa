@@ -1,7 +1,12 @@
+"use client";
+
 import { cn } from "@/lib/cn";
+import { useReservaModal } from "@/components/mision-origen/ui/ReservaModal";
 
 type CtaButtonProps = {
-  href: string;
+  /** If given, the button navigates to this href. If omitted, it opens the
+   *  reservation modal instead — the default behavior for the landing CTAs. */
+  href?: string;
   children: React.ReactNode;
   className?: string;
   /** Full-width on its container (useful in stacked mobile layouts). */
@@ -17,8 +22,9 @@ type CtaButtonProps = {
 };
 
 /**
- * Multi-variant call-to-action anchor.
- * Tailwind-only — stays a Server Component, no runtime CSS-in-JS.
+ * Multi-variant call-to-action. By default (no href) it opens the reservation
+ * modal; with an href it renders a plain anchor. Client component so the
+ * default variant can trigger the modal.
  */
 export function CtaButton({
   href,
@@ -27,9 +33,13 @@ export function CtaButton({
   block,
   variant = "primary",
 }: CtaButtonProps) {
+  const { open } = useReservaModal();
+
+  const Tag = href ? "a" : "button";
+
   return (
-    <a
-      href={href}
+    <Tag
+      {...(href ? { href } : { type: "button" as const, onClick: open })}
       className={cn(
         "group relative inline-flex items-center justify-center overflow-hidden",
         "font-sans font-medium uppercase",
@@ -57,7 +67,7 @@ export function CtaButton({
          * Transition: 400ms on shadow, 350ms on the overlay opacity.
          */
         variant === "pill" &&
-          "h-14 rounded-full px-8 text-xs tracking-[0.12em] text-white bg-[linear-gradient(180deg,#8b5cf6_0%,#6d28d9_45%,#4c1d95_100%)] shadow-[0_0_22px_rgba(109,40,217,0.6),0_4px_18px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_0_36px_rgba(139,92,246,0.55),0_0_64px_rgba(109,40,217,0.22),0_8px_22px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.24)]",
+          "h-14 rounded-full px-8 text-xs tracking-[0.12em] border border-[#8b5cf6]/70 text-[#c4b5fd] bg-transparent shadow-[0_0_18px_rgba(139,92,246,0.35)] hover:border-[#a78bfa] hover:text-white hover:shadow-[0_0_32px_rgba(139,92,246,0.55),0_0_60px_rgba(109,40,217,0.25)]",
 
         block ? "flex w-full" : "inline-flex",
         className,
@@ -73,17 +83,16 @@ export function CtaButton({
 
       {variant === "pill" && (
         /*
-         * Lighter-purple overlay — fades in on hover to simulate the
-         * gradient brightening that CSS cannot interpolate natively.
-         * Kept inside overflow-hidden so it is clipped to the pill shape.
+         * Outline pill: a faint violet fill fades in on hover so the button
+         * "lights up" without becoming solid. Clipped to the pill shape.
          */
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity duration-350 ease-out group-hover:opacity-60 bg-[linear-gradient(180deg,#a78bfa_0%,#8b5cf6_45%,#6d28d9_100%)]"
+          className="pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity duration-350 ease-out group-hover:opacity-100 bg-[#8b5cf6]/12"
         />
       )}
 
       <span className="relative">{children}</span>
-    </a>
+    </Tag>
   );
 }

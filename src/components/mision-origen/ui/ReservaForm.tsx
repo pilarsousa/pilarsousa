@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/cn";
-import { NeonText } from "@/components/mision-origen/ui/NeonText";
 
 /*
   Email validation: requires local part, "@", a domain with at least one dot,
@@ -31,9 +31,24 @@ type Status = "idle" | "submitting" | "success" | "error";
 const FIELD_CLASS =
   "h-11 w-full rounded-sm border bg-white/3 px-4 font-sans text-sm font-light text-white placeholder:text-white/25 outline-none transition-all duration-300";
 
-/* `source` tags the lead in the CRM by which landing it came from. Defaults to
-   this landing; set it explicitly if the form is reused elsewhere. */
-export function ReservaForm({ source = "mision-origen" }: { source?: string }) {
+type ReservaFormProps = {
+  /* `source` tags the lead in the CRM by which landing it came from. Defaults
+     to this landing; set it explicitly if the form is reused elsewhere. */
+  source?: string;
+  /* Text for the submit button. Defaults to the Hero copy; the modal overrides
+     it with "Dar mi salto". */
+  submitLabel?: string;
+  /* Called right after a successful registration, before navigating away — the
+     modal uses it to close itself. */
+  onSuccess?: () => void;
+};
+
+export function ReservaForm({
+  source = "mision-origen",
+  submitLabel = "✦ Quiero dar mi Salto Cuántico ✦",
+  onSuccess,
+}: ReservaFormProps) {
+  const router = useRouter();
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
@@ -88,30 +103,21 @@ export function ReservaForm({ source = "mision-origen" }: { source?: string }) {
       // Notify the analytics layer that a real lead was stored. GTM listens for
       // this event and fires the Meta "Lead" conversion; keeping it here (not on
       // page load) ensures only completed registrations count as conversions.
+      // Fire this BEFORE navigating, or the redirect tears down the page before
+      // the event is pushed.
       window.dataLayer?.push({ event: "lead_registered", lead_source: source });
 
-      setStatus("success");
+      // Let the host (e.g. the modal) react — typically to close itself — before
+      // we navigate away.
+      onSuccess?.();
+
+      // Free event: registration IS the conversion, so send the visitor to the
+      // thank-you page instead of showing an inline confirmation. Keep status
+      // "submitting" so the button stays disabled during the navigation.
+      router.push("/gracias-mision-origen");
     } catch {
       setStatus("error");
     }
-  }
-
-  if (status === "success") {
-    return (
-      <div
-        role="status"
-        className="flex flex-col items-center gap-3 py-6 text-center"
-      >
-        <span className="font-display text-xl text-white">
-          <NeonText variant="cyan">¡Plaza reservada!</NeonText>
-        </span>
-        <p className="max-w-xs font-sans text-sm font-light text-white/60">
-          Te enviamos los próximos pasos a{" "}
-          <span className="text-cyan">{email.trim()}</span>. Revisá tu bandeja de
-          entrada.
-        </p>
-      </div>
-    );
   }
 
   return (
@@ -243,16 +249,14 @@ export function ReservaForm({ source = "mision-origen" }: { source?: string }) {
         <button
           type="submit"
           disabled={status === "submitting"}
-          className="group relative flex h-14 w-full items-center justify-center overflow-hidden rounded-full px-8 font-sans text-xs font-medium uppercase tracking-[0.12em] text-white transition-all duration-500 ease-out active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-70 bg-[linear-gradient(180deg,#8b5cf6_0%,#6d28d9_45%,#4c1d95_100%)] shadow-[0_0_22px_rgba(109,40,217,0.6),0_4px_18px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_0_36px_rgba(139,92,246,0.55),0_0_64px_rgba(109,40,217,0.22),0_8px_22px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.24)]"
+          className="group relative flex h-14 w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-full px-6 font-sans text-[0.65rem] font-medium uppercase tracking-[0.08em] text-white transition-all duration-500 ease-out active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-70 bg-[linear-gradient(180deg,#8b5cf6_0%,#6d28d9_45%,#4c1d95_100%)] shadow-[0_0_22px_rgba(109,40,217,0.6),0_4px_18px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_0_36px_rgba(139,92,246,0.55),0_0_64px_rgba(109,40,217,0.22),0_8px_22px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.24)] sm:text-xs sm:tracking-[0.12em] sm:px-8"
         >
           <span
             aria-hidden
             className="pointer-events-none absolute inset-0 rounded-full bg-[linear-gradient(180deg,#a78bfa_0%,#8b5cf6_45%,#6d28d9_100%)] opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-60"
           />
           <span className="relative">
-            {status === "submitting"
-              ? "Reservando…"
-              : "✦ Quiero dar mi Salto Cuántico ✦"}
+            {status === "submitting" ? "Reservando…" : submitLabel}
           </span>
         </button>
       </div>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AnnouncementBar } from "@/components/mision-origen/ui/AnnouncementBar";
+import { ReservaModalProvider } from "@/components/mision-origen/ui/ReservaModal";
 
 /*
   Misión Origen — the landing at the domain root (/).
@@ -41,8 +42,10 @@ export default function MisionOrigenLayout({
     /* pt-* offsets the fixed AnnouncementBar so it never covers page content.
        Taller on mobile (stacked layout), shorter once it lays out in a row. */
     <div className="mo-scope min-h-full bg-background pt-18 text-foreground sm:pt-12">
-      <AnnouncementBar />
-      {children}
+      <ReservaModalProvider>
+        <AnnouncementBar />
+        {children}
+      </ReservaModalProvider>
     </div>
   );
 }
