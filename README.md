@@ -3,11 +3,17 @@
 Two landing pages served from one Next.js app: **one repo, one branch, one
 Vercel project, one deploy**. Next.js 16 (App Router, Turbopack) + Tailwind v4.
 
-| URL              | Landing                  | Lives in                      |
-| ---------------- | ------------------------ | ----------------------------- |
-| `/`              | Bootcamp Reset Identidad | `src/app/(bootcamp)/`         |
-| `/gracias`       | Bootcamp — thank you     | `src/app/(bootcamp)/gracias/` |
-| `/mision-origen` | Misión Origen            | `src/app/mision-origen/`      |
+| URL                 | Landing                  | Lives in                       |
+| ------------------- | ------------------------ | ------------------------------ |
+| `/`                 | Misión Origen            | `src/app/(mision-origen)/`     |
+| `/bootcamp`         | Bootcamp Reset Identidad | `src/app/bootcamp/`            |
+| `/bootcamp/gracias` | Bootcamp — thank you     | `src/app/bootcamp/gracias/`    |
+
+Two redirects in `next.config.ts` cover the URLs from before the root swap:
+`/mision-origen` → `/` and `/gracias` → `/bootcamp/gracias`, both temporary
+(307). The second is a safety net while the Stripe checkout still points its
+success URL at `/gracias`; remove it once the checkout is updated to
+`/bootcamp/gracias`.
 
 ```bash
 npm install
@@ -39,13 +45,13 @@ git log mision-origen-rewrite-proxy     # a vercel.json proxy stopgap, supersede
 src/app/
   layout.tsx              root: <html>/<body>, GTM, Analytics, ALL font vars
   globals.css             design tokens for BOTH landings — read the next section
-  (bootcamp)/             route group: stripped from the URL
-    layout.tsx            Bootcamp metadata + .bc-scope
-    page.tsx              -> /
-    gracias/page.tsx      -> /gracias
-  mision-origen/
+  (mision-origen)/        route group: stripped from the URL
     layout.tsx            Misión Origen metadata + .mo-scope + AnnouncementBar
-    page.tsx              -> /mision-origen
+    page.tsx              -> /
+  bootcamp/
+    layout.tsx            Bootcamp metadata + .bc-scope
+    page.tsx              -> /bootcamp
+    gracias/page.tsx      -> /bootcamp/gracias
 src/components/
   sections/  ui/          Bootcamp's components
   mision-origen/          Misión Origen's components, namespaced
@@ -58,9 +64,11 @@ public/
   *.jpg|png               Bootcamp's images, loose at the root (historical)
 ```
 
-`(bootcamp)` is a **route group**: the parentheses keep it out of the URL, so
-`page.tsx` there still serves `/`. It exists so each landing owns its own
-`metadata` and its own visual chrome without leaking either onto the other.
+`(mision-origen)` is a **route group**: the parentheses keep it out of the URL,
+so `page.tsx` there serves `/`. Each landing has its own layout so it owns its
+own `metadata` and visual chrome without leaking either onto the other. Which
+landing sits at the root is decided purely by which one is the route group —
+swapping them is a matter of moving folders, not touching Vercel.
 
 ## The part that will bite you: two palettes, one Tailwind
 

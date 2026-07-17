@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 
 /*
-  Bootcamp Reset Identidad — the landing at the domain root.
-
-  This is a route group: the (bootcamp) folder is stripped from the URL, so
-  page.tsx still serves "/" and gracias/page.tsx still serves "/gracias". The
-  group exists so this landing can carry its own metadata and its own visual
-  chrome without leaking either onto /mision-origen.
+  Bootcamp Reset Identidad — served at /bootcamp. page.tsx here is /bootcamp
+  and gracias/page.tsx is /bootcamp/gracias. This landing used to sit at the
+  domain root; Misión Origen took the root in the swap and the Bootcamp moved
+  under /bootcamp. This layout gives it its own metadata and visual chrome
+  without leaking either onto the root landing.
 
   The design tokens this landing uses are the ones declared at :root in
   globals.css, so there is nothing to override here — .bc-scope only carries

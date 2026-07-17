@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import { AnnouncementBar } from "@/components/mision-origen/ui/AnnouncementBar";
 
 /*
-  Misión Origen — served at /mision-origen off the same deploy as the Bootcamp.
+  Misión Origen — the landing at the domain root (/).
+
+  This is a route group: the (mision-origen) folder is stripped from the URL,
+  so page.tsx here serves "/". It took the root from the Bootcamp in the swap;
+  the old /mision-origen URL now 307-redirects here (see next.config.ts).
 
   .mo-scope is what keeps the two palettes apart. Both landings define the same
   semantic tokens (--color-background, --font-display, …) with different values,
