@@ -2,15 +2,9 @@ import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { NeonText } from "@/components/mision-origen/ui/NeonText";
 import { Reveal } from "@/components/mision-origen/ui/Reveal";
+import { PilarBio } from "@/components/mision-origen/ui/PilarBio";
 import pilarDesktop from "@/../public/mision-origen/Fondo-PilarSousaPC.jpg";
 import pilarMobile from "@/../public/mision-origen/foto-pilar.jpg";
-
-const BULLETS = [
-  "+500.000 personas impactadas.",
-  "Referente en Metafísica Práctica y Manifestación.",
-  "Fundadora de Volver al Origen.",
-  "Cientos de alumnos han pasado por sus procesos de transformación.",
-];
 
 /**
  * Section 5 — La guía / Soy Pilar Sousa.
@@ -26,7 +20,7 @@ export function Pilar() {
     <section
       id="pilar"
       aria-labelledby="pilar-title"
-      className="relative isolate flex min-h-[100svh] items-start overflow-hidden bg-background lg:items-center"
+      className="relative isolate flex min-h-svh items-start bg-background lg:h-svh"
     >
       {/* Degradé de costura superior: funde el violeta de la sección anterior
           (Protocolo, #170f22) con el borde de arriba de la foto, para que la
@@ -89,39 +83,31 @@ export function Pilar() {
       />
 
       {/* Mobile: el contenido arranca en la costura donde la figura se funde a
-          negro (pt-[52svh]). Desktop: centrado vertical, alineado a la derecha. */}
-      <Container className="pb-14 pt-[70svh] md:pt-[76svh] lg:py-16 lg:pt-16">
-        {/* Contenido sobre el hueco de la derecha en desktop (ml-auto); ancho
-            completo en mobile. */}
-        <div className="lg:ml-auto lg:max-w-[52%]">
-          <div className="flex flex-col gap-6 [text-shadow:0_2px_20px_rgba(0,0,0,0.6)]">
-            <Reveal delay={0.1}>
+          negro. Desktop: alineado arriba (items-start en la sección) con un pt
+          que lo baja a media altura; así el panel crece hacia ABAJO al expandir
+          y el título nunca se corta contra el borde superior. */}
+      <Container className="pb-14 pt-[56svh] md:pt-[76svh] lg:py-0 lg:pt-32">
+        {/* Contenido pegado al borde derecho (ml-auto) y corrido ~150px más a
+            la derecha (translate) sobre el espacio libre de la foto. Ancho
+            suficiente para que el título entre en una línea. Ancho completo en
+            mobile (sin translate). */}
+        <div className="lg:ml-auto lg:max-w-[58%] lg:translate-x-[150px]">
+          {/* Panel glass oscuro: deja ver la foto detrás pero da contraste para
+              leer la bio larga sobre la imagen. */}
+          <Reveal delay={0.1}>
+            <div className="rounded-xl border border-white/10 bg-black/55 p-6 backdrop-blur-md sm:p-8">
               <h2
                 id="pilar-title"
-                className="font-display text-3xl font-semibold text-foreground sm:text-4xl"
+                className="text-center font-display text-xl font-semibold text-foreground sm:text-4xl"
               >
                 ¿Quién es{" "}
                 <NeonText variant="violet">Pilar Sousa</NeonText>?
               </h2>
-            </Reveal>
-            <Reveal delay={0.2}>
-              <ul className="flex flex-col gap-4">
-                {BULLETS.map((text) => (
-                  <li key={text} className="flex items-start gap-3">
-                    <span
-                      aria-hidden
-                      className="mt-0.5 shrink-0 font-display text-lg text-neon-pink"
-                    >
-                      ✦
-                    </span>
-                    <span className="font-sans text-lg font-light leading-relaxed text-foreground/75 sm:text-xl">
-                      {text}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
-          </div>
+              <div className="mt-6">
+                <PilarBio />
+              </div>
+            </div>
+          </Reveal>
         </div>
       </Container>
     </section>
