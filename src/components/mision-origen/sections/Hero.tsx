@@ -5,8 +5,8 @@ import { Reveal } from "@/components/mision-origen/ui/Reveal";
 import { FactBadge } from "@/components/mision-origen/ui/FactBadge";
 import { NeonText } from "@/components/mision-origen/ui/NeonText";
 import { CtaButton } from "@/components/mision-origen/ui/CtaButton";
-import heroDesktop from "@/../public/mision-origen/fondo-hero-2.jpg";
-import heroMobile from "@/../public/mision-origen/fondo-hero-movil-2.jpg";
+import heroDesktop from "@/../public/mision-origen/fondo-hero-3.jpg";
+import heroMobile from "@/../public/mision-origen/fondo-hero-movil-3.jpg";
 
 /* La fecha debe coincidir con el countdown de AnnouncementBar (TARGET) y el
    precio con la barra: si cambia uno, actualizar el otro. */

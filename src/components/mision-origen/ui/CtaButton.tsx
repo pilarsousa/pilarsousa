@@ -41,11 +41,14 @@ export function CtaButton({
     <Tag
       {...(href ? { href } : { type: "button" as const, onClick: open })}
       className={cn(
-        "group relative inline-flex items-center justify-center overflow-hidden",
+        "group relative inline-flex items-center justify-center",
         "font-sans font-medium uppercase",
         "transition-all duration-500 ease-out",
         "active:scale-95",
         "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent",
+        /* overflow-hidden clips the primary shimmer; the pill's neon glow must
+           overflow (its ::after "puddle" sits below the button). */
+        variant === "primary" && "overflow-hidden",
 
         /* ── Primary — hot-pink gradient drift ── */
         variant === "primary" &&
@@ -67,7 +70,7 @@ export function CtaButton({
          * Transition: 400ms on shadow, 350ms on the overlay opacity.
          */
         variant === "pill" &&
-          "h-14 rounded-full px-8 text-xs tracking-[0.12em] border border-[#a78bfa]/60 text-white bg-[#8b5cf6]/25 backdrop-blur-md shadow-[0_0_22px_rgba(139,92,246,0.4),inset_0_1px_0_rgba(255,255,255,0.22)] hover:border-[#a78bfa] hover:shadow-[0_0_36px_rgba(139,92,246,0.6),0_0_64px_rgba(109,40,217,0.28),inset_0_1px_0_rgba(255,255,255,0.3)]",
+          "neon-btn h-14 rounded-full px-8 text-xs font-bold tracking-[0.12em]",
 
         block ? "flex w-full" : "inline-flex",
         className,
@@ -81,16 +84,6 @@ export function CtaButton({
         />
       )}
 
-      {variant === "pill" && (
-        /*
-         * Glass pill: a lighter violet fill fades in on hover so the glass
-         * brightens. Clipped to the pill shape.
-         */
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity duration-350 ease-out group-hover:opacity-100 bg-[linear-gradient(180deg,rgba(167,139,250,0.35)_0%,rgba(139,92,246,0.2)_100%)]"
-        />
-      )}
 
       <span className="relative">{children}</span>
     </Tag>

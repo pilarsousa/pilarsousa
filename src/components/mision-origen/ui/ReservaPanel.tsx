@@ -6,7 +6,14 @@ import { ReservaForm } from "@/components/mision-origen/ui/ReservaForm";
  * Hero (originally embedded there) and the ReservaModal, so the panel exists in
  * a single place and never drifts between the two.
  */
-export function ReservaPanel({ submitLabel }: { submitLabel?: string }) {
+export function ReservaPanel({
+  submitLabel,
+  onSuccess,
+}: {
+  submitLabel?: string;
+  /** Forwarded to the form — the modal uses it to close itself on success. */
+  onSuccess?: () => void;
+}) {
   return (
     <div className="group/form relative overflow-hidden rounded-md border border-cyan/30 bg-black/75 p-6 backdrop-blur-md shadow-[0_0_0_1px_rgba(40,191,241,0.08),0_0_40px_rgba(135,36,120,0.25),inset_0_1px_0_rgba(174,240,254,0.08)]">
       {/* Glow ambiental interior — pulso suave tipo panel activo */}
@@ -49,7 +56,7 @@ export function ReservaPanel({ submitLabel }: { submitLabel?: string }) {
         </div>
 
         {/* Formulario con validación real (client component) */}
-        <ReservaForm submitLabel={submitLabel} />
+        <ReservaForm submitLabel={submitLabel} onSuccess={onSuccess} />
       </div>
     </div>
   );

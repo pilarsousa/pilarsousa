@@ -229,6 +229,45 @@
   }
 }
 
+/*
+  Neon-glow CTA button. Violet fill with a strong outer glow + a soft "puddle"
+  reflection below (::after), so it clearly draws the eye. Shared by the landing
+  CTAs (CtaButton pill) and the modal's submit button via the .neon-btn class.
+  Sizing (height/padding/font) is left to the element's own utilities so it fits
+  each context; this class only owns the color/glow treatment.
+*/
+.neon-btn {
+  --glow-color: rgb(217, 176, 255);
+  --glow-spread-color: rgba(191, 123, 255, 0.75);
+  --btn-color: rgb(100, 61, 136);
+  position: relative;
+  border: 0.2em solid var(--glow-color);
+  color: var(--glow-color);
+  background-color: var(--btn-color);
+  box-shadow:
+    0 0 1em 0.25em var(--glow-color),
+    0 0 4em 1em var(--glow-spread-color),
+    inset 0 0 0.75em 0.25em var(--glow-color);
+  text-shadow: 0 0 0.5em var(--glow-color);
+  transition: all 0.3s ease;
+}
+
+.neon-btn:hover {
+  color: var(--btn-color);
+  background-color: var(--glow-color);
+  box-shadow:
+    0 0 1em 0.25em var(--glow-color),
+    0 0 4em 2em var(--glow-spread-color),
+    inset 0 0 0.75em 0.25em var(--glow-color);
+}
+
+.neon-btn:active {
+  box-shadow:
+    0 0 0.6em 0.25em var(--glow-color),
+    0 0 2.5em 2em var(--glow-spread-color),
+    inset 0 0 0.5em 0.25em var(--glow-color);
+}
+
 /* Fade-in for the reservation modal (backdrop + panel). */
 @keyframes fadeIn {
   from {
