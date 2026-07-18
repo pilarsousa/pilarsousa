@@ -11,7 +11,7 @@ import heroMobile from "@/../public/mision-origen/fondo-hero-movil-3.jpg";
 /* La fecha debe coincidir con el countdown de AnnouncementBar (TARGET) y el
    precio con la barra: si cambia uno, actualizar el otro. */
 const FACTS = [
-  { label: "23 de julio · 19:00", icon: <CalendarDays size={15} /> },
+  { label: "26 de julio · 19:00", icon: <CalendarDays size={15} /> },
   { label: "Online en vivo", icon: <Radio size={15} /> },
   { label: "3 pasos aplicables", icon: <Footprints size={15} /> },
   { label: "Acceso gratuito", icon: <Gift size={15} /> },

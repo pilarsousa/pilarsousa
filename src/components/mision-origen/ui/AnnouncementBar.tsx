@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/cn";
 
 /*
-  Target: 23 July 2026, 19:00 in Europe/Madrid.
+  Target: 26 July 2026, 19:00 in Europe/Madrid.
 
   In late July, Madrid observes CEST (UTC+2). Rather than hardcode the offset,
   we resolve it from the IANA zone so the value stays correct even if the date
@@ -12,7 +12,7 @@ import { cn } from "@/lib/cn";
   for a given instant and derives the offset, which we apply to build the exact
   UTC instant the local wall-clock target corresponds to.
 */
-const TARGET = { year: 2026, month: 7, day: 23, hour: 19, minute: 0 };
+const TARGET = { year: 2026, month: 7, day: 26, hour: 19, minute: 0 };
 const TIME_ZONE = "Europe/Madrid";
 
 /** Offset (ms) of the given zone at a given UTC instant: zoneWallClock - utc. */
@@ -114,7 +114,7 @@ function TimeCell({
 // Split into two logical parts so desktop keeps everything inline with the "·"
 // separator. Mobile instead scrolls the full single-line phrase as a marquee.
 const MESSAGE_MAIN = "EVENTO ONLINE GRATUITO - MISIÓN ORIGEN";
-const MESSAGE_DETAIL = "23 DE JULIO / 19:00PM (ESPAÑA)";
+const MESSAGE_DETAIL = "26 DE JULIO / 19:00PM (ESPAÑA)";
 const MESSAGE_FULL = `${MESSAGE_MAIN} · ${MESSAGE_DETAIL}`;
 
 export function AnnouncementBar() {
