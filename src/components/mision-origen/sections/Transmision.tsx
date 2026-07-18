@@ -10,7 +10,7 @@ import { Reveal } from "@/components/mision-origen/ui/Reveal";
  */
 export function Transmision() {
   return (
-    <section id="transmision" className="relative bg-surface py-section pb-48">
+    <section id="transmision" className="relative bg-surface py-section pb-24 sm:pb-48">
       {/* Degradé de transición: funde el azul noche con el negro de la sección
           siguiente (Código), suavizando el corte entre secciones. */}
       <div

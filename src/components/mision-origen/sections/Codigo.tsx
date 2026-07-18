@@ -41,7 +41,7 @@ const CARDS = [
  */
 export function Codigo() {
   return (
-    <section id="codigo" className="relative bg-background py-section">
+    <section id="codigo" className="relative bg-background py-16 sm:py-section">
       {/* Degradé de transición: funde el negro con el azul noche de la sección
           siguiente (Protocolo), suavizando el corte entre secciones. */}
       <div
