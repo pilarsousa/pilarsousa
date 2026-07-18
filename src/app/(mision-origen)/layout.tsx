@@ -41,7 +41,7 @@ export default function MisionOrigenLayout({
   return (
     /* pt-* offsets the fixed AnnouncementBar so it never covers page content.
        Taller on mobile (stacked layout), shorter once it lays out in a row. */
-    <div className="mo-scope min-h-full bg-background pt-18 text-foreground sm:pt-12">
+    <div className="mo-scope min-h-full overflow-x-clip bg-background pt-18 text-foreground sm:pt-12">
       <ReservaModalProvider>
         <AnnouncementBar />
         {children}

@@ -5,53 +5,10 @@ import { Reveal } from "@/components/mision-origen/ui/Reveal";
 import { PlazasBar } from "@/components/mision-origen/ui/PlazasBar";
 import { TestimonialCarousel } from "@/components/mision-origen/ui/TestimonialCarousel";
 import { TrustScoreCard } from "@/components/mision-origen/ui/TrustScoreCard";
-import img5250 from "@/../public/Testimonios/IMG_5250.png";
-import img5243 from "@/../public/Testimonios/IMG_5243.png";
-import img5244 from "@/../public/Testimonios/IMG_5244.png";
-import img5245 from "@/../public/Testimonios/IMG_5245.png";
-import img5246 from "@/../public/Testimonios/IMG_5246.png";
-import img5247 from "@/../public/Testimonios/IMG_5247.png";
-import img5248 from "@/../public/Testimonios/IMG_5248.png";
-import img5249 from "@/../public/Testimonios/IMG_5249.png";
-import t0 from "@/../public/Testimonios/testimonio.png";
-import t1 from "@/../public/Testimonios/testimonio1.png";
-import t2 from "@/../public/Testimonios/testimonio2.png";
-import t3 from "@/../public/Testimonios/testimonio3.png";
-import t4 from "@/../public/Testimonios/testimonio4.png";
-import t5 from "@/../public/Testimonios/testimonio5.png";
-import t6 from "@/../public/Testimonios/testimonio6.png";
-import t7 from "@/../public/Testimonios/testimonio7.png";
-import t8 from "@/../public/Testimonios/testimonio8.png";
-import t9 from "@/../public/Testimonios/testimonio9.png";
-import t10 from "@/../public/Testimonios/testimonio10.png";
 
 /* Plazas vendidas — edit these to update the progress bar and its labels. */
 const SOLD = 150;
 const TOTAL = 250;
-
-// Capturas reales de reseñas de Trustpilot — prueba social verificable.
-// IMG_5250 abre, luego el resto del lote nuevo, después las originales.
-const TESTIMONIALS = [
-  img5250,
-  img5243,
-  img5244,
-  img5245,
-  img5246,
-  img5247,
-  img5248,
-  img5249,
-  t0,
-  t1,
-  t2,
-  t3,
-  t4,
-  t5,
-  t6,
-  t7,
-  t8,
-  t9,
-  t10,
-];
 
 /**
  * Section 6 — Acceso / Testimonios + CTA de cierre.
@@ -138,9 +95,10 @@ export function Acceso() {
               </div>
             </Reveal>
 
-            {/* Capturas reales de reseñas de Trustpilot en carrusel horizontal. */}
-            <div className="mt-8">
-              <TestimonialCarousel items={TESTIMONIALS} />
+            {/* Reseñas en carrusel horizontal. min-w-0 + overflow-x-clip evitan
+                que el track (más ancho que la pantalla) genere scroll de página. */}
+            <div className="mt-8 w-full min-w-0 overflow-x-clip">
+              <TestimonialCarousel />
             </div>
           </div>
 

@@ -20,7 +20,7 @@ export function Pilar() {
     <section
       id="pilar"
       aria-labelledby="pilar-title"
-      className="relative isolate flex min-h-svh items-start bg-background lg:h-svh"
+      className="relative isolate flex min-h-svh items-start overflow-x-clip bg-background lg:h-svh"
     >
       {/* Degradé de costura superior: funde el violeta de la sección anterior
           (Protocolo, #170f22) con el borde de arriba de la foto, para que la
