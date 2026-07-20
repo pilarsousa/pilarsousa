@@ -107,6 +107,16 @@ export function ReservaForm({
       // the event is pushed.
       window.dataLayer?.push({ event: "lead_registered", lead_source: source });
 
+      // One-shot flag so the thank-you page knows this visit came from a real
+      // completed registration. The Meta "Lead" event is fired there (per the
+      // tracking spec) and only when this flag is present, so a refresh or a
+      // direct visit to /gracias-mision-origen never counts as a conversion.
+      try {
+        sessionStorage.setItem("mo_lead_pending", "1");
+      } catch {
+        // sessionStorage can throw in private mode — tracking is best-effort.
+      }
+
       // Show the "¡Reservado!" confirmation for ~3s so it clearly registers,
       // then close the modal and navigate to the thank-you page. This redirect
       // fires on the timer regardless of whether the user closes the modal
