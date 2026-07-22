@@ -72,7 +72,7 @@ export function Protocolo() {
             {ITEMS.map((item, i) => (
               <Reveal key={item.number} delay={0.1 + i * 0.1}>
                 <article
-                  className={`flex h-full flex-col gap-4 rounded-sm border bg-background/40 p-6 transition-all duration-500 ${item.wrapperClass}`}
+                  className={`beam-card flex h-full flex-col gap-4 rounded-sm border bg-background/40 p-6 transition-all duration-500 ${item.wrapperClass}`}
                 >
                   <span
                     className={`font-display text-4xl font-semibold tabular-nums ${item.numberClass}`}

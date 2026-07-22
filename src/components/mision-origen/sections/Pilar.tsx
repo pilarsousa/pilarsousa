@@ -20,7 +20,7 @@ export function Pilar() {
     <section
       id="pilar"
       aria-labelledby="pilar-title"
-      className="relative isolate flex min-h-svh items-start overflow-x-clip bg-background lg:h-svh"
+      className="relative isolate flex min-h-svh items-start overflow-x-clip bg-background lg:h-[750px] lg:min-h-0 lg:items-center"
     >
       {/* Degradé de costura superior: funde el violeta de la sección anterior
           (Protocolo, #170f22) con el borde de arriba de la foto, para que la
@@ -83,10 +83,9 @@ export function Pilar() {
       />
 
       {/* Mobile: el contenido arranca en la costura donde la figura se funde a
-          negro. Desktop: alineado arriba (items-start en la sección) con un pt
-          que lo baja a media altura; así el panel crece hacia ABAJO al expandir
-          y el título nunca se corta contra el borde superior. */}
-      <Container className="pb-14 pt-[56svh] md:pt-[76svh] lg:py-0 lg:pt-32">
+          negro. Desktop: el centrado vertical lo resuelve lg:items-center en la
+          sección, así que aquí se anulan los offsets de mobile. */}
+      <Container className="pb-14 pt-[56svh] md:pt-[76svh] lg:py-0 lg:pt-0">
         {/* Contenido pegado al borde derecho (ml-auto) y corrido ~150px más a
             la derecha (translate) sobre el espacio libre de la foto. Ancho
             suficiente para que el título entre en una línea. Ancho completo en

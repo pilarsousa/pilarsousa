@@ -69,8 +69,13 @@ export function CtaButton({
          *           reference screenshots.
          * Transition: 400ms on shadow, 350ms on the overlay opacity.
          */
+        /* 16px (text-base) en todos los breakpoints. El tracking baja respecto
+           del resto de variantes porque a ese cuerpo el espaciado ancho
+           desbordaba el pill en pantallas chicas. whitespace-nowrap: el texto
+           va siempre en una sola línea; el alto fijo (h-14) no admite dos y la
+           etiqueta se partiría contra el borde. */
         variant === "pill" &&
-          "neon-btn h-14 rounded-full px-8 text-xs font-bold tracking-[0.12em]",
+          "neon-btn h-14 whitespace-nowrap rounded-full px-6 text-base font-bold tracking-[0.06em] sm:px-8",
 
         block ? "flex w-full" : "inline-flex",
         className,

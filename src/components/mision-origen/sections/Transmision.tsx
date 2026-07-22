@@ -19,12 +19,12 @@ export function Transmision() {
       />
       <Container narrow>
         <Reveal>
-          <p className="font-sans section-eyebrow text-cyan">
+          <p className="font-sans section-eyebrow text-cyan lg:text-center">
             Te entiendo...
           </p>
         </Reveal>
         <Reveal delay={0.1}>
-          <h2 className="mt-6 font-display text-2xl font-semibold leading-snug text-foreground sm:text-3xl lg:text-4xl">
+          <h2 className="mt-6 font-display text-2xl font-semibold leading-snug text-foreground sm:text-3xl lg:text-center lg:text-4xl">
             Se que estás hecho para más, pero todo el conocimiento sobre
             manifestación que sabes{" "}
             <NeonText variant="multi">
