@@ -39,17 +39,19 @@ export function ReservaPanel({
       <span aria-hidden className="absolute bottom-0 right-0 h-0.5 w-12 bg-linear-to-l from-neon-pink to-transparent" />
 
       <div className="relative z-10 flex flex-col gap-4">
-        {/* Cabecera del formulario */}
-        <div className="flex flex-col gap-2">
-          <p className="font-sans text-[0.7rem] font-semibold uppercase tracking-[0.4em] text-cyan/80">
+        {/* Cabecera del formulario — "Reserva tu plaza" es un badge (pill con
+            borde), no un eyebrow suelto: marca el bloque sin robarle jerarquía
+            al titular. El titular usa el rosa/violeta de marca en vez del cyan,
+            que ya carga el resto del panel (bordes, scan-line, esquinas). */}
+        <div className="flex flex-col gap-3">
+          <span className="inline-flex w-fit items-center rounded-full border border-hot-pink/40 bg-hot-pink/10 px-3 py-1 font-sans text-sm font-semibold uppercase tracking-[0.12em] text-white">
             Reserva tu plaza
-          </p>
-          <h2 className="font-display leading-tight text-white">
-            <span className="block text-2xl sm:text-3xl">Plazas limitadas</span>
-            <NeonText
-              variant="violet"
-              className="mt-1 block text-lg font-light sm:text-xl"
-            >
+          </span>
+          <h2 className="font-display leading-tight">
+            <NeonText variant="multi" className="block text-2xl font-semibold sm:text-3xl">
+              Plazas limitadas
+            </NeonText>
+            <NeonText variant="pink" className="mt-1 block text-lg font-light sm:text-xl">
               asegura la tuya
             </NeonText>
           </h2>

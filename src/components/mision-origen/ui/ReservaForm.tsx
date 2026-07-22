@@ -2,6 +2,12 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+/* Banderas empaquetadas como componentes React. Por defecto la librería las
+   pide a un GitHub Pages de terceros: si ese dominio falla, el formulario se
+   queda sin banderas. Estas viajan en el bundle, sin peticiones externas. */
+import flags from "react-phone-number-input/flags";
+import "react-phone-number-input/style.css";
 import { cn } from "@/lib/cn";
 
 /*
@@ -12,13 +18,9 @@ import { cn } from "@/lib/cn";
 */
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-/*
-  Phone: allow only digits, an optional leading "+", plus common separators
-  (spaces, hyphens, parentheses) for readability. Requires at least 7 digits
-  so it's a plausible number, not just a "+".
-*/
-const PHONE_ALLOWED_RE = /[^\d+\s()-]/g;
-const PHONE_VALID_RE = /^\+?[\d\s()-]{7,}$/;
+/* El teléfono ya no se valida con regex propia: PhoneInput entrega el número
+   en E.164 e isValidPhoneNumber comprueba que sea válido para el país elegido,
+   que es bastante más fiable que contar dígitos. */
 
 type Errors = {
   nombre?: string;
@@ -28,8 +30,15 @@ type Errors = {
 
 type Status = "idle" | "submitting" | "success" | "error";
 
+/* Placeholder en blanco (a 70% para que siga leyéndose como texto de ayuda y
+   no como valor cargado): los grises previos quedaban ilegibles sobre el panel
+   oscuro del modal. */
 const FIELD_CLASS =
-  "h-11 w-full rounded-sm border bg-white/3 px-4 font-sans text-sm font-light text-white placeholder:text-white/25 outline-none transition-all duration-300";
+  "h-11 w-full rounded-sm border bg-white/3 px-4 font-sans text-sm font-light text-white placeholder:text-white/70 outline-none transition-all duration-300";
+
+/* Etiquetas en blanco pleno, por el mismo motivo. */
+const LABEL_CLASS =
+  "font-sans text-xs font-medium uppercase tracking-[0.15em] text-white";
 
 type ReservaFormProps = {
   /* `source` tags the lead in the CRM by which landing it came from. Defaults
@@ -45,7 +54,7 @@ type ReservaFormProps = {
 
 export function ReservaForm({
   source = "mision-origen",
-  submitLabel = "✦ Quiero dar mi Salto Cuántico ✦",
+  submitLabel = "Quiero dar mi Salto Cuántico",
   onSuccess,
 }: ReservaFormProps) {
   const router = useRouter();
@@ -55,9 +64,10 @@ export function ReservaForm({
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<Status>("idle");
 
-  // Strip anything that isn't a digit, "+", or a common separator as the user types.
-  function handleTelefonoChange(value: string) {
-    setTelefono(value.replace(PHONE_ALLOWED_RE, ""));
+  /* PhoneInput emite undefined cuando el campo queda vacío; lo normalizamos a
+     "" para que el estado siga siendo siempre string. */
+  function handleTelefonoChange(value?: string) {
+    setTelefono(value ?? "");
   }
 
   function validate(): Errors {
@@ -72,8 +82,8 @@ export function ReservaForm({
     }
     if (!telefono.trim()) {
       next.telefono = "El teléfono es obligatorio.";
-    } else if (!PHONE_VALID_RE.test(telefono.trim())) {
-      next.telefono = "Ingresá un teléfono válido, por ejemplo: +34 600 000 000";
+    } else if (!isValidPhoneNumber(telefono)) {
+      next.telefono = "Ingresá un teléfono válido para el país seleccionado.";
     }
     return next;
   }
@@ -142,7 +152,7 @@ export function ReservaForm({
       <div className="flex flex-col gap-1.5">
         <label
           htmlFor="hero-nombre"
-          className="font-sans text-xs font-medium uppercase tracking-[0.15em] text-foreground/45"
+          className={LABEL_CLASS}
         >
           Nombre completo
         </label>
@@ -177,7 +187,7 @@ export function ReservaForm({
       <div className="flex flex-col gap-1.5">
         <label
           htmlFor="hero-email"
-          className="font-sans text-xs font-medium uppercase tracking-[0.15em] text-foreground/45"
+          className={LABEL_CLASS}
         >
           Correo electrónico
         </label>
@@ -209,30 +219,32 @@ export function ReservaForm({
         )}
       </div>
 
-      {/* Teléfono — solo dígitos, "+" y separadores comunes */}
+      {/* Teléfono — selector de país + número. El selector inyecta el prefijo
+          internacional automáticamente y queda separado del número, así el
+          valor que viaja al CRM siempre sale en formato E.164 (+34600000000). */}
       <div className="flex flex-col gap-1.5">
         <label
           htmlFor="hero-telefono"
-          className="font-sans text-xs font-medium uppercase tracking-[0.15em] text-foreground/45"
+          className={LABEL_CLASS}
         >
           Teléfono
         </label>
-        <input
+        <PhoneInput
           id="hero-telefono"
-          type="tel"
           name="telefono"
-          inputMode="tel"
+          international
+          flags={flags}
+          countryCallingCodeEditable={false}
+          defaultCountry="ES"
           autoComplete="tel"
-          placeholder="+34 600 000 000"
+          placeholder="600 000 000"
           value={telefono}
-          onChange={(e) => handleTelefonoChange(e.target.value)}
+          onChange={handleTelefonoChange}
           aria-invalid={!!errors.telefono}
           aria-describedby={errors.telefono ? "hero-telefono-error" : undefined}
           className={cn(
-            FIELD_CLASS,
-            errors.telefono
-              ? "border-hot-pink/70 focus:border-hot-pink focus:shadow-[0_0_18px_rgba(249,2,129,0.3)]"
-              : "border-cyan/20 focus:border-cyan/70 focus:bg-cyan/4 focus:shadow-[0_0_18px_rgba(40,191,241,0.25)]",
+            "mo-phone",
+            errors.telefono ? "mo-phone--error" : undefined,
           )}
         />
         {errors.telefono && (
@@ -261,7 +273,7 @@ export function ReservaForm({
           type="submit"
           disabled={status === "submitting" || status === "success"}
           className={cn(
-            "relative flex h-14 w-full items-center justify-center whitespace-nowrap rounded-full px-6 text-[0.65rem] font-bold uppercase tracking-[0.08em] transition-all duration-300 ease-out active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent disabled:cursor-not-allowed sm:text-xs sm:tracking-[0.12em] sm:px-8",
+            "relative flex h-14 w-full items-center justify-center whitespace-nowrap rounded-full px-6 text-base font-bold uppercase tracking-[0.04em] transition-all duration-300 ease-out active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent disabled:cursor-not-allowed sm:px-8",
             status === "success"
               ? "border-2 border-[#22c55e] bg-[#15803d] text-white shadow-[0_0_28px_rgba(34,197,94,0.6)] [text-shadow:0_0_0.5em_rgba(34,197,94,0.8)]"
               : "neon-btn disabled:opacity-70",
@@ -271,7 +283,7 @@ export function ReservaForm({
             {status === "submitting"
               ? "Reservando…"
               : status === "success"
-                ? "✦ ¡Reservado! ✦"
+                ? "¡Reservado!"
                 : submitLabel}
           </span>
         </button>

@@ -97,7 +97,7 @@ export function ReservaModalProvider({
               </svg>
             </button>
 
-            <ReservaPanel submitLabel="✦ Dar mi salto ✦" onSuccess={close} />
+            <ReservaPanel submitLabel="Dar mi salto" onSuccess={close} />
           </div>
         </div>
       )}
