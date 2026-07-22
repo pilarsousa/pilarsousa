@@ -95,6 +95,10 @@
   --animate-tick-pulse: tick-pulse 0.45s ease-out 1;
   --animate-marquee: marquee 14s linear infinite;
   --animate-badge-pulse: badge-pulse 3s ease-in-out infinite;
+  /* Haz que recorre el perímetro del badge. Comparte el mecanismo de
+     --border-angle / border-spin de las beam-card, pero más lento para que
+     cuatro badges a la vez no saturen el hero. */
+  --animate-badge-beam: border-spin 6s linear infinite;
   /* Slow-drifting neon aurora blobs (thank-you page). Three offset timings so
      the cyan / magenta / violet blobs never sync up. */
   --animate-aurora-1: aurora-1 18s ease-in-out infinite;
@@ -388,10 +392,15 @@
 
 /*
   Textura de malla fina sobre TODA la landing de Misión Origen (no el Bootcamp).
-  Fija al viewport, muy tenue (opacity 0.02), no intercepta clics. El z-index se
-  mantiene por DEBAJO del AnnouncementBar (z-100) a propósito: es una textura de
-  fondo, no una capa que deba tapar la UI. .mo-scope no tiene transform/filter,
-  así que el `fixed` se ancla al viewport correctamente.
+  Fija al viewport, no intercepta clics. El z-index se mantiene por DEBAJO del
+  AnnouncementBar (z-100) a propósito: es una textura, no una capa que deba
+  tapar la UI. .mo-scope no tiene transform/filter, así que el `fixed` se ancla
+  al viewport correctamente.
+
+  La malla va por DELANTE del contenido (z-40), como filtro sobre toda la
+  página, pero a opacidad baja: a 0.055 por delante se leía como un velo sucio
+  sobre el texto. 0.03 mantiene la textura visible sobre fondos e imágenes sin
+  entorpecer la lectura.
 */
 .mo-scope::before {
   content: "";
@@ -399,11 +408,11 @@
   inset: 0;
   z-index: 40;
   pointer-events: none;
-  opacity: 0.02;
+  opacity: 0.03;
   background-image:
     linear-gradient(#fff 1px, transparent 1px),
     linear-gradient(to right, #fff 1px, transparent 1px);
-  background-size: 8px 8px;
+  background-size: 10px 10px;
 }
 
 /*
@@ -454,6 +463,211 @@
 .fancy-card:hover::after {
   rotate: 9deg;
   opacity: 0.68;
+}
+
+/*
+  Phone field — restyles react-phone-number-input to match the Misión Origen
+  form fields. The library ships its own stylesheet (imported in ReservaForm),
+  which renders a plain light-theme input; these rules override it so the
+  country selector and the number share the same dark neon treatment as the
+  other inputs. Selectors mirror the library's own class names.
+*/
+.mo-phone {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 2.75rem; /* h-11, same as the other fields */
+  border-radius: 0.125rem;
+  border: 1px solid color-mix(in srgb, var(--color-cyan) 20%, transparent);
+  background-color: rgb(255 255 255 / 0.03);
+  padding-inline: 1rem;
+  transition: all 0.3s ease;
+}
+
+.mo-phone:focus-within {
+  border-color: color-mix(in srgb, var(--color-cyan) 70%, transparent);
+  background-color: color-mix(in srgb, var(--color-cyan) 4%, transparent);
+  box-shadow: 0 0 18px rgb(40 191 241 / 0.25);
+}
+
+.mo-phone--error {
+  border-color: color-mix(in srgb, var(--color-hot-pink) 70%, transparent);
+}
+
+.mo-phone--error:focus-within {
+  border-color: var(--color-hot-pink);
+  box-shadow: 0 0 18px rgb(249 2 129 / 0.3);
+}
+
+/* The number input itself — strip the library's chrome, inherit ours. */
+.mo-phone .PhoneInputInput {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: #ffffff;
+  outline: none;
+}
+
+.mo-phone .PhoneInputInput::placeholder {
+  color: rgb(255 255 255 / 0.45);
+}
+
+/* Country <select> + flag. The select is transparent and overlays the flag. */
+.mo-phone .PhoneInputCountry {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-right: 0.25rem;
+  padding-right: 0.6rem;
+  border-right: 1px solid rgb(255 255 255 / 0.12);
+}
+
+.mo-phone .PhoneInputCountrySelect {
+  color: #ffffff;
+}
+
+/* The dropdown list is rendered by the OS/browser, so its options need an
+   explicit dark background or they inherit the page's transparent one. */
+.mo-phone .PhoneInputCountrySelect option {
+  background-color: var(--color-card);
+  color: #ffffff;
+}
+
+.mo-phone .PhoneInputCountrySelectArrow {
+  color: color-mix(in srgb, var(--color-cyan) 70%, transparent);
+  opacity: 1;
+}
+
+/* Bandera — la librería la dimensiona con em, que sobre nuestro cuerpo de
+   14px queda diminuta. Tamaño explícito para que se lea. */
+.mo-phone .PhoneInputCountryIcon {
+  width: 1.6rem;
+  height: 1.1rem;
+  box-shadow: none;
+}
+
+.mo-phone .PhoneInputCountryIcon img,
+.mo-phone .PhoneInputCountryIcon svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 2px;
+}
+
+/*
+  Beam card — the "La Proyección" cards. A cyan light beam travels continuously
+  around the border, reusing the shared --border-angle property and border-spin
+  keyframe declared above.
+
+  How it works: the ::before is a conic-gradient rotating around the card, and
+  a two-layer mask (one padding-box, one content-box, composited with xor)
+  punches out the middle so only a 1px border-width ring of the gradient shows.
+  That ring is the beam. Content is unaffected because the pseudo-element sits
+  at z-index -1 under an isolated stacking context.
+
+  Cyan is deliberate: electric-blue and violet are already used as the static
+  per-card border colours, so a beam in those tones would wash out against the
+  border it travels on.
+*/
+.beam-card {
+  position: relative;
+  isolation: isolate;
+}
+
+.beam-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--border-angle),
+    transparent 0%,
+    transparent 65%,
+    color-mix(in srgb, var(--color-cyan) 55%, transparent) 82%,
+    var(--color-ice-blue) 92%,
+    color-mix(in srgb, var(--color-cyan) 55%, transparent) 97%,
+    transparent 100%
+  );
+  /* Hollow out the centre so only the border ring renders. */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: var(--animate-border-spin);
+}
+
+/* Respect users who ask for less motion: keep the ring, stop the travel. */
+@media (prefers-reduced-motion: reduce) {
+  .beam-card::before {
+    animation: none;
+  }
+}
+
+/*
+  Beam badge — same travelling-border technique as .beam-card, applied to the
+  hero fact badges. The existing scan-line sweep only fires on hover, so on
+  touch devices the badges were static; this runs on its own.
+
+  Each badge gets a different animation-delay (see nth-child below) so the four
+  beams don't travel in lockstep, which would read as one blinking block.
+*/
+.beam-badge {
+  isolation: isolate;
+}
+
+.beam-badge::after {
+  content: "";
+  position: absolute;
+  inset: -1px; /* asoma justo fuera del borde del badge */
+  z-index: 1; /* sobre el fondo del badge, bajo su contenido */
+  pointer-events: none;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--border-angle),
+    transparent 0%,
+    transparent 70%,
+    color-mix(in srgb, var(--color-cyan) 50%, transparent) 85%,
+    var(--color-ice-blue) 93%,
+    transparent 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: var(--animate-badge-beam);
+}
+
+/* Stagger the four hero badges so their beams are out of phase. */
+.beam-badge:nth-child(2)::after {
+  animation-delay: -1.5s;
+}
+.beam-badge:nth-child(3)::after {
+  animation-delay: -3s;
+}
+.beam-badge:nth-child(4)::after {
+  animation-delay: -4.5s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .beam-badge::after {
+    animation: none;
+  }
 }
 
 /*
