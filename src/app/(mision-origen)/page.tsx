@@ -26,9 +26,17 @@ export default function Home() {
           className="group absolute left-1/2 -translate-x-1/2 -translate-y-1/2"
         >
           {/* Bounce lives on an inner span so it doesn't fight the -translate-y
-              that pins the anchor to the section seam. */}
+              that pins the anchor to the section seam.
+              Two sizes: the SVG takes its dimensions from a numeric prop, so
+              the responsive step is done by rendering one per breakpoint and
+              toggling visibility rather than with CSS classes. */}
           <span className="block animate-bounce-soft transition-transform duration-300 group-hover:scale-110">
-            <ScrollArrow size={64} />
+            <span className="block sm:hidden">
+              <ScrollArrow size={36} />
+            </span>
+            <span className="hidden sm:block">
+              <ScrollArrow size={44} />
+            </span>
           </span>
         </a>
       </div>

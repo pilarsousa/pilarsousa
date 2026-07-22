@@ -31,7 +31,7 @@ export function Hero() {
     <section
       id="hero"
       aria-labelledby="hero-title"
-      className="relative isolate flex min-h-[100svh] items-start overflow-hidden bg-background lg:items-center"
+      className="relative isolate flex min-h-[100svh] items-start overflow-hidden bg-background lg:h-[750px] lg:min-h-0"
     >
       {/* ── Foto de fondo a sangre ──
           Dos encuadres distintos, no el mismo recortado: el panorámico deja a
@@ -95,7 +95,13 @@ export function Hero() {
           ahí para abajo la imagen ya es negro puro. Arrancamos el contenido en
           esa costura (pt-[52svh]) en vez de al final de la foto (72svh), para no
           dejar una franja negra vacía entre la imagen y el copy. */}
-      <Container className="pb-12 pt-[40svh] lg:py-16 lg:pt-16">
+      {/* Mobile: el contenido arranca al 30% de la altura de pantalla. Antes
+          era 40svh, que lo dejaba innecesariamente bajo y desperdiciaba el
+          espacio de arriba; a 30svh sigue cayendo sobre la zona donde la foto
+          se funde a negro, así que no compite con la cara de Pilar.
+          Desktop: se ancla arriba (items-start en la sección) con un pt corto,
+          en vez de centrarse en los 750px. */}
+      <Container className="pb-12 pt-[30svh] sm:pt-[34svh] lg:py-0 lg:pt-12">
         {/* El contenido ocupa la mitad izquierda en desktop: es el hueco que la
             foto de fondo deja libre. En mobile pasa a ancho completo. */}
         <div className="lg:max-w-[52%]">
@@ -103,18 +109,23 @@ export function Hero() {
           {/* ══════════ Columna izquierda — todo el contenido ══════════ */}
           <div className="flex flex-col [text-shadow:0_2px_20px_rgba(0,0,0,0.6)]">
 
-            {/* Logo / nombre del programa — jerarquía máxima, aureola neon que recorre la frase */}
+            {/* Logo / nombre del programa — el wordmark cede la jerarquía a la
+                promesa: se limita a ~300px de ancho en desktop para no competir
+                con el h1, que es el que debe mandar. */}
             <Reveal>
-              <p className="whitespace-nowrap font-display text-3xl leading-tight tracking-tight sm:text-4xl lg:text-5xl filter-[drop-shadow(0_0_28px_rgba(249,2,129,0.35))]">
+              <p className="whitespace-nowrap font-display text-2xl leading-tight tracking-tight sm:text-3xl lg:max-w-[300px] lg:text-[1.75rem] filter-[drop-shadow(0_0_28px_rgba(249,2,129,0.35))]">
                 <NeonText variant="multi">Misión Origen</NeonText>
               </p>
             </Reveal>
 
-            {/* Promesa — headline (h1 para SEO/accesibilidad) */}
+            {/* Promesa — headline (h1 para SEO/accesibilidad).
+                Es el elemento de mayor jerarquía del Hero. 2rem en desktop:
+                a 2.6rem el texto se derramaba a 6 líneas dentro de la columna
+                izquierda, que es demasiado alto para los 750px del Hero. */}
             <Reveal delay={0.15}>
               <h1
                 id="hero-title"
-                className="mt-4 font-display text-lg leading-snug tracking-tight text-white/90 sm:text-xl lg:text-2xl"
+                className="mt-4 font-display text-2xl leading-snug tracking-tight text-white sm:text-3xl lg:text-[2rem] lg:leading-[1.25]"
               >
                 Te revelo los 3 pasos de mi{" "}
                 <NeonText variant="cyan">Sistema Práctico de Manifestación</NeonText>{" "}
@@ -122,9 +133,9 @@ export function Hero() {
               </h1>
             </Reveal>
 
-            {/* Descripción */}
+            {/* Descripción — 18px fijos (text-lg) */}
             <Reveal delay={0.25}>
-              <p className="mt-4 max-w-xl font-sans text-sm font-light leading-relaxed text-white/65 sm:text-base">
+              <p className="mt-4 max-w-xl font-sans text-base font-light leading-relaxed text-white/65 lg:text-lg">
                 Ya no necesitas más información o teoría. Necesitas un sistema
                 práctico que te permita sostener los resultados que quieres
                 manifestar.
@@ -133,12 +144,17 @@ export function Hero() {
 
             {/* Badges de detalles — ARRIBA del formulario */}
             <Reveal delay={0.35}>
+              {/* Flujo libre en 2 filas aproximadas: cada badge ocupa lo que
+                  necesita su texto en vez de forzarse a una celda de ancho
+                  fijo, que recortaba las etiquetas más largas. */}
               <ul
-                className="mt-5 grid max-w-md grid-cols-2 gap-2.5 justify-items-center"
+                className="mt-5 flex max-w-lg flex-wrap gap-3"
                 aria-label="Detalles del programa"
               >
+                {/* beam-badge va en el <li> y no en el badge: el stagger se
+                    resuelve con :nth-child, que necesita hermanos directos. */}
                 {FACTS.map((fact) => (
-                  <li key={fact.label}>
+                  <li key={fact.label} className="beam-badge relative rounded-sm">
                     <FactBadge icon={fact.icon}>{fact.label}</FactBadge>
                   </li>
                 ))}
@@ -148,7 +164,7 @@ export function Hero() {
             {/* CTA principal — abre el modal de reserva (el form vive ahí) */}
             <Reveal delay={0.45} className="mt-8 w-full max-w-md">
               <CtaButton variant="pill" block>
-                ✦ Quiero dar mi Salto Cuántico ✦
+                Quiero dar mi Salto Cuántico
               </CtaButton>
             </Reveal>
 
