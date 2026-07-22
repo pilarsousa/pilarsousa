@@ -22,6 +22,17 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
    en E.164 e isValidPhoneNumber comprueba que sea válido para el país elegido,
    que es bastante más fiable que contar dígitos. */
 
+/* Meta Advanced Matching / CAPI quieren el teléfono en E.164: sólo dígitos con
+   el "+" del prefijo internacional. PhoneInput ya lo entrega así, pero lo
+   normalizamos por si el valor llega con espacios, guiones o paréntesis; si no
+   trae prefijo de país asumimos España (+34). Sin hashear: eso lo hace GTM/Stape. */
+function normalizePhone(raw: string): string {
+  const trimmed = raw.trim();
+  const digits = trimmed.replace(/\D/g, "");
+  if (!digits) return "";
+  return trimmed.startsWith("+") ? `+${digits}` : `+34${digits}`;
+}
+
 type Errors = {
   nombre?: string;
   email?: string;
@@ -115,17 +126,23 @@ export function ReservaForm({
       // page load) ensures only completed registrations count as conversions.
       // Fire this BEFORE navigating, or the redirect tears down the page before
       // the event is pushed.
-      window.dataLayer?.push({ event: "lead_registered", lead_source: source });
-
-      // One-shot flag so the thank-you page knows this visit came from a real
-      // completed registration. The Meta "Lead" event is fired there (per the
-      // tracking spec) and only when this flag is present, so a refresh or a
-      // direct visit to /gracias-mision-origen never counts as a conversion.
-      try {
-        sessionStorage.setItem("mo_lead_pending", "1");
-      } catch {
-        // sessionStorage can throw in private mode — tracking is best-effort.
-      }
+      // user_data en claro (sin hashear): GTM/Stape aplican el SHA-256 antes de
+      // enviarlo a Meta (Advanced Matching / Conversions API).
+      const cleanName = nombre.trim();
+      const [firstName = "", ...restName] = cleanName.split(/\s+/);
+      const lastName = restName.join(" ").toLowerCase();
+      window.dataLayer?.push({
+        event: "lead_registered",
+        lead_source: source,
+        user_data: {
+          email_address: email.trim().toLowerCase(),
+          phone_number: normalizePhone(telefono),
+          address: {
+            first_name: firstName.toLowerCase(),
+            ...(lastName ? { last_name: lastName } : {}),
+          },
+        },
+      });
 
       // Show the "¡Reservado!" confirmation for ~3s so it clearly registers,
       // then close the modal and navigate to the thank-you page. This redirect
