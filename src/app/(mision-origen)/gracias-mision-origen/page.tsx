@@ -3,6 +3,8 @@ import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/mision-origen/ui/Reveal";
 import { NeonText } from "@/components/mision-origen/ui/NeonText";
 import { LeadPixelEvent } from "@/components/mision-origen/ui/LeadPixelEvent";
+import { Radar } from "@/components/mision-origen/ui/Radar";
+import { Footer } from "@/components/mision-origen/sections/Footer";
 import { MO_WHATSAPP_COMMUNITY_URL } from "@/lib/links";
 
 export const metadata: Metadata = {
@@ -31,7 +33,36 @@ export default function GraciasPage() {
     <main>
       {/* Dispara el "Lead" del pixel sólo si se llegó desde el formulario. */}
       <LeadPixelEvent />
-      <section className="relative isolate flex min-h-svh items-center justify-center overflow-hidden bg-background">
+      {/* items-start en mobile: con items-center el bloque quedaba centrado en
+          el alto de pantalla y el sello caía demasiado abajo. Desde sm vuelve a
+          centrarse, que es donde hay aire de sobra. */}
+      <section className="relative isolate flex min-h-[calc(100svh-var(--footer-h))] items-start justify-center overflow-hidden bg-background [--footer-h:16rem] sm:items-center">
+        {/* Radar de fondo — mismo efecto que el CTA de cierre de la landing.
+            Va por debajo de la aurora y del velo de legibilidad. */}
+        <Radar
+          className="absolute inset-0 -z-20 h-full w-full"
+          color="#28bff1"
+          backgroundColor="#000000"
+          scale={0.62}
+          ringCount={9}
+          spokeCount={12}
+          ringThickness={0.035}
+          spokeThickness={0.008}
+          speed={0.5}
+          sweepSpeed={0.7}
+          sweepWidth={3.0}
+          falloff={2.4}
+          brightness={0.85}
+          enableMouseInteraction={false}
+        />
+
+        {/* Velo radial: oscurece el centro para que el copy se lea, dejando que
+            el radar respire hacia los bordes. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_65%_60%_at_50%_50%,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.72)_45%,rgba(0,0,0,0.3)_75%,transparent_100%)]"
+        />
+
         {/* Cyberpunk grid — same texture as the Hero */}
         <div
           aria-hidden
@@ -80,7 +111,9 @@ export default function GraciasPage() {
           className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-32 bg-linear-to-t from-background to-transparent"
         />
 
-        <Container className="py-12 text-center">
+        {/* pt corto en mobile para que el sello arranque cerca del top; desde
+            sm el centrado vertical se encarga y el padding se iguala. */}
+        <Container className="pb-12 pt-10 text-center sm:py-12">
           {/* ── Sello de activación — anillo neon giratorio + check ── */}
           <Reveal>
             <div className="relative mx-auto grid size-28 place-items-center sm:size-32">
@@ -122,8 +155,11 @@ export default function GraciasPage() {
             </div>
           </Reveal>
 
+          {/* Antetítulo en blanco y cuerpo contenido: acompaña al titular sin
+              competir con él. El cyan con glow que tenía antes le daba
+              demasiado peso para lo que es. */}
           <Reveal delay={0.1}>
-            <p className="mt-8 font-sans section-eyebrow text-cyan">
+            <p className="mx-auto mt-8 max-w-2xl font-display text-sm font-semibold uppercase leading-snug tracking-[0.14em] text-white sm:text-base">
               Es hora de dar tu salto cuántico
             </p>
           </Reveal>
@@ -135,28 +171,53 @@ export default function GraciasPage() {
             </h1>
           </Reveal>
 
+          {/* ── Paso pendiente — card con el último paso ──
+              El copy antes era un párrafo suelto y la gente no registraba que
+              todavía tenía algo que hacer. Ahora va en una card con etiqueta de
+              paso, borde en verde WhatsApp y el CTA dentro del mismo bloque,
+              para que la acción se lea como parte del paso y no como un extra. */}
           <Reveal delay={0.26}>
-            <p className="mx-auto mt-6 max-w-xl font-sans text-base font-light leading-relaxed text-zinc-300 sm:text-lg">
-              Diste el primer paso. Únete ahora a la comunidad privada de
-              WhatsApp: ahí vas a recibir los accesos, las fechas y todo lo que
-              necesitas para comenzar tu proceso.
-            </p>
-          </Reveal>
+            <div className="mx-auto mt-10 max-w-xl rounded-xl border border-[#25D366]/35 bg-black/50 p-6 backdrop-blur-sm sm:p-8">
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#25D366]/45 bg-[#25D366]/12 px-4 py-1.5 font-sans text-xs font-bold uppercase tracking-[0.18em] text-[#4ade80]">
+                <span className="relative flex size-2">
+                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#25D366] opacity-75" />
+                  <span className="relative inline-flex size-2 rounded-full bg-[#25D366]" />
+                </span>
+                Paso 1 · Pendiente
+              </span>
 
-          {/* ── CTA — comunidad de WhatsApp ── */}
-          <Reveal delay={0.34}>
-            <a
-              href={MO_WHATSAPP_COMMUNITY_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group mt-10 inline-flex items-center justify-center gap-3 rounded-full bg-[linear-gradient(135deg,#25D366_0%,#128C7E_100%)] px-12 py-5 font-display text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-[0_10px_30px_-8px_rgba(37,211,102,0.6)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_14px_40px_-8px_rgba(37,211,102,0.8)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#25D366] sm:text-base"
-            >
-              <WhatsAppIcon className="size-5 transition-transform duration-300 group-hover:scale-110" />
-              Unirme a la comunidad
-            </a>
+              <h2 className="mt-5 font-display text-xl font-semibold leading-snug text-white sm:text-2xl">
+                Te falta el último paso: entrar al grupo de WhatsApp
+              </h2>
+
+              <p className="mx-auto mt-3 font-sans text-base font-light leading-relaxed text-zinc-300">
+                Todo se comunica ahí dentro: los accesos, las fechas y el enlace
+                del evento en vivo. Si no entras al grupo,{" "}
+                <span className="font-medium text-white">
+                  no vas a recibir la información
+                </span>
+                .
+              </p>
+
+              <a
+                href={MO_WHATSAPP_COMMUNITY_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                /* Texto pequeño y tracking corto en mobile: es lo que permite
+                   que "Unirme a la comunidad" entre en una línea sin recurrir a
+                   whitespace-nowrap, que desbordaba el botón en pantallas
+                   angostas en vez de resolver el ajuste. */
+                className="group mt-6 inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[linear-gradient(135deg,#25D366_0%,#128C7E_100%)] px-4 py-4 font-display text-xs font-semibold uppercase tracking-[0.04em] text-white shadow-[0_10px_30px_-8px_rgba(37,211,102,0.6)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_14px_40px_-8px_rgba(37,211,102,0.8)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#25D366] sm:gap-3 sm:px-10 sm:text-sm sm:tracking-[0.1em]"
+              >
+                <WhatsAppIcon className="size-4 shrink-0 transition-transform duration-300 group-hover:scale-110 sm:size-5" />
+                Unirme a la comunidad
+              </a>
+            </div>
           </Reveal>
         </Container>
       </section>
+
+      <Footer />
     </main>
   );
 }
