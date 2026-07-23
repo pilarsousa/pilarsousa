@@ -1,0 +1,13 @@
+PDFs de la landing /game
+=========================
+
+Colocá acá los dos PDFs descargables, con EXACTAMENTE estos nombres:
+
+  contenido.pdf    -> se descarga desde la modal, al ingresar un código válido.
+  recompensa.pdf   -> se descarga en /game/form, al completar el formulario.
+
+Si preferís otros nombres, cambiá las rutas CONTENT_PDF y REWARD_PDF en:
+  src/components/game/game-config.ts
+
+Mientras estos archivos no existan, los botones de descarga darán error 404.
+Podés borrar este LEEME.txt cuando subas los PDFs.

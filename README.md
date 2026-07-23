@@ -1,6 +1,6 @@
 # Pilar Sousa — landings
 
-Two landing pages served from one Next.js app: **one repo, one branch, one
+Landing pages served from one Next.js app: **one repo, one branch, one
 Vercel project, one deploy**. Next.js 16 (App Router, Turbopack) + Tailwind v4.
 
 | URL                 | Landing                  | Lives in                       |
@@ -8,6 +8,17 @@ Vercel project, one deploy**. Next.js 16 (App Router, Turbopack) + Tailwind v4.
 | `/`                 | Misión Origen            | `src/app/(mision-origen)/`     |
 | `/bootcamp`         | Bootcamp Reset Identidad | `src/app/bootcamp/`            |
 | `/bootcamp/gracias` | Bootcamp — thank you     | `src/app/bootcamp/gracias/`    |
+| `/game`             | Game (código + form)     | `src/app/game/`                |
+| `/game/form`        | Game — formulario        | `src/app/game/form/`           |
+
+**Game** (`/game`) is a standalone one-screen landing (no scroll) over
+`public/game/game-img/hero-game.jpg`, reusing Misión Origen's `.mo-scope`
+palette + fonts. Two actions: a **code** button (client-side check against
+`VALID_CODES`, then a content preview + PDF download) and a **form** button
+(→ `/game/form`, posts to `/api/register` with `source: "game"`, then a
+verification animation + reward PDF). Codes, preview copy and PDF paths all
+live in `src/components/game/game-config.ts`; drop the PDFs in
+`public/game/pdf/` (see the LEEME there).
 
 Two redirects in `next.config.ts` cover the URLs from before the root swap:
 `/mision-origen` → `/` and `/gracias` → `/bootcamp/gracias`, both temporary

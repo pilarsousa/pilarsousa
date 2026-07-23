@@ -272,6 +272,34 @@
     inset 0 0 0.5em 0.25em var(--glow-color);
 }
 
+/*
+  Variante de menor resplandor. Se aplica JUNTO a .neon-btn (p. ej. en los
+  botones "Desbloquear" y "Completar registro" de /game); reutiliza sus colores
+  (--glow-color / --glow-spread-color) y sólo atenúa el box-shadow. Al declararse
+  después de .neon-btn y con la misma especificidad, gana el box-shadow sin
+  afectar al glow completo que usa Misión Origen.
+*/
+.neon-btn--soft {
+  box-shadow:
+    0 0 0.6em 0.12em var(--glow-color),
+    0 0 2em 0.4em var(--glow-spread-color),
+    inset 0 0 0.5em 0.15em var(--glow-color);
+}
+
+.neon-btn--soft:hover {
+  box-shadow:
+    0 0 0.7em 0.15em var(--glow-color),
+    0 0 2.4em 0.7em var(--glow-spread-color),
+    inset 0 0 0.5em 0.15em var(--glow-color);
+}
+
+.neon-btn--soft:active {
+  box-shadow:
+    0 0 0.4em 0.12em var(--glow-color),
+    0 0 1.5em 0.7em var(--glow-spread-color),
+    inset 0 0 0.4em 0.15em var(--glow-color);
+}
+
 /* Fade-in for the reservation modal (backdrop + panel). */
 @keyframes fadeIn {
   from {
@@ -413,6 +441,16 @@
     linear-gradient(#fff 1px, transparent 1px),
     linear-gradient(to right, #fff 1px, transparent 1px);
   background-size: 10px 10px;
+}
+
+/*
+  La landing /game reutiliza .mo-scope por su paleta y tipografía, pero NO quiere
+  la malla de líneas de arriba. Su layout añade .game-scope junto a .mo-scope;
+  esta regla, al ir después y con la misma especificidad, gana y anula la textura
+  sólo en /game, sin afectar a Misión Origen.
+*/
+.game-scope::before {
+  display: none;
 }
 
 /*
