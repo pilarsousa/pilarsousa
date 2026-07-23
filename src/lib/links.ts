@@ -13,7 +13,7 @@ export const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/GO8DZzC2o5bJotgoAZ9
 export const WHATSAPP_SUPPORT_URL = "https://wa.link/i8qdol";
 
 // Misión Origen — WhatsApp community (post-registration thank-you page).
-export const MO_WHATSAPP_COMMUNITY_URL = "https://chat.whatsapp.com/FoGktYQvJ687Y6Wwq62Ylm";
+export const MO_WHATSAPP_COMMUNITY_URL = "https://chat.whatsapp.com/EPDdH6Ng27QDeTpClwA4Kh";
 
 // Bootcamp start — the countdown target. July 10, 2026, 19:00 Spain time
 // (CEST = UTC+2), used as the reference time for Spanish-speaking audiences.
