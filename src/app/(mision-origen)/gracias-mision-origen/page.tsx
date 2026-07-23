@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/mision-origen/ui/Reveal";
 import { NeonText } from "@/components/mision-origen/ui/NeonText";
-import { LeadPixelEvent } from "@/components/mision-origen/ui/LeadPixelEvent";
 import { Radar } from "@/components/mision-origen/ui/Radar";
 import { Footer } from "@/components/mision-origen/sections/Footer";
 import { MO_WHATSAPP_COMMUNITY_URL } from "@/lib/links";
@@ -31,8 +30,6 @@ function WhatsAppIcon({ className }: { className?: string }) {
 export default function GraciasPage() {
   return (
     <main>
-      {/* Dispara el "Lead" del pixel sólo si se llegó desde el formulario. */}
-      <LeadPixelEvent />
       {/* items-start en mobile: con items-center el bloque quedaba centrado en
           el alto de pantalla y el sello caía demasiado abajo. Desde sm vuelve a
           centrarse, que es donde hay aire de sobra. */}
