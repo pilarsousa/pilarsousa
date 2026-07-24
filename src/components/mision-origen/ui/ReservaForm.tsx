@@ -2,13 +2,14 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+import PhoneInput, { isValidPhoneNumber, type Country } from "react-phone-number-input";
 /* Banderas empaquetadas como componentes React. Por defecto la librería las
    pide a un GitHub Pages de terceros: si ese dominio falla, el formulario se
    queda sin banderas. Estas viajan en el bundle, sin peticiones externas. */
 import flags from "react-phone-number-input/flags";
 import "react-phone-number-input/style.css";
 import { cn } from "@/lib/cn";
+import { useVisitorCountry } from "@/lib/useVisitorCountry";
 
 /*
   Email validation: requires local part, "@", a domain with at least one dot,
@@ -68,6 +69,9 @@ export function ReservaForm({
   submitLabel = "Quiero dar mi Salto Cuántico",
   onSuccess,
 }: ReservaFormProps) {
+  /* Preselecciona el prefijo del país del visitante para que no tenga que
+     buscarlo entre los ~240 de la lista. */
+  const defaultCountry = useVisitorCountry();
   const router = useRouter();
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
@@ -252,7 +256,7 @@ export function ReservaForm({
           international
           flags={flags}
           countryCallingCodeEditable={false}
-          defaultCountry="ES"
+          defaultCountry={defaultCountry as Country}
           autoComplete="tel"
           placeholder="600 000 000"
           value={telefono}
