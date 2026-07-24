@@ -48,6 +48,22 @@ function parseLead(data: unknown): Lead | null {
   aviso — sería peor que esto, porque además daría una falsa sensación de
   respaldo.
 */
+/* Actualiza el estado del lead respaldado sin que un fallo del respaldo pueda
+   propagarse: si no hay id (Supabase inactivo) no hace nada, y cualquier error
+   queda en los logs en lugar de romper la respuesta al visitante. */
+async function markLead(
+  id: string | null,
+  status: "sent" | "failed",
+  detail?: string,
+) {
+  if (!id) return;
+  try {
+    await updateLeadStatus(id, status, detail);
+  } catch (err) {
+    console.error("updateLeadStatus threw unexpectedly:", err);
+  }
+}
+
 function logLeadFallback(lead: Lead, reason: string) {
   console.error(
     `LEAD_FALLBACK ${JSON.stringify({ ...lead, reason, at: new Date().toISOString() })}`,
@@ -86,7 +102,14 @@ export async function POST(request: Request) {
     fetch, o si GHL rechaza, el contacto ya está guardado y sólo queda pendiente
     de sincronizar.
   */
-  const leadId = await saveLead(lead, "pending");
+  /* Blindado: el respaldo es un extra, nunca un motivo para perder el lead.
+     Si saveLead fallara de una forma no prevista, el registro debe continuar. */
+  let leadId: string | null = null;
+  try {
+    leadId = await saveLead(lead, "pending");
+  } catch (err) {
+    console.error("saveLead threw unexpectedly:", err);
+  }
 
   /*
     Si GHL rechaza o no responde, el lead NO se descarta: queda en Supabase (y
@@ -109,18 +132,16 @@ export async function POST(request: Request) {
       const detail = await res.text().catch(() => "");
       console.error(`GHL webhook responded ${res.status}: ${detail.slice(0, 300)}`);
       logLeadFallback(lead, `ghl_${res.status}`);
-      if (leadId) {
-        await updateLeadStatus(leadId, "failed", `ghl_${res.status}: ${detail.slice(0, 300)}`);
-      }
+      await markLead(leadId, "failed", `ghl_${res.status}: ${detail.slice(0, 300)}`);
       return Response.json({ ok: true, queued: true });
     }
   } catch (err) {
     console.error("Failed to reach the GHL webhook:", err);
     logLeadFallback(lead, "ghl_unreachable");
-    if (leadId) await updateLeadStatus(leadId, "failed", "ghl_unreachable");
+    await markLead(leadId, "failed", "ghl_unreachable");
     return Response.json({ ok: true, queued: true });
   }
 
-  if (leadId) await updateLeadStatus(leadId, "sent");
+  await markLead(leadId, "sent");
   return Response.json({ ok: true });
 }

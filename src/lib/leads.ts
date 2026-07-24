@@ -34,9 +34,18 @@ function getClient() {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return null;
 
-  return createClient(url, key, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
+  /* createClient valida la URL y lanza si no le gusta el formato (por ejemplo
+     si viene con espacios, con comillas, o sin protocolo al copiarla del panel).
+     Eso ocurriría FUERA del try de saveLead, así que se captura aquí: el
+     respaldo puede quedar inactivo, pero nunca puede tumbar el registro. */
+  try {
+    return createClient(url, key, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+  } catch (err) {
+    console.error("Supabase createClient failed:", err);
+    return null;
+  }
 }
 
 /**
