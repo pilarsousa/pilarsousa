@@ -10,6 +10,8 @@
   .env.local for local dev).
 */
 
+import { saveLead, updateLeadStatus } from "@/lib/leads";
+
 // Kept in sync with the client-side checks in ReservaForm.tsx.
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PHONE_VALID_RE = /^\+?[\d\s()-]{7,}$/;
@@ -34,6 +36,22 @@ function parseLead(data: unknown): Lead | null {
   if (!PHONE_VALID_RE.test(telefono)) return null;
 
   return { nombre, email, telefono, source: source || "unknown" };
+}
+
+/*
+  Último recurso cuando GHL no acepta el lead. Lo deja en los logs del servidor
+  con un prefijo fijo y grepeable, de modo que se pueda recuperar a mano desde
+  Vercel → Logs (buscar "LEAD_FALLBACK") y cargarlo en el CRM.
+
+  No se escribe a disco a propósito: el filesystem de Vercel es efímero y no
+  está compartido entre invocaciones, así que un archivo JSON se perdería sin
+  aviso — sería peor que esto, porque además daría una falsa sensación de
+  respaldo.
+*/
+function logLeadFallback(lead: Lead, reason: string) {
+  console.error(
+    `LEAD_FALLBACK ${JSON.stringify({ ...lead, reason, at: new Date().toISOString() })}`,
+  );
 }
 
 export async function POST(request: Request) {
@@ -62,6 +80,21 @@ export async function POST(request: Request) {
     );
   }
 
+  /*
+    El lead se respalda en Supabase ANTES de intentar el envío a GHL. Ese orden
+    es lo que garantiza que nada se pierda: si el proceso muere en mitad del
+    fetch, o si GHL rechaza, el contacto ya está guardado y sólo queda pendiente
+    de sincronizar.
+  */
+  const leadId = await saveLead(lead, "pending");
+
+  /*
+    Si GHL rechaza o no responde, el lead NO se descarta: queda en Supabase (y
+    en los logs como red de emergencia) y la respuesta sigue siendo 200. Es
+    deliberado — el visitante completó el formulario y su dato está guardado,
+    así que mostrarle un error lo empujaría a irse o a reintentar en loop. El
+    fallo es nuestro y se resuelve de nuestro lado.
+  */
   try {
     const res = await fetch(webhookUrl, {
       method: "POST",
@@ -73,19 +106,21 @@ export async function POST(request: Request) {
     });
 
     if (!res.ok) {
-      console.error(`GHL webhook responded ${res.status}`);
-      return Response.json(
-        { error: "No pudimos registrar tu reserva. Probá de nuevo." },
-        { status: 502 },
-      );
+      const detail = await res.text().catch(() => "");
+      console.error(`GHL webhook responded ${res.status}: ${detail.slice(0, 300)}`);
+      logLeadFallback(lead, `ghl_${res.status}`);
+      if (leadId) {
+        await updateLeadStatus(leadId, "failed", `ghl_${res.status}: ${detail.slice(0, 300)}`);
+      }
+      return Response.json({ ok: true, queued: true });
     }
   } catch (err) {
     console.error("Failed to reach the GHL webhook:", err);
-    return Response.json(
-      { error: "No pudimos registrar tu reserva. Probá de nuevo." },
-      { status: 502 },
-    );
+    logLeadFallback(lead, "ghl_unreachable");
+    if (leadId) await updateLeadStatus(leadId, "failed", "ghl_unreachable");
+    return Response.json({ ok: true, queued: true });
   }
 
+  if (leadId) await updateLeadStatus(leadId, "sent");
   return Response.json({ ok: true });
 }

@@ -129,8 +129,30 @@ enviar el formulario):
 | ------ | ------------- | ----------- |
 | **500** | `GHL_WEBHOOK_URL` no está cargada | Cargá la variable en Vercel (Paso 4) y redeployá |
 | **400** | Los datos del formulario llegaron incompletos o mal | Normalmente es validación; no suele pasar desde el form real |
-| **502** | GHL no respondió o rechazó el webhook | Revisá que la URL sea correcta y que el workflow esté **publicado** |
+| **200** con `queued: true` | GHL rechazó el lead, pero el lead **no se perdió** | Ver "Recuperar leads" abajo, y revisar por qué falla GHL |
 | **200** | Todo bien, el lead se envió | Si no aparece en GHL, revisá el mapeo de campos del Paso 3 |
+
+### Recuperar leads cuando GHL falla
+
+Si GHL rechaza el envío (workflow despublicado, URL mal, o **sin saldo en la
+cuenta** — GHL devuelve `422 Billing failure` cuando el workflow usa una acción
+premium y la Location no tiene fondos), el endpoint **no descarta el lead**: lo
+escribe en los logs y le responde `200` al navegador, para que el visitante vea
+la confirmación en lugar de un error que no puede resolver.
+
+Para rescatarlos, andá a **Vercel → tu proyecto → Logs** y buscá
+`LEAD_FALLBACK`. Cada coincidencia es una línea como esta:
+
+```
+LEAD_FALLBACK {"nombre":"Ana Pérez","email":"ana@mail.com","telefono":"+34600123456","source":"mision-origen","reason":"ghl_422","at":"2026-07-24T11:51:29.113Z"}
+```
+
+Copiá esos datos y cargalos a mano en GHL.
+
+> **Ojo con la retención de logs.** En el plan Hobby de Vercel los logs duran
+> ~1 hora. Si la caída se extiende, revisá y exportá seguido, o el respaldo se
+> pierde igual. Es un paliativo para salir del paso — la solución de fondo es
+> arreglar la causa en GHL.
 
 Referencias en el código, por si hace falta:
 
