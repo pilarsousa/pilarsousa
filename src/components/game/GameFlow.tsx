@@ -9,9 +9,8 @@ import { QUIZ_QUESTIONS } from "@/components/game/game-config";
 /*
   Flujo de /game/form, en una card centrada tipo "inicio de sesión".
 
-  Paso 1 (login): pide el Gmail. La card NO se puede cerrar/abandonar hasta
-  ingresar un correo válido — por eso este paso no ofrece ningún botón de volver
-  ni de cerrar, y "Continuar" queda deshabilitado hasta que el correo sea válido.
+  Paso 1 (login): pide el Gmail. "Continuar" queda deshabilitado hasta que el
+  correo sea válido. Arriba a la izquierda hay un botón para volver a /game/home.
 
   Paso 2 (quiz): las 6 preguntas de QUIZ_QUESTIONS (game-config.ts), de a una,
   con barra de progreso. Al terminar envía { email, answers } a /api/game-quiz
@@ -75,8 +74,8 @@ export function GameFlow() {
     }
   }
 
-  function selectOption(questionId: string, option: string) {
-    setAnswers((prev) => ({ ...prev, [questionId]: option }));
+  function setAnswer(questionId: string, value: string) {
+    setAnswers((prev) => ({ ...prev, [questionId]: value }));
   }
 
   async function submitQuiz() {
@@ -115,7 +114,9 @@ export function GameFlow() {
             Iniciá tu partida
           </h1>
           <p className="mt-3 font-sans text-sm font-light leading-relaxed text-white/65">
-            Ingresá tu Gmail para acceder. No vas a poder continuar sin él.
+            Ingresá tu Gmail para acceder.
+            <br />
+            No vas a poder continuar sin él.
           </p>
         </div>
 
@@ -174,7 +175,8 @@ export function GameFlow() {
   /* ───────────────────────────── Paso: quiz ────────────────────────────── */
   if (stage === "quiz") {
     const q = QUIZ_QUESTIONS[qIndex];
-    const selected = answers[q.id];
+    const answer = answers[q.id] ?? "";
+    const answered = answer.trim().length > 0;
     const isLast = qIndex === total - 1;
 
     return (
@@ -200,40 +202,18 @@ export function GameFlow() {
             exit={{ opacity: 0, x: -24 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
           >
-            <h2 className="font-display text-xl leading-snug tracking-tight text-white">
+            <h2 className="font-display text-lg leading-snug tracking-tight text-white sm:text-xl">
               {q.question}
             </h2>
 
-            <div className="mt-5 flex flex-col gap-3">
-              {q.options.map((option) => {
-                const active = selected === option;
-                return (
-                  <button
-                    key={option}
-                    type="button"
-                    onClick={() => selectOption(q.id, option)}
-                    className={cn(
-                      "group flex items-center justify-between gap-3 rounded-lg border px-4 py-3 text-left font-sans text-sm font-light transition-all duration-200 active:scale-[0.99]",
-                      active
-                        ? "border-cyan bg-cyan/10 text-white shadow-[0_0_18px_rgba(40,191,241,0.25)]"
-                        : "border-white/15 text-white/80 hover:border-cyan/50 hover:bg-white/5",
-                    )}
-                  >
-                    <span>{option}</span>
-                    <span
-                      className={cn(
-                        "grid size-5 shrink-0 place-items-center rounded-full border transition-colors duration-200",
-                        active
-                          ? "border-cyan bg-cyan text-background"
-                          : "border-white/30 text-transparent",
-                      )}
-                    >
-                      <Check size={13} aria-hidden />
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+            {/* Respuesta de texto libre */}
+            <textarea
+              value={answer}
+              onChange={(e) => setAnswer(q.id, e.target.value)}
+              rows={5}
+              placeholder="Escribí tu respuesta…"
+              className="mt-5 w-full resize-none rounded-lg border border-cyan/25 bg-white/3 px-4 py-3 font-sans text-sm font-light leading-relaxed text-white outline-none transition-all duration-300 placeholder:text-white/40 focus:border-cyan/70 focus:bg-cyan/4 focus:shadow-[0_0_18px_rgba(40,191,241,0.25)]"
+            />
           </motion.div>
         </AnimatePresence>
 
@@ -259,7 +239,7 @@ export function GameFlow() {
           <button
             type="button"
             onClick={handleNext}
-            disabled={!selected || status === "submitting"}
+            disabled={!answered || status === "submitting"}
             className="neon-btn neon-btn--soft inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full px-6 text-sm font-bold uppercase tracking-[0.06em] transition-all duration-300 ease-out active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-60"
           >
             <span>
@@ -334,7 +314,7 @@ export function GameFlow() {
 /* Card contenedora neón, compartida por los tres pasos. */
 function Card({ children }: { children: React.ReactNode }) {
   return (
-    <div className="w-full max-w-md rounded-2xl border border-cyan/25 bg-surface/90 p-7 shadow-[0_0_40px_rgba(40,191,241,0.15)] backdrop-blur-md sm:p-9">
+    <div className="relative w-full max-w-md rounded-2xl border border-cyan/25 bg-surface/90 p-7 shadow-[0_0_40px_rgba(40,191,241,0.15)] backdrop-blur-md sm:p-9">
       {children}
     </div>
   );

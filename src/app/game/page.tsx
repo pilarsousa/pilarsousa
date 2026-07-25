@@ -49,6 +49,12 @@ export default function GamePage() {
           Dar mi salto cuántico
         </Link>
       </div>
+
+      {/* Viñeta/sombra en los bordes */}
+      <div
+        aria-hidden
+        className="game-edge-shadow pointer-events-none absolute inset-0 z-20"
+      />
     </main>
   );
 }

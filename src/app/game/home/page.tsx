@@ -1,16 +1,20 @@
+"use client";
+
+import { useState } from "react";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
+import { CardUnicaModal } from "@/components/game/CardUnicaModal";
+import { CodeGateModal } from "@/components/game/CodeGateModal";
 import fondo from "@/../public/game/game-img/fondo-landing.jpg";
+import fondoMobile from "@/../public/game/game-img/fondo-seccion-mobile.jpg";
 import cardFrame from "@/../public/game/seccions/section-2/card-principal.png";
 import imgNav from "@/../public/game/seccions/section-2/img-nav.png";
 import imgPerfil from "@/../public/game/seccions/section-2/img-perfil.png";
 import imgCard1 from "@/../public/game/seccions/section-2/img-card-1.png";
 import imgCard2 from "@/../public/game/seccions/section-2/img-card-2.png";
-import imgCard3 from "@/../public/game/seccions/section-2/img-card-3.png";
-import imgCard4 from "@/../public/game/seccions/section-2/img-card-4.png";
 
 /*
-  /game/home — recreación de la maqueta: barra superior con el retrato y cuatro
+  /game/home — recreación de la maqueta: barra superior con el retrato y dos
   cards ornamentadas en fila sobre el bosque encantado, una sola pantalla sin
   scroll.
 
@@ -26,49 +30,54 @@ import imgCard4 from "@/../public/game/seccions/section-2/img-card-4.png";
     3. El marco card-principal.png por encima (object-fill, mismo aspect → sin
        deformar), sin capturar el puntero.
 
-  Las cuatro ilustraciones van de la más luminosa (1) a la más oscura (4).
+  Cada card muestra su título en el compartimento negro inferior.
 
   Barra superior: img-nav.png centrada; img-perfil.png (retrato) encima, centrado
-  sobre la placa. Es decorativa → pointer-events-none.
+  sobre la placa. Es decorativa → pointer-events-none. Se OCULTA mientras la modal
+  de la 1ª card está abierta.
 
-  h-[100dvh] + overflow-hidden = sin scroll.
+  Responsive: mobile usa fondo-seccion-mobile.jpg y dimensiona las cards por ANCHO
+  (dos en fila en portrait); desde md: usa fondo-landing.jpg y las dimensiona por
+  ALTO (la maqueta original). Ambos: h-[100dvh] + overflow-hidden = sin scroll.
 */
 
-const CARDS: { art: StaticImageData; alt: string }[] = [
-  { art: imgCard1, alt: "" },
-  { art: imgCard2, alt: "" },
-  { art: imgCard3, alt: "" },
-  { art: imgCard4, alt: "" },
+const CARDS: { art: StaticImageData; alt: string; title: string }[] = [
+  { art: imgCard1, alt: "", title: "Las 33 Leyes Universales" },
+  { art: imgCard2, alt: "", title: "Archivo Oculto" },
 ];
 
-function GameCard({
+/* Contenido visual de la card (imagen + negro + marco). Es igual sea clickeable
+   o no; sólo cambia el contenedor (Link vs div). */
+function CardContent({
   art,
   alt,
-  href,
+  title,
 }: {
   art: StaticImageData;
   alt: string;
-  href: string;
+  title: string;
 }) {
   return (
-    <Link
-      href={href}
-      className="relative h-[74vh] shrink-0 aspect-[214/459] transition-transform duration-300 ease-out hover:scale-[1.03] focus-visible:outline-none focus-visible:scale-[1.03]"
-    >
-      {/* 1 — Ilustración, recortada bajo el marco (agrandada hacia abajo) */}
+    <>
+      {/* 1 — Ilustración: llena TODA su sección hasta el divisor (pasa por detrás
+             del metal del divisor, que es un arco). Así nunca hay negro por
+             encima de la línea del divisor ni se filtra el fondo por sus huecos. */}
       <div className="absolute left-[7%] right-[7%] top-[3.2%] bottom-[13%] overflow-hidden bg-black">
         <Image
           src={art}
           alt={alt}
           fill
-          quality={85}
+          quality={90}
           sizes="(min-width: 768px) 20vw, 45vw"
           className="object-cover object-center"
         />
       </div>
 
-      {/* 2 — Rectángulo negro SÓLO en el compartimento de abajo (bajo el divisor) */}
-      <div className="absolute left-[7%] right-[7%] top-[86%] bottom-[2%] bg-black" />
+      {/* 2 — Rectángulo negro desde el BORDE INFERIOR del metal del divisor
+             (~84.8%, medido sobre el alpha del marco) hacia abajo. Así la imagen
+             termina justo en la línea del divisor: no asoma por debajo del metal
+             ni queda negro por encima de esa línea. */}
+      <div className="absolute left-[7%] right-[7%] top-[84.8%] bottom-[2%] bg-black" />
 
       {/* 3 — Marco ornamental por encima */}
       <Image
@@ -80,14 +89,91 @@ function GameCard({
         sizes="(min-width: 768px) 22vw, 48vw"
         className="pointer-events-none object-fill"
       />
-    </Link>
+
+      {/* 4 — Título en el compartimento negro, con la tipografía del botón de /game */}
+      <div className="pointer-events-none absolute inset-x-[11%] top-[86%] bottom-[3.2%] flex items-center justify-center">
+        <span className="text-center font-[family-name:var(--font-pixelify)] text-[3vw] font-bold uppercase leading-tight tracking-[0.04em] text-white md:text-[2vh]">
+          {title}
+        </span>
+      </div>
+    </>
   );
 }
 
+/* Cajas de la card según viewport: mobile por ANCHO (apiladas), desktop por ALTO. */
+const CARD_BOX_MOBILE = "relative w-[58vw] shrink-0 aspect-[214/459]";
+const CARD_BOX_DESKTOP = "relative h-[74vh] shrink-0 aspect-[214/459]";
+const CARD_HOVER =
+  "transition-transform duration-300 ease-out hover:scale-[1.03] focus-visible:scale-[1.03] focus-visible:outline-none";
+
 export default function GameHomePage() {
+  /* Flujo de la 1ª card: cerrada → pide código → (código correcto) → modal. */
+  const [unlockStep, setUnlockStep] = useState<"closed" | "code" | "card">(
+    "closed",
+  );
+
+  /* La 1ª card pide un código antes de abrir la modal; la 2ª navega a /game/form. */
+  const renderCard = (
+    c: (typeof CARDS)[number],
+    i: number,
+    boxClass: string,
+  ) =>
+    i === 0 ? (
+      <button
+        key={i}
+        type="button"
+        aria-label="Abrir"
+        onClick={() => setUnlockStep("code")}
+        className={`${boxClass} ${CARD_HOVER}`}
+      >
+        <CardContent art={c.art} alt={c.alt} title={c.title} />
+      </button>
+    ) : (
+      <Link
+        key={i}
+        href="/game/form?nivel=2"
+        className={`${boxClass} ${CARD_HOVER}`}
+      >
+        <CardContent art={c.art} alt={c.alt} title={c.title} />
+      </Link>
+    );
+
+  /* Barra superior con el retrato (decorativa). El ancho lo fija el contenedor. */
+  const renderNav = () => (
+    <div className="pointer-events-none relative w-full">
+      <Image
+        src={imgNav}
+        alt=""
+        aria-hidden
+        priority
+        sizes="(min-width: 768px) 46vw, 94vw"
+        className="h-auto w-full"
+      />
+      <Image
+        src={imgPerfil}
+        alt="Tu perfil"
+        priority
+        sizes="(min-width: 768px) 10vw, 18vw"
+        className="absolute left-1/2 top-[44%] w-[17%] -translate-x-1/2 -translate-y-1/2"
+      />
+    </div>
+  );
+
   return (
-    <main className="relative isolate h-[100dvh] w-full overflow-hidden">
-      {/* Fondo a sangre — el bosque encantado */}
+    <main className="relative isolate min-h-[100dvh] w-full overflow-y-auto md:h-[100dvh] md:overflow-hidden">
+      {/* Fondo a sangre — mobile (portrait) vs desktop. Como el <main> crece con
+          el contenido en mobile, el fill cubre toda el área (incluida la de scroll). */}
+      <Image
+        src={fondoMobile}
+        alt=""
+        aria-hidden
+        fill
+        priority
+        quality={90}
+        sizes="100vw"
+        placeholder="blur"
+        className="-z-20 object-cover object-center md:hidden"
+      />
       <Image
         src={fondo}
         alt=""
@@ -97,43 +183,49 @@ export default function GameHomePage() {
         quality={90}
         sizes="100vw"
         placeholder="blur"
-        className="-z-20 object-cover object-center"
+        className="-z-20 hidden object-cover object-center md:block"
       />
       {/* Oscurecido sutil para que las cards resalten */}
       <div aria-hidden className="absolute inset-0 -z-10 bg-black/20" />
 
-      {/* Fila de cuatro cards */}
-      <div className="absolute inset-x-0 top-[15.5%] z-10 flex justify-center gap-[1.5vw] px-[2vw]">
-        {CARDS.map((c, i) => (
-          <GameCard
-            key={i}
-            art={c.art}
-            alt={c.alt}
-            href={`/game/form?nivel=${i + 1}`}
-          />
-        ))}
+      {/* ── MOBILE: barra grande + cards apiladas (una abajo de la otra, con scroll) ── */}
+      <div className="relative z-10 flex flex-col items-center gap-[5vh] px-[6vw] pt-0 pb-[8vh] md:hidden">
+        {/* -mt compensa el padding transparente superior del PNG (14.8%) para
+            pegar la barra al tope sin espacio. */}
+        {unlockStep === "closed" && (
+          <div className="-mt-[4.6vw] w-[94vw]">{renderNav()}</div>
+        )}
+        {CARDS.map((c, i) => renderCard(c, i, CARD_BOX_MOBILE))}
       </div>
 
-      {/* Barra superior con el retrato (decorativa) */}
-      <div className="pointer-events-none absolute inset-x-0 top-[1%] z-20 flex justify-center">
-        <div className="relative w-[clamp(360px,46vw,860px)]">
-          <Image
-            src={imgNav}
-            alt=""
-            aria-hidden
-            priority
-            sizes="46vw"
-            className="h-auto w-full"
-          />
-          <Image
-            src={imgPerfil}
-            alt="Tu perfil"
-            priority
-            sizes="10vw"
-            className="absolute left-1/2 top-[30%] w-[21%] -translate-x-1/2 -translate-y-1/2"
-          />
+      {/* ── DESKTOP: maqueta original (absoluta, sin scroll) ── */}
+      <div className="hidden md:contents">
+        <div className="absolute inset-x-0 top-[15.5%] z-10 flex justify-center gap-[calc(1.5vw+60px)] px-[2vw]">
+          {CARDS.map((c, i) => renderCard(c, i, CARD_BOX_DESKTOP))}
         </div>
+        {unlockStep === "closed" && (
+          <div className="pointer-events-none absolute inset-x-0 top-[-4.5%] z-20 flex justify-center">
+            <div className="w-[clamp(360px,46vw,860px)]">{renderNav()}</div>
+          </div>
+        )}
       </div>
+
+      {/* Viñeta/sombra en los bordes */}
+      <div
+        aria-hidden
+        className="game-edge-shadow pointer-events-none absolute inset-0 z-30"
+      />
+
+      {/* Flujo de la 1ª card: primero el código, luego la modal */}
+      {unlockStep === "code" && (
+        <CodeGateModal
+          onClose={() => setUnlockStep("closed")}
+          onUnlock={() => setUnlockStep("card")}
+        />
+      )}
+      {unlockStep === "card" && (
+        <CardUnicaModal onClose={() => setUnlockStep("closed")} />
+      )}
     </main>
   );
 }

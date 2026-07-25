@@ -15,7 +15,7 @@
 /* ─────────────────────────── Códigos válidos ───────────────────────────
    Los códigos que le vas a dar a los clientes. La comparación ignora
    mayúsculas/minúsculas y espacios sobrantes. Agregá o quitá los que quieras. */
-export const VALID_CODES: string[] = ["MisionOrigen"];
+export const VALID_CODES: string[] = ["MISIONORIGEN"];
 
 /* Normaliza un código tipeado por el usuario para compararlo sin importar
    mayúsculas ni espacios al principio/final. */
@@ -67,54 +67,52 @@ export const UNLOCK_CONTENT: {
 export const CONTENT_PDF = "/game/pdf/contenido.pdf"; // botón de la modal de código
 export const REWARD_PDF = "/game/pdf/recompensa.pdf"; // botón tras completar el form
 
-/* ─────────────────────────── Cuestionario de /game/form ──────────────────
-   Las 6 preguntas del flujo de /game/form (paso posterior al Gmail). Por ahora
-   son FICTICIAS: sirven para tener listo el flujo y el envío mientras se conecta
-   la base de datos real. Editá libremente el texto y las opciones; podés agregar
-   o quitar preguntas y el flujo se adapta al largo del array.
+/* PDF que descarga el botón de la modal de la 1ª card (/game/home).
+   El archivo se renombró a un nombre sin acentos/espacios para que la URL
+   resuelva siempre; el nombre "lindo" se define en el atributo download. */
+export const PRINCIPIOS_PDF = "/game/pdf/33-principios-cuanticos-mision-origen.pdf";
 
-   Cada pregunta es de opción única (radio). El `id` es la clave con la que se
-   guarda la respuesta en el payload que se envía al backend. */
+/* ─────────────────────────── Cuestionario de /game/form ──────────────────
+   Las 6 preguntas del flujo de /game/form (paso posterior al Gmail). Se responden
+   con texto libre (el usuario escribe lo que quiera). Podés editar el texto, y
+   agregar o quitar preguntas: el flujo se adapta al largo del array.
+
+   El orden define en qué columna se guarda cada respuesta (1ª → respuesta_1, …).
+   El `id` es la clave con la que viaja la respuesta en el payload. */
 export type QuizQuestion = {
   id: string;
   question: string;
-  options: string[];
 };
 
 export const QUIZ_QUESTIONS: QuizQuestion[] = [
   {
-    id: "clase",
-    question: "¿Qué clase de personaje sos?",
-    options: ["Guerrero", "Mago", "Explorador", "Sanador"],
+    id: "q1",
+    question:
+      "¿Qué es aquello que más te gustaría transformar en tu vida en este momento y por qué?",
   },
   {
-    id: "objetivo",
-    question: "¿Cuál es tu objetivo principal ahora mismo?",
-    options: [
-      "Subir de nivel rápido",
-      "Dominar una habilidad",
-      "Conseguir un tesoro",
-      "Completar la historia",
-    ],
+    id: "q2",
+    question:
+      "¿Qué es lo que más te está frenando hoy para vivir la vida que realmente deseas?",
   },
   {
-    id: "estilo",
-    question: "¿Cómo preferís enfrentar los desafíos?",
-    options: ["De frente", "Con estrategia", "En equipo", "Improvisando"],
+    id: "q3",
+    question:
+      "¿Qué has intentado hasta ahora para cambiar tu realidad y por qué crees que todavía no has conseguido los resultados que buscas?",
   },
   {
-    id: "tiempo",
-    question: "¿Cuánto tiempo le dedicás por día?",
-    options: ["Menos de 30 min", "30 a 60 min", "1 a 2 horas", "Más de 2 horas"],
+    id: "q4",
+    question:
+      "Si dentro de un año tu vida fuera exactamente como sueñas, ¿cómo sería? Cuéntanoslo con el mayor detalle posible.",
   },
   {
-    id: "experiencia",
-    question: "¿Qué nivel de experiencia tenés?",
-    options: ["Principiante", "Intermedio", "Avanzado", "Experto"],
+    id: "q5",
+    question:
+      "¿Cuál es tu mayor miedo si dentro de 5 años sigues exactamente en el mismo lugar en el que estás hoy?",
   },
   {
-    id: "motivacion",
-    question: "¿Qué te motiva a seguir jugando?",
-    options: ["Superarme", "Competir", "Aprender", "Divertirme"],
+    id: "q6",
+    question:
+      "¿Qué decisión o cambio sabes que llevas demasiado tiempo posponiendo en tu vida?",
   },
 ];
