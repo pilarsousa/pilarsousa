@@ -2,9 +2,9 @@
 
 import { useState, type FormEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Check, Mail } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Download, Mail } from "lucide-react";
 import { cn } from "@/lib/cn";
-import { QUIZ_QUESTIONS } from "@/components/game/game-config";
+import { QUIZ_QUESTIONS, REWARD_PDF } from "@/components/game/game-config";
 
 /*
   Flujo de /game/form, en una card centrada tipo "inicio de sesión".
@@ -284,6 +284,8 @@ export function GameFlow() {
             </li>
           ))}
         </ul>
+
+        <RewardDownloadButton className="mt-7 w-full" />
       </Card>
     );
   }
@@ -306,6 +308,7 @@ export function GameFlow() {
         <p className="mt-3 max-w-sm font-sans text-sm font-light leading-relaxed text-white/70">
           Guardamos tus respuestas. Gracias por completar el cuestionario.
         </p>
+        <RewardDownloadButton className="mt-7" />
       </div>
     </Card>
   );
@@ -317,5 +320,21 @@ function Card({ children }: { children: React.ReactNode }) {
     <div className="relative w-full max-w-md rounded-2xl border border-cyan/25 bg-surface/90 p-7 shadow-[0_0_40px_rgba(40,191,241,0.15)] backdrop-blur-md sm:p-9">
       {children}
     </div>
+  );
+}
+
+function RewardDownloadButton({ className }: { className?: string }) {
+  return (
+    <a
+      href={REWARD_PDF}
+      download="recompensa.pdf"
+      className={cn(
+        "neon-btn neon-btn--soft inline-flex h-14 items-center justify-center gap-2.5 rounded-full px-7 text-center text-sm font-bold uppercase tracking-[0.06em] transition-all duration-300 ease-out active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:text-base",
+        className,
+      )}
+    >
+      <Download size={20} aria-hidden />
+      <span>Descargar recompensa</span>
+    </a>
   );
 }
