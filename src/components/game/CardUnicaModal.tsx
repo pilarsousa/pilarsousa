@@ -115,29 +115,47 @@ export function CardUnicaModal({ onClose }: { onClose: () => void }) {
           <Image src={botonAtras} alt="" className="h-auto w-full" />
         </button>
 
-        {/* Halo pulsante detrás del botón de descarga, para señalar dónde tocar. */}
-        <span
-          aria-hidden
-          className="pointer-events-none absolute left-[81.2%] top-[88.2%] size-[16%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/30 animate-ping"
-        />
+        {/* descarga — socket inferior derecho → descarga el PDF.
+            El botón y su halo comparten contenedor (anclado al socket) para que
+            el halo se posicione respecto del BOTÓN y no de la card. El PNG es
+            cuadrado, así que los % de acá adentro son fracciones del botón:
+            su círculo visible ocupa el 67.9% y está centrado en (49.2%, 47.7%),
+            medido sobre el alpha del archivo. */}
+        <div className="absolute left-[81.2%] top-[88.2%] w-[18%] -translate-x-1/2 -translate-y-1/2">
+          {/* Halo pulsante que asoma por debajo del botón, para señalar dónde
+              tocar. En el pico su radio (45%) supera al del círculo del botón
+              (33.9%) por todos lados, así que la onda se ve como un aro
+              completo alrededor del botón, apenas descolgado hacia abajo
+              (centro 53% vs 47.7% del círculo). */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute left-[49.24%] top-[53%] size-[58%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/70 animate-halo-ping"
+          />
 
-        {/* descarga — socket inferior derecho → descarga el PDF */}
-        <a
-          href={PRINCIPIOS_PDF}
-          download="33 Principios Cuánticos - Misión Origen.pdf"
-          aria-label="Descargar"
-          className="absolute left-[81.2%] top-[88.2%] w-[18%] -translate-x-1/2 -translate-y-1/2 transition-transform duration-200 ease-out hover:scale-105 active:scale-95 focus-visible:outline-none"
-        >
-          <Image src={descarga} alt="" className="h-auto w-full" />
-        </a>
+          <a
+            href={PRINCIPIOS_PDF}
+            download="33 Principios Cuánticos - Misión Origen.pdf"
+            aria-label="Descargar"
+            className="relative block transition-transform duration-200 ease-out hover:scale-105 active:scale-95 focus-visible:outline-none"
+          >
+            <Image src={descarga} alt="" className="h-auto w-full" />
+          </a>
+        </div>
       </div>
 
-      {/* Indicación clara de la acción: tocar el botón de descarga de la card.
-          pointer-events-none → clickear aquí cierra la modal como el resto del fondo. */}
-      <div className="pointer-events-none flex items-center justify-center gap-2 px-4 text-center font-[family-name:var(--font-pixelify)] text-[clamp(12px,1.9vh,18px)] font-bold uppercase tracking-[0.06em] text-accent [text-shadow:0_0_12px_rgba(40,191,241,0.6)]">
+      {/* Indicación de la acción, que además descarga: señala el botón de la
+          card, pero si alguien toca el texto en vez del botón igual se lleva el
+          PDF. stopPropagation para que descargar no cierre la modal (el fondo
+          cierra al click), igual que el botón de la card. */}
+      <a
+        href={PRINCIPIOS_PDF}
+        download="33 Principios Cuánticos - Misión Origen.pdf"
+        onClick={(e) => e.stopPropagation()}
+        className="flex items-center justify-center gap-2 px-4 text-center font-[family-name:var(--font-pixelify)] text-[clamp(12px,1.9vh,18px)] font-bold uppercase tracking-[0.06em] text-accent [text-shadow:0_0_12px_rgba(40,191,241,0.6)] transition-transform duration-200 ease-out hover:scale-105 active:scale-95 focus-visible:outline-none"
+      >
         <Download size={20} aria-hidden className="animate-bounce" />
-        <span>Tocá el botón de descarga para bajar tu PDF</span>
-      </div>
+        <span>Toca el botón de descarga de arriba para obtener el PDF</span>
+      </a>
     </div>
   );
 }

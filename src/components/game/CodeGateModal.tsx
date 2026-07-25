@@ -105,7 +105,7 @@ export function CodeGateModal({
                   Ingresá el código
                 </h2>
                 <p className="mt-2 font-sans text-sm font-light text-white/60">
-                  Escribí el código que te dieron para desbloquear el contenido.
+                  Escribe el código que te han dado para desbloquear el contenido.
                 </p>
               </div>
 

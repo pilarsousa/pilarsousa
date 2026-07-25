@@ -95,6 +95,10 @@
   --animate-tick-pulse: tick-pulse 0.45s ease-out 1;
   --animate-marquee: marquee 14s linear infinite;
   --animate-badge-pulse: badge-pulse 3s ease-in-out infinite;
+  /* Halo que late detrás del botón de descarga de la card única. Versión
+     contenida del ping de Tailwind: ese escala al doble y la onda tapaba media
+     card, este apenas se despega del borde del botón. */
+  --animate-halo-ping: halo-ping 1.6s ease-out infinite;
   /* Haz que recorre el perímetro del badge. Comparte el mecanismo de
      --border-angle / border-spin de las beam-card, pero más lento para que
      cuatro badges a la vez no saturen el hero. */
@@ -378,6 +382,29 @@
   50% {
     border-color: color-mix(in srgb, var(--color-cyan) 60%, transparent);
     box-shadow: 0 0 14px rgba(40, 191, 241, 0.2);
+  }
+}
+
+/* Onda corta que señala el botón de descarga sin invadir la card. Arranca
+   opaca y se apaga recién sobre el final del recorrido, así la onda se lee
+   contra la card oscura en vez de desvanecerse apenas sale.
+
+   OJO: sólo scale(), nunca translate(). El halo se centra con las utilidades
+   -translate-x-1/2 / -translate-y-1/2, que en Tailwind v4 escriben la
+   propiedad `translate` (no `transform`). Como el navegador aplica `translate`
+   antes que `transform`, agregar un translate acá lo centraría dos veces y la
+   onda saldría corrida media pantalla arriba-izquierda. */
+@keyframes halo-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.95;
+  }
+  60% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
   }
 }
 
