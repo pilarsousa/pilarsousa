@@ -6,9 +6,9 @@
   created_at). Cada respuesta se mapea a su columna según el ORDEN de
   QUIZ_QUESTIONS: la 1ª pregunta → respuesta_1, la 2ª → respuesta_2, etc.
 
-  La conexión usa el cliente server-side de src/lib/supabase.ts (env vars
-  SUPABASE_URL y SUPABASE_ANON_KEY). Requiere una policy de RLS que permita el
-  insert anónimo en esa tabla — ver el SQL en la conversación.
+  La conexión usa el cliente server-side de src/lib/supabase.ts. En Vercel conviene
+  configurar SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY; si sólo existe
+  SUPABASE_ANON_KEY, requiere una policy de RLS que permita el insert anónimo.
 
   Payload esperado desde el cliente (GameFlow.tsx):
     { email: string, answers: { [questionId]: string } }
@@ -28,7 +28,7 @@ function parseSubmission(data: unknown): QuizSubmission | null {
   if (typeof data !== "object" || data === null) return null;
   const d = data as Record<string, unknown>;
 
-  const email = typeof d.email === "string" ? d.email.trim() : "";
+  const email = typeof d.email === "string" ? d.email.trim().toLowerCase() : "";
   if (!EMAIL_RE.test(email)) return null;
 
   if (typeof d.answers !== "object" || d.answers === null) return null;
@@ -60,8 +60,10 @@ export async function POST(request: Request) {
 
   const supabase = getSupabase();
   if (!supabase) {
-    // Misconfiguración, no error del cliente: falta SUPABASE_URL / SUPABASE_ANON_KEY.
-    console.error("Supabase no configurado — faltan SUPABASE_URL/ANON_KEY.");
+    // Misconfiguración, no error del cliente: faltan env vars de Supabase.
+    console.error(
+      "Supabase no configurado — faltan SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY/SUPABASE_ANON_KEY.",
+    );
     return Response.json(
       { error: "El cuestionario no está disponible en este momento." },
       { status: 500 },

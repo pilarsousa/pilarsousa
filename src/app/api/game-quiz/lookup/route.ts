@@ -5,10 +5,10 @@
   correo ya tiene respuestas cargadas en `Respuestas_Game`, se las devolvemos para
   mostrárselas (en vez de volver a hacer el cuestionario).
 
-  La lectura se hace vía la función RPC `get_respuestas_by_gmail` (SECURITY
-  DEFINER en Supabase), que devuelve ÚNICAMENTE la fila del correo consultado.
-  Así la anon key sigue sin poder leer toda la tabla — sólo ejecutar esa función.
-  Ver el SQL de la función en la conversación.
+  La lectura intenta primero consultar la tabla directo desde el servidor. Con
+  SUPABASE_SERVICE_ROLE_KEY configurada en Vercel, esto no depende de policies ni
+  de funciones RPC creadas a mano. Si el proyecto sólo tiene anon key, mantenemos
+  un fallback a la RPC `get_respuestas_by_gmail`.
 
   Payload: { email: string }
   Respuesta: { found: false } | { found: true, row: { respuesta_1..6, created_at } }
@@ -17,6 +17,8 @@
 import { getSupabase } from "@/lib/supabase";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const RESPONSE_COLUMNS =
+  "respuesta_1,respuesta_2,respuesta_3,respuesta_4,respuesta_5,respuesta_6,created_at";
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -28,7 +30,7 @@ export async function POST(request: Request) {
 
   const email =
     typeof (body as { email?: unknown })?.email === "string"
-      ? (body as { email: string }).email.trim()
+      ? (body as { email: string }).email.trim().toLowerCase()
       : "";
   if (!EMAIL_RE.test(email)) {
     return Response.json({ error: "Correo inválido." }, { status: 400 });
@@ -36,26 +38,40 @@ export async function POST(request: Request) {
 
   const supabase = getSupabase();
   if (!supabase) {
-    console.error("Supabase no configurado — faltan SUPABASE_URL/ANON_KEY.");
-    return Response.json(
-      { error: "El cuestionario no está disponible en este momento." },
-      { status: 500 },
+    console.error(
+      "Supabase no configurado — faltan SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY/SUPABASE_ANON_KEY.",
     );
+    return Response.json({ found: false, lookupUnavailable: true });
   }
 
-  const { data, error } = await supabase.rpc("get_respuestas_by_gmail", {
-    p_gmail: email,
-  });
+  const { data: directData, error: directError } = await supabase
+    .from("Respuestas_Game")
+    .select(RESPONSE_COLUMNS)
+    .ilike("gmail", email)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
 
-  if (error) {
-    console.error("Supabase RPC get_respuestas_by_gmail falló:", error.message);
-    return Response.json(
-      { error: "No pudimos verificar tu correo. Probá de nuevo." },
-      { status: 502 },
-    );
+  if (!directError) {
+    if (!directData) return Response.json({ found: false });
+    return Response.json({ found: true, row: directData });
   }
 
-  const row = Array.isArray(data) ? data[0] : data;
+  console.error("Supabase lookup directo falló:", directError.message);
+
+  const { data: rpcData, error: rpcError } = await supabase.rpc(
+    "get_respuestas_by_gmail",
+    {
+      p_gmail: email,
+    },
+  );
+
+  if (rpcError) {
+    console.error("Supabase RPC get_respuestas_by_gmail falló:", rpcError.message);
+    return Response.json({ found: false, lookupUnavailable: true });
+  }
+
+  const row = Array.isArray(rpcData) ? rpcData[0] : rpcData;
   if (!row) return Response.json({ found: false });
 
   return Response.json({ found: true, row });
