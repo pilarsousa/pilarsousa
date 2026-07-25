@@ -147,7 +147,7 @@ export default function GameHomePage() {
         aria-hidden
         priority
         sizes="(min-width: 768px) 46vw, 94vw"
-        className="h-auto w-full"
+        className="h-auto w-full brightness-[1.18] saturate-[1.12] md:brightness-100 md:saturate-100"
       />
       <Image
         src={imgPerfil}
@@ -210,10 +210,10 @@ export default function GameHomePage() {
         )}
       </div>
 
-      {/* Viñeta/sombra en los bordes */}
+      {/* Viñeta/sombra en los bordes: sobre el fondo, detrás de la UI. */}
       <div
         aria-hidden
-        className="game-edge-shadow pointer-events-none absolute inset-0 z-30"
+        className="game-edge-shadow pointer-events-none absolute inset-0 z-0"
       />
 
       {/* Flujo de la 1ª card: primero el código, luego la modal */}
