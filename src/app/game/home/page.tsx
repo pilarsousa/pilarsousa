@@ -3,8 +3,10 @@
 import { useState } from "react";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
+import { Lock } from "lucide-react";
 import { CardUnicaModal } from "@/components/game/CardUnicaModal";
 import { CodeGateModal } from "@/components/game/CodeGateModal";
+import { UnlockingModal } from "@/components/game/UnlockingModal";
 import fondo from "@/../public/game/game-img/fondo-landing.jpg";
 import fondoMobile from "@/../public/game/game-img/fondo-seccion-mobile.jpg";
 import cardFrame from "@/../public/game/seccions/section-2/card-principal.png";
@@ -41,9 +43,15 @@ import imgCard2 from "@/../public/game/seccions/section-2/img-card-2.png";
   ALTO (la maqueta original). Ambos: h-[100dvh] + overflow-hidden = sin scroll.
 */
 
-const CARDS: { art: StaticImageData; alt: string; title: string }[] = [
+const CARDS: {
+  art: StaticImageData;
+  alt: string;
+  title: string;
+  /* Card bloqueada: se muestra oscurecida, con candado y sin poder abrirse. */
+  locked?: boolean;
+}[] = [
   { art: imgCard1, alt: "", title: "Las 33 Leyes Universales" },
-  { art: imgCard2, alt: "", title: "Archivo Oculto" },
+  { art: imgCard2, alt: "", title: "Archivo Oculto", locked: true },
 ];
 
 /* Contenido visual de la card (imagen + negro + marco). Es igual sea clickeable
@@ -52,16 +60,19 @@ function CardContent({
   art,
   alt,
   title,
+  locked = false,
 }: {
   art: StaticImageData;
   alt: string;
   title: string;
+  locked?: boolean;
 }) {
   return (
     <>
       {/* 1 — Ilustración: llena TODA su sección hasta el divisor (pasa por detrás
              del metal del divisor, que es un arco). Así nunca hay negro por
-             encima de la línea del divisor ni se filtra el fondo por sus huecos. */}
+             encima de la línea del divisor ni se filtra el fondo por sus huecos.
+             Si la card está bloqueada, la ilustración va en gris y oscurecida. */}
       <div className="absolute left-[7%] right-[7%] top-[3.2%] bottom-[13%] overflow-hidden bg-black">
         <Image
           src={art}
@@ -69,7 +80,7 @@ function CardContent({
           fill
           quality={90}
           sizes="(min-width: 768px) 20vw, 45vw"
-          className="object-cover object-center"
+          className={`object-cover object-center${locked ? " grayscale brightness-[0.4]" : ""}`}
         />
       </div>
 
@@ -96,6 +107,20 @@ function CardContent({
           {title}
         </span>
       </div>
+
+      {/* 5 — Overlay de bloqueo: candado centrado sobre la ilustración + etiqueta.
+             Va por encima del marco para que se lea claro que está deshabilitada. */}
+      {locked && (
+        <div className="pointer-events-none absolute left-[7%] right-[7%] top-[3.2%] bottom-[13%] flex flex-col items-center justify-center gap-[1.4vh]">
+          <Lock
+            aria-hidden
+            className="h-[7vh] w-[7vh] text-white [filter:drop-shadow(0_0_14px_rgba(40,191,241,0.75))]"
+          />
+          <span className="font-[family-name:var(--font-pixelify)] text-[2.8vw] font-bold uppercase tracking-[0.1em] text-white/85 md:text-[1.5vh]">
+            Bloqueado
+          </span>
+        </div>
+      )}
     </>
   );
 }
@@ -107,18 +132,33 @@ const CARD_HOVER =
   "transition-transform duration-300 ease-out hover:scale-[1.03] focus-visible:scale-[1.03] focus-visible:outline-none";
 
 export default function GameHomePage() {
-  /* Flujo de la 1ª card: cerrada → pide código → (código correcto) → modal. */
-  const [unlockStep, setUnlockStep] = useState<"closed" | "code" | "card">(
-    "closed",
-  );
+  /* Flujo de la 1ª card: cerrada → pide código → (código correcto) → secuencia
+     de desbloqueo (barra + festejo) → modal de la card. */
+  const [unlockStep, setUnlockStep] = useState<
+    "closed" | "code" | "unlocking" | "card"
+  >("closed");
 
-  /* La 1ª card pide un código antes de abrir la modal; la 2ª navega a /game/form. */
+  /* La 1ª card pide un código antes de abrir la modal; la 2ª navega a /game/form.
+     Una card bloqueada se muestra como un div inerte (no navega ni tiene hover). */
   const renderCard = (
     c: (typeof CARDS)[number],
     i: number,
     boxClass: string,
-  ) =>
-    i === 0 ? (
+  ) => {
+    if (c.locked) {
+      return (
+        <div
+          key={i}
+          aria-disabled="true"
+          aria-label={`${c.title} — bloqueado`}
+          className={`${boxClass} cursor-not-allowed`}
+        >
+          <CardContent art={c.art} alt={c.alt} title={c.title} locked />
+        </div>
+      );
+    }
+
+    return i === 0 ? (
       <button
         key={i}
         type="button"
@@ -137,6 +177,7 @@ export default function GameHomePage() {
         <CardContent art={c.art} alt={c.alt} title={c.title} />
       </Link>
     );
+  };
 
   /* Barra superior con el retrato (decorativa). El ancho lo fija el contenedor. */
   const renderNav = () => (
@@ -216,12 +257,15 @@ export default function GameHomePage() {
         className="game-edge-shadow pointer-events-none absolute inset-0 z-0"
       />
 
-      {/* Flujo de la 1ª card: primero el código, luego la modal */}
+      {/* Flujo de la 1ª card: código → secuencia de desbloqueo → modal */}
       {unlockStep === "code" && (
         <CodeGateModal
           onClose={() => setUnlockStep("closed")}
-          onUnlock={() => setUnlockStep("card")}
+          onUnlock={() => setUnlockStep("unlocking")}
         />
+      )}
+      {unlockStep === "unlocking" && (
+        <UnlockingModal onDone={() => setUnlockStep("card")} />
       )}
       {unlockStep === "card" && (
         <CardUnicaModal onClose={() => setUnlockStep("closed")} />
