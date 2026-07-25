@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Image from "next/image";
+import { Download } from "lucide-react";
 import cardUnica from "@/../public/game/seccions/section-2/card-unica/card-unica-sf.png";
 import botonAtras from "@/../public/game/seccions/section-2/card-unica/boton-atras.png";
 import descarga from "@/../public/game/seccions/section-2/card-unica/descarga.png";
@@ -48,7 +49,7 @@ export function CardUnicaModal({ onClose }: { onClose: () => void }) {
       className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-[2.5vh] bg-black/80 p-4 animate-[fadeIn_0.2s_ease-out]"
     >
       {/* Texto superior, con la tipografía de /game (Press Start 2P) */}
-      <p className="max-w-[90vw] text-center font-[family-name:var(--font-press-start)] text-[clamp(8px,1.15vh,12px)] leading-relaxed text-white md:max-w-[620px]">
+      <p className="max-w-[92vw] text-center font-[family-name:var(--font-press-start)] text-[clamp(10px,1.55vh,16px)] leading-relaxed text-white md:max-w-[680px]">
         Descargá el PDF para recordar tu poder y comenzar tu salto.
       </p>
 
@@ -114,6 +115,12 @@ export function CardUnicaModal({ onClose }: { onClose: () => void }) {
           <Image src={botonAtras} alt="" className="h-auto w-full" />
         </button>
 
+        {/* Halo pulsante detrás del botón de descarga, para señalar dónde tocar. */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute left-[81.2%] top-[88.2%] size-[16%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/30 animate-ping"
+        />
+
         {/* descarga — socket inferior derecho → descarga el PDF */}
         <a
           href={PRINCIPIOS_PDF}
@@ -123,6 +130,13 @@ export function CardUnicaModal({ onClose }: { onClose: () => void }) {
         >
           <Image src={descarga} alt="" className="h-auto w-full" />
         </a>
+      </div>
+
+      {/* Indicación clara de la acción: tocar el botón de descarga de la card.
+          pointer-events-none → clickear aquí cierra la modal como el resto del fondo. */}
+      <div className="pointer-events-none flex items-center justify-center gap-2 px-4 text-center font-[family-name:var(--font-pixelify)] text-[clamp(12px,1.9vh,18px)] font-bold uppercase tracking-[0.06em] text-accent [text-shadow:0_0_12px_rgba(40,191,241,0.6)]">
+        <Download size={20} aria-hidden className="animate-bounce" />
+        <span>Tocá el botón de descarga para bajar tu PDF</span>
       </div>
     </div>
   );
