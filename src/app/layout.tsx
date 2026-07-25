@@ -63,6 +63,24 @@ const jost = localFont({
   display: "swap",
 });
 
+// ---- Game ----
+
+/* Título arcade de /game — pixel-art retro. Sólo la usa esa landing. */
+const pressStart2P = localFont({
+  variable: "--font-press-start",
+  src: "../../public/fonts/Press_Start_2P/PressStart2P-Regular.ttf",
+  weight: "400",
+  display: "swap",
+});
+
+/* Botón/UI arcade de /game — pixel legible. Variable: 400–700 en un solo file. */
+const pixelifySans = localFont({
+  variable: "--font-pixelify",
+  src: "../../public/fonts/Pixelify_Sans/PixelifySans-VariableFont_wght.ttf",
+  weight: "400 700",
+  display: "swap",
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -71,7 +89,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${cinzel.variable} ${manrope.variable} ${cormorant.variable} ${zenDots.variable} ${jost.variable} h-full antialiased`}
+      className={`${cinzel.variable} ${manrope.variable} ${cormorant.variable} ${zenDots.variable} ${jost.variable} ${pressStart2P.variable} ${pixelifySans.variable} h-full antialiased`}
     >
       {/* suppressHydrationWarning: browser extensions (e.g. ColorZilla) inject
           attributes like cz-shortcut-listen on <body> before React hydrates,

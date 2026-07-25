@@ -66,3 +66,55 @@ export const UNLOCK_CONTENT: {
    coincidan con los tuyos. Mientras el archivo no exista, el botón dará 404. */
 export const CONTENT_PDF = "/game/pdf/contenido.pdf"; // botón de la modal de código
 export const REWARD_PDF = "/game/pdf/recompensa.pdf"; // botón tras completar el form
+
+/* ─────────────────────────── Cuestionario de /game/form ──────────────────
+   Las 6 preguntas del flujo de /game/form (paso posterior al Gmail). Por ahora
+   son FICTICIAS: sirven para tener listo el flujo y el envío mientras se conecta
+   la base de datos real. Editá libremente el texto y las opciones; podés agregar
+   o quitar preguntas y el flujo se adapta al largo del array.
+
+   Cada pregunta es de opción única (radio). El `id` es la clave con la que se
+   guarda la respuesta en el payload que se envía al backend. */
+export type QuizQuestion = {
+  id: string;
+  question: string;
+  options: string[];
+};
+
+export const QUIZ_QUESTIONS: QuizQuestion[] = [
+  {
+    id: "clase",
+    question: "¿Qué clase de personaje sos?",
+    options: ["Guerrero", "Mago", "Explorador", "Sanador"],
+  },
+  {
+    id: "objetivo",
+    question: "¿Cuál es tu objetivo principal ahora mismo?",
+    options: [
+      "Subir de nivel rápido",
+      "Dominar una habilidad",
+      "Conseguir un tesoro",
+      "Completar la historia",
+    ],
+  },
+  {
+    id: "estilo",
+    question: "¿Cómo preferís enfrentar los desafíos?",
+    options: ["De frente", "Con estrategia", "En equipo", "Improvisando"],
+  },
+  {
+    id: "tiempo",
+    question: "¿Cuánto tiempo le dedicás por día?",
+    options: ["Menos de 30 min", "30 a 60 min", "1 a 2 horas", "Más de 2 horas"],
+  },
+  {
+    id: "experiencia",
+    question: "¿Qué nivel de experiencia tenés?",
+    options: ["Principiante", "Intermedio", "Avanzado", "Experto"],
+  },
+  {
+    id: "motivacion",
+    question: "¿Qué te motiva a seguir jugando?",
+    options: ["Superarme", "Competir", "Aprender", "Divertirme"],
+  },
+];
