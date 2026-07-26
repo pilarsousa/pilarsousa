@@ -6,6 +6,11 @@
 // Stripe checkout for the bootcamp enrollment.
 export const CHECKOUT_URL = "https://link.fastpaydirect.com/payment-link/6a429e26a655fa0b802a1cde";
 
+// Checkout de la landing de ventas (/ventas). Apunta al mismo enlace que el
+// bootcamp por ahora — cambialo cuando la oferta de ventas tenga su propio
+// link de pago.
+export const VENTAS_CHECKOUT_URL = "https://link.fastpaydirect.com/payment-link/6a429e26a655fa0b802a1cde";
+
 // Private WhatsApp group (thank-you page).
 export const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/GO8DZzC2o5bJotgoAZ98Uu";
 
