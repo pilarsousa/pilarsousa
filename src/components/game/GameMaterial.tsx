@@ -22,12 +22,16 @@ export function GameMaterial() {
   const hasVideo = REWARD_VIDEO_URL.trim().length > 0;
 
   return (
-    <div className="relative w-full max-w-2xl rounded-2xl border border-cyan/25 bg-surface/90 p-5 shadow-[0_0_40px_rgba(40,191,241,0.15)] backdrop-blur-md sm:p-7">
-      <div className="mb-5 text-center">
-        <h1 className="font-display text-2xl tracking-tight text-white">
+    /* Más ancho que el resto de las cards de /game (max-w-4xl): un video 16:9
+       necesita ancho para no verse diminuto, sobre todo en mobile. Padding
+       reducido en mobile (p-3) para que el video gane los pocos píxeles que la
+       card le robaba a los lados. */
+    <div className="relative w-full max-w-4xl rounded-2xl border border-cyan/25 bg-surface/90 p-3 shadow-[0_0_40px_rgba(40,191,241,0.15)] backdrop-blur-md sm:p-6">
+      <div className="mb-3 text-center sm:mb-5">
+        <h1 className="font-display text-xl tracking-tight text-white sm:text-2xl">
           Archivo Oculto desbloqueado
         </h1>
-        <p className="mt-2 font-sans text-sm font-light leading-relaxed text-white/65">
+        <p className="mt-2 font-sans text-xs font-light leading-relaxed text-white/65 sm:text-sm">
           Este es tu material. Ya tenés acceso desde este dispositivo.
         </p>
       </div>
@@ -56,6 +60,14 @@ export function GameMaterial() {
             (game-config.ts). ]
           </p>
         </div>
+      )}
+
+      {/* Pantalla completa: en mobile un 16:9 embebido siempre es chico; este
+          atajo lleva el video a fullscreen usando los controles nativos. */}
+      {hasVideo && (
+        <p className="mt-3 text-center font-sans text-xs font-light text-white/45">
+          ¿Se ve pequeño? Usá el botón de pantalla completa del reproductor.
+        </p>
       )}
     </div>
   );

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { GameForm } from "@/components/game/GameForm";
 import { GameMaterial } from "@/components/game/GameMaterial";
+import { UnlockingModal } from "@/components/game/UnlockingModal";
 
 /*
   Puerta de acceso al material de la 2ª card ("Archivo Oculto") de /game.
@@ -23,35 +24,48 @@ import { GameMaterial } from "@/components/game/GameMaterial";
 
 const ACCESS_KEY = "game_nivel2_unlocked";
 
+/* form:      pidiendo los datos.
+   unlocking: secuencia de desbloqueo (barra + candado + confeti), igual que la
+              card N1, tras enviar el formulario con éxito.
+   material:  el video ya visible. */
+type Stage = "form" | "unlocking" | "material";
+
 export function GameGate() {
-  /* unlocked arranca en null = "todavía no sé" (aún no leí localStorage). Evita
-     un parpadeo del formulario antes de saber si ya tenía acceso. En SSR y en
-     el primer render de cliente vale null, así que no hay mismatch de
-     hidratación: el contenido real se decide en el efecto. */
-  const [unlocked, setUnlocked] = useState<boolean | null>(null);
+  /* stage arranca en null = "todavía no sé" (aún no leí localStorage). Evita un
+     parpadeo del formulario antes de saber si ya tenía acceso. En SSR y en el
+     primer render de cliente vale null, así que no hay mismatch de hidratación:
+     el contenido real se decide en el efecto. */
+  const [stage, setStage] = useState<Stage | null>(null);
 
   useEffect(() => {
     try {
-      setUnlocked(localStorage.getItem(ACCESS_KEY) === "1");
+      // Si ya se desbloqueó antes en este dispositivo, va directo al material
+      // (sin repetir el formulario ni la secuencia de desbloqueo).
+      setStage(localStorage.getItem(ACCESS_KEY) === "1" ? "material" : "form");
     } catch {
       // localStorage puede fallar en modo privado — sin recordatorio, se pide.
-      setUnlocked(false);
+      setStage("form");
     }
   }, []);
 
+  /* Registro exitoso → guarda la marca y lanza la secuencia de desbloqueo. */
   function handleSuccess() {
     try {
       localStorage.setItem(ACCESS_KEY, "1");
     } catch {
-      // best-effort: si no se puede guardar, igual mostramos el material ahora.
+      // best-effort: si no se puede guardar, igual seguimos al material.
     }
-    setUnlocked(true);
+    setStage("unlocking");
   }
 
   /* Estado indeterminado: nada visible hasta saber si ya tenía acceso. */
-  if (unlocked === null) return null;
+  if (stage === null) return null;
 
-  if (unlocked) return <GameMaterial />;
+  if (stage === "material") return <GameMaterial />;
+
+  if (stage === "unlocking") {
+    return <UnlockingModal onDone={() => setStage("material")} />;
+  }
 
   return (
     <motion.div

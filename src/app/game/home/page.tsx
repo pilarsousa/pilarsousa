@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { Lock } from "lucide-react";
@@ -131,12 +131,47 @@ const CARD_BOX_DESKTOP = "relative h-[74vh] shrink-0 aspect-[214/459]";
 const CARD_HOVER =
   "transition-transform duration-300 ease-out hover:scale-[1.03] focus-visible:scale-[1.03] focus-visible:outline-none";
 
+/* Marca de que la 1ª card ya se desbloqueó en este dispositivo — así al volver
+   se abre directo la modal sin volver a pedir el código. Mismo criterio que la
+   2ª card (localStorage por navegador, no IP): las IPs cambian y se comparten. */
+const CARD1_KEY = "game_nivel1_unlocked";
+
 export default function GameHomePage() {
   /* Flujo de la 1ª card: cerrada → pide código → (código correcto) → secuencia
      de desbloqueo (barra + festejo) → modal de la card. */
   const [unlockStep, setUnlockStep] = useState<
     "closed" | "code" | "unlocking" | "card"
   >("closed");
+
+  /* ¿La 1ª card ya se había desbloqueado antes? Se lee del navegador una vez al
+     montar. Mientras es null todavía no lo sabemos (no cambia el render, sólo
+     decide si el botón pide código o abre directo). */
+  const [card1Unlocked, setCard1Unlocked] = useState(false);
+  useEffect(() => {
+    try {
+      setCard1Unlocked(localStorage.getItem(CARD1_KEY) === "1");
+    } catch {
+      // localStorage puede fallar en modo privado — sin recordatorio, pide código.
+    }
+  }, []);
+
+  /* Al abrir la 1ª card: si ya está desbloqueada, va directo a la modal; si no,
+     pide el código. */
+  function openCard1() {
+    setUnlockStep(card1Unlocked ? "card" : "code");
+  }
+
+  /* Se llama cuando el código es correcto: recuerda el desbloqueo y lanza la
+     secuencia. */
+  function handleCard1Unlock() {
+    try {
+      localStorage.setItem(CARD1_KEY, "1");
+    } catch {
+      // best-effort
+    }
+    setCard1Unlocked(true);
+    setUnlockStep("unlocking");
+  }
 
   /* La 1ª card pide un código antes de abrir la modal; la 2ª navega a /game/form.
      Una card bloqueada se muestra como un div inerte (no navega ni tiene hover). */
@@ -163,7 +198,7 @@ export default function GameHomePage() {
         key={i}
         type="button"
         aria-label="Abrir"
-        onClick={() => setUnlockStep("code")}
+        onClick={openCard1}
         className={`${boxClass} ${CARD_HOVER}`}
       >
         <CardContent art={c.art} alt={c.alt} title={c.title} />
@@ -213,7 +248,7 @@ export default function GameHomePage() {
         quality={90}
         sizes="100vw"
         placeholder="blur"
-        className="-z-20 object-cover object-center md:hidden"
+        className="game-bg-lightning -z-20 object-cover object-center md:hidden"
       />
       <Image
         src={fondo}
@@ -224,7 +259,7 @@ export default function GameHomePage() {
         quality={90}
         sizes="100vw"
         placeholder="blur"
-        className="-z-20 hidden object-cover object-center md:block"
+        className="game-bg-lightning -z-20 hidden object-cover object-center md:block"
       />
       {/* Oscurecido sutil para que las cards resalten */}
       <div aria-hidden className="absolute inset-0 -z-10 bg-black/20" />
@@ -261,7 +296,7 @@ export default function GameHomePage() {
       {unlockStep === "code" && (
         <CodeGateModal
           onClose={() => setUnlockStep("closed")}
-          onUnlock={() => setUnlockStep("unlocking")}
+          onUnlock={handleCard1Unlock}
         />
       )}
       {unlockStep === "unlocking" && (
