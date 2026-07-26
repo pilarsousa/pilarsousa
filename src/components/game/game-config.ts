@@ -74,16 +74,14 @@ export const PRINCIPIOS_PDF = "/game/pdf/33-principios-cuanticos-mision-origen.p
 
 /* ───────────────────────── Material de la 2ª card ────────────────────────
    Video del "Archivo Oculto", que se muestra tras completar el registro de la
-   2ª card (ver GameMaterial / GameGate). Se decidió EMBEBERLO en la web.
+   2ª card (ver GameMaterial / GameGate). mp4 directo del CDN de GHL: se
+   reproduce con <video> nativo (controles completos, seeking).
 
-   Pegá aquí la URL EMBEBIBLE del video:
-     - mp4 directo, o el "embed URL" de YouTube/Vimeo → se ve dentro de la web.
-     - Si es una página de GHL que bloquea el iframe, no se podrá embeber; habría
-       que pasar a mostrarlo como enlace (avisame y lo cambio).
-
-   Mientras esté vacío, GameMaterial muestra un placeholder en vez de un iframe
-   roto. */
-export const REWARD_VIDEO_URL = "";
+   OJO: el archivo pesa ~1.28 GB. GameMaterial usa preload="metadata" y no
+   autoplay para no descargarlo entero a cada visitante. Si algún día se sube
+   una versión más liviana o comprimida, reemplazá esta URL. */
+export const REWARD_VIDEO_URL =
+  "https://assets.cdn.filesafe.space/cJQdXHXCPXZIpQkUiwgI/media/6a07782e2e98e28fa112fbf9.mp4";
 
 /* ─────────────────────────── Cuestionario de /game/form ──────────────────
    Las 6 preguntas del flujo de /game/form (paso posterior al Gmail). Se responden

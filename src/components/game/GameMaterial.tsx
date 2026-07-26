@@ -4,15 +4,18 @@ import { REWARD_VIDEO_URL } from "@/components/game/game-config";
   Material de la 2ª card ("Archivo Oculto"), visible tras completar el registro
   (o al volver, si ya se registró antes — ver GameGate).
 
-  El material es un video alojado en Go High Level. Se decidió INSERTARLO en la
-  web (mejor UX: el usuario no sale del sitio). Para que el <iframe> funcione, la
-  URL de REWARD_VIDEO_URL debe ser EMBEBIBLE:
-    - Un mp4 directo, o un embed de YouTube/Vimeo → se ve aquí sin problema.
-    - Una página de GHL que bloquee el iframe (X-Frame-Options) → NO se podrá
-      embeber; en ese caso hay que usar el fallback de enlace de abajo.
+  El material es un mp4 directo alojado en el CDN de GHL (filesafe.space). Al ser
+  un archivo de video y no una página, se reproduce con el elemento <video>
+  nativo — mejores controles (play, volumen, pantalla completa, barra de
+  progreso con seeking) que un iframe, y sin riesgo de X-Frame-Options.
 
-  PENDIENTE: cargar el link real en REWARD_VIDEO_URL (game-config.ts). Mientras
-  esté vacío se muestra el placeholder, no un iframe roto.
+  IMPORTANTE — el archivo pesa ~1.28 GB. Por eso:
+    - preload="metadata": sólo baja lo mínimo para pintar el player; el video se
+      descarga cuando el usuario pulsa play, no al cargar la página.
+    - sin autoplay: descargar 1.28 GB a cada visitante sin que lo pida sería un
+      derroche de datos (y de la factura del CDN).
+  El origen soporta Accept-Ranges (verificado), así que adelantar/retroceder
+  funciona sin bajar el archivo entero.
 */
 
 export function GameMaterial() {
@@ -30,30 +33,27 @@ export function GameMaterial() {
       </div>
 
       {hasVideo ? (
-        /* Reproductor embebido con controles nativos (play, volumen, pantalla
-           completa los da el propio player del origen). */
         <div className="overflow-hidden rounded-xl border border-cyan/20 bg-black">
-          <div className="relative aspect-video w-full">
-            <iframe
-              src={REWARD_VIDEO_URL}
-              title="Archivo Oculto — material"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-              allowFullScreen
-              className="absolute inset-0 h-full w-full"
-            />
-          </div>
+          <video
+            controls
+            preload="metadata"
+            playsInline
+            className="aspect-video w-full"
+          >
+            <source src={REWARD_VIDEO_URL} type="video/mp4" />
+            Tu navegador no puede reproducir este video.{" "}
+            <a href={REWARD_VIDEO_URL} className="text-cyan underline">
+              Abrilo en una pestaña nueva
+            </a>
+            .
+          </video>
         </div>
       ) : (
-        /* Placeholder mientras no haya link cargado. */
         <div className="flex aspect-video w-full items-center justify-center rounded-xl border border-dashed border-white/20 bg-white/3 px-6 text-center">
           <p className="font-sans text-sm font-light text-white/45">
             [ Material pendiente — cargar el link del video en{" "}
-            <span className="font-mono text-white/60">
-              REWARD_VIDEO_URL
-            </span>{" "}
-            (game-config.ts).
-            <br className="hidden sm:block" />
-            Si GHL no permite embeberlo, usar el botón de enlace. ]
+            <span className="font-mono text-white/60">REWARD_VIDEO_URL</span>{" "}
+            (game-config.ts). ]
           </p>
         </div>
       )}
