@@ -9,8 +9,8 @@ import {
   Repeat2,
   type LucideIcon,
 } from "lucide-react";
-import { Container } from "@/components/ui/Container";
-import { SectionTitle } from "@/components/ui/SectionTitle";
+import { Container } from "@/components/shared/Container";
+import { SectionTitle } from "@/components/bootcamp/ui/SectionTitle";
 
 // Five recognizable pain points for the right-fit audience. Icons stay
 // symbolic: each one reinforces the pattern without turning the card into a

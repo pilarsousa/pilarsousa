@@ -1,8 +1,8 @@
 import Image from "next/image";
-import { Container } from "@/components/ui/Container";
-import { Reveal } from "@/components/ui/Reveal";
-import bgDesktop from "@/../public/banner-pilar.jpg";
-import bgMobile from "@/../public/banner-pilar-mobile2.jpg";
+import { Container } from "@/components/shared/Container";
+import { Reveal } from "@/components/bootcamp/ui/Reveal";
+import bgDesktop from "@/../public/bootcamp-landing/banner-pilar.jpg";
+import bgMobile from "@/../public/bootcamp-landing/banner-pilar-mobile2.jpg";
 
 /**
  * Section 5 — Soy Pilar Sousa (authority).

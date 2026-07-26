@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { CalendarDays, Radio, Footprints, Gift } from "lucide-react";
-import { Container } from "@/components/ui/Container";
+import { Container } from "@/components/shared/Container";
 import { Reveal } from "@/components/mision-origen/ui/Reveal";
 import { FactBadge } from "@/components/mision-origen/ui/FactBadge";
 import { NeonText } from "@/components/mision-origen/ui/NeonText";

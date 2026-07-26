@@ -1,9 +1,9 @@
 import { Sparkles } from "lucide-react";
-import { CtaButton } from "@/components/ui/CtaButton";
-import { GoldText } from "@/components/ui/GoldText";
-import { GlowBadge } from "@/components/ui/GlowBadge";
-import { Countdown } from "@/components/ui/Countdown";
-import { ScheduleReferenceCard } from "@/components/ui/ScheduleReferenceCard";
+import { CtaButton } from "@/components/bootcamp/ui/CtaButton";
+import { GoldText } from "@/components/bootcamp/ui/GoldText";
+import { GlowBadge } from "@/components/bootcamp/ui/GlowBadge";
+import { Countdown } from "@/components/bootcamp/ui/Countdown";
+import { ScheduleReferenceCard } from "@/components/bootcamp/ui/ScheduleReferenceCard";
 import { CHECKOUT_URL, BOOTCAMP_START } from "@/lib/links";
 
 /**

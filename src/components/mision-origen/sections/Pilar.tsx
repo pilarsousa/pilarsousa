@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Container } from "@/components/ui/Container";
+import { Container } from "@/components/shared/Container";
 import { NeonText } from "@/components/mision-origen/ui/NeonText";
 import { Reveal } from "@/components/mision-origen/ui/Reveal";
 import { PilarBio } from "@/components/mision-origen/ui/PilarBio";

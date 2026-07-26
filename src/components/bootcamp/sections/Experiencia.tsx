@@ -2,13 +2,13 @@
 
 import Image, { type StaticImageData } from "next/image";
 import { motion, type Variants } from "framer-motion";
-import { Container } from "@/components/ui/Container";
-import { SectionTitle } from "@/components/ui/SectionTitle";
+import { Container } from "@/components/shared/Container";
+import { SectionTitle } from "@/components/bootcamp/ui/SectionTitle";
 import { cn } from "@/lib/cn";
 import styles from "./Experiencia.module.css";
-import img1 from "@/../public/img1-pilar.jpg";
-import img2 from "@/../public/img2-pilar.jpg";
-import img3 from "@/../public/img3-pilar.jpg";
+import img1 from "@/../public/bootcamp-landing/img1-pilar.jpg";
+import img2 from "@/../public/bootcamp-landing/img2-pilar.jpg";
+import img3 from "@/../public/bootcamp-landing/img3-pilar.jpg";
 
 // The three day covers — each 600×450 (4:3) image already carries its own
 // title and copy, so the card is just the artwork, no overlay.

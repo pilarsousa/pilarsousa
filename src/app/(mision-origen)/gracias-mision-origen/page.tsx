@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Container } from "@/components/ui/Container";
+import { Container } from "@/components/shared/Container";
 import { Reveal } from "@/components/mision-origen/ui/Reveal";
 import { NeonText } from "@/components/mision-origen/ui/NeonText";
 import { Radar } from "@/components/mision-origen/ui/Radar";

@@ -1,15 +1,15 @@
-import { Hero } from "@/components/sections/Hero";
-import { Manifiesto } from "@/components/sections/Manifiesto";
-import { Patron } from "@/components/sections/Patron";
-import { Experiencia } from "@/components/sections/Experiencia";
-import { Bonos } from "@/components/sections/Bonos";
-import { Pilar } from "@/components/sections/Pilar";
-import { Cierre } from "@/components/sections/Cierre";
-import { Faq } from "@/components/sections/Faq";
-import { Footer } from "@/components/sections/Footer";
-import { Container } from "@/components/ui/Container";
-import { Reveal } from "@/components/ui/Reveal";
-import { PricingCard } from "@/components/ui/PricingCard";
+import { Hero } from "@/components/bootcamp/sections/Hero";
+import { Manifiesto } from "@/components/bootcamp/sections/Manifiesto";
+import { Patron } from "@/components/bootcamp/sections/Patron";
+import { Experiencia } from "@/components/bootcamp/sections/Experiencia";
+import { Bonos } from "@/components/bootcamp/sections/Bonos";
+import { Pilar } from "@/components/bootcamp/sections/Pilar";
+import { Cierre } from "@/components/bootcamp/sections/Cierre";
+import { Faq } from "@/components/bootcamp/sections/Faq";
+import { Footer } from "@/components/bootcamp/sections/Footer";
+import { Container } from "@/components/shared/Container";
+import { Reveal } from "@/components/bootcamp/ui/Reveal";
+import { PricingCard } from "@/components/bootcamp/ui/PricingCard";
 
 export default function Home() {
   return (

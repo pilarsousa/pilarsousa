@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Star } from "lucide-react";
-import trustpilotLogo from "@/../public/Trustpilot_logo.png";
+import trustpilotLogo from "@/../public/bootcamp-landing/Trustpilot_logo.png";
 
 /**
  * Trustpilot-style rating summary card, rebuilt with our own markup (the

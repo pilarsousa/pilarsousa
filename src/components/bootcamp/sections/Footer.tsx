@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { Container } from "@/components/ui/Container";
-import logo from "@/../public/LOGO.png";
+import { Container } from "@/components/shared/Container";
+import logo from "@/../public/bootcamp-landing/LOGO.png";
 
 /**
  * Minimal site footer — logo + program name + copyright. Sober, on a deep

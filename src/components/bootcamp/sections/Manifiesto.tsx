@@ -6,8 +6,8 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
-import { Container } from "@/components/ui/Container";
-import flecha from "@/../public/flecha.png";
+import { Container } from "@/components/shared/Container";
+import flecha from "@/../public/bootcamp-landing/flecha.png";
 
 gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
 

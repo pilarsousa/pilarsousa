@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Plus } from "lucide-react";
-import { Container } from "@/components/ui/Container";
-import { SectionTitle } from "@/components/ui/SectionTitle";
+import { Container } from "@/components/shared/Container";
+import { SectionTitle } from "@/components/bootcamp/ui/SectionTitle";
 import { cn } from "@/lib/cn";
 
 const FAQS: Array<{ q: string; a: string }> = [

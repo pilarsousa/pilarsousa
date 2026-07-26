@@ -1,11 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Container } from "@/components/ui/Container";
-import { SectionTitle } from "@/components/ui/SectionTitle";
-import { GoldText } from "@/components/ui/GoldText";
-import { TestimonialCarousel } from "@/components/ui/TestimonialCarousel";
-import { TrustScoreCard } from "@/components/ui/TrustScoreCard";
+import { Container } from "@/components/shared/Container";
+import { SectionTitle } from "@/components/bootcamp/ui/SectionTitle";
+import { GoldText } from "@/components/bootcamp/ui/GoldText";
+import { TestimonialCarousel } from "@/components/bootcamp/ui/TestimonialCarousel";
+import { TrustScoreCard } from "@/components/bootcamp/ui/TrustScoreCard";
 // New testimonials — IMG_5250 leads, then the rest, ahead of the originals.
 import img5250 from "@/../public/Testimonios/IMG_5250.png";
 import img5243 from "@/../public/Testimonios/IMG_5243.png";

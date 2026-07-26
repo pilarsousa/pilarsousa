@@ -8,12 +8,12 @@ import {
   Route,
   type LucideIcon,
 } from "lucide-react";
-import { Container } from "@/components/ui/Container";
-import { SectionTitle } from "@/components/ui/SectionTitle";
-import { CtaButton } from "@/components/ui/CtaButton";
+import { Container } from "@/components/shared/Container";
+import { SectionTitle } from "@/components/bootcamp/ui/SectionTitle";
+import { CtaButton } from "@/components/bootcamp/ui/CtaButton";
 import { CHECKOUT_URL } from "@/lib/links";
-import banner from "@/../public/banner-web-bonos.jpg";
-import bannerMobile from "@/../public/banner-web-bonos-mobile.jpg";
+import banner from "@/../public/bootcamp-landing/banner-web-bonos.jpg";
+import bannerMobile from "@/../public/bootcamp-landing/banner-web-bonos-mobile.jpg";
 
 const BONUSES: Array<{
   title: string;
