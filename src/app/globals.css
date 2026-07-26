@@ -408,6 +408,107 @@
   }
 }
 
+/* Glow eléctrico pulsante detrás del botón de descarga. Un box-shadow multicapa
+   que late entre un brillo suave y un fogonazo intenso, para gritar "clickeá
+   acá". El drop-shadow del filtro sigue el contorno circular del PNG en vez de
+   dibujar un cuadrado, así el aura abraza el botón. Mismo cuidado que halo-ping:
+   sólo scale(), el centrado lo hacen las utilidades translate de Tailwind. */
+@keyframes electric-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 6px rgba(40, 191, 241, 0.75))
+      drop-shadow(0 0 14px rgba(40, 191, 241, 0.35));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 14px rgba(174, 240, 254, 1))
+      drop-shadow(0 0 34px rgba(40, 191, 241, 0.85))
+      drop-shadow(0 0 60px rgba(40, 191, 241, 0.45));
+    transform: scale(1.04);
+  }
+}
+
+/* Aro de energía que gira alrededor del botón: un gradiente cónico con dos
+   arcos brillantes que recorren el perímetro, reutilizando --border-angle. La
+   máscara vacía el centro para que sólo se vea el anillo, no un disco. */
+@keyframes energy-ring {
+  to {
+    --border-angle: 360deg;
+  }
+}
+
+/* Degradado rojo↔blanco que se desplaza sin cortar, para el texto del enlace
+   de descarga. background-size 200% + el barrido de la posición dan el efecto
+   continuo; el color se pinta sobre el texto con bg-clip en la clase. */
+@keyframes red-white-drift {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.electric-download {
+  animation: electric-pulse 1.4s ease-in-out infinite;
+}
+
+.energy-ring::before {
+  content: "";
+  position: absolute;
+  inset: -8%;
+  border-radius: 9999px;
+  padding: 6%;
+  background: conic-gradient(
+    from var(--border-angle),
+    transparent 0deg,
+    var(--color-ice-blue) 40deg,
+    transparent 90deg,
+    transparent 180deg,
+    var(--color-cyan) 220deg,
+    transparent 270deg,
+    transparent 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: energy-ring 2.4s linear infinite;
+}
+
+/* Texto con degradado rojo↔blanco en movimiento continuo. El gradiente repite
+   rojo→blanco→rojo para que al desplazarse no aparezca una costura. */
+.text-download-pulse {
+  background-image: linear-gradient(
+    90deg,
+    #ff1a1a 0%,
+    #ffffff 25%,
+    #ff1a1a 50%,
+    #ffffff 75%,
+    #ff1a1a 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: red-white-drift 3s linear infinite;
+}
+
+/* Respeta a quien pide menos movimiento: sin animaciones, pero el degradado y
+   el glow quedan fijos para que la señal visual no desaparezca. */
+@media (prefers-reduced-motion: reduce) {
+  .electric-download,
+  .energy-ring::before,
+  .text-download-pulse {
+    animation: none;
+  }
+}
+
 /* Subtle heartbeat on the ticking seconds. */
 @keyframes tick-pulse {
   0% {

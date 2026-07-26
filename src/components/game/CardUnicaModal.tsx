@@ -132,11 +132,21 @@ export function CardUnicaModal({ onClose }: { onClose: () => void }) {
             className="pointer-events-none absolute left-[49.24%] top-[53%] size-[58%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/70 animate-halo-ping"
           />
 
+          {/* Aro de energía eléctrica girando alrededor del círculo del botón.
+              Se ancla al círculo visible (no al PNG cuadrado): centro
+              (49.2%, 47.7%), diámetro 67.9% del botón, medido sobre el alpha. */}
+          <span
+            aria-hidden
+            className="energy-ring pointer-events-none absolute left-[49.24%] top-[47.7%] size-[67.9%] -translate-x-1/2 -translate-y-1/2"
+          />
+
+          {/* electric-download: glow que late en el contorno del botón, para que
+              se lea claramente como el punto de acción. */}
           <a
             href={PRINCIPIOS_PDF}
             download="33 Principios Cuánticos - Misión Origen.pdf"
             aria-label="Descargar"
-            className="relative block transition-transform duration-200 ease-out hover:scale-105 active:scale-95 focus-visible:outline-none"
+            className="electric-download relative block transition-transform duration-200 ease-out hover:scale-110 active:scale-95 focus-visible:outline-none"
           >
             <Image src={descarga} alt="" className="h-auto w-full" />
           </a>
@@ -151,10 +161,15 @@ export function CardUnicaModal({ onClose }: { onClose: () => void }) {
         href={PRINCIPIOS_PDF}
         download="33 Principios Cuánticos - Misión Origen.pdf"
         onClick={(e) => e.stopPropagation()}
-        className="flex items-center justify-center gap-2 px-4 text-center font-[family-name:var(--font-pixelify)] text-[clamp(12px,1.9vh,18px)] font-bold uppercase tracking-[0.06em] text-accent [text-shadow:0_0_12px_rgba(40,191,241,0.6)] transition-transform duration-200 ease-out hover:scale-105 active:scale-95 focus-visible:outline-none"
+        className="group flex items-center justify-center gap-2 px-4 text-center font-[family-name:var(--font-pixelify)] text-[clamp(12px,1.9vh,18px)] font-bold uppercase tracking-[0.06em] transition-transform duration-200 ease-out hover:scale-105 active:scale-95 focus-visible:outline-none"
       >
-        <Download size={20} aria-hidden className="animate-bounce" />
-        <span>Toca el botón de descarga de arriba para obtener el PDF</span>
+        {/* El icono queda en rojo sólido para acompañar el degradado del texto
+            (no se le puede aplicar bg-clip como al span). */}
+        <Download size={20} aria-hidden className="shrink-0 animate-bounce text-[#ff1a1a]" />
+        {/* text-download-pulse: degradado rojo↔blanco desplazándose en bucle. */}
+        <span className="text-download-pulse">
+          Toca el botón de descarga de arriba para obtener el PDF
+        </span>
       </a>
     </div>
   );
