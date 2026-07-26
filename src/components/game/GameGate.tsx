@@ -3,32 +3,35 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { GameForm } from "@/components/game/GameForm";
+import { GameFlow } from "@/components/game/GameFlow";
 import { GameMaterial } from "@/components/game/GameMaterial";
 import { UnlockingModal } from "@/components/game/UnlockingModal";
 
 /*
   Puerta de acceso al material de la 2ª card ("Archivo Oculto") de /game.
 
-  Flujo:
-    1. Si el visitante YA se registró antes en este navegador (marca en
-       localStorage), salta directo al material — no vuelve a pedir datos.
-    2. Si no, muestra GameForm (nombre / correo / teléfono → /api/register →
-       GHL + Supabase). Al completarlo, deja la marca y muestra el material.
+  Flujo completo:
+    1. Formulario de datos (nombre / correo / teléfono → /api/register → GHL +
+       Supabase).
+    2. Cuestionario (las preguntas de GameFlow), reusando el email del paso 1.
+    3. Secuencia de desbloqueo (barra + candado + confeti), igual que la card 1.
+    4. Material: el video incrustado.
+
+  Si el visitante YA completó todo antes en este navegador (marca en
+  localStorage), salta directo al material — no repite datos ni cuestionario.
 
   El "recordar" es por navegador (localStorage), no por IP: es lo más simple y
   respetuoso de la privacidad. Si el usuario cambia de dispositivo o borra sus
-  datos, se le vuelve a pedir el registro.
-
-  Card contenedora con el mismo estilo neón que GameFlow.
+  datos, se le vuelve a pedir.
 */
 
 const ACCESS_KEY = "game_nivel2_unlocked";
 
 /* form:      pidiendo los datos.
-   unlocking: secuencia de desbloqueo (barra + candado + confeti), igual que la
-              card N1, tras enviar el formulario con éxito.
+   quiz:      cuestionario, con el email ya conocido.
+   unlocking: secuencia de desbloqueo (barra + candado + confeti).
    material:  el video ya visible. */
-type Stage = "form" | "unlocking" | "material";
+type Stage = "form" | "quiz" | "unlocking" | "material";
 
 export function GameGate() {
   /* stage arranca en null = "todavía no sé" (aún no leí localStorage). Evita un
@@ -36,11 +39,12 @@ export function GameGate() {
      primer render de cliente vale null, así que no hay mismatch de hidratación:
      el contenido real se decide en el efecto. */
   const [stage, setStage] = useState<Stage | null>(null);
+  /* Email capturado en el paso de datos, para que el cuestionario no lo repida. */
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     try {
-      // Si ya se desbloqueó antes en este dispositivo, va directo al material
-      // (sin repetir el formulario ni la secuencia de desbloqueo).
+      // Si ya completó todo antes en este dispositivo, va directo al material.
       setStage(localStorage.getItem(ACCESS_KEY) === "1" ? "material" : "form");
     } catch {
       // localStorage puede fallar en modo privado — sin recordatorio, se pide.
@@ -48,12 +52,20 @@ export function GameGate() {
     }
   }, []);
 
-  /* Registro exitoso → guarda la marca y lanza la secuencia de desbloqueo. */
-  function handleSuccess() {
+  /* Datos enviados con éxito → guarda el email y pasa al cuestionario. */
+  function handleFormSuccess(data: { email: string }) {
+    setEmail(data.email);
+    setStage("quiz");
+  }
+
+  /* Cuestionario completado → deja la marca y lanza la secuencia de desbloqueo.
+     La marca se guarda aquí (no antes) para que "ya desbloqueado" signifique el
+     recorrido entero: datos + preguntas. */
+  function handleQuizComplete() {
     try {
       localStorage.setItem(ACCESS_KEY, "1");
     } catch {
-      // best-effort: si no se puede guardar, igual seguimos al material.
+      // best-effort: si no se puede guardar, igual seguimos al desbloqueo.
     }
     setStage("unlocking");
   }
@@ -65,6 +77,10 @@ export function GameGate() {
 
   if (stage === "unlocking") {
     return <UnlockingModal onDone={() => setStage("material")} />;
+  }
+
+  if (stage === "quiz") {
+    return <GameFlow initialEmail={email} onComplete={handleQuizComplete} />;
   }
 
   return (
@@ -84,7 +100,7 @@ export function GameGate() {
         </p>
       </div>
 
-      <GameForm source="game-nivel2" onSuccess={handleSuccess} />
+      <GameForm source="game-nivel2" onSuccess={handleFormSuccess} />
     </motion.div>
   );
 }

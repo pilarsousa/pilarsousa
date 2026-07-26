@@ -44,9 +44,10 @@ type GameFormProps = {
   /* Etiqueta el lead en el CRM según de qué card/flujo vino. Default "game". */
   source?: string;
   /* Si se pasa, se llama tras un registro exitoso EN LUGAR de mostrar la
-     pantalla de descarga por defecto. Lo usa GameGate para desbloquear el
-     material de la 2ª card. */
-  onSuccess?: () => void;
+     pantalla de descarga por defecto. Recibe el email ya validado, para que el
+     paso siguiente (p. ej. el cuestionario) no vuelva a pedirlo. Lo usa
+     GameGate para encadenar el cuestionario de la 2ª card. */
+  onSuccess?: (data: { email: string }) => void;
 };
 
 export function GameForm({ source = "game", onSuccess }: GameFormProps) {
@@ -123,7 +124,7 @@ export function GameForm({ source = "game", onSuccess }: GameFormProps) {
       // material), le cedemos el control en vez de mostrar la pantalla de
       // descarga propia.
       if (onSuccess) {
-        onSuccess();
+        onSuccess({ email: email.trim() });
         return;
       }
       setStatus("success");

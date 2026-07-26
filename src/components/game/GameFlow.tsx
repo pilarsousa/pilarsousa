@@ -32,9 +32,21 @@ type ExistingRow = Record<string, string | null>;
 const FIELD_CLASS =
   "h-11 w-full rounded-sm border bg-white/3 px-4 font-sans text-sm font-light text-white placeholder:text-white/70 outline-none transition-all duration-300";
 
-export function GameFlow() {
-  const [stage, setStage] = useState<Stage>("login");
-  const [email, setEmail] = useState("");
+type GameFlowProps = {
+  /* Si se pasa, el cuestionario arranca directo en las preguntas usando este
+     email (ya validado en un paso previo), sin pedir el login de nuevo. Lo usa
+     el flujo de la 2ª card, donde el email viene del formulario de datos. */
+  initialEmail?: string;
+  /* Si se pasa, se llama al terminar el cuestionario EN LUGAR de mostrar la
+     pantalla "done" con la descarga del PDF. El flujo de la 2ª card lo usa para
+     encadenar el desbloqueo → video. */
+  onComplete?: () => void;
+};
+
+export function GameFlow({ initialEmail, onComplete }: GameFlowProps = {}) {
+  /* Con initialEmail entramos directo al quiz; si no, al login. */
+  const [stage, setStage] = useState<Stage>(initialEmail ? "quiz" : "login");
+  const [email, setEmail] = useState(initialEmail ?? "");
   const [emailError, setEmailError] = useState<string | null>(null);
   const [qIndex, setQIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -88,6 +100,12 @@ export function GameFlow() {
       });
       if (!res.ok) throw new Error(`quiz failed: ${res.status}`);
       setStatus("idle");
+      // En el flujo de la 2ª card, el consumidor (GameGate) toma el control para
+      // encadenar el desbloqueo → video. Si no, mostramos la pantalla "done".
+      if (onComplete) {
+        onComplete();
+        return;
+      }
       setStage("done");
     } catch {
       setStatus("error");

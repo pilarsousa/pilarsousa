@@ -62,13 +62,6 @@ export function GameMaterial() {
         </div>
       )}
 
-      {/* Pantalla completa: en mobile un 16:9 embebido siempre es chico; este
-          atajo lleva el video a fullscreen usando los controles nativos. */}
-      {hasVideo && (
-        <p className="mt-3 text-center font-sans text-xs font-light text-white/45">
-          ¿Se ve pequeño? Usá el botón de pantalla completa del reproductor.
-        </p>
-      )}
     </div>
   );
 }
