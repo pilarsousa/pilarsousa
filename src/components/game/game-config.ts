@@ -72,6 +72,19 @@ export const REWARD_PDF = "/game/pdf/recompensa.pdf"; // botón tras completar e
    resuelva siempre; el nombre "lindo" se define en el atributo download. */
 export const PRINCIPIOS_PDF = "/game/pdf/33-principios-cuanticos-mision-origen.pdf";
 
+/* ───────────────────────── Material de la 2ª card ────────────────────────
+   Video del "Archivo Oculto", que se muestra tras completar el registro de la
+   2ª card (ver GameMaterial / GameGate). Se decidió EMBEBERLO en la web.
+
+   Pegá aquí la URL EMBEBIBLE del video:
+     - mp4 directo, o el "embed URL" de YouTube/Vimeo → se ve dentro de la web.
+     - Si es una página de GHL que bloquea el iframe, no se podrá embeber; habría
+       que pasar a mostrarlo como enlace (avisame y lo cambio).
+
+   Mientras esté vacío, GameMaterial muestra un placeholder en vez de un iframe
+   roto. */
+export const REWARD_VIDEO_URL = "";
+
 /* ─────────────────────────── Cuestionario de /game/form ──────────────────
    Las 6 preguntas del flujo de /game/form (paso posterior al Gmail). Se responden
    con texto libre (el usuario escribe lo que quiera). Podés editar el texto, y

@@ -51,7 +51,7 @@ const CARDS: {
   locked?: boolean;
 }[] = [
   { art: imgCard1, alt: "", title: "Las 33 Leyes Universales" },
-  { art: imgCard2, alt: "", title: "Archivo Oculto", locked: true },
+  { art: imgCard2, alt: "", title: "Archivo Oculto" },
 ];
 
 /* Contenido visual de la card (imagen + negro + marco). Es igual sea clickeable

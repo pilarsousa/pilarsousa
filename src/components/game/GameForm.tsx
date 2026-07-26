@@ -40,7 +40,16 @@ const FIELD_CLASS =
 const LABEL_CLASS =
   "font-sans text-xs font-medium uppercase tracking-[0.15em] text-white";
 
-export function GameForm() {
+type GameFormProps = {
+  /* Etiqueta el lead en el CRM según de qué card/flujo vino. Default "game". */
+  source?: string;
+  /* Si se pasa, se llama tras un registro exitoso EN LUGAR de mostrar la
+     pantalla de descarga por defecto. Lo usa GameGate para desbloquear el
+     material de la 2ª card. */
+  onSuccess?: () => void;
+};
+
+export function GameForm({ source = "game", onSuccess }: GameFormProps) {
   /* Preselecciona el prefijo del país del visitante para que no tenga que
      buscarlo entre los ~240 de la lista. */
   const defaultCountry = useVisitorCountry();
@@ -87,7 +96,7 @@ export function GameForm() {
           nombre: nombre.trim(),
           email: email.trim(),
           telefono: telefono.trim(),
-          source: "game",
+          source,
         }),
       });
       // Sólo mostramos éxito si el lead se guardó de verdad.
@@ -100,7 +109,7 @@ export function GameForm() {
       const lastName = restName.join(" ").toLowerCase();
       window.dataLayer?.push({
         event: "lead_registered",
-        lead_source: "game",
+        lead_source: source,
         user_data: {
           email_address: email.trim().toLowerCase(),
           address: {
@@ -110,6 +119,13 @@ export function GameForm() {
         },
       });
 
+      // Si el consumidor maneja el éxito (p. ej. GameGate, que desbloquea el
+      // material), le cedemos el control en vez de mostrar la pantalla de
+      // descarga propia.
+      if (onSuccess) {
+        onSuccess();
+        return;
+      }
       setStatus("success");
     } catch {
       setStatus("error");

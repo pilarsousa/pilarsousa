@@ -3,22 +3,34 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import fondoForm from "@/../public/game/game-img/fondo-form.jpg";
 import { GameFlow } from "@/components/game/GameFlow";
+import { GameGate } from "@/components/game/GameGate";
 
 /*
-  /game/form — destino al tocar la card habilitada en /game/home.
+  /game/form — destino al tocar cualquiera de las dos cards de /game/home.
 
   Card centrada tipo "inicio de sesión" sobre fondo-form.jpg: un fondo ya oscuro
   en el centro (para que el contenido resalte) y decorado con enredaderas neón en
   los bordes. Por eso el overlay es suave (no lo tapa) y sumamos la viñeta de
   bordes (.game-edge-shadow) para enmarcar, igual que el resto de /game.
 
-  Arriba a la izquierda hay un botón para volver a /game/home (presente en todos
-  los pasos del flujo).
+  El parámetro ?nivel decide qué flujo se muestra:
+    - nivel=2  → GameGate: registro (nombre/correo/teléfono → GHL+Supabase) que
+                 desbloquea el material de la 2ª card ("Archivo Oculto").
+    - resto    → GameFlow: el cuestionario de 6 preguntas (flujo original).
 
-  min-h-[100dvh] permite crecer si el teclado móvil o una pregunta empujan el
-  contenido; la card queda centrada mientras entra.
+  Arriba a la izquierda hay un botón para volver a /game/home.
+
+  min-h-[100dvh] permite crecer si el teclado móvil o el contenido empujan; la
+  card queda centrada mientras entra.
 */
-export default function GameFormPage() {
+export default async function GameFormPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ nivel?: string }>;
+}) {
+  const { nivel } = await searchParams;
+  const isNivel2 = nivel === "2";
+
   return (
     <main className="relative isolate flex min-h-[100dvh] w-full items-center justify-center overflow-hidden px-4 py-12">
       {/* Fondo a sangre */}
@@ -48,7 +60,7 @@ export default function GameFormPage() {
         <ArrowLeft size={20} aria-hidden />
       </Link>
 
-      <GameFlow />
+      {isNivel2 ? <GameGate /> : <GameFlow />}
 
       {/* Viñeta/sombra en los bordes */}
       <div
