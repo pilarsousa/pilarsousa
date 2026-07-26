@@ -311,6 +311,49 @@
   box-shadow: inset 0 0 150px 45px rgba(0, 0, 0, 0.72);
 }
 
+/* Destello tipo relámpago sobre el fondo de /game/home. Se aplica SÓLO a la
+   imagen de fondo (no a las cards ni al contenido): los tiempos irregulares del
+   keyframe imitan el parpadeo de un rayo — fogonazos rápidos en grupo, largos
+   tramos en calma. Se corta con prefers-reduced-motion. */
+@keyframes rayo {
+  0%,
+  5%,
+  7%,
+  9%,
+  50%,
+  52%,
+  54%,
+  56%,
+  74%,
+  100% {
+    filter: brightness(250%);
+  }
+  6%,
+  8%,
+  10%,
+  25%,
+  49%,
+  51%,
+  53%,
+  55%,
+  57%,
+  73%,
+  76%,
+  99% {
+    filter: brightness(100%);
+  }
+}
+
+.game-bg-lightning {
+  animation: rayo 5s infinite linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-bg-lightning {
+    animation: none;
+  }
+}
+
 /* Fade-in for the reservation modal (backdrop + panel). */
 @keyframes fadeIn {
   from {
