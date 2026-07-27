@@ -1,6 +1,8 @@
 import { Container } from "@/components/shared/Container";
 import { NeonText } from "@/components/mision-origen/ui/NeonText";
 import { Reveal } from "@/components/mision-origen/ui/Reveal";
+import { Badge } from "@/components/ventas/ui/Badge";
+import { Target } from "lucide-react";
 
 /*
   Sección "¿Qué vas a lograr?".
@@ -36,14 +38,12 @@ export function QueVasALograr() {
         <div className="flex flex-col gap-12">
           <div className="flex flex-col items-center gap-4 text-center">
             <Reveal>
-              <p className="font-sans section-eyebrow text-neon-pink">
-                Qué vas a lograr
-              </p>
+              <Badge icon={Target}>Qué vas a lograr</Badge>
             </Reveal>
             <Reveal delay={0.1}>
-              <h2 className="max-w-3xl font-display text-3xl font-semibold leading-snug text-foreground sm:text-4xl">
-                Al terminar, vas a{" "}
-                <NeonText variant="pink">haber cambiado</NeonText>
+              <h2 className="max-w-3xl font-display text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
+                Esto es lo que vas a{" "}
+                <NeonText variant="pink">conseguir</NeonText>
               </h2>
             </Reveal>
           </div>
@@ -51,7 +51,7 @@ export function QueVasALograr() {
           <div className="mx-auto grid w-full max-w-3xl grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
             {LOGROS.map((logro, i) => (
               <Reveal key={i} delay={0.1 + i * 0.1}>
-                <div className="fancy-card group flex h-full flex-col gap-3 p-7">
+                <div className="fancy-card shine-hover group flex h-full flex-col gap-3 p-7">
                   <h3 className="font-display text-lg font-semibold text-foreground">
                     {logro.title}
                   </h3>

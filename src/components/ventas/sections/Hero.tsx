@@ -67,21 +67,19 @@ export function Hero() {
           funde a negro, pero sin empujar tanto que el CTA quede fuera de vista
           (44svh deja la foto arriba y el bloque completo entra en pantalla).
           Desktop: columna izquierda, alineado a la izquierda como el Bootcamp. */}
-      <Container className="pb-16 pt-[44svh] sm:pt-[48svh] lg:py-[clamp(2.5rem,1rem+5vh,7rem)]">
-        <div className="max-w-2xl [text-shadow:0_2px_20px_rgba(0,0,0,0.7)]">
-          {/* ── Badge de urgencia ── */}
-          <Reveal>
-            <p className="inline-flex items-center gap-2 rounded-full border border-hot-pink/50 bg-hot-pink/15 px-4 py-2 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-white backdrop-blur-sm sm:text-sm">
-              <span aria-hidden>⚠️</span>
-              Oferta disponible solo hasta agotarse las plazas
-            </p>
-          </Reveal>
+      <Container className="pb-16 pt-[24svh] sm:pt-[32svh] lg:py-[clamp(2.5rem,1rem+5vh,7rem)]">
+        <div className="max-w-2xl [text-shadow:0_2px_20px_rgba(0,0,0,0.7)] lg:max-w-3xl">
+          {/* La urgencia ("Oferta disponible…") vive ahora en la AnnouncementBar
+              del layout, así que aquí no se repite. */}
 
-          {/* ── Título principal ── */}
+          {/* ── Título principal (la promesa) ──
+              Tope de fuente calibrado para que el texto completo entre en ~4
+              líneas en desktop (con la columna lg:max-w-3xl) y ~5 en mobile, sin
+              desbordar. */}
           <Reveal delay={0.1}>
             <h1
               id="ventas-title"
-              className="mt-5 font-display font-semibold leading-[1.15] tracking-tight text-white text-[clamp(1.7rem,1rem+2.4vw,3rem)]"
+              className="font-display font-semibold leading-[1.15] tracking-tight text-white text-[clamp(1.75rem,1.1rem+2vw,2.6rem)]"
             >
               Accede ahora al entrenamiento{" "}
               <NeonText variant="cyan">nº1 de Metafísica Práctica</NeonText> para
@@ -103,7 +101,7 @@ export function Hero() {
             <div className="mt-8 w-full sm:w-fit">
               <a
                 href={VENTAS_CHECKOUT_URL}
-                className="neon-btn flex h-14 w-full items-center justify-center whitespace-nowrap rounded-full px-10 font-sans text-base font-bold uppercase tracking-[0.08em] text-white transition-all duration-500 ease-out active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:w-fit sm:px-14 sm:text-lg"
+                className="neon-btn cursor-pointer flex h-14 w-full items-center justify-center whitespace-nowrap rounded-full px-10 font-sans text-base font-bold uppercase tracking-[0.08em] text-white transition-all duration-500 ease-out active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:w-fit sm:px-14 sm:text-lg"
               >
                 Acceder ahora
               </a>

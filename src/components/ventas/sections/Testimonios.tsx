@@ -3,6 +3,8 @@ import { NeonText } from "@/components/mision-origen/ui/NeonText";
 import { Reveal } from "@/components/mision-origen/ui/Reveal";
 import { TestimonialCarousel } from "@/components/mision-origen/ui/TestimonialCarousel";
 import { TrustScoreCard } from "@/components/mision-origen/ui/TrustScoreCard";
+import { Badge } from "@/components/ventas/ui/Badge";
+import { Quote } from "lucide-react";
 
 /*
   Sección de testimonios. Reutiliza los mismos componentes de la landing de
@@ -15,11 +17,9 @@ export function Testimonios() {
     <section id="testimonios" className="bg-background py-section">
       <Container>
         <div className="flex flex-col gap-10">
-          <div className="flex flex-col items-center gap-4 text-center">
+          <div className="flex flex-col items-center gap-5 text-center">
             <Reveal>
-              <p className="font-sans section-eyebrow text-hot-pink">
-                Testimonios
-              </p>
+              <Badge icon={Quote}>Testimonios</Badge>
             </Reveal>
             <Reveal delay={0.1}>
               <h2 className="font-display text-3xl font-semibold text-foreground sm:text-4xl">
@@ -33,11 +33,17 @@ export function Testimonios() {
             <TrustScoreCard />
 
             <div className="mt-10 max-w-xl text-center">
-              <p className="font-sans section-eyebrow text-cyan">
-                Validado por quienes ya lo vivieron
-              </p>
-              <p className="mt-4 font-sans text-xl font-light leading-snug text-foreground sm:text-2xl">
-                <NeonText variant="cyan" className="font-display font-semibold">
+              {/* Título de este bloque de validación */}
+              <h3 className="font-display text-2xl font-semibold leading-tight text-foreground sm:text-3xl">
+                Validado por quienes{" "}
+                <NeonText variant="cyan">ya lo vivieron</NeonText>
+              </h3>
+              {/* Nota de apoyo — 4,8/5 conserva su tamaño; el resto en párrafo 18px */}
+              <p className="mt-4 font-sans text-base font-light leading-relaxed text-foreground/80 sm:text-lg">
+                <NeonText
+                  variant="cyan"
+                  className="font-display text-xl font-semibold sm:text-2xl"
+                >
                   4,8 / 5
                 </NeonText>{" "}
                 media de valoración entre nuestros alumnos.
@@ -45,7 +51,9 @@ export function Testimonios() {
             </div>
           </Reveal>
 
-          <div className="w-full min-w-0 overflow-x-clip">
+          {/* -mt para acercar el carrusel al bloque de valoración (el carrusel
+              trae su propio pt interno, que este margen compensa). */}
+          <div className="-mt-4 w-full min-w-0 overflow-x-clip">
             <TestimonialCarousel />
           </div>
         </div>

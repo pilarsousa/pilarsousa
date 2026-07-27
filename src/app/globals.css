@@ -94,6 +94,9 @@
   --animate-bar-shimmer: bar-shimmer 5s ease-in-out infinite;
   --animate-tick-pulse: tick-pulse 0.45s ease-out 1;
   --animate-marquee: marquee 14s linear infinite;
+  /* Marquee mucho más lento para la barra de ventas: el texto se desliza
+     sutil, no a la velocidad del de registro. */
+  --animate-marquee-slow: marquee 40s linear infinite;
   --animate-badge-pulse: badge-pulse 3s ease-in-out infinite;
   /* Halo que late detrás del botón de descarga de la card única. Versión
      contenida del ping de Tailwind: ese escala al doble y la onda tapaba media
@@ -258,6 +261,39 @@
     inset 0 0 0.75em 0.25em var(--glow-color);
   text-shadow: 0 0 0.5em var(--glow-color);
   transition: all 0.3s ease;
+  /* Halo que respira, como el botón de la referencia: el resplandor exterior
+     late suavemente para que el CTA nunca pase desapercibido. En hover/active
+     las reglas de abajo pisan el box-shadow y la animación cede el control. */
+  animation: neon-btn-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes neon-btn-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 1em 0.25em var(--glow-color),
+      0 0 4em 1em var(--glow-spread-color),
+      inset 0 0 0.75em 0.25em var(--glow-color);
+  }
+  50% {
+    box-shadow:
+      0 0 1.4em 0.4em var(--glow-color),
+      0 0 6em 1.8em var(--glow-spread-color),
+      inset 0 0 0.9em 0.3em var(--glow-color);
+  }
+}
+
+/* En hover el usuario ya tiene el foco: frenamos el pulso para que no compita
+   con el estado hover. */
+.neon-btn:hover,
+.neon-btn:active {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .neon-btn {
+    animation: none;
+  }
 }
 
 .neon-btn:hover {
@@ -288,6 +324,30 @@
     0 0 0.6em 0.12em var(--glow-color),
     0 0 2em 0.4em var(--glow-spread-color),
     inset 0 0 0.5em 0.15em var(--glow-color);
+  /* Su propio pulso, atenuado, para no heredar el glow fuerte de la animación
+     base de .neon-btn (que anima un box-shadow más intenso). */
+  animation: neon-btn-soft-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes neon-btn-soft-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0.6em 0.12em var(--glow-color),
+      0 0 2em 0.4em var(--glow-spread-color),
+      inset 0 0 0.5em 0.15em var(--glow-color);
+  }
+  50% {
+    box-shadow:
+      0 0 0.85em 0.2em var(--glow-color),
+      0 0 3em 0.7em var(--glow-spread-color),
+      inset 0 0 0.6em 0.2em var(--glow-color);
+  }
+}
+
+.neon-btn--soft:hover,
+.neon-btn--soft:active {
+  animation: none;
 }
 
 .neon-btn--soft:hover {
@@ -425,6 +485,218 @@
   50% {
     border-color: color-mix(in srgb, var(--color-cyan) 60%, transparent);
     box-shadow: 0 0 14px rgba(40, 191, 241, 0.2);
+  }
+}
+
+/*
+  Óvalo del pricing — adaptado de la landing de referencia (con permiso). La
+  forma es una imagen (oval-pricing.webp: la cápsula violeta con las muescas
+  laterales, ya renderizada). Encima va un aro luminoso animado (.borde-hueco)
+  y el contenido. El violeta de la imagen coincide con nuestra paleta, así que
+  no necesita recolor.
+
+  .borde-hueco: copiado casi literal del original — un aro con conic-gradient
+  que gira, difuminado (blur) para que sea un halo suave alrededor del óvalo.
+  El gradiente se recolorea a la paleta neón (cyan/rosa/ice) en vez del
+  violeta/naranja original.
+*/
+.borde-hueco {
+  width: 104%;
+  height: 90px;
+  transform: translateY(-5px) translateX(-2%);
+  border-radius: 999px;
+  position: relative;
+  background: transparent;
+  z-index: 0;
+  filter: blur(15px);
+  overflow: hidden;
+}
+
+.borde-hueco::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 12px;
+  border-radius: 999px;
+  background: conic-gradient(
+    from 0deg,
+    var(--color-cyan),
+    var(--color-neon-pink),
+    var(--color-ice-blue),
+    var(--color-violet),
+    var(--color-cyan)
+  );
+  background-size: 300% 300%;
+  background-position: 0% 50%;
+  animation: mover-gradiente 8s linear infinite;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes mover-gradiente {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .borde-hueco::after {
+    animation: none;
+  }
+}
+
+/*
+  Reflejo/destello que barre un elemento al pasar el mouse — adaptado del efecto
+  ".brillo" del original. Un ::before blanco, inclinado (skew), difuminado y en
+  mix-blend overlay, que cruza de un lado al otro. Se aplica a cualquier
+  contenedor con position:relative y overflow:hidden.
+*/
+.shine-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-hover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 60px;
+  height: 100%;
+  background: #fff;
+  filter: blur(22px);
+  mix-blend-mode: overlay;
+  transform: skew(-30deg);
+  box-shadow: 0 0 30px 18px rgba(255, 255, 255, 0.65);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.shine-hover:hover::before {
+  animation: shine-sweep 0.9s ease-in-out;
+}
+
+@keyframes shine-sweep {
+  0% {
+    opacity: 1;
+    left: -60%;
+  }
+  100% {
+    opacity: 1;
+    left: 160%;
+  }
+}
+
+/* En el announcement bar el destello recorre solo, en bucle, sin depender del
+   hover (la barra es fija y no se hoverea). */
+.shine-loop::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 80px;
+  height: 100%;
+  background: #fff;
+  filter: blur(24px);
+  mix-blend-mode: overlay;
+  transform: skew(-30deg);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 5;
+  animation: shine-sweep 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shine-hover:hover::before,
+  .shine-loop::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* Item lateral del pricing — estilo del original: fondo oscuro violáceo,
+   muy redondeado, con un bisel sutil (dos sombras de 1px opuestas). */
+.pricing-item {
+  background: #201a29;
+  border-radius: 50px;
+  box-shadow:
+    1px -1px #493d5c,
+    -1px 1px #18141f;
+  transition: all 0.4s ease-in-out;
+}
+
+.pricing-item:hover {
+  background: #26203180;
+  box-shadow:
+    1px -1px var(--color-cyan),
+    -1px 1px #18141f,
+    0 0 24px rgba(40, 191, 241, 0.2);
+}
+
+/* Borde con gradiente que se desplaza en bucle, alrededor de una card.
+   Adaptado del sitio de referencia (efecto "borde-hueco") a la paleta neón:
+   un gradiente cónico enmascarado para que sólo se vea el anillo del borde, no
+   un disco. Se aplica a un contenedor position:relative; el ::before dibuja el
+   borde detrás del contenido. Se detiene con prefers-reduced-motion. */
+.glow-border {
+  position: relative;
+  isolation: isolate;
+}
+
+.glow-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 2px;
+  background: conic-gradient(
+    from 0deg,
+    var(--color-cyan),
+    var(--color-neon-pink),
+    var(--color-violet),
+    var(--color-ice-blue),
+    var(--color-cyan)
+  );
+  background-size: 300% 300%;
+  animation: glow-border-drift 8s linear infinite;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+@keyframes glow-border-drift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glow-border::before {
+    animation: none;
   }
 }
 

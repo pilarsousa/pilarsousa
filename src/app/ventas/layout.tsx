@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { AnnouncementBar } from "@/components/ventas/ui/AnnouncementBar";
+import { FloatingCta } from "@/components/ventas/ui/FloatingCta";
 
 /*
   Landing de ventas — servida en /ventas.
@@ -32,8 +34,12 @@ export default function VentasLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="mo-scope min-h-full overflow-x-clip bg-background text-foreground">
+    /* pt-9 compensa la altura de la AnnouncementBar fija para que no tape el
+       inicio del Hero. */
+    <div className="mo-scope min-h-full overflow-x-clip bg-background pt-9 text-foreground">
+      <AnnouncementBar />
       {children}
+      <FloatingCta />
     </div>
   );
 }

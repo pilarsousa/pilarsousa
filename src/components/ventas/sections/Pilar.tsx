@@ -34,8 +34,7 @@ export function Pilar() {
           {/* Bio */}
           <div className="w-full lg:w-3/5">
             <Reveal delay={0.1}>
-              <p className="font-sans section-eyebrow text-violet">La experta</p>
-              <h2 className="mt-4 font-display text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
+              <h2 className="font-display text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
                 ¿Quién es{" "}
                 <NeonText variant="violet">Pilar Sousa</NeonText>?
               </h2>
