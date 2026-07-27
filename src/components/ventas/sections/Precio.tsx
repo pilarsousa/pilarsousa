@@ -12,6 +12,7 @@ import {
   VENTAS_PRECIO_CUOTAS,
 } from "@/lib/links";
 import ovalShape from "@/../public/ventas/oval-pricing.webp";
+import logosPago from "@/../public/mision-origen-venta/logos.svg";
 import {
   GraduationCap,
   Route,
@@ -190,10 +191,12 @@ export function Precio() {
                     Acceder ahora
                   </a>
 
-                  {/* Logos de pago — PLACEHOLDER (Visa/Mastercard/Stripe) */}
-                  <p className="text-center font-sans text-[0.55rem] uppercase tracking-[0.1em] text-white/40">
-                    Visa · Mastercard · Stripe
-                  </p>
+                  {/* Logos de los métodos de pago */}
+                  <Image
+                    src={logosPago}
+                    alt="Métodos de pago aceptados"
+                    className="h-auto w-[180px] opacity-80"
+                  />
                 </div>
               </div>
 

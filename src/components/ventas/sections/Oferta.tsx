@@ -1,6 +1,8 @@
+import Image from "next/image";
 import { Container } from "@/components/shared/Container";
 import { NeonText } from "@/components/mision-origen/ui/NeonText";
 import { Reveal } from "@/components/mision-origen/ui/Reveal";
+import mockup from "@/../public/mision-origen-venta/mockup.png";
 import {
   GraduationCap,
   Route,
@@ -44,19 +46,16 @@ export function Oferta() {
             </h2>
           </Reveal>
 
-          {/* Mockup del packaging — PLACEHOLDER */}
+          {/* Mockup con todo el packaging del programa */}
           <Reveal delay={0.15}>
             <div className="w-full max-w-4xl">
-              <div className="flex aspect-video w-full items-center justify-center rounded-2xl border border-dashed border-white/20 bg-white/3 px-6 text-center">
-                <p className="font-sans text-sm font-light text-white/40 sm:text-base">
-                  [ Mockup del programa — pendiente del arte.
-                  <br className="hidden sm:block" /> Reemplazar por la imagen en{" "}
-                  <span className="font-mono text-white/55">
-                    public/ventas/mockup
-                  </span>{" "}
-                  ]
-                </p>
-              </div>
+              <Image
+                src={mockup}
+                alt="Todo lo que incluye el programa: plataforma, sesiones, recursos, libro y certificado"
+                priority
+                sizes="(min-width: 768px) 56rem, 100vw"
+                className="h-auto w-full"
+              />
             </div>
           </Reveal>
 
