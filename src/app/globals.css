@@ -11,7 +11,7 @@
   - Raw palettes never collide (gold/forest vs neon/cyan), so both live here.
   - The SEMANTIC aliases (--color-background, --color-accent, --font-display, …)
     collide: same names, different values. The Bootcamp's win at :root because
-    it is the landing at the domain root. Misión Origen's are redefined in the
+    it is the landing at the domain root. Volver al Origen's are redefined in the
     .mo-scope block further down, which its layout wraps around itself.
 
   This works because Tailwind compiles utilities to var(--token) rather than
@@ -196,7 +196,7 @@
   }
 }
 
-/* ---- Misión Origen keyframes ---- */
+/* ---- Volver al Origen keyframes ---- */
 
 @keyframes neon-drift {
   0%,
@@ -317,7 +317,7 @@
   botones "Desbloquear" y "Completar registro" de /game); reutiliza sus colores
   (--glow-color / --glow-spread-color) y sólo atenúa el box-shadow. Al declararse
   después de .neon-btn y con la misma especificidad, gana el box-shadow sin
-  afectar al glow completo que usa Misión Origen.
+  afectar al glow completo que usa Volver al Origen.
 */
 .neon-btn--soft {
   box-shadow:
@@ -837,14 +837,14 @@
 }
 
 /*
-  Misión Origen's semantic layer. Its layout wraps the whole landing in
+  Volver al Origen's semantic layer. Its layout wraps the whole landing in
   .mo-scope, so these override the Bootcamp values from @theme for that
   subtree only. Keep this list in sync with the semantic aliases above:
   a Bootcamp token added there without a counterpart here will bleed into
-  Misión Origen with the wrong value.
+  Volver al Origen with the wrong value.
 
   Tokens deliberately NOT overridden: --color-surface-alt, --color-accent-soft
-  and --font-accent are Bootcamp-only and unused by Misión Origen.
+  and --font-accent are Bootcamp-only and unused by Volver al Origen.
 */
 .mo-scope {
   --color-background: var(--color-void);
@@ -869,7 +869,7 @@
 }
 
 /*
-  Textura de malla fina sobre TODA la landing de Misión Origen (no el Bootcamp).
+  Textura de malla fina sobre TODA la landing de Volver al Origen (no el Bootcamp).
   Fija al viewport, no intercepta clics. El z-index se mantiene por DEBAJO del
   AnnouncementBar (z-100) a propósito: es una textura, no una capa que deba
   tapar la UI. .mo-scope no tiene transform/filter, así que el `fixed` se ancla
@@ -897,7 +897,7 @@
   La landing /game reutiliza .mo-scope por su paleta y tipografía, pero NO quiere
   la malla de líneas de arriba. Su layout añade .game-scope junto a .mo-scope;
   esta regla, al ir después y con la misma especificidad, gana y anula la textura
-  sólo en /game, sin afectar a Misión Origen.
+  sólo en /game, sin afectar a Volver al Origen.
 */
 .game-scope::before {
   display: none;
@@ -906,7 +906,7 @@
 /*
   Fancy card — the "Recompensa" benefit cards. A rounded neon-bordered panel
   with a tilted, overlay-blended ::after behind it that gives a subtle
-  stacked/offset depth. Adapted from a teal reference to Misión Origen's neon
+  stacked/offset depth. Adapted from a teal reference to Volver al Origen's neon
   palette; the reference's noise/conic background is intentionally dropped.
   The tilt sits BEHIND content (z-index) so text stays crisp and upright.
 */
@@ -954,7 +954,7 @@
 }
 
 /*
-  Phone field — restyles react-phone-number-input to match the Misión Origen
+  Phone field — restyles react-phone-number-input to match the Volver al Origen
   form fields. The library ships its own stylesheet (imported in ReservaForm),
   which renders a plain light-theme input; these rules override it so the
   country selector and the number share the same dark neon treatment as the
@@ -1159,7 +1159,7 @@
 }
 
 /*
-  Section eyebrow — the small uppercase label that opens each Misión Origen
+  Section eyebrow — the small uppercase label that opens each Volver al Origen
   section ("Recompensa", "La Proyección", …). Realzado para que marque el
   inicio de sección sin pasar desapercibido: algo más grande, semibold, y con
   un glow neon. El text-shadow usa currentColor, así hereda el color de la
@@ -1215,7 +1215,7 @@ body {
   pass straight through. plus-lighter blends the dots as light so they lift
   the dark surfaces subtly (degrades gracefully where unsupported).
 
-  Scoped to .bc-scope rather than body: Misión Origen shares this document and
+  Scoped to .bc-scope rather than body: Volver al Origen shares this document and
   was not designed with the grain, and a descendant cannot switch off an
   ancestor's pseudo-element. Still position:fixed — it is viewport-anchored,
   not element-anchored, so the grain stays put while the page scrolls.
@@ -1442,6 +1442,16 @@ body {
   background: #44ff00;
 }
 
+.ventas-borde-hueco2 {
+  left: 50%;
+  width: calc(100% + 18px);
+  height: calc(100% + 18px);
+  transform: translate(-50%, -50%);
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+  opacity: 0.5;
+}
+
 @media (min-width: 640px) {
   .ventas-fixed-cta {
     right: 24px;
@@ -1500,8 +1510,7 @@ body {
     height: clamp(24px, 7vw, 28px);
   }
 
-  .ventas-borde-hueco,
-  .ventas-borde-hueco2 {
+  .ventas-borde-hueco {
     height: 20.5vw;
     max-height: 80px;
     min-height: 72px;
@@ -1511,9 +1520,24 @@ body {
     opacity: 0.66;
   }
 
-  .ventas-borde-hueco::after,
-  .ventas-borde-hueco2::after {
+  .ventas-borde-hueco::after {
     padding: 3.1vw;
+  }
+
+  .ventas-borde-hueco2 {
+    left: 50%;
+    width: calc(100% + 12px);
+    height: calc(100% + 12px);
+    min-height: 0;
+    max-height: none;
+    transform: translate(-50%, -50%);
+    filter: blur(7px);
+    -webkit-filter: blur(7px);
+    opacity: 0.42;
+  }
+
+  .ventas-borde-hueco2::after {
+    padding: 8px;
   }
 }
 

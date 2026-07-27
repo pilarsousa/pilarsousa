@@ -3,29 +3,29 @@ import { AnnouncementBar } from "@/components/mision-origen/ui/AnnouncementBar";
 import { ReservaModalProvider } from "@/components/mision-origen/ui/ReservaModal";
 
 /*
-  Misión Origen — the landing at the domain root (/).
+  Volver al Origen — registration/thank-you routes under /mision-origen.
 
   This is a route group: the (mision-origen) folder is stripped from the URL,
-  so page.tsx here serves "/". It took the root from the Bootcamp in the swap;
-  the old /mision-origen URL now 307-redirects here (see next.config.ts).
+  so nested pages keep clean public paths like /mision-origen and
+  /gracias-mision-origen while sharing this scoped visual shell.
 
   .mo-scope is what keeps the two palettes apart. Both landings define the same
   semantic tokens (--color-background, --font-display, …) with different values,
   and Tailwind's @theme is global — one build, one :root. Since every Tailwind
   utility compiles to var(--token), redefining those variables on this wrapper
-  makes bg-background/font-display resolve to Misión Origen's values for this
+  makes bg-background/font-display resolve to Volver al Origen's values for this
   subtree only. See the .mo-scope block in globals.css.
 
-  The wrapper also carries what used to live on <body> when Misión Origen had
+  The wrapper also carries what used to live on <body> when Volver al Origen had
   its own repo: the full-height dark surface and the AnnouncementBar offset.
 */
 
 export const metadata: Metadata = {
-  title: "Misión Origen — Activa tu misión desde adentro",
+  title: "Volver al Origen — Activa tu misión desde adentro",
   description:
     "Un programa de 3 días con Pilar Sousa para reprogramar tu identidad, activar tu misión y alinearte con la versión de ti que ya existe.",
   openGraph: {
-    title: "Misión Origen — Pilar Sousa",
+    title: "Volver al Origen — Pilar Sousa",
     description:
       "Reprograma tu identidad. Activa tu misión. Un programa de 3 días que cambia el código desde adentro.",
     type: "website",

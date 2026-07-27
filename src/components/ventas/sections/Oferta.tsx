@@ -3,7 +3,7 @@ import { Container } from "@/components/shared/Container";
 import { NeonText } from "@/components/mision-origen/ui/NeonText";
 import { Reveal } from "@/components/mision-origen/ui/Reveal";
 import { MatrixRain } from "@/components/bootcamp/ui/MatrixRain";
-import mockup from "@/../public/mision-origen-venta/mockup1.png";
+import mockup from "@/../public/mision-origen-venta/mockup1.webp";
 import regaloIcon from "@/components/mision-origen/regalo-mision/regalo-icon.png";
 import {
   CircleAlert,
@@ -76,7 +76,7 @@ export function Oferta() {
 
           {/* Mockup con todo el packaging del programa */}
           <Reveal delay={0.15}>
-            <div className="relative isolate w-full max-w-5xl overflow-hidden rounded-[2rem] border border-lime-300/18 bg-[radial-gradient(70%_80%_at_50%_45%,rgba(42,107,60,0.24),transparent_62%),linear-gradient(180deg,rgba(4,10,6,0.96),rgba(0,0,0,0.92))] px-2 py-7 shadow-[0_30px_90px_-48px_rgba(142,255,80,0.55),inset_0_1px_0_rgba(255,255,255,0.08)] sm:px-6 sm:py-9">
+            <div className="relative isolate w-full max-w-6xl overflow-hidden rounded-[2rem] border border-lime-300/18 bg-[radial-gradient(70%_80%_at_50%_45%,rgba(42,107,60,0.24),transparent_62%),linear-gradient(180deg,rgba(4,10,6,0.96),rgba(0,0,0,0.92))] px-1 py-4 shadow-[0_30px_90px_-48px_rgba(142,255,80,0.55),inset_0_1px_0_rgba(255,255,255,0.08)] sm:px-3 sm:py-6 lg:px-5 lg:py-7">
               <MatrixRain fade={0.035} opacity={0.42} />
               <div
                 aria-hidden
@@ -86,8 +86,8 @@ export function Oferta() {
                 src={mockup}
                 alt="Todo lo que incluye el programa: plataforma, sesiones, recursos, libro y certificado"
                 priority
-                sizes="(min-width: 1024px) 64rem, 100vw"
-                className="relative z-10 h-auto w-full drop-shadow-[0_24px_42px_rgba(0,0,0,0.72)]"
+                sizes="(min-width: 1280px) 72rem, 100vw"
+                className="relative z-10 mx-auto h-auto w-full max-w-none drop-shadow-[0_24px_42px_rgba(0,0,0,0.72)]"
               />
             </div>
           </Reveal>

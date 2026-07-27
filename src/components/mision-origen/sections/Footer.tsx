@@ -23,7 +23,7 @@ export function Footer() {
             variant="multi"
             className="font-display text-3xl tracking-tight sm:text-4xl"
           >
-            Misión Origen
+            Volver al Origen
           </NeonText>
           <p className="font-sans text-xs font-medium uppercase tracking-[0.4em] text-cyan/70">
             Da tu salto cuántico

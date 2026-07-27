@@ -19,7 +19,7 @@ import {
    2. "unlocked" — código correcto: se muestra el contenido como vista previa
                    (UNLOCK_CONTENT) y un botón que descarga el PDF (CONTENT_PDF).
 
-  Reutiliza el patrón de accesibilidad del modal de Misión Origen: role/dialog,
+  Reutiliza el patrón de accesibilidad del modal de Volver al Origen: role/dialog,
   cierre por backdrop / botón X / Escape, y bloqueo del scroll del body mientras
   está abierto. Al abrir se resetea siempre al paso 1.
 */
@@ -114,7 +114,7 @@ export function CodeModal({ onClose }: CodeModalProps) {
         </button>
 
         {/* beam-card: el haz de luz cian que recorre el borde, el mismo efecto
-            que las cards de "La Proyección" en Misión Origen. El haz vive DETRÁS
+            que las cards de "La Proyección" en Volver al Origen. El haz vive DETRÁS
             del fondo (::before en z-index -1), por eso el panel usa un fondo
             translúcido y NO lleva overflow-hidden; el recorte de las esquinas del
             contenido lo hace el wrapper interno. */}

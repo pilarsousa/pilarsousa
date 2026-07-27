@@ -16,7 +16,11 @@ const PERFILES = [
 
 export function ParaQuien() {
   return (
-    <section id="para-quien" className="bg-surface py-section">
+    <section id="para-quien" className="relative bg-surface pb-section pt-12 sm:pt-16">
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(40,191,241,0.22),rgba(249,2,129,0.2),transparent)]"
+      />
       <Container>
         <div className="flex flex-col gap-8 sm:gap-9">
           <div className="flex flex-col items-center text-center">

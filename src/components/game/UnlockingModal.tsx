@@ -20,7 +20,7 @@ import { Lock, LockOpen } from "lucide-react";
 const FILL_MS = 1800; // duración del llenado de la barra
 const CELEBRATE_MS = 1600; // festejo antes de abrir la card
 
-// Paleta neón de Misión Origen para el confeti.
+// Paleta neón de Volver al Origen para el confeti.
 const CONFETTI_COLORS = ["#28bff1", "#8b5cf6", "#f90281", "#f3e2b0", "#aef0fe"];
 const PARTICLE_COUNT = 30;
 

@@ -121,7 +121,7 @@ export function Precio() {
                 {/* Contenido sobre el óvalo */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-10 py-8">
                   <p className="text-center font-display text-xl font-semibold tracking-tight sm:text-2xl">
-                    <NeonText variant="multi">Misión Origen</NeonText>
+                    <NeonText variant="multi">Volver al Origen</NeonText>
                   </p>
 
                   <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3.5 py-1.5 font-sans text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-white/80">

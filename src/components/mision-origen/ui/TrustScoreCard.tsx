@@ -4,7 +4,7 @@ import { cn } from "@/lib/cn";
 import trustpilotLogo from "@/../public/Testimonios/logo-trustpilot.png";
 
 /**
- * Trustpilot-style rating summary card, recolored to the Misión Origen neon
+ * Trustpilot-style rating summary card, recolored to the Volver al Origen neon
  * palette on a dark face: neon star tiles (StarBox) and neon distribution bars
  * matching the "Plazas vendidas" gradient. Data is real from the client's
  * Trustpilot profile; the logo keeps the brand link.

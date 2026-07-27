@@ -26,7 +26,7 @@ export function useReservaModal() {
 }
 
 /**
- * Provides the reservation modal to the whole Misión Origen landing. Wraps the
+ * Provides the reservation modal to the whole Volver al Origen landing. Wraps the
  * app subtree once (in the layout); any CTA calls useReservaModal().open() to
  * pop the "Reserva tu plaza" panel over the page. Closes on backdrop click,
  * the X button, or Escape, and locks body scroll while open.

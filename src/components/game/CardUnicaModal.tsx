@@ -144,7 +144,7 @@ export function CardUnicaModal({ onClose }: { onClose: () => void }) {
               se lea claramente como el punto de acción. */}
           <a
             href={PRINCIPIOS_PDF}
-            download="33 Principios Cuánticos - Misión Origen.pdf"
+            download="33 Principios Cuánticos - Volver al Origen.pdf"
             aria-label="Descargar"
             className="electric-download relative block transition-transform duration-200 ease-out hover:scale-110 active:scale-95 focus-visible:outline-none"
           >
@@ -159,7 +159,7 @@ export function CardUnicaModal({ onClose }: { onClose: () => void }) {
           cierra al click), igual que el botón de la card. */}
       <a
         href={PRINCIPIOS_PDF}
-        download="33 Principios Cuánticos - Misión Origen.pdf"
+        download="33 Principios Cuánticos - Volver al Origen.pdf"
         onClick={(e) => e.stopPropagation()}
         className="group flex items-center justify-center gap-2 px-4 text-center font-[family-name:var(--font-pixelify)] text-[clamp(12px,1.9vh,18px)] font-bold uppercase tracking-[0.06em] transition-transform duration-200 ease-out hover:scale-105 active:scale-95 focus-visible:outline-none"
       >

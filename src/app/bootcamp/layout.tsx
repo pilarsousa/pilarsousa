@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 /*
   Bootcamp Reset Identidad — served at /bootcamp. page.tsx here is /bootcamp
   and gracias/page.tsx is /bootcamp/gracias. This landing used to sit at the
-  domain root; Misión Origen took the root in the swap and the Bootcamp moved
+  domain root; Volver al Origen took the root in the swap and the Bootcamp moved
   under /bootcamp. This layout gives it its own metadata and visual chrome
   without leaking either onto the root landing.
 

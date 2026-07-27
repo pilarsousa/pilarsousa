@@ -3,7 +3,7 @@ import { AnnouncementBar } from "@/components/ventas/ui/AnnouncementBar";
 import { FloatingCta } from "@/components/ventas/ui/FloatingCta";
 
 /*
-  Landing de ventas — layout histórico de /ventas; la URL pública redirige a /.
+  Landing de ventas — servida como raíz pública (/).
 
   Reutiliza la identidad visual de Volver al Origen (la landing de registro):
   envolver el árbol en .mo-scope hace que hereden el fondo negro, la paleta neón

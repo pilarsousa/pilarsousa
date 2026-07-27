@@ -7,8 +7,8 @@ import { Footer } from "@/components/mision-origen/sections/Footer";
 import { MO_WHATSAPP_COMMUNITY_URL } from "@/lib/links";
 
 export const metadata: Metadata = {
-  title: "¡Bienvenido a bordo! — Misión Origen",
-  description: "Tu lugar en Misión Origen está confirmado.",
+  title: "¡Bienvenido a bordo! — Volver al Origen",
+  description: "Tu lugar en Volver al Origen está confirmado.",
   robots: { index: false }, // post-purchase page shouldn't be indexed
 };
 
@@ -22,7 +22,7 @@ function WhatsAppIcon({ className }: { className?: string }) {
 }
 
 /**
- * Post-purchase thank-you page for Misión Origen. A single no-scroll "mission
+ * Post-purchase thank-you page for Volver al Origen. A single no-scroll "mission
  * activated" screen in the landing's cyberpunk/neon key: a glowing seal with a
  * check, a confirmation message, and a WhatsApp community CTA. Lives inside the
  * (mision-origen) route group so it inherits .mo-scope (neon palette + fonts).

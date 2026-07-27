@@ -8,7 +8,7 @@ type ScrollArrowProps = {
 
 /**
  * Down-arrow inside a neon circle — recreated as a vector so it has a truly
- * transparent background, scales without pixelation, and uses the Misión Origen
+ * transparent background, scales without pixelation, and uses the Volver al Origen
  * palette instead of a raster asset.
  *
  * The circle carries a multicolor neon gradient (cyan → magenta → electric blue)

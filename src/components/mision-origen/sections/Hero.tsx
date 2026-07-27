@@ -114,7 +114,7 @@ export function Hero() {
                 con el h1, que es el que debe mandar. */}
             <Reveal>
               <p className="whitespace-nowrap font-display text-2xl leading-tight tracking-tight sm:text-3xl lg:max-w-[300px] lg:text-[1.75rem] filter-[drop-shadow(0_0_28px_rgba(249,2,129,0.35))]">
-                <NeonText variant="multi">Misión Origen</NeonText>
+                <NeonText variant="multi">Volver al Origen</NeonText>
               </p>
             </Reveal>
 

@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import PhoneInput, { isValidPhoneNumber, type Country } from "react-phone-number-input";
 /* Banderas empaquetadas como componentes React, sin peticiones externas —
-   mismo motivo que en el formulario de Misión Origen. */
+   mismo motivo que en el formulario de Volver al Origen. */
 import flags from "react-phone-number-input/flags";
 import "react-phone-number-input/style.css";
 import { Download } from "lucide-react";
@@ -21,7 +21,7 @@ import { REWARD_PDF } from "@/components/game/game-config";
   muestra una animación de verificación (un check neón que se dibuja) y el botón
   para descargar el PDF de recompensa (REWARD_PDF).
 
-  La validación de campos es idéntica a la de Misión Origen: email por regex,
+  La validación de campos es idéntica a la de Volver al Origen: email por regex,
   teléfono con isValidPhoneNumber en formato E.164.
 */
 
@@ -104,7 +104,7 @@ export function GameForm({ source = "game", onSuccess }: GameFormProps) {
       if (!res.ok) throw new Error(`register failed: ${res.status}`);
 
       // Avisar a la capa de analítica que se registró un lead real (GTM escucha
-      // este evento y dispara la conversión de Meta), igual que en Misión Origen.
+      // este evento y dispara la conversión de Meta), igual que en Volver al Origen.
       const cleanName = nombre.trim();
       const [firstName = "", ...restName] = cleanName.split(/\s+/);
       const lastName = restName.join(" ").toLowerCase();

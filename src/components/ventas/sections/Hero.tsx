@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { Container } from "@/components/shared/Container";
-import { NeonText } from "@/components/mision-origen/ui/NeonText";
 import { Reveal } from "@/components/mision-origen/ui/Reveal";
 import { VENTAS_CHECKOUT_URL } from "@/lib/links";
 import heroDesktop from "@/../public/mision-origen-venta/herosection.jpg";
@@ -11,7 +10,7 @@ import heroMobile from "@/../public/mision-origen-venta/herosection-mobile.jpg";
  *
  * Estructura del Bootcamp (foto a sangre de fondo, contenido en columna a la
  * izquierda sobre el hueco que deja la imagen, degradado de legibilidad sólo
- * tras el texto) con la identidad neón de Misión Origen y su foto de Pilar.
+ * tras el texto) con la identidad neón de Volver al Origen y su foto de Pilar.
  * Alto impacto: la imagen manda a pantalla completa y el copy se apoya sobre
  * ella, no en un bloque centrado sobre negro plano.
  *
@@ -82,10 +81,11 @@ export function Hero() {
               className="font-display font-semibold leading-[1.15] tracking-tight text-white text-[clamp(1.75rem,1.1rem+2vw,2.6rem)]"
             >
               Accede ahora al entrenamiento{" "}
-              {/* Color sólido cyan + halo por text-shadow, en vez de bg-clip
-                  animado: en Safari/iOS el bg-clip-text dejaba una sombra oscura
-                  fea. Así se ve limpio en todos los navegadores. */}
-              <span className="text-cyan [text-shadow:0_0_18px_rgba(40,191,241,0.6)]">
+              {/* Blanco con halo cálido/premium, en vez de cyan: mantiene el
+                  énfasis sin llevar la promesa hacia una estética tech que no
+                  representa a Metafísica Práctica. Evita bg-clip animado porque
+                  en Safari/iOS dejaba una sombra oscura fea. */}
+              <span className="text-white [text-shadow:0_0_10px_rgba(255,255,255,0.5),0_0_26px_rgba(255,244,214,0.34),0_0_44px_rgba(249,219,132,0.18)]">
                 Nº1 de Metafísica Práctica
               </span>{" "}
               para manifestar una vida extraordinaria.

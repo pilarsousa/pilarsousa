@@ -44,7 +44,7 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
-// ---- Misión Origen ----
+// ---- Volver al Origen ----
 
 /* Títulos y subtítulos — futurista, tecnológica, cyberpunk */
 const zenDots = localFont({

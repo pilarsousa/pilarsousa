@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { VENTAS_CHECKOUT_URL, WHATSAPP_SUPPORT_URL } from "@/lib/links";
+import { VENTAS_CHECKOUT_URL, VENTAS_WHATSAPP_SUPPORT_URL } from "@/lib/links";
 
 /*
   Fixed sales CTA + WhatsApp adapted from the Jhonny Lubo reference.
@@ -80,7 +80,7 @@ export function FloatingCta() {
       <div className="ventas-fixed-action ventas-fixed-action--whatsapp">
         <a
           className="ventas-fixed-button ventas-fixed-button--whatsapp"
-          href={WHATSAPP_SUPPORT_URL}
+          href={VENTAS_WHATSAPP_SUPPORT_URL}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Consultar por WhatsApp"

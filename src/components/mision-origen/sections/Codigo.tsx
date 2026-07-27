@@ -29,7 +29,7 @@ const CARDS = [
   {
     icon: regaloIcon,
     alt: "Regalo",
-    text: "Recibirás el Certificado Digital de Participación del Evento Misión Origen con Pilar Sousa.",
+    text: "Recibirás el Certificado Digital de Participación del Evento Volver al Origen con Pilar Sousa.",
   },
 ];
 
