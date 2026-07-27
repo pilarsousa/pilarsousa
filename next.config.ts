@@ -11,6 +11,18 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      /* lp.pilarsousa.es es el dominio de la landing de ventas. Quien entre a su
+         raíz se envía a /ventas, para que ese dominio muestre la landing de
+         ventas directamente (útil en pauta). El `has` de host acota el redirect
+         SOLO a ese dominio: registro.pilarsousa.es y el resto NO se ven
+         afectados y siguen sirviendo la raíz (Misión Origen). Temporal (307)
+         para no cachearlo por si el mapeo de dominios cambia. */
+      {
+        source: "/",
+        has: [{ type: "host", value: "lp.pilarsousa.es" }],
+        destination: "/ventas",
+        permanent: false,
+      },
       /* Misión Origen pasó a la raíz (/); antes vivía en /mision-origen y esa
          URL puede estar en campañas/pauta. Temporal (307, no se cachea) por si
          más adelante se quiere /mision-origen para otra cosa. */

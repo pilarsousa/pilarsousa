@@ -83,15 +83,6 @@ export function Precio() {
 
   return (
     <section id="precio" className="relative overflow-hidden bg-surface py-section">
-      {/* Glow ambiental cálido bajo el óvalo, como el original */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 -z-0 h-[500px] w-[700px] -translate-x-1/2 -translate-y-1/2 opacity-60 blur-3xl"
-        style={{
-          background:
-            "radial-gradient(ellipse 50% 55% at 50% 60%, rgba(135,36,120,0.5) 0%, rgba(249,2,129,0.22) 45%, transparent 72%)",
-        }}
-      />
 
       <Container className="relative">
         <div className="flex flex-col items-center gap-10">
@@ -146,11 +137,15 @@ export function Precio() {
 
                   {/* Toggle destacado: dos opciones grandes; la activa se
                       resalta con la píldora deslizante. Cambia precio + CTA. */}
-                  <div className="relative flex w-full max-w-[220px] rounded-full border border-white/20 bg-black/60 p-1">
+                  <div className="relative isolate flex w-full max-w-[236px] overflow-hidden rounded-full border border-cyan/35 bg-[radial-gradient(120%_140%_at_50%_-30%,rgba(174,240,254,0.22),transparent_55%),linear-gradient(180deg,rgba(255,255,255,0.09),rgba(0,0,0,0.7))] p-1 shadow-[0_0_0_1px_rgba(174,240,254,0.08),0_0_28px_rgba(40,191,241,0.24),inset_0_1px_0_rgba(255,255,255,0.16)]">
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 bg-linear-to-r from-transparent via-white/20 to-transparent animate-sheen"
+                    />
                     {/* Píldora deslizante que marca la opción activa */}
                     <span
                       aria-hidden
-                      className={`absolute inset-y-1 w-[calc(50%-0.25rem)] rounded-full bg-cyan/25 shadow-[0_0_16px_rgba(40,191,241,0.4)] transition-transform duration-300 ${
+                      className={`absolute inset-y-1 left-1 w-[calc(50%-0.5rem)] rounded-full border border-white/45 bg-[linear-gradient(110deg,rgba(40,191,241,0.95)_0%,rgba(174,240,254,0.95)_45%,rgba(255,255,255,0.92)_58%,rgba(40,191,241,0.82)_100%)] shadow-[0_0_18px_rgba(174,240,254,0.72),0_0_34px_rgba(40,191,241,0.38),inset_0_1px_0_rgba(255,255,255,0.75)] transition-transform duration-300 ease-out ${
                         plan === "cuotas" ? "translate-x-[calc(100%+0.5rem)]" : "translate-x-0"
                       }`}
                     />
@@ -158,7 +153,7 @@ export function Precio() {
                       type="button"
                       onClick={() => setPlan("unico")}
                       className={`relative z-10 flex-1 cursor-pointer rounded-full py-2 font-sans text-xs font-bold uppercase tracking-[0.06em] transition-colors duration-300 ${
-                        plan === "unico" ? "text-cyan" : "text-white/55"
+                        plan === "unico" ? "text-black [text-shadow:0_1px_10px_rgba(255,255,255,0.75)]" : "text-white/60 hover:text-white"
                       }`}
                     >
                       Pago único
@@ -167,7 +162,7 @@ export function Precio() {
                       type="button"
                       onClick={() => setPlan("cuotas")}
                       className={`relative z-10 flex-1 cursor-pointer rounded-full py-2 font-sans text-xs font-bold uppercase tracking-[0.06em] transition-colors duration-300 ${
-                        plan === "cuotas" ? "text-cyan" : "text-white/55"
+                        plan === "cuotas" ? "text-black [text-shadow:0_1px_10px_rgba(255,255,255,0.75)]" : "text-white/60 hover:text-white"
                       }`}
                     >
                       2 cuotas
@@ -177,7 +172,7 @@ export function Precio() {
                   {/* Precio (según el plan) */}
                   <div className="flex flex-col items-center">
                     <span className="font-sans text-xs font-light text-white/70">
-                      {plan === "cuotas" ? "En 2 cuotas de" : "Pago único de"}
+                      {plan === "cuotas" ? "En 2 cuotas de" : "Pago único"}
                     </span>
                     <span className="font-display text-4xl font-bold sm:text-5xl">
                       <NeonText variant="cyan">{precio}</NeonText>

@@ -82,7 +82,13 @@ export function Hero() {
               className="font-display font-semibold leading-[1.15] tracking-tight text-white text-[clamp(1.75rem,1.1rem+2vw,2.6rem)]"
             >
               Accede ahora al entrenamiento{" "}
-              <NeonText variant="cyan">nº1 de Metafísica Práctica</NeonText> para
+              <NeonText
+                variant="cyan"
+                className="brightness-125 contrast-125 drop-shadow-[0_0_16px_rgba(174,240,254,0.72)]"
+              >
+                nº1 de Metafísica Práctica
+              </NeonText>{" "}
+              para
               manifestar una vida extraordinaria en tan solo 40 días.
             </h1>
           </Reveal>

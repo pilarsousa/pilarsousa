@@ -7,14 +7,13 @@
 export const CHECKOUT_URL = "https://link.fastpaydirect.com/payment-link/6a429e26a655fa0b802a1cde";
 
 // Checkout de la landing de ventas (/ventas).
-// Dos planes: pago único y en cuotas. Cuando tengas los links reales de cada
-// uno, pegalos acá — mientras estén vacíos el CTA no navega a ningún lado.
-export const VENTAS_CHECKOUT_UNICO = ""; // pago único (1 cuota)
-export const VENTAS_CHECKOUT_CUOTAS = ""; // pago en 2 cuotas
+// Two sales plans: one-time payment and 2 installments.
+export const VENTAS_CHECKOUT_UNICO = "https://link.fastpaydirect.com/payment-link/6a53c878a655fa0b802a3e06"; // one-time payment
+export const VENTAS_CHECKOUT_CUOTAS = "https://link.fastpaydirect.com/payment-link/6a53c8e2a655fa0b802a3e07"; // 2 installments
 
-// Precios de cada plan — PLACEHOLDER, cambialos por los reales.
-export const VENTAS_PRECIO_UNICO = "XXX €";
-export const VENTAS_PRECIO_CUOTAS = "2 × XX €";
+// Prices for each sales plan.
+export const VENTAS_PRECIO_UNICO = "597 €";
+export const VENTAS_PRECIO_CUOTAS = "297 €";
 
 // Alias legacy: el CTA por defecto (flotante, hero) apunta al pago único.
 export const VENTAS_CHECKOUT_URL = VENTAS_CHECKOUT_UNICO;

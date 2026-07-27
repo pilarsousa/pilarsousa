@@ -1,8 +1,6 @@
 import { Container } from "@/components/shared/Container";
 import { NeonText } from "@/components/mision-origen/ui/NeonText";
 import { Reveal } from "@/components/mision-origen/ui/Reveal";
-import { Badge } from "@/components/ventas/ui/Badge";
-import { Target } from "lucide-react";
 
 /*
   Sección "¿Qué vas a lograr?".
@@ -36,10 +34,7 @@ export function QueVasALograr() {
     <section id="que-vas-a-lograr" className="relative bg-background py-section">
       <Container>
         <div className="flex flex-col gap-12">
-          <div className="flex flex-col items-center gap-4 text-center">
-            <Reveal>
-              <Badge icon={Target}>Qué vas a lograr</Badge>
-            </Reveal>
+          <div className="flex flex-col items-center text-center">
             <Reveal delay={0.1}>
               <h2 className="max-w-3xl font-display text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
                 Esto es lo que vas a{" "}

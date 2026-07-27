@@ -4,16 +4,18 @@ import { useEffect, useState } from "react";
 import { VENTAS_CHECKOUT_URL, WHATSAPP_SUPPORT_URL } from "@/lib/links";
 
 /*
-  CTA + WhatsApp anclados abajo a la derecha — adaptado de la landing de
-  referencia. El botón de acceso lleva el halo neón (misma clase .neon-btn que
-  el resto) y el de WhatsApp su glow verde. Aparecen tras scrollear un poco
-  (para no tapar el hero) y quedan fijos.
+  Fixed sales CTA + WhatsApp adapted from the Jhonny Lubo reference.
+  The visual effect lives in globals.css as real CSS, mirroring the Elementor
+  HTML/CSS structure instead of rebuilding it with Tailwind utilities.
 */
 
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className={className}>
-      <path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.748-.983v.376zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
+    <svg viewBox="0 0 33 32" fill="none" aria-hidden className={className}>
+      <path
+        d="M16.5249 2.36328H16.5181C8.99886 2.36328 2.88428 8.47957 2.88428 16.0005C2.88428 18.9836 3.8457 21.7486 5.48046 23.9936L3.78092 29.0598L9.02272 27.3841C11.1791 28.8126 13.7514 29.6377 16.5249 29.6377C24.0441 29.6377 30.1587 23.5197 30.1587 16.0005C30.1587 8.48127 24.0441 2.36328 16.5249 2.36328ZM24.46 21.6207C24.131 22.5498 22.8253 23.3203 21.7837 23.5453C21.0712 23.697 20.1405 23.818 17.0073 22.5191C12.9997 20.8587 10.4188 16.7863 10.2177 16.5221C10.0251 16.2579 8.59827 14.3657 8.59827 12.4088C8.59827 10.4518 9.59208 9.49895 9.99267 9.08983C10.3217 8.75402 10.8655 8.6006 11.3871 8.6006C11.5558 8.6006 11.7075 8.60912 11.8439 8.61594C12.2445 8.63299 12.4457 8.65685 12.7099 9.28928C13.0389 10.0819 13.8401 12.0389 13.9355 12.24C14.0327 12.4412 14.1299 12.7139 13.9935 12.9781C13.8656 13.2509 13.7531 13.3719 13.552 13.6037C13.3508 13.8356 13.1599 14.0129 12.9588 14.2617C12.7747 14.4782 12.5667 14.7101 12.7985 15.1107C13.0304 15.5027 13.8315 16.8102 15.0112 17.8603C16.5334 19.2155 17.7676 19.6484 18.2091 19.8325C18.5381 19.9689 18.9302 19.9365 19.1705 19.6808C19.4756 19.3518 19.8524 18.8063 20.2359 18.2694C20.5087 17.8841 20.853 17.8364 21.2144 17.9728C21.5826 18.1006 23.531 19.0637 23.9316 19.2632C24.3322 19.4643 24.5964 19.5598 24.6936 19.7286C24.789 19.8973 24.789 20.69 24.46 21.6207Z"
+        fill="white"
+      />
     </svg>
   );
 }
@@ -22,7 +24,6 @@ export function FloatingCta() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    // Aparece tras pasar el primer viewport, para no competir con el hero.
     const onScroll = () => setVisible(window.scrollY > window.innerHeight * 0.8);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -30,33 +31,30 @@ export function FloatingCta() {
   }, []);
 
   return (
-    <div
-      className={`fixed bottom-4 right-4 z-90 flex items-center gap-3 transition-all duration-500 sm:bottom-6 sm:right-6 ${
-        visible
-          ? "pointer-events-auto translate-y-0 opacity-100"
-          : "pointer-events-none translate-y-6 opacity-0"
-      }`}
-    >
-      {/* WhatsApp — algo más chico en mobile */}
-      <a
-        href={WHATSAPP_SUPPORT_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Consultar por WhatsApp"
-        className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,#25D366_0%,#128C7E_100%)] text-white shadow-[0_8px_24px_-4px_rgba(37,211,102,0.7)] transition-transform duration-300 hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366] sm:size-14"
-      >
-        <WhatsAppIcon className="size-6 sm:size-7" />
-      </a>
+    <div className={`ventas-fixed-cta ${visible ? "is-visible" : ""}`}>
+      <div className="ventas-fixed-action ventas-fixed-action--main">
+        <a
+          className="ventas-fixed-button ventas-fixed-button--main"
+          href={VENTAS_CHECKOUT_URL || undefined}
+        >
+          <span className="ventas-fixed-button__label">Acceder ahora</span>
+        </a>
+        <div className="ventas-borde-hueco" aria-hidden />
+      </div>
 
-      {/* Acceder — en mobile más compacto (menos padding y texto) para no
-          desbordar junto al botón de WhatsApp. */}
-      <a
-        href={VENTAS_CHECKOUT_URL || undefined}
-        className="neon-btn cursor-pointer flex h-12 items-center justify-center whitespace-nowrap rounded-full px-4 font-sans text-xs font-bold uppercase tracking-[0.04em] text-white transition-all duration-300 ease-out active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:h-14 sm:px-6 sm:text-sm sm:tracking-[0.06em]"
-      >
-        Acceder
-        <span className="hidden sm:inline">&nbsp;ahora</span>
-      </a>
+      <div className="ventas-fixed-action ventas-fixed-action--whatsapp">
+        <a
+          className="ventas-fixed-button ventas-fixed-button--whatsapp"
+          href={WHATSAPP_SUPPORT_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Consultar por WhatsApp"
+          title="Chatear por WhatsApp"
+        >
+          <WhatsAppIcon className="ventas-fixed-whatsapp-icon" />
+        </a>
+        <div className="ventas-borde-hueco2" aria-hidden />
+      </div>
     </div>
   );
 }

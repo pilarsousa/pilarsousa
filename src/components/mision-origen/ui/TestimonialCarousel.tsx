@@ -96,11 +96,11 @@ export function TestimonialCarousel() {
           <li
             key={i}
             className={cn(
-              "flex h-80 w-[80vw] max-w-[360px] shrink-0 snap-center flex-col rounded-2xl border border-cyan/15 bg-background/40 p-6 text-left shadow-[0_20px_50px_-20px_rgba(0,0,0,0.6)] backdrop-blur-sm transition-[transform,opacity] duration-500 ease-out sm:w-[340px]",
+              "flex h-80 w-[80vw] max-w-[360px] shrink-0 snap-center flex-col rounded-2xl border border-cyan/25 bg-[radial-gradient(90%_70%_at_20%_0%,rgba(40,191,241,0.12),transparent_60%),radial-gradient(90%_70%_at_100%_100%,rgba(249,2,129,0.09),transparent_60%),linear-gradient(180deg,rgba(12,12,16,0.86),rgba(0,0,0,0.72))] p-6 text-left shadow-[0_22px_65px_-34px_rgba(40,191,241,0.75),0_16px_50px_-32px_rgba(249,2,129,0.65),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-sm transition-[transform,opacity,box-shadow,border-color] duration-500 ease-out sm:w-[340px]",
               // En desktop, la card centrada se agranda y las demás se atenúan.
               i === centered
-                ? "lg:scale-105 lg:opacity-100"
-                : "lg:scale-90 lg:opacity-60",
+                ? "lg:scale-105 lg:border-cyan/45 lg:opacity-100 lg:shadow-[0_28px_80px_-32px_rgba(40,191,241,0.95),0_18px_60px_-34px_rgba(249,2,129,0.7),0_0_0_1px_rgba(174,240,254,0.08),inset_0_1px_0_rgba(255,255,255,0.12)]"
+                : "lg:scale-90 lg:border-white/10 lg:opacity-60",
             )}
           >
             {/* Header — avatar + name + date */}

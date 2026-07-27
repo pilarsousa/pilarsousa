@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { StarBox } from "@/components/mision-origen/ui/StarRating";
+import { cn } from "@/lib/cn";
 import trustpilotLogo from "@/../public/Testimonios/logo-trustpilot.png";
 
 /**
@@ -23,9 +24,14 @@ const DISTRIBUTION: Array<{ label: string; pct: number }> = [
 
 const PROFILE_URL = "https://es.trustpilot.com/review/pilarsousa.es";
 
-export function TrustScoreCard() {
+export function TrustScoreCard({ className }: { className?: string } = {}) {
   return (
-    <div className="mx-auto w-full max-w-sm rounded-2xl border border-cyan/15 bg-background/60 p-6 text-foreground shadow-[0_20px_50px_-20px_rgba(0,0,0,0.6)] backdrop-blur-sm">
+    <div
+      className={cn(
+        "mx-auto w-full rounded-2xl border border-cyan/15 bg-background/60 p-6 text-foreground shadow-[0_20px_50px_-20px_rgba(0,0,0,0.6)] backdrop-blur-sm",
+        className ?? "max-w-sm",
+      )}
+    >
       {/* Trustpilot logo header — the brand recognition that carries the proof. */}
       {/* Logo ya adaptado para fondo oscuro (estrella neon + texto claro). */}
       <Image
