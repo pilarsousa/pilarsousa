@@ -19,27 +19,31 @@ import { cn } from "@/lib/cn";
 const FAQS: Array<{ q: string; a: string }> = [
   {
     q: "¿Cuánto dura Volver al Origen?",
-    a: "El entrenamiento se desarrolla a lo largo de 40 días, con acceso completo al material desde el primer momento.",
+    a: "40 días de entrenamiento práctico en directo y 90 días de acompañamiento para integrar y sostener tu transformación.",
   },
   {
     q: "¿Necesito experiencia previa en metafísica?",
-    a: "No. El programa está diseñado para llevarte paso a paso, tengas o no conocimientos previos.",
+    a: "No. Está diseñado tanto para principiantes como para personas que ya llevan tiempo en el desarrollo espiritual.",
   },
   {
     q: "¿Las sesiones quedan grabadas?",
-    a: "Sí. Cada sesión en vivo queda grabada, así que podés verla cuando quieras y avanzar a tu ritmo.",
+    a: "Sí. Todas las sesiones quedan grabadas por 3 meses para que puedas verlas cuando quieras.",
   },
   {
-    q: "¿Cómo accedo al contenido después de comprar?",
-    a: "Al confirmar tu compra recibirás por correo los accesos a la plataforma y a la comunidad privada (revisá spam o promociones).",
+    q: "¿Cómo accedo después de comprar?",
+    a: "Recibirás un correo con todos los accesos a la plataforma, las sesiones y la comunidad privada.",
   },
   {
     q: "¿Hay acompañamiento o quedo sola?",
-    a: "Cuentas con sesiones en vivo con Pilar y una comunidad privada donde acompañamos tu proceso durante todo el camino.",
+    a: "No estarás sola. Tendrás acompañamiento durante 90 días, sesiones en directo y una comunidad privada para resolver tus dudas a diario.",
   },
   {
     q: "¿Puedo hacerlo desde cualquier país?",
-    a: "Sí. Volver al Origen es 100% online, así que podés participar desde donde estés — solo necesitás conexión a internet.",
+    a: "Sí. Solo necesitas conexión a Internet. Además, las sesiones quedan grabadas para adaptarse a tu horario.",
+  },
+  {
+    q: "¿Puedo pagar a plazos? ¿Cuándo se cobra la siguiente cuota?",
+    a: "Sí. Si eliges el pago a plazos, la siguiente cuota se cobrará automáticamente el mismo día del mes siguiente.",
   },
 ];
 

@@ -82,20 +82,19 @@ export function Hero() {
               className="font-display font-semibold leading-[1.15] tracking-tight text-white text-[clamp(1.75rem,1.1rem+2vw,2.6rem)]"
             >
               Accede ahora al entrenamiento{" "}
-              <NeonText
-                variant="cyan"
-                className="brightness-125 contrast-125 drop-shadow-[0_0_16px_rgba(174,240,254,0.72)]"
-              >
-                nº1 de Metafísica Práctica
-              </NeonText>{" "}
-              para
-              manifestar una vida extraordinaria en tan solo 40 días.
+              {/* Color sólido cyan + halo por text-shadow, en vez de bg-clip
+                  animado: en Safari/iOS el bg-clip-text dejaba una sombra oscura
+                  fea. Así se ve limpio en todos los navegadores. */}
+              <span className="text-cyan [text-shadow:0_0_18px_rgba(40,191,241,0.6)]">
+                Nº1 de Metafísica Práctica
+              </span>{" "}
+              para manifestar una vida extraordinaria.
             </h1>
           </Reveal>
 
           {/* ── Subtítulo ── */}
           <Reveal delay={0.18}>
-            <p className="mt-5 max-w-xl font-sans font-light leading-relaxed text-white/80 text-[clamp(1rem,0.95rem+0.3vw,1.125rem)]">
+            <p className="mt-5 max-w-xl font-sans font-medium leading-relaxed text-white/85 text-[clamp(1.0625rem,1rem+0.3vw,1.125rem)]">
               Un entrenamiento práctico donde aprenderás a transformar tu
               identidad para manifestar y sostener una nueva realidad en todas
               las áreas de tu vida.

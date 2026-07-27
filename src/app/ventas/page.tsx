@@ -13,9 +13,9 @@ import { Footer } from "@/components/mision-origen/sections/Footer";
 
   Orden persuasivo:
     1. Hero (promesa + CTA)
-    2. Para quién es este producto (cualifica)
-    3. Qué vas a lograr (resultados)
-    4. Oferta irresistible (valor + mockup)
+    2. Oferta / todo lo que recibes (valor + mockup)
+    3. Para quién es este producto (cualifica)
+    4. Qué vas a lograr (resultados)
     5. Testimonios (prueba social)
     6. Resumen y precio (cierre + CTA)
     7. Quién es Pilar (autoridad)
@@ -28,9 +28,9 @@ export default function VentasPage() {
   return (
     <main>
       <Hero />
+      <Oferta />
       <ParaQuien />
       <QueVasALograr />
-      <Oferta />
       <Testimonios />
       <Precio />
       <Pilar />

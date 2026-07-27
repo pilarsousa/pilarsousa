@@ -9,6 +9,15 @@ import { VENTAS_CHECKOUT_URL, WHATSAPP_SUPPORT_URL } from "@/lib/links";
   HTML/CSS structure instead of rebuilding it with Tailwind utilities.
 */
 
+const FLOATING_CTA_SECTION_IDS = [
+  "para-quien",
+  "que-vas-a-lograr",
+  "oferta",
+  "testimonios",
+  "pilar",
+  "faq",
+] as const;
+
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 33 32" fill="none" aria-hidden className={className}>
@@ -24,10 +33,36 @@ export function FloatingCta() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > window.innerHeight * 0.8);
-    onScroll();
+    let ticking = false;
+
+    const updateVisibility = () => {
+      ticking = false;
+
+      const viewportAnchor = window.innerHeight * 0.55;
+      const isInKeySection = FLOATING_CTA_SECTION_IDS.some((id) => {
+        const section = document.getElementById(id);
+        if (!section) return false;
+
+        const { top, bottom } = section.getBoundingClientRect();
+        return top <= viewportAnchor && bottom >= viewportAnchor;
+      });
+
+      setVisible(isInKeySection);
+    };
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(updateVisibility);
+    };
+
+    updateVisibility();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   return (

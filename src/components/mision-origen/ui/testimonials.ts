@@ -54,25 +54,18 @@ export const TESTIMONIALS: Testimonial[] = [
     photo: card4,
   },
   {
-    name: "Alondra Lázaro Cordova",
-    text: "Volver al origen fue una experiencia maravillosa, me hizo ver y ser conciente de la paja mental que mantenía en mi zona de confort, gracias a Pilar puedo ser capaz de identificarme con el ser abundante, infinito, presente y conciente, que toda expansión viene de la incomodidad, que el sentirse incómodo no es malo sino necesario para crecer. 🥰🔥❤️",
-    stars: 4,
-    date: "19 Abr. 2026",
-    photo: null,
-  },
-  {
-    name: "THE GABO GM",
-    text: "Es un programa excelente, la verdad te hacen ver las cosas desde dentro, desde la verdad, sin embargo se me hace muy rápido, el hecho de que haya 2 codigos por semana es mucho, es mucha información para poner en práctica y para digerirla. Siento que deberia ser uno por semana. Sin embargo estoy muy agradecido por conocer a Pilar y aprender tantas cosas.",
-    stars: 4,
-    date: "29 May. 2026",
-    photo: card6,
-  },
-  {
     name: "Carolina Zepeda",
     text: "Ha sido un camino de autodescubrimiento, de darme cuenta que me sentía bloqueada y estancada por el simple hecho de estar interfiriendo con mi creador. Me encanta como Pilar nos fue llevando de la mano con una coherencia increíble, viviendo los códigos con nosotros y experimentándolos conforme íbamos avanzando, demostrando en carne propia que si funcionan. Me siento súper agradecida de ser parte de la primera edición. De ahora en adelante viviré los retos de mi vida no con miedo sino con la mirada en Dios, dejaré de tomarme la vida tan enserio. No venimos a sufrir ni a sanar, venimos a recordar quienes somos ✨",
     stars: 5,
     date: "30 May. 2026",
     photo: card7,
+  },
+  {
+    name: "Alondra Lázaro Cordova",
+    text: "Volver al origen fue una experiencia maravillosa, me hizo ver y ser conciente de la paja mental que mantenía en mi zona de confort, gracias a Pilar puedo ser capaz de identificarme con el ser abundante, infinito, presente y conciente, que toda expansión viene de la incomodidad, que el sentirse incómodo no es malo sino necesario para crecer. 🥰🔥❤️",
+    stars: 4,
+    date: "19 Abr. 2026",
+    photo: null,
   },
   {
     name: "Germán Araujo",
@@ -87,6 +80,13 @@ export const TESTIMONIALS: Testimonial[] = [
     stars: 5,
     date: "16 Jun. 2026",
     photo: null,
+  },
+  {
+    name: "THE GABO GM",
+    text: "Es un programa excelente, la verdad te hacen ver las cosas desde dentro, desde la verdad, sin embargo se me hace muy rápido, el hecho de que haya 2 codigos por semana es mucho, es mucha información para poner en práctica y para digerirla. Siento que deberia ser uno por semana. Sin embargo estoy muy agradecido por conocer a Pilar y aprender tantas cosas.",
+    stars: 4,
+    date: "29 May. 2026",
+    photo: card6,
   },
   {
     name: "Francesca",

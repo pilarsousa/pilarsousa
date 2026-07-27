@@ -118,22 +118,14 @@ export function Precio() {
                   className="pointer-events-none w-[300px] select-none sm:w-[360px]"
                 />
 
-                {/* Aro luminoso animado alrededor del óvalo */}
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute left-1/2 top-1/2 h-[80%] w-[86%] -translate-x-1/2 -translate-y-1/2"
-                >
-                  <div className="borde-hueco h-full" />
-                </div>
-
                 {/* Contenido sobre el óvalo */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-10 py-8">
-                  <p className="text-center font-display text-base font-semibold tracking-tight">
+                  <p className="text-center font-display text-xl font-semibold tracking-tight sm:text-2xl">
                     <NeonText variant="multi">Misión Origen</NeonText>
                   </p>
 
                   <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3.5 py-1.5 font-sans text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-white/80">
-                    Actualizable y vitalicio
+                    Acceso por 3 meses
                   </span>
 
                   {/* Toggle destacado: dos opciones grandes; la activa se
@@ -195,7 +187,7 @@ export function Precio() {
                   <Image
                     src={logosPago}
                     alt="Métodos de pago aceptados"
-                    className="h-auto w-[180px] opacity-80"
+                    className="h-auto w-[150px] opacity-80"
                   />
                 </div>
               </div>
