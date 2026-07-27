@@ -31,7 +31,7 @@ const LOGROS = [
 
 export function QueVasALograr() {
   return (
-    <section id="que-vas-a-lograr" className="relative bg-background py-section">
+    <section id="que-vas-a-lograr" className="relative bg-void py-section">
       <Container>
         <div className="flex flex-col gap-12">
           <div className="flex flex-col items-center text-center">
