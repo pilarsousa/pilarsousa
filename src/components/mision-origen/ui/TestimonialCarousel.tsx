@@ -149,9 +149,9 @@ export function TestimonialCarousel() {
           type="button"
           onClick={() => scrollByCards(-1)}
           aria-label="Testimonio anterior"
-          className="group relative flex size-11 cursor-pointer rounded-full p-px bg-[conic-gradient(from_var(--border-angle),transparent_0%,var(--color-cyan)_15%,var(--color-neon-pink)_25%,transparent_40%,transparent_100%)] animate-border-spin focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+          className="group relative flex size-11 cursor-pointer rounded-full border border-cyan/40 p-px bg-[conic-gradient(from_var(--border-angle),transparent_0%,var(--color-cyan)_15%,var(--color-neon-pink)_25%,transparent_40%,transparent_100%)] shadow-[0_0_0_1px_rgba(40,191,241,0.22),0_0_18px_rgba(40,191,241,0.14)] animate-border-spin focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
         >
-          <span className="flex size-full items-center justify-center rounded-full bg-background text-cyan transition-colors group-hover:bg-surface">
+          <span className="flex size-full items-center justify-center rounded-full border border-white/10 bg-background text-cyan transition-colors group-hover:bg-surface">
             <ChevronLeft size={20} />
           </span>
         </button>
@@ -159,9 +159,9 @@ export function TestimonialCarousel() {
           type="button"
           onClick={() => scrollByCards(1)}
           aria-label="Testimonio siguiente"
-          className="group relative flex size-11 cursor-pointer rounded-full p-px bg-[conic-gradient(from_var(--border-angle),transparent_0%,var(--color-cyan)_15%,var(--color-neon-pink)_25%,transparent_40%,transparent_100%)] animate-border-spin focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+          className="group relative flex size-11 cursor-pointer rounded-full border border-cyan/40 p-px bg-[conic-gradient(from_var(--border-angle),transparent_0%,var(--color-cyan)_15%,var(--color-neon-pink)_25%,transparent_40%,transparent_100%)] shadow-[0_0_0_1px_rgba(40,191,241,0.22),0_0_18px_rgba(40,191,241,0.14)] animate-border-spin focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
         >
-          <span className="flex size-full items-center justify-center rounded-full bg-background text-cyan transition-colors group-hover:bg-surface">
+          <span className="flex size-full items-center justify-center rounded-full border border-white/10 bg-background text-cyan transition-colors group-hover:bg-surface">
             <ChevronRight size={20} />
           </span>
         </button>
