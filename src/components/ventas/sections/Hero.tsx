@@ -3,8 +3,8 @@ import { Container } from "@/components/shared/Container";
 import { NeonText } from "@/components/mision-origen/ui/NeonText";
 import { Reveal } from "@/components/mision-origen/ui/Reveal";
 import { VENTAS_CHECKOUT_URL } from "@/lib/links";
-import heroDesktop from "@/../public/mision-origen/fondo-hero-3.jpg";
-import heroMobile from "@/../public/mision-origen/fondo-hero-movil-3.jpg";
+import heroDesktop from "@/../public/mision-origen-venta/herosection.jpg";
+import heroMobile from "@/../public/mision-origen-venta/herosection-mobile.jpg";
 
 /**
  * Sección 1 — Hero de la landing de ventas.

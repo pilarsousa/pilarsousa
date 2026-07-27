@@ -1,0 +1,81 @@
+import { Container } from "@/components/shared/Container";
+import { NeonText } from "@/components/mision-origen/ui/NeonText";
+import { Reveal } from "@/components/mision-origen/ui/Reveal";
+
+/*
+  Sección "Oferta irresistible".
+
+  Muestra todo lo que incluye el programa con una imagen grande del packaging
+  (libros, bonus, plataforma, sesiones) para maximizar el valor percibido antes
+  del precio. Copy y lista PLACEHOLDER — editá con lo real.
+
+  El mockup todavía no existe: se deja un recuadro marcado. Cuando tengas el
+  arte, colocalo en public/ventas/mockup.png (o .jpg), importalo con next/image
+  y reemplazá el recuadro punteado por el <Image />.
+*/
+
+const INCLUYE = [
+  "Acceso completo al entrenamiento de 40 días",
+  "Sistema práctico paso a paso de manifestación",
+  "Sesiones en vivo con Pilar Sousa",
+  "Comunidad privada de acompañamiento",
+  "Material descargable y recursos de apoyo",
+  "Certificado de participación",
+] as const;
+
+export function Oferta() {
+  return (
+    <section id="oferta" className="bg-surface py-section">
+      <Container>
+        <div className="flex flex-col items-center gap-10 text-center">
+          <div className="flex flex-col items-center gap-4">
+            <Reveal>
+              <p className="font-sans section-eyebrow text-cyan">La oferta</p>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <h2 className="max-w-3xl font-display text-3xl font-semibold leading-snug text-foreground sm:text-4xl">
+                Todo lo que{" "}
+                <NeonText variant="cyan">recibes</NeonText> al acceder hoy
+              </h2>
+            </Reveal>
+          </div>
+
+          {/* Mockup del packaging — PLACEHOLDER */}
+          <Reveal delay={0.15}>
+            <div className="w-full max-w-4xl">
+              <div className="flex aspect-video w-full items-center justify-center rounded-2xl border border-dashed border-white/20 bg-white/3 px-6 text-center">
+                <p className="font-sans text-sm font-light text-white/40 sm:text-base">
+                  [ Mockup del programa — pendiente del arte.
+                  <br className="hidden sm:block" /> Reemplazar por la imagen en{" "}
+                  <span className="font-mono text-white/55">
+                    public/ventas/mockup
+                  </span>{" "}
+                  ]
+                </p>
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Lista de lo que incluye */}
+          <Reveal delay={0.2}>
+            <ul className="mx-auto grid max-w-2xl grid-cols-1 gap-3 text-left sm:grid-cols-2">
+              {INCLUYE.map((item, i) => (
+                <li
+                  key={i}
+                  className="flex items-start gap-3 rounded-sm border border-cyan/15 bg-background/40 px-4 py-3"
+                >
+                  <span aria-hidden className="mt-0.5 text-cyan">
+                    ✦
+                  </span>
+                  <span className="font-sans text-sm font-light leading-snug text-foreground/85 sm:text-base">
+                    {item}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </div>
+      </Container>
+    </section>
+  );
+}
