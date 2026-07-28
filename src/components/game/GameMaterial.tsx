@@ -5,15 +5,16 @@ import botonAtras from "@/../public/game/seccions/section-2/card-unica/boton-atr
 import descarga from "@/../public/game/seccions/section-2/card-unica/descarga.png";
 import gema1 from "@/../public/game/seccions/section-2/card-unica/img-gema-1.png";
 import gema2 from "@/../public/game/seccions/section-2/card-unica/img-gema-2.png";
+import previewModal2 from "@/../public/game/seccions/section-2/card-unica/prevew-modal-2.png";
 import { ARCHIVO_OCULTO_PDF } from "@/components/game/game-config";
 
 /*
   Material de la 2ª card ("Archivo Oculto"), visible tras completar el registro
   (o al volver, si ya se registró antes — ver GameGate).
 
-  Replica la card ornamental de la 1ª card (card-unica-sf.png con el PDF
-  desbloqueado de fondo, gemas en los huecos y el botón de descarga encastrado en su
-  socket), pero apuntando al PDF "El Archivo Oculto — Código 6 Desclasificado" y
+  Replica la card ornamental de la 1ª card (card-unica-sf.png con la preview del
+  PDF desbloqueado de fondo, gemas en los huecos y el botón de descarga encastrado
+  en su socket), pero apuntando al PDF "El Archivo Oculto — Código 6 Desclasificado" y
   SIN el comportamiento de modal: aquí es contenido inline. El botón atrás vive
   dentro del socket superior izquierdo de la card, igual que en la 1ª card.
 
@@ -30,18 +31,17 @@ export function GameMaterial() {
 
       {/* La card ornamental */}
       <div className="relative aspect-[1086/1448] w-[86vw] md:h-[82vh] md:w-auto">
-        {/* PDF desbloqueado como fondo, recortado dentro de la ventana central. */}
+        {/* Preview estática del PDF, recortada dentro de la ventana central. */}
         <div className="pointer-events-none absolute left-[20.4%] right-[19.8%] top-[21.8%] bottom-[10.9%] overflow-hidden bg-white">
-          <object
-            data={`${ARCHIVO_OCULTO_PDF}#toolbar=0&navpanes=0&scrollbar=0&page=1&view=FitH`}
-            type="application/pdf"
-            aria-label="Vista previa del Archivo Oculto"
-            className="h-full w-full border-0"
-          >
-            <div className="flex h-full w-full items-center justify-center bg-[radial-gradient(circle_at_50%_20%,rgba(40,191,241,0.18),transparent_48%),#07070b] px-5 text-center font-[family-name:var(--font-pixelify)] text-[clamp(10px,1.5vh,14px)] font-bold uppercase leading-relaxed tracking-[0.06em] text-white">
-              El Archivo Oculto — Código 6 Desclasificado
-            </div>
-          </object>
+          <Image
+            src={previewModal2}
+            alt=""
+            aria-hidden
+            fill
+            priority
+            sizes="50vh"
+            className="object-cover object-top"
+          />
         </div>
 
         {/* Gemas que rellenan los huecos vacíos. */}
