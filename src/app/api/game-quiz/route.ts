@@ -2,7 +2,7 @@
   Endpoint del cuestionario de /game/form.
 
   Valida el payload (Gmail + respuestas) y lo guarda en Supabase, tabla
-  `Respuestas_Game` (columnas: gmail text, respuesta_1 … respuesta_6 text,
+  `Respuestas_Game` (columnas: gmail text, respuesta_1 … respuesta_N text,
   created_at). Cada respuesta se mapea a su columna según el ORDEN de
   QUIZ_QUESTIONS: la 1ª pregunta → respuesta_1, la 2ª → respuesta_2, etc.
 
@@ -71,10 +71,10 @@ export async function POST(request: Request) {
   }
 
   // Mapear cada respuesta a su columna respuesta_N según el orden de las
-  // preguntas. La tabla tiene 6 columnas (respuesta_1 … respuesta_6); si una
-  // pregunta no fue respondida queda null.
+  // preguntas configuradas. Supabase debe tener esas columnas creadas
+  // (hoy: respuesta_1 … respuesta_7); si una pregunta no fue respondida queda null.
   const row: Record<string, string | null> = { gmail: submission.email };
-  QUIZ_QUESTIONS.slice(0, 6).forEach((q, i) => {
+  QUIZ_QUESTIONS.forEach((q, i) => {
     row[`respuesta_${i + 1}`] = submission.answers[q.id] ?? null;
   });
 

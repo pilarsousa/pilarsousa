@@ -79,7 +79,7 @@ export const ARCHIVO_OCULTO_PDF =
   "/game/pdf/El_Archivo_Oculto_Codigo6_Desclasificado.pdf";
 
 /* ─────────────────────────── Cuestionario de /game/form ──────────────────
-   Las 6 preguntas del flujo de /game/form (paso posterior al Gmail). Se responden
+   Las preguntas del flujo de /game/form (paso posterior al Gmail). Se responden
    con texto libre (el usuario escribe lo que quiera). Podés editar el texto, y
    agregar o quitar preguntas: el flujo se adapta al largo del array.
 
@@ -120,5 +120,10 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     id: "q6",
     question:
       "¿Qué decisión o cambio sabes que llevas demasiado tiempo posponiendo en tu vida?",
+  },
+  {
+    id: "q7",
+    question:
+      "Después de ver todo lo que contiene el programa Volver al Origen, ¿te gustaría formar parte de esta segunda edición? Cuéntanos qué te llama y qué dudas te quedan.",
   },
 ];

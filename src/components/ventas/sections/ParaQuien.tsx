@@ -26,7 +26,7 @@ export function ParaQuien() {
           <div className="flex flex-col items-center text-center">
             <Reveal delay={0.1}>
               <h2 className="max-w-3xl font-display text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
-                Esto es para ti si...
+                Esto es <span className="bg-clip-text text-transparent bg-[length:200%_auto] animate-neon-drift bg-[linear-gradient(110deg,#28bff1_0%,#aef0fe_38%,#ffffff_55%,#aef0fe_72%,#28bff1_100%)]">para ti</span> si...
               </h2>
             </Reveal>
           </div>

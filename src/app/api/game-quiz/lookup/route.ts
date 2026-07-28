@@ -11,14 +11,15 @@
   un fallback a la RPC `get_respuestas_by_gmail`.
 
   Payload: { email: string }
-  Respuesta: { found: false } | { found: true, row: { respuesta_1..6, created_at } }
+  Respuesta: { found: false } | { found: true, row: { respuesta_1..N, created_at } }
 */
 
+import { QUIZ_QUESTIONS } from "@/components/game/game-config";
 import { getSupabase } from "@/lib/supabase";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const RESPONSE_COLUMNS =
-  "respuesta_1,respuesta_2,respuesta_3,respuesta_4,respuesta_5,respuesta_6,created_at";
+  `${QUIZ_QUESTIONS.map((_, i) => `respuesta_${i + 1}`).join(",")},created_at`;
 
 export async function POST(request: Request) {
   let body: unknown;

@@ -12,7 +12,7 @@ import { QUIZ_QUESTIONS, REWARD_PDF } from "@/components/game/game-config";
   Paso 1 (login): pide el Gmail. "Continuar" queda deshabilitado hasta que el
   correo sea válido. Arriba a la izquierda hay un botón para volver a /game/home.
 
-  Paso 2 (quiz): las 6 preguntas de QUIZ_QUESTIONS (game-config.ts), de a una,
+  Paso 2 (quiz): las preguntas de QUIZ_QUESTIONS (game-config.ts), de a una,
   con barra de progreso. Al terminar envía { email, answers } a /api/game-quiz
   (hoy un stub, listo para conectar la base de datos).
 
@@ -26,7 +26,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 type Stage = "login" | "quiz" | "existing" | "done";
 type Status = "idle" | "submitting" | "error";
-/* Fila devuelta por /api/game-quiz/lookup (columnas respuesta_1 … respuesta_6). */
+/* Fila devuelta por /api/game-quiz/lookup (columnas respuesta_1 … respuesta_N). */
 type ExistingRow = Record<string, string | null>;
 
 const FIELD_CLASS =
@@ -291,7 +291,7 @@ export function GameFlow({ initialEmail, onComplete }: GameFlowProps = {}) {
         </div>
 
         <ul className="flex flex-col gap-4">
-          {QUIZ_QUESTIONS.slice(0, 6).map((q, i) => (
+          {QUIZ_QUESTIONS.map((q, i) => (
             <li key={q.id} className="flex flex-col gap-1">
               <p className="font-sans text-xs font-medium uppercase tracking-[0.12em] text-white/50">
                 {q.question}
