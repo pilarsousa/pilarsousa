@@ -15,7 +15,7 @@ import { UnlockingModal } from "@/components/game/UnlockingModal";
        Supabase).
     2. Cuestionario (las preguntas de GameFlow), reusando el email del paso 1.
     3. Secuencia de desbloqueo (barra + candado + confeti), igual que la card 1.
-    4. Material: el video incrustado.
+    4. Material: el PDF descargable.
 
   Si el visitante YA completó todo antes en este navegador (marca en
   localStorage), salta directo al material — no repite datos ni cuestionario.
@@ -30,7 +30,7 @@ const ACCESS_KEY = "game_nivel2_unlocked";
 /* form:      pidiendo los datos.
    quiz:      cuestionario, con el email ya conocido.
    unlocking: secuencia de desbloqueo (barra + candado + confeti).
-   material:  el video ya visible. */
+   material:  el PDF ya visible. */
 type Stage = "form" | "quiz" | "unlocking" | "material";
 
 export function GameGate() {
@@ -43,13 +43,17 @@ export function GameGate() {
   const [email, setEmail] = useState("");
 
   useEffect(() => {
-    try {
-      // Si ya completó todo antes en este dispositivo, va directo al material.
-      setStage(localStorage.getItem(ACCESS_KEY) === "1" ? "material" : "form");
-    } catch {
-      // localStorage puede fallar en modo privado — sin recordatorio, se pide.
-      setStage("form");
-    }
+    const id = window.setTimeout(() => {
+      try {
+        // Si ya completó todo antes en este dispositivo, va directo al material.
+        setStage(localStorage.getItem(ACCESS_KEY) === "1" ? "material" : "form");
+      } catch {
+        // localStorage puede fallar en modo privado — sin recordatorio, se pide.
+        setStage("form");
+      }
+    }, 0);
+
+    return () => window.clearTimeout(id);
   }, []);
 
   /* Datos enviados con éxito → guarda el email y pasa al cuestionario. */

@@ -1,67 +1,43 @@
-import { REWARD_VIDEO_URL } from "@/components/game/game-config";
+import { Download, FileText } from "lucide-react";
+import { ARCHIVO_OCULTO_PDF } from "@/components/game/game-config";
 
 /*
   Material de la 2ª card ("Archivo Oculto"), visible tras completar el registro
   (o al volver, si ya se registró antes — ver GameGate).
 
-  El material es un mp4 directo alojado en el CDN de GHL (filesafe.space). Al ser
-  un archivo de video y no una página, se reproduce con el elemento <video>
-  nativo — mejores controles (play, volumen, pantalla completa, barra de
-  progreso con seeking) que un iframe, y sin riesgo de X-Frame-Options.
-
-  IMPORTANTE — el archivo pesa ~1.28 GB. Por eso:
-    - preload="metadata": sólo baja lo mínimo para pintar el player; el video se
-      descarga cuando el usuario pulsa play, no al cargar la página.
-    - sin autoplay: descargar 1.28 GB a cada visitante sin que lo pida sería un
-      derroche de datos (y de la factura del CDN).
-  El origen soporta Accept-Ranges (verificado), así que adelantar/retroceder
-  funciona sin bajar el archivo entero.
+  El recurso desbloqueado es el PDF "El Archivo Oculto — Código 6 Desclasificado".
 */
 
 export function GameMaterial() {
-  const hasVideo = REWARD_VIDEO_URL.trim().length > 0;
-
   return (
-    /* Más ancho que el resto de las cards de /game (max-w-4xl): un video 16:9
-       necesita ancho para no verse diminuto, sobre todo en mobile. Padding
-       reducido en mobile (p-3) para que el video gane los pocos píxeles que la
-       card le robaba a los lados. */
-    <div className="relative w-full max-w-4xl rounded-2xl border border-cyan/25 bg-surface/90 p-3 shadow-[0_0_40px_rgba(40,191,241,0.15)] backdrop-blur-md sm:p-6">
-      <div className="mb-3 text-center sm:mb-5">
-        <h1 className="font-display text-xl tracking-tight text-white sm:text-2xl">
+    <div className="relative w-full max-w-md rounded-2xl border border-cyan/25 bg-surface/90 p-7 text-center shadow-[0_0_40px_rgba(40,191,241,0.15)] backdrop-blur-md sm:p-9">
+      <div className="mb-7 flex flex-col items-center">
+        <span className="grid size-16 place-items-center rounded-full border border-cyan/40 bg-cyan/10 text-cyan shadow-[0_0_24px_rgba(40,191,241,0.32)]">
+          <FileText size={30} aria-hidden />
+        </span>
+        <h1 className="mt-5 font-display text-xl tracking-tight text-white sm:text-2xl">
           Archivo Oculto desbloqueado
         </h1>
         <p className="mt-2 font-sans text-xs font-light leading-relaxed text-white/65 sm:text-sm">
-          Este es tu material. Ya tenés acceso desde este dispositivo.
+          Descargá tu PDF y guardalo. Ya tenés acceso desde este dispositivo.
         </p>
       </div>
 
-      {hasVideo ? (
-        <div className="overflow-hidden rounded-xl border border-cyan/20 bg-black">
-          <video
-            controls
-            preload="metadata"
-            playsInline
-            className="aspect-video w-full"
-          >
-            <source src={REWARD_VIDEO_URL} type="video/mp4" />
-            Tu navegador no puede reproducir este video.{" "}
-            <a href={REWARD_VIDEO_URL} className="text-cyan underline">
-              Abrilo en una pestaña nueva
-            </a>
-            .
-          </video>
-        </div>
-      ) : (
-        <div className="flex aspect-video w-full items-center justify-center rounded-xl border border-dashed border-white/20 bg-white/3 px-6 text-center">
-          <p className="font-sans text-sm font-light text-white/45">
-            [ Material pendiente — cargar el link del video en{" "}
-            <span className="font-mono text-white/60">REWARD_VIDEO_URL</span>{" "}
-            (game-config.ts). ]
-          </p>
-        </div>
-      )}
-
+      <div className="rounded-2xl border border-cyan/20 bg-black/35 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+        <p className="font-[family-name:var(--font-pixelify)] text-sm font-bold uppercase leading-relaxed tracking-[0.05em] text-white sm:text-base">
+          El Archivo Oculto:
+          <br />
+          Código 6 Desclasificado
+        </p>
+        <a
+          href={ARCHIVO_OCULTO_PDF}
+          download="El Archivo Oculto - Codigo 6 Desclasificado.pdf"
+          className="neon-btn mt-6 inline-flex h-14 w-full items-center justify-center gap-2.5 rounded-full px-6 text-base font-bold uppercase tracking-[0.06em] transition-all duration-300 ease-out active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+        >
+          <Download size={20} aria-hidden />
+          <span>Descargar PDF</span>
+        </a>
+      </div>
     </div>
   );
 }

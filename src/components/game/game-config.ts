@@ -73,15 +73,10 @@ export const REWARD_PDF = "/game/pdf/recompensa.pdf"; // botón tras completar e
 export const PRINCIPIOS_PDF = "/game/pdf/33-principios-cuanticos-mision-origen.pdf";
 
 /* ───────────────────────── Material de la 2ª card ────────────────────────
-   Video del "Archivo Oculto", que se muestra tras completar el registro de la
-   2ª card (ver GameMaterial / GameGate). mp4 directo del CDN de GHL: se
-   reproduce con <video> nativo (controles completos, seeking).
-
-   OJO: el archivo pesa ~1.28 GB. GameMaterial usa preload="metadata" y no
-   autoplay para no descargarlo entero a cada visitante. Si algún día se sube
-   una versión más liviana o comprimida, reemplazá esta URL. */
-export const REWARD_VIDEO_URL =
-  "https://assets.cdn.filesafe.space/cJQdXHXCPXZIpQkUiwgI/media/6a07782e2e98e28fa112fbf9.mp4";
+   PDF del "Archivo Oculto", que se muestra tras completar el registro de la
+   2ª card (ver GameMaterial / GameGate). */
+export const ARCHIVO_OCULTO_PDF =
+  "/game/pdf/El_Archivo_Oculto_Codigo6_Desclasificado.pdf";
 
 /* ─────────────────────────── Cuestionario de /game/form ──────────────────
    Las 6 preguntas del flujo de /game/form (paso posterior al Gmail). Se responden

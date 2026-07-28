@@ -9,9 +9,8 @@ import pilarMobile from "@/../public/mision-origen/foto-pilar.jpg";
 /*
   Sección "¿Quién es Pilar Sousa?".
 
-  Reutiliza la foto y la bio (PilarBio) de la landing de registro, pero en un
-  layout de dos columnas (foto + texto) en vez del hero a sangre, que encaja
-  mejor como sección intermedia de una landing de ventas.
+  Reutiliza la foto y la bio (PilarBio) de la landing de registro, con texto
+  trabajando directamente sobre la imagen como en el Hero de ventas.
 */
 export function Pilar() {
   return (
@@ -34,13 +33,13 @@ export function Pilar() {
           quality={90}
           sizes="100vw"
           placeholder="blur"
-          className="object-cover object-top lg:object-[38%_center] xl:object-[30%_center]"
+          className="object-cover object-top lg:object-[62%_center] xl:object-[58%_center]"
         />
       </picture>
 
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[86svh] md:h-[84svh] bg-[linear-gradient(to_top,#000000_0%,#000000_28%,rgba(0,0,0,0.55)_40%,transparent_58%)] lg:inset-0 lg:h-full lg:bg-[linear-gradient(to_left,#000000_0%,rgba(0,0,0,0.88)_30%,rgba(0,0,0,0.48)_55%,transparent_80%)]"
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[86svh] md:h-[84svh] bg-[linear-gradient(to_top,#000000_0%,rgba(0,0,0,0.9)_24%,rgba(0,0,0,0.5)_42%,transparent_66%)] lg:inset-0 lg:h-full lg:bg-[linear-gradient(to_right,#000000_0%,rgba(0,0,0,0.9)_34%,rgba(0,0,0,0.52)_56%,transparent_78%)]"
       />
 
       <div
@@ -57,24 +56,17 @@ export function Pilar() {
 
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-24 bg-[linear-gradient(to_bottom,#000000,transparent)]"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-32 bg-[linear-gradient(to_top,#000000,transparent)]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-24 bg-[linear-gradient(to_top,#000000,transparent)] lg:h-28"
       />
 
-      <Container className="pb-14 pt-[56svh] md:pt-[76svh] lg:py-0 lg:pt-0">
-        <div className="lg:ml-auto lg:max-w-[56%]">
+      <Container className="pb-14 pt-[46svh] md:pt-[64svh] lg:py-0 lg:pt-0">
+        <div className="max-w-2xl text-left [text-shadow:0_2px_20px_rgba(0,0,0,0.72)] lg:max-w-[52%]">
           <Reveal delay={0.1}>
-            <div className="rounded-xl border border-white/10 bg-black/58 p-6 shadow-[0_24px_70px_-34px_rgba(40,191,241,0.45)] backdrop-blur-md sm:p-8">
-              <h2
-                id="pilar-title"
-                className="text-center font-display text-3xl font-semibold leading-tight text-foreground sm:text-4xl"
-              >
+            <div>
+              <h2 id="pilar-title" className="font-display text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
                 ¿Quién es <NeonText variant="violet">Pilar Sousa</NeonText>?
               </h2>
-              <div className="mt-6">
+              <div className="mt-6 max-w-xl">
                 <PilarBio />
               </div>
             </div>

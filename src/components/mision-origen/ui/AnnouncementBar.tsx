@@ -113,19 +113,16 @@ function TimeCell({
 
 // Split into two logical parts so desktop keeps everything inline with the "·"
 // separator. Mobile instead scrolls the full single-line phrase as a marquee.
-const MESSAGE_MAIN = "EVENTO ONLINE GRATUITO - MISIÓN ORIGEN";
+const MESSAGE_MAIN = "EVENTO ONLINE GRATUITO - VOLVER AL ORIGEN";
 const MESSAGE_DETAIL = "26 DE JULIO / 19:00PM (ESPAÑA)";
 const MESSAGE_FULL = `${MESSAGE_MAIN} · ${MESSAGE_DETAIL}`;
 
 export function AnnouncementBar() {
   // Resolve the target once; it never changes across renders.
   const [targetMs] = useState(resolveTargetMs);
-  const [remaining, setRemaining] = useState<Remaining | null>(null);
+  const [remaining, setRemaining] = useState<Remaining>(() => computeRemaining(targetMs));
 
   useEffect(() => {
-    // Set immediately, then tick every second. Starting in the effect keeps
-    // SSR and first client render identical (avoids a hydration mismatch).
-    setRemaining(computeRemaining(targetMs));
     const id = setInterval(() => {
       setRemaining(computeRemaining(targetMs));
     }, 1000);
@@ -187,12 +184,12 @@ export function AnnouncementBar() {
           <span>{MESSAGE_DETAIL}</span>
         </p>
 
-        {/* Countdown — hidden numbers until mounted to avoid layout shift */}
+        {/* Countdown */}
         <div
           className="flex items-center gap-2 sm:shrink-0 sm:gap-4"
           aria-live="off"
         >
-          {remaining && !remaining.done ? (
+          {!remaining.done ? (
             <>
               <TimeCell value={remaining.days} label="días" pulse />
               <span aria-hidden className="font-display text-sm text-white/40">:</span>
@@ -202,13 +199,10 @@ export function AnnouncementBar() {
               <span aria-hidden className="font-display text-sm text-white/40">:</span>
               <TimeCell value={remaining.seconds} label="seg" pulse />
             </>
-          ) : remaining?.done ? (
+          ) : (
             <span className="font-display text-sm font-semibold text-white">
               ¡El evento ha comenzado!
             </span>
-          ) : (
-            // Reserve height during SSR / first paint so nothing jumps.
-            <span className="h-8" aria-hidden />
           )}
         </div>
       </div>

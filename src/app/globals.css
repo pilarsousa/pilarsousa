@@ -72,7 +72,7 @@
   /* Scroll cue impulse — a subtle premium downward nudge with a soft pause. */
   --animate-scroll-cue: scroll-cue 2.4s ease-in-out infinite;
 
-  /* ================= MISIÓN ORIGEN ================= */
+  /* ================= VOLVER AL ORIGEN ================= */
   /* Futuristic, neon-lit cyberpunk direction. Raw tokens only — the semantic
      aliases and fonts are in .mo-scope, since those names are already taken
      above by the Bootcamp. */

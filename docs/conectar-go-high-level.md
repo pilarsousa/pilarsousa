@@ -1,6 +1,6 @@
 # Conectar el formulario con Go High Level (GHL)
 
-Guía para dejar que los leads del formulario de **Misión Origen** (el de la
+Guía para dejar que los leads del formulario de **Volver al Origen** (el de la
 sección Hero) se guarden como contactos en Go High Level.
 
 El código ya está hecho y probado. Lo que falta es la configuración del lado de

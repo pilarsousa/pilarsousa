@@ -5,14 +5,14 @@ Vercel project, one deploy**. Next.js 16 (App Router, Turbopack) + Tailwind v4.
 
 | URL                 | Landing                  | Lives in                       |
 | ------------------- | ------------------------ | ------------------------------ |
-| `/`                 | Misión Origen            | `src/app/(mision-origen)/`     |
+| `/`                 | Volver al Origen            | `src/app/(mision-origen)/`     |
 | `/bootcamp`         | Bootcamp Reset Identidad | `src/app/bootcamp/`            |
 | `/bootcamp/gracias` | Bootcamp — thank you     | `src/app/bootcamp/gracias/`    |
 | `/game`             | Game (código + form)     | `src/app/game/`                |
 | `/game/form`        | Game — formulario        | `src/app/game/form/`           |
 
 **Game** (`/game`) is a standalone one-screen landing (no scroll) over
-`public/game/game-img/hero-game.jpg`, reusing Misión Origen's `.mo-scope`
+`public/game/game-img/hero-game.jpg`, reusing Volver al Origen's `.mo-scope`
 palette + fonts. Two actions: a **code** button (client-side check against
 `VALID_CODES`, then a content preview + PDF download) and a **form** button
 (→ `/game/form`, posts to `/api/register` with `source: "game"`, then a
@@ -42,11 +42,11 @@ wanting either, read the palettes section below first.
 **History worth knowing.** Until July 2026 the two landings lived on separate
 branches (`master` and `main`) with *no common ancestor*, each deploying as its
 own Vercel project. They could never be merged: ~20 files collided by name with
-entirely different content. Commit `867bb5f` ported Misión Origen into `master`
+entirely different content. Commit `867bb5f` ported Volver al Origen into `master`
 as a route instead. The old branches are gone, but their history is preserved:
 
 ```bash
-git log mision-origen-pre-unificacion   # the 10 commits Misión Origen was built in
+git log mision-origen-pre-unificacion   # the 10 commits Volver al Origen was built in
 git log mision-origen-rewrite-proxy     # a vercel.json proxy stopgap, superseded
 ```
 
@@ -57,7 +57,7 @@ src/app/
   layout.tsx              root: <html>/<body>, GTM, Analytics, ALL font vars
   globals.css             design tokens for BOTH landings — read the next section
   (mision-origen)/        route group: stripped from the URL
-    layout.tsx            Misión Origen metadata + .mo-scope + AnnouncementBar
+    layout.tsx            Volver al Origen metadata + .mo-scope + AnnouncementBar
     page.tsx              -> /
   bootcamp/
     layout.tsx            Bootcamp metadata + .bc-scope
@@ -65,12 +65,12 @@ src/app/
     gracias/page.tsx      -> /bootcamp/gracias
 src/components/
   sections/  ui/          Bootcamp's components
-  mision-origen/          Misión Origen's components, namespaced
+  mision-origen/          Volver al Origen's components, namespaced
   ui/Container.tsx        shared (byte-identical in both landings)
 src/lib/cn.ts             shared
 public/
-  mision-origen/          Misión Origen's images
-  fonts/                  self-hosted Jost + Zen Dots (Misión Origen)
+  mision-origen/          Volver al Origen's images
+  fonts/                  self-hosted Jost + Zen Dots (Volver al Origen)
   Testimonios/            shared by both landings
   *.jpg|png               Bootcamp's images, loose at the root (historical)
 ```
@@ -86,7 +86,7 @@ swapping them is a matter of moving folders, not touching Vercel.
 Tailwind v4's `@theme` is **global** — one build, one `:root`. Both landings
 define the same semantic tokens with different values:
 
-|                      | Bootcamp      | Misión Origen  |
+|                      | Bootcamp      | Volver al Origen  |
 | -------------------- | ------------- | -------------- |
 | `--color-background` | `#080808` ink | `#000000` void |
 | `--color-accent`     | gold          | hot pink       |
@@ -98,7 +98,7 @@ They are kept apart like this:
   `@theme` together.
 - The **seven colliding semantic aliases** are declared in `@theme` with the
   Bootcamp's values (it is the landing at the domain root), and redefined in the
-  **`.mo-scope`** block in `globals.css`. Misión Origen's layout wraps itself in
+  **`.mo-scope`** block in `globals.css`. Volver al Origen's layout wraps itself in
   that class, so `bg-background` resolves to void inside it and to ink outside.
 
 This works only because Tailwind compiles utilities to `var(--token)` rather
@@ -106,7 +106,7 @@ than inlining values. Two consequences:
 
 1. **Adding a semantic token to `@theme` means deciding whether `.mo-scope`
    needs a counterpart.** Forget, and the Bootcamp's value silently bleeds into
-   Misión Origen.
+   Volver al Origen.
 2. **Never make a shared component branch on which landing it is in.** Duplicate
    it into `components/mision-origen/` instead. These are marketing landings;
    they are meant to diverge.
@@ -116,7 +116,7 @@ be on `body::before`, which would now cover both landings.
 
 ## Lead registration (Go High Level)
 
-Misión Origen's Hero form posts to `src/app/api/register/route.ts`, a
+Volver al Origen's Hero form posts to `src/app/api/register/route.ts`, a
 server-side route handler that forwards the lead to a Go High Level inbound
 webhook. The webhook URL is read from the `GHL_WEBHOOK_URL` env var and never
 ships to the browser. Until that var is set (in Vercel, and in `.env.local` for
@@ -146,6 +146,6 @@ Step-by-step setup — creating the webhook, mapping fields, adding the env var:
 
 - `public/fonts/solaria*.woff` and `public/fonts/Jost/static/` (~1.4 MB) are not
   referenced by anything — `next/font` loads only the variable fonts.
-- The Bootcamp's images sit loose in `public/` while Misión Origen's are in
+- The Bootcamp's images sit loose in `public/` while Volver al Origen's are in
   `public/mision-origen/`. Moving them to `public/bootcamp/` would be tidier but
   touches a lot of references for no functional gain.

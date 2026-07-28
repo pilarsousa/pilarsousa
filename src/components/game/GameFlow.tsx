@@ -39,7 +39,7 @@ type GameFlowProps = {
   initialEmail?: string;
   /* Si se pasa, se llama al terminar el cuestionario EN LUGAR de mostrar la
      pantalla "done" con la descarga del PDF. El flujo de la 2ª card lo usa para
-     encadenar el desbloqueo → video. */
+     encadenar el desbloqueo → PDF. */
   onComplete?: () => void;
 };
 
@@ -101,7 +101,7 @@ export function GameFlow({ initialEmail, onComplete }: GameFlowProps = {}) {
       if (!res.ok) throw new Error(`quiz failed: ${res.status}`);
       setStatus("idle");
       // En el flujo de la 2ª card, el consumidor (GameGate) toma el control para
-      // encadenar el desbloqueo → video. Si no, mostramos la pantalla "done".
+      // encadenar el desbloqueo → PDF. Si no, mostramos la pantalla "done".
       if (onComplete) {
         onComplete();
         return;

@@ -1,6 +1,6 @@
 # Respaldo de leads en Supabase
 
-Los leads del formulario de Misión Origen se guardan en Supabase **antes** de
+Los leads del formulario de Volver al Origen se guardan en Supabase **antes** de
 enviarse a Go High Level. Si GHL falla (workflow despublicado, sin saldo,
 caído), el contacto queda igual en la base y se puede exportar a mano.
 

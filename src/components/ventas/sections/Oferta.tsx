@@ -3,6 +3,7 @@ import { Container } from "@/components/shared/Container";
 import { NeonText } from "@/components/mision-origen/ui/NeonText";
 import { Reveal } from "@/components/mision-origen/ui/Reveal";
 import { MatrixRain } from "@/components/bootcamp/ui/MatrixRain";
+import { VENTAS_CHECKOUT_URL } from "@/lib/links";
 import mockup from "@/../public/mision-origen-venta/mockup1.webp";
 import regaloIcon from "@/components/mision-origen/regalo-mision/regalo-icon.png";
 import {
@@ -118,8 +119,20 @@ export function Oferta() {
               Card diferenciada (borde/gradiente rosa + icono de regalo) para que
               los bonos salten a la vista respecto de la lista de arriba. */}
           <Reveal delay={0.25} className="w-full max-w-3xl">
-            <div className="relative overflow-hidden rounded-2xl border border-hot-pink/40 bg-[linear-gradient(135deg,rgba(249,2,129,0.14),rgba(135,36,120,0.1))] p-px shadow-[0_0_40px_rgba(249,2,129,0.18)]">
-              <div className="flex flex-col items-center gap-4 rounded-2xl bg-background/85 px-6 py-8 text-center sm:flex-row sm:gap-6 sm:px-10 sm:text-left">
+            <div className="relative isolate overflow-hidden rounded-2xl border border-hot-pink/40 bg-[linear-gradient(135deg,rgba(249,2,129,0.14),rgba(135,36,120,0.1))] p-px shadow-[0_0_40px_rgba(249,2,129,0.18)]">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -left-16 top-1/2 z-0 size-44 -translate-y-1/2 animate-aurora-1 rounded-full bg-hot-pink/24 blur-3xl"
+              />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -right-12 bottom-0 z-0 size-40 animate-aurora-2 rounded-full bg-cyan/18 blur-3xl"
+              />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute left-1/2 top-0 z-0 size-32 -translate-x-1/2 animate-aurora-3 rounded-full bg-[#872478]/18 blur-3xl"
+              />
+              <div className="relative z-10 flex flex-col items-center gap-4 rounded-2xl bg-background/88 px-6 py-8 text-center sm:flex-row sm:gap-6 sm:px-10 sm:text-left">
                 <Image
                   src={regaloIcon}
                   alt="Bonos de regalo"
@@ -141,6 +154,12 @@ export function Oferta() {
                 </div>
               </div>
             </div>
+            <a
+              href={VENTAS_CHECKOUT_URL}
+              className="neon-btn mx-auto mt-5 flex h-14 w-full max-w-sm items-center justify-center whitespace-nowrap rounded-full px-8 font-sans text-base font-bold uppercase tracking-[0.08em] text-white transition-all duration-500 ease-out active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:w-fit sm:px-12"
+            >
+              Acceder ahora
+            </a>
           </Reveal>
         </div>
       </Container>

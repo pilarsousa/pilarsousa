@@ -42,9 +42,9 @@ export function Hero() {
 
         {/* Degradado de legibilidad — sólo detrás del texto, se desvanece antes
             de llegar a Pilar. Desde abajo en mobile, desde la izquierda en
-            desktop. En desktop llega algo más oscuro y más lejos (hasta ~62%)
+            desktop. En desktop llega algo más oscuro y más lejos (hasta ~58%)
             para que el título no compita con la cara de Pilar. */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_top,#000000_0%,#000000_26%,rgba(0,0,0,0.55)_42%,transparent_65%)] lg:bg-[linear-gradient(to_right,#000000_0%,rgba(0,0,0,0.9)_38%,rgba(0,0,0,0.5)_62%,transparent_85%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_top,#000000_0%,rgba(0,0,0,0.92)_24%,rgba(0,0,0,0.5)_42%,transparent_66%)] lg:bg-[linear-gradient(to_right,#000000_0%,rgba(0,0,0,0.86)_34%,rgba(0,0,0,0.42)_58%,transparent_80%)]" />
 
         {/* Grilla cyberpunk sobre la foto */}
         <div
@@ -59,7 +59,7 @@ export function Hero() {
         />
 
         {/* Fundido inferior hacia la siguiente sección */}
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-[linear-gradient(to_bottom,transparent,#000000)]" />
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(to_bottom,transparent,#000000)] lg:h-28" />
       </div>
 
       {/* Mobile: el contenido cae sobre la franja inferior donde la foto se
