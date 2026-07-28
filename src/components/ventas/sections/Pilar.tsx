@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { Container } from "@/components/shared/Container";
-import { NeonText } from "@/components/mision-origen/ui/NeonText";
 import { Reveal } from "@/components/mision-origen/ui/Reveal";
 import { PilarBio } from "@/components/mision-origen/ui/PilarBio";
 import pilarDesktop from "@/../public/mision-origen/Fondo-PilarSousaPC.jpg";
@@ -17,7 +16,7 @@ export function Pilar() {
     <section
       id="pilar"
       aria-labelledby="pilar-title"
-      className="relative isolate flex min-h-svh items-start overflow-x-clip bg-background lg:h-[750px] lg:min-h-0 lg:items-center"
+      className="relative isolate flex min-h-svh items-start overflow-x-clip bg-background lg:h-[750px] lg:min-h-0 lg:items-end"
     >
       <picture className="absolute inset-x-0 top-0 -z-20 block h-[86svh] md:h-[84svh] lg:h-full">
         <source
@@ -59,12 +58,16 @@ export function Pilar() {
         className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-24 bg-[linear-gradient(to_top,#000000,transparent)] lg:h-28"
       />
 
-      <Container className="pb-14 pt-[46svh] md:pt-[64svh] lg:py-0 lg:pt-0">
+      <Container className="pb-14 pt-[78svh] md:pt-[88svh] lg:pb-8 lg:pt-0 xl:pb-6">
         <div className="max-w-2xl text-left [text-shadow:0_2px_20px_rgba(0,0,0,0.72)] lg:max-w-[52%]">
           <Reveal delay={0.1}>
             <div>
               <h2 id="pilar-title" className="font-display text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
-                ¿Quién es <NeonText variant="violet">Pilar Sousa</NeonText>?
+                ¿Quién es{" "}
+                <span className="bg-clip-text text-transparent bg-[length:200%_auto] animate-neon-drift bg-[linear-gradient(110deg,#ffffff_0%,#fff6d8_28%,#f9db84_52%,#ffffff_72%,#f6b34b_100%)] [filter:drop-shadow(0_0_12px_rgba(255,255,255,0.5))_drop-shadow(0_0_30px_rgba(249,219,132,0.35))]">
+                  Pilar Sousa
+                </span>
+                ?
               </h2>
               <div className="mt-6 max-w-xl">
                 <PilarBio />
