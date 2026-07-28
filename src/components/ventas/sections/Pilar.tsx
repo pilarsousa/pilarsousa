@@ -60,15 +60,18 @@ export function Pilar() {
         className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-24 bg-[linear-gradient(to_top,#000000,transparent)] lg:h-28"
       />
 
-      <Container className="pb-14 pt-[72svh] md:pt-[82svh] lg:pb-10 lg:pt-0 xl:pb-8">
-        {/* Desktop: el texto va a la DERECHA (ml-auto), sobre el hueco oscuro,
-            para no tapar la cara de Pilar (izquierda). Sin text-shadow. */}
-        <div className="max-w-2xl text-left lg:ml-auto lg:max-w-[52%]">
+      {/* Desde lg el contenedor se ensancha más que el max-w-6xl por defecto y el
+          bloque pasa a un ancho fijo: así el texto se corre hacia la derecha en
+          vez de solo estirarse, y deja despejada la cara (que cae a la izquierda).
+          Sin text-shadow: no debe proyectar sombra sobre la foto. */}
+      <Container className="pb-14 pt-[72svh] md:pt-[82svh] lg:max-w-[88rem] lg:pb-10 lg:pt-0 xl:pb-8">
+        <div className="max-w-2xl text-left lg:ml-auto lg:max-w-[34rem] xl:max-w-[36rem]">
           <Reveal delay={0.1}>
             <div>
               <h2 id="pilar-title" className="font-display text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
                 ¿Quién es{" "}
-                <span className="bg-clip-text text-transparent bg-[length:200%_auto] animate-neon-drift bg-[linear-gradient(110deg,#f90281_0%,#f00eb8_30%,#ffffff_52%,#aef0fe_68%,#495cc4_100%)]">
+                <span className="bg-clip-text text-transparent bg-[length:200%_auto] animate-neon-drift bg-[linear-gradient(110deg,#f90281_0%,#f54cd0_28%,#ffffff_50%,#aef0fe_72%,#28bff1_100%)]">
+
                   Pilar Sousa
                 </span>
                 ?

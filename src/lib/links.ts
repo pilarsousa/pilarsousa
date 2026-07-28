@@ -28,6 +28,9 @@ export const WHATSAPP_SUPPORT_URL = "https://wa.link/i8qdol";
 export const VENTAS_WHATSAPP_SUPPORT_URL =
   "https://api.whatsapp.com/send?phone=34633327481&text=Hola%2C%20tengo%20dudas%20sobre%20el%20programa%20Volver%20al%20Origen.%20%C2%BFMe%20pueden%20ayudar%3F";
 
+// Ventas — WhatsApp del equipo para la sección de dudas previa al FAQ.
+export const VENTAS_WHATSAPP_EQUIPO_URL = "https://wa.link/90avqa";
+
 // Volver al Origen — WhatsApp community (post-registration thank-you page).
 export const MO_WHATSAPP_COMMUNITY_URL = "https://chat.whatsapp.com/FBFK1l0bsHW4pmbqVi2Z6u";
 

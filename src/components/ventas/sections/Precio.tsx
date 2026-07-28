@@ -19,10 +19,11 @@ import logosPago from "@/../public/mision-origen-venta/logos.svg";
   Lubo, con permiso): un óvalo central con el precio. El óvalo es la imagen
   original (oval-pricing.webp, la cápsula violeta con muescas laterales, que
   coincide con nuestra paleta), con un aro luminoso animado (.borde-hueco) por
-  encima. Toggle, badge y CTA
-  reconstruidos con nuestros estilos.
+  encima. Toggle, badge y CTA reconstruidos con nuestros estilos.
 
-  PLACEHOLDER: precios ("XX €") y logos de pago.
+  Las columnas de items que flanqueaban el óvalo se quitaron: repetían lo que
+  ya enumera la sección Oferta ("todo lo que recibes"), y el cierre funciona
+  mejor con un único foco en el precio y el CTA.
 */
 
 export function Precio() {
@@ -49,7 +50,7 @@ export function Precio() {
             </Reveal>
           </div>
 
-          {/* Cápsula central */}
+          {/* Óvalo central — único foco de la sección */}
           <Reveal delay={0.15} className="w-full">
             <div className="flex justify-center">
               <div className="relative mx-auto">
@@ -75,16 +76,15 @@ export function Precio() {
 
                   {/* Toggle destacado: dos opciones grandes; la activa se
                       resalta con la píldora deslizante. Cambia precio + CTA. */}
-                  <div className="relative isolate flex w-full max-w-[236px] overflow-hidden rounded-full border border-neon-pink/35 bg-[radial-gradient(120%_140%_at_50%_-30%,rgba(240,14,184,0.2),transparent_55%),linear-gradient(180deg,rgba(255,255,255,0.07),rgba(0,0,0,0.72))] p-1 shadow-[0_0_0_1px_rgba(240,14,184,0.1),0_0_28px_rgba(135,36,120,0.32),inset_0_1px_0_rgba(255,255,255,0.14)]">
+                  <div className="relative isolate flex w-full max-w-[236px] overflow-hidden rounded-full border border-violet/50 bg-[radial-gradient(120%_140%_at_50%_-30%,rgba(191,123,255,0.20),transparent_55%),linear-gradient(180deg,rgba(255,255,255,0.09),rgba(0,0,0,0.7))] p-1 shadow-[0_0_0_1px_rgba(191,123,255,0.10),0_0_28px_rgba(135,36,120,0.30),inset_0_1px_0_rgba(255,255,255,0.16)]">
                     <span
                       aria-hidden
-                      className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 bg-linear-to-r from-transparent via-white/15 to-transparent animate-sheen"
+                      className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 bg-linear-to-r from-transparent via-white/20 to-transparent animate-sheen"
                     />
-                    {/* Píldora deslizante que marca la opción activa — en violetas
-                        de la paleta, no cyan/blanco (chocaba con el óvalo). */}
+                    {/* Píldora deslizante que marca la opción activa */}
                     <span
                       aria-hidden
-                      className={`absolute inset-y-1 left-1 w-[calc(50%-0.5rem)] rounded-full border border-white/25 bg-[linear-gradient(110deg,rgba(135,36,120,0.98)_0%,rgba(240,14,184,0.92)_50%,rgba(135,36,120,0.98)_100%)] shadow-[0_0_18px_rgba(240,14,184,0.6),0_0_34px_rgba(135,36,120,0.42),inset_0_1px_0_rgba(255,255,255,0.35)] transition-transform duration-300 ease-out ${
+                      className={`absolute inset-y-1 left-1 w-[calc(50%-0.5rem)] rounded-full border border-white/35 bg-[linear-gradient(110deg,#872478_0%,#9c2fae_35%,#7b46d6_60%,#495cc4_100%)] shadow-[0_0_18px_rgba(191,123,255,0.55),0_0_34px_rgba(135,36,120,0.45),inset_0_1px_0_rgba(255,255,255,0.35)] transition-transform duration-300 ease-out ${
                         plan === "cuotas" ? "translate-x-[calc(100%+0.5rem)]" : "translate-x-0"
                       }`}
                     />
@@ -92,7 +92,7 @@ export function Precio() {
                       type="button"
                       onClick={() => setPlan("unico")}
                       className={`relative z-10 flex-1 cursor-pointer rounded-full py-2 font-sans text-xs font-bold uppercase tracking-[0.06em] transition-colors duration-300 ${
-                        plan === "unico" ? "text-white [text-shadow:0_1px_10px_rgba(240,14,184,0.6)]" : "text-white/60 hover:text-white"
+                        plan === "unico" ? "text-white [text-shadow:0_1px_8px_rgba(0,0,0,0.55)]" : "text-white/55 hover:text-white"
                       }`}
                     >
                       Pago único
@@ -101,7 +101,7 @@ export function Precio() {
                       type="button"
                       onClick={() => setPlan("cuotas")}
                       className={`relative z-10 flex-1 cursor-pointer rounded-full py-2 font-sans text-xs font-bold uppercase tracking-[0.06em] transition-colors duration-300 ${
-                        plan === "cuotas" ? "text-white [text-shadow:0_1px_10px_rgba(240,14,184,0.6)]" : "text-white/60 hover:text-white"
+                        plan === "cuotas" ? "text-white [text-shadow:0_1px_8px_rgba(0,0,0,0.55)]" : "text-white/55 hover:text-white"
                       }`}
                     >
                       2 cuotas
