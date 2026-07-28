@@ -5,7 +5,9 @@ import { Reveal } from "@/components/mision-origen/ui/Reveal";
 import { MatrixRain } from "@/components/bootcamp/ui/MatrixRain";
 import { VENTAS_CHECKOUT_URL } from "@/lib/links";
 import mockup from "@/../public/mision-origen-venta/mockup1.webp";
-import regaloIcon from "@/components/mision-origen/regalo-mision/regalo-icon.png";
+/* Versión recortada: el PNG original trae ~30% de margen transparente alrededor
+   del arte, que inflaba la caja sin aportar nada visible. */
+import bonosImg from "@/../public/ventas/bonus-img-02-trim.png";
 import {
   CircleAlert,
   CalendarClock,
@@ -20,7 +22,7 @@ import {
 /*
   Sección "Todo lo que recibes" — el desglose completo de la oferta con el
   mockup del packaging arriba y la lista de todo lo incluido. Los bonos se
-  destacan aparte, en una card propia con el icono de regalo, porque son el
+  destacan aparte, en una card propia con la imagen de los bonos, porque son el
   gancho de esta edición.
 */
 
@@ -116,8 +118,8 @@ export function Oferta() {
           </Reveal>
 
           {/* ── Bonos destacados ──
-              Card diferenciada (borde/gradiente rosa + icono de regalo) para que
-              los bonos salten a la vista respecto de la lista de arriba. */}
+              Card diferenciada (borde/gradiente rosa + imagen de los bonos) para
+              que salten a la vista respecto de la lista de arriba. */}
           <Reveal delay={0.25} className="w-full max-w-3xl">
             <div className="relative isolate overflow-hidden rounded-2xl border border-hot-pink/40 bg-[linear-gradient(135deg,rgba(249,2,129,0.14),rgba(135,36,120,0.1))] p-px shadow-[0_0_40px_rgba(249,2,129,0.18)]">
               <div
@@ -134,11 +136,11 @@ export function Oferta() {
               />
               <div className="relative z-10 flex flex-col items-center gap-4 rounded-2xl bg-background/88 px-6 py-8 text-center sm:flex-row sm:gap-6 sm:px-10 sm:text-left">
                 <Image
-                  src={regaloIcon}
+                  src={bonosImg}
                   alt="Bonos de regalo"
-                  width={72}
-                  height={72}
-                  className="size-16 shrink-0 object-contain sm:size-20"
+                  width={184}
+                  height={128}
+                  className="h-24 w-34 shrink-0 object-contain sm:h-32 sm:w-46"
                 />
                 <div className="flex flex-col gap-1">
                   <span className="font-sans text-xs font-bold uppercase tracking-[0.16em] text-hot-pink">
