@@ -58,13 +58,13 @@ export function Pilar() {
         className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-24 bg-[linear-gradient(to_top,#000000,transparent)] lg:h-28"
       />
 
-      <Container className="pb-14 pt-[78svh] md:pt-[88svh] lg:pb-8 lg:pt-0 xl:pb-6">
+      <Container className="pb-14 pt-[72svh] md:pt-[82svh] lg:pb-10 lg:pt-0 xl:pb-8">
         <div className="max-w-2xl text-left [text-shadow:0_2px_20px_rgba(0,0,0,0.72)] lg:max-w-[52%]">
           <Reveal delay={0.1}>
             <div>
               <h2 id="pilar-title" className="font-display text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
                 ¿Quién es{" "}
-                <span className="bg-clip-text text-transparent bg-[length:200%_auto] animate-neon-drift bg-[linear-gradient(110deg,#ffffff_0%,#fff6d8_28%,#f9db84_52%,#ffffff_72%,#f6b34b_100%)] [filter:drop-shadow(0_0_12px_rgba(255,255,255,0.5))_drop-shadow(0_0_30px_rgba(249,219,132,0.35))]">
+                <span className="bg-clip-text text-transparent bg-[length:200%_auto] animate-neon-drift bg-[linear-gradient(110deg,#f90281_0%,#f00eb8_30%,#ffffff_52%,#aef0fe_68%,#495cc4_100%)] [filter:drop-shadow(0_0_12px_rgba(240,14,184,0.44))_drop-shadow(0_0_28px_rgba(73,92,196,0.32))]">
                   Pilar Sousa
                 </span>
                 ?
