@@ -21,7 +21,7 @@ import { Footer } from "@/components/mision-origen/sections/Footer";
     6. Resumen y precio (cierre + CTA)
     7. Quién es Pilar (autoridad)
     8. Contacto directo con el equipo (duda que necesita respuesta humana)
-    9. Soporte y FAQ (últimas objeciones)
+    9. FAQ (últimas objeciones)
 
   Reutiliza componentes de la landing de registro (testimonios, bio de Pilar,
   footer) para no duplicar contenido ni estilo.

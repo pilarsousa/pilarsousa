@@ -67,7 +67,7 @@ export function Pilar() {
             <div>
               <h2 id="pilar-title" className="font-display text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
                 ¿Quién es{" "}
-                <span className="bg-clip-text text-transparent bg-[length:200%_auto] animate-neon-drift bg-[linear-gradient(110deg,#ffffff_0%,#fff6d8_28%,#f9db84_52%,#ffffff_72%,#f6b34b_100%)] [filter:drop-shadow(0_0_12px_rgba(255,255,255,0.5))_drop-shadow(0_0_30px_rgba(249,219,132,0.35))]">
+                <span className="bg-clip-text text-transparent bg-[length:200%_auto] animate-neon-drift bg-[linear-gradient(110deg,#f90281_0%,#f54cd0_28%,#ffffff_50%,#aef0fe_72%,#28bff1_100%)] [filter:drop-shadow(0_0_12px_rgba(249,2,129,0.42))_drop-shadow(0_0_26px_rgba(40,191,241,0.38))]">
                   Pilar Sousa
                 </span>
                 ?

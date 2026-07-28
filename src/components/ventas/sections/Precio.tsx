@@ -13,64 +13,18 @@ import {
 } from "@/lib/links";
 import ovalShape from "@/../public/ventas/oval-pricing.webp";
 import logosPago from "@/../public/mision-origen-venta/logos.svg";
-import {
-  GraduationCap,
-  Route,
-  Video,
-  Users,
-  BookOpen,
-  BadgeCheck,
-  Infinity as InfinityIcon,
-  MessageCircle,
-  Sparkles,
-  Headphones,
-} from "lucide-react";
 
 /*
   Sección "Resumen y precio" — adaptada de la landing de referencia (Jhonny
-  Lubo, con permiso): un óvalo central con el precio, flanqueado por items con
-  icono a ambos lados. El óvalo es la imagen original (oval-pricing.webp, la
-  cápsula violeta con muescas laterales, que coincide con nuestra paleta), con
-  un aro luminoso animado (.borde-hueco) por encima. Items, toggle, badge y CTA
-  reconstruidos con nuestros estilos.
+  Lubo, con permiso): un óvalo central con el precio. El óvalo es la imagen
+  original (oval-pricing.webp, la cápsula violeta con muescas laterales, que
+  coincide con nuestra paleta), con un aro luminoso animado (.borde-hueco) por
+  encima. Toggle, badge y CTA reconstruidos con nuestros estilos.
 
-  PLACEHOLDER: precios ("XX €"), textos de los items y logos de pago.
+  Las columnas de items que flanqueaban el óvalo se quitaron: repetían lo que
+  ya enumera la sección Oferta ("todo lo que recibes"), y el cierre funciona
+  mejor con un único foco en el precio y el CTA.
 */
-
-const ITEMS_IZQ = [
-  { icon: GraduationCap, text: "Acceso completo al entrenamiento de 40 días" },
-  { icon: Route, text: "Sistema práctico paso a paso" },
-  { icon: Video, text: "Sesiones en vivo con Pilar Sousa" },
-  { icon: Users, text: "Comunidad privada de acompañamiento" },
-  { icon: BookOpen, text: "Material descargable y recursos" },
-] as const;
-
-const ITEMS_DER = [
-  { icon: BadgeCheck, text: "Certificado de participación" },
-  { icon: InfinityIcon, text: "Acceso vitalicio y actualizaciones" },
-  { icon: MessageCircle, text: "Grupo de anuncios por WhatsApp" },
-  { icon: Sparkles, text: "Herramientas de manifestación" },
-  { icon: Headphones, text: "Soporte y acompañamiento cercano" },
-] as const;
-
-function ItemPill({
-  icon: Icon,
-  text,
-}: {
-  icon: typeof GraduationCap;
-  text: string;
-}) {
-  return (
-    <div className="pricing-item shine-hover flex min-h-[60px] items-center gap-3 px-4 py-2 text-left">
-      <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-black text-cyan">
-        <Icon size={18} />
-      </span>
-      <span className="font-sans text-sm font-light leading-tight text-foreground/90">
-        {text}
-      </span>
-    </div>
-  );
-}
 
 export function Precio() {
   /* Plan seleccionado. Cambia el precio mostrado y el destino del CTA. Los
@@ -96,18 +50,10 @@ export function Precio() {
             </Reveal>
           </div>
 
-          {/* Items | óvalo | items */}
+          {/* Óvalo central — único foco de la sección */}
           <Reveal delay={0.15} className="w-full">
-            <div className="grid items-center gap-6 lg:grid-cols-[1fr_auto_1fr] lg:gap-2">
-              {/* Items izquierda */}
-              <div className="flex flex-col gap-4 lg:order-1">
-                {ITEMS_IZQ.map((it, i) => (
-                  <ItemPill key={i} icon={it.icon} text={it.text} />
-                ))}
-              </div>
-
-              {/* Óvalo central */}
-              <div className="relative mx-auto lg:order-2">
+            <div className="flex justify-center">
+              <div className="relative mx-auto">
                 {/* La imagen del óvalo (forma + gradiente violeta) */}
                 <Image
                   src={ovalShape}
@@ -130,7 +76,7 @@ export function Precio() {
 
                   {/* Toggle destacado: dos opciones grandes; la activa se
                       resalta con la píldora deslizante. Cambia precio + CTA. */}
-                  <div className="relative isolate flex w-full max-w-[236px] overflow-hidden rounded-full border border-cyan/35 bg-[radial-gradient(120%_140%_at_50%_-30%,rgba(174,240,254,0.22),transparent_55%),linear-gradient(180deg,rgba(255,255,255,0.09),rgba(0,0,0,0.7))] p-1 shadow-[0_0_0_1px_rgba(174,240,254,0.08),0_0_28px_rgba(40,191,241,0.24),inset_0_1px_0_rgba(255,255,255,0.16)]">
+                  <div className="relative isolate flex w-full max-w-[236px] overflow-hidden rounded-full border border-violet/50 bg-[radial-gradient(120%_140%_at_50%_-30%,rgba(191,123,255,0.20),transparent_55%),linear-gradient(180deg,rgba(255,255,255,0.09),rgba(0,0,0,0.7))] p-1 shadow-[0_0_0_1px_rgba(191,123,255,0.10),0_0_28px_rgba(135,36,120,0.30),inset_0_1px_0_rgba(255,255,255,0.16)]">
                     <span
                       aria-hidden
                       className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 bg-linear-to-r from-transparent via-white/20 to-transparent animate-sheen"
@@ -138,7 +84,7 @@ export function Precio() {
                     {/* Píldora deslizante que marca la opción activa */}
                     <span
                       aria-hidden
-                      className={`absolute inset-y-1 left-1 w-[calc(50%-0.5rem)] rounded-full border border-white/45 bg-[linear-gradient(110deg,rgba(40,191,241,0.95)_0%,rgba(174,240,254,0.95)_45%,rgba(255,255,255,0.92)_58%,rgba(40,191,241,0.82)_100%)] shadow-[0_0_18px_rgba(174,240,254,0.72),0_0_34px_rgba(40,191,241,0.38),inset_0_1px_0_rgba(255,255,255,0.75)] transition-transform duration-300 ease-out ${
+                      className={`absolute inset-y-1 left-1 w-[calc(50%-0.5rem)] rounded-full border border-white/35 bg-[linear-gradient(110deg,#872478_0%,#9c2fae_35%,#7b46d6_60%,#495cc4_100%)] shadow-[0_0_18px_rgba(191,123,255,0.55),0_0_34px_rgba(135,36,120,0.45),inset_0_1px_0_rgba(255,255,255,0.35)] transition-transform duration-300 ease-out ${
                         plan === "cuotas" ? "translate-x-[calc(100%+0.5rem)]" : "translate-x-0"
                       }`}
                     />
@@ -146,7 +92,7 @@ export function Precio() {
                       type="button"
                       onClick={() => setPlan("unico")}
                       className={`relative z-10 flex-1 cursor-pointer rounded-full py-2 font-sans text-xs font-bold uppercase tracking-[0.06em] transition-colors duration-300 ${
-                        plan === "unico" ? "text-black [text-shadow:0_1px_10px_rgba(255,255,255,0.75)]" : "text-white/60 hover:text-white"
+                        plan === "unico" ? "text-white [text-shadow:0_1px_8px_rgba(0,0,0,0.55)]" : "text-white/55 hover:text-white"
                       }`}
                     >
                       Pago único
@@ -155,7 +101,7 @@ export function Precio() {
                       type="button"
                       onClick={() => setPlan("cuotas")}
                       className={`relative z-10 flex-1 cursor-pointer rounded-full py-2 font-sans text-xs font-bold uppercase tracking-[0.06em] transition-colors duration-300 ${
-                        plan === "cuotas" ? "text-black [text-shadow:0_1px_10px_rgba(255,255,255,0.75)]" : "text-white/60 hover:text-white"
+                        plan === "cuotas" ? "text-white [text-shadow:0_1px_8px_rgba(0,0,0,0.55)]" : "text-white/55 hover:text-white"
                       }`}
                     >
                       2 cuotas
@@ -190,13 +136,6 @@ export function Precio() {
                     className="h-auto w-[150px] opacity-80"
                   />
                 </div>
-              </div>
-
-              {/* Items derecha */}
-              <div className="flex flex-col gap-4 lg:order-3">
-                {ITEMS_DER.map((it, i) => (
-                  <ItemPill key={i} icon={it.icon} text={it.text} />
-                ))}
               </div>
             </div>
           </Reveal>

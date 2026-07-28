@@ -5,9 +5,15 @@ import { VENTAS_WHATSAPP_EQUIPO_URL } from "@/lib/links";
 /*
   Mini sección "Tengo dudas, quiero hablar con el equipo de Pilar".
 
-  Banda corta entre "¿Quién es Pilar Sousa?" y el FAQ: recoge a quien todavía
+  Sección propia entre "¿Quién es Pilar Sousa?" y el FAQ: recoge a quien todavía
   duda y le da una salida humana antes de que empiece a leer preguntas. Texto a
   la izquierda, botón de WhatsApp a la derecha; se apila en mobile.
+
+  Lleva el espaciado de sección (py-section) para que se lea como bloque propio
+  y no como el pie de la sección de Pilar, que termina en el mismo negro.
+
+  El botón reusa .neon-btn (mismo tamaño, glow y pulso que los CTA de la
+  landing) con el modificador .neon-btn--whatsapp, que sólo repinta a verde.
 */
 
 // Official WhatsApp glyph (lucide ships no brand logos). Inherits currentColor.
@@ -21,7 +27,7 @@ function WhatsAppIcon({ className }: { className?: string }) {
 
 export function Contacto() {
   return (
-    <section id="contacto" className="bg-background py-12 sm:py-16">
+    <section id="contacto" className="bg-background py-section">
       <Container>
         <Reveal delay={0.1}>
           <div className="mx-auto flex max-w-3xl flex-col items-center gap-4 rounded-2xl border border-cyan/20 bg-[radial-gradient(90%_120%_at_0%_0%,rgba(40,191,241,0.12),transparent_62%),linear-gradient(180deg,rgba(12,12,16,0.96),rgba(0,0,0,0.92))] px-6 py-7 text-center shadow-[0_22px_55px_-34px_rgba(40,191,241,0.8)] sm:px-8 sm:py-8 md:flex-row md:justify-center md:gap-8 md:text-left">
@@ -36,7 +42,7 @@ export function Contacto() {
               href={VENTAS_WHATSAPP_EQUIPO_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex shrink-0 items-center justify-center gap-3 rounded-full bg-[#25D366] px-7 py-3.5 font-sans text-base font-medium text-black shadow-[0_18px_45px_-18px_rgba(37,211,102,0.9)] transition-transform duration-300 hover:-translate-y-0.5 hover:bg-[#1fbe5a]"
+              className="neon-btn neon-btn--whatsapp group inline-flex h-13 shrink-0 items-center justify-center gap-2.5 whitespace-nowrap rounded-full px-7 font-sans text-sm font-bold uppercase tracking-[0.06em] transition-all duration-500 ease-out active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[rgb(37,211,102)] sm:text-base"
             >
               <WhatsAppIcon className="size-5 shrink-0 transition-transform duration-300 group-hover:scale-110" />
               Hablar por WhatsApp

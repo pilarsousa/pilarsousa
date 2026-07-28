@@ -364,6 +364,19 @@
     inset 0 0 0.4em 0.15em var(--glow-color);
 }
 
+/*
+  Variante verde WhatsApp del CTA. Se aplica JUNTO a .neon-btn y sólo repinta
+  los tres tokens de color: el resto (geometría, glow, pulso, hover/active) lo
+  hereda tal cual, así el botón de soporte se lee como un CTA de la marca pero
+  con el color que la gente asocia a WhatsApp. Declarada después de .neon-btn
+  y con la misma especificidad, gana las variables.
+*/
+.neon-btn--whatsapp {
+  --glow-color: rgb(152, 240, 186);
+  --glow-spread-color: rgba(37, 211, 102, 0.75);
+  --btn-color: rgb(21, 106, 60);
+}
+
 /* Viñeta/sombra en los bordes, compartida por las pantallas de /game.
    inset box-shadow: oscurece los cuatro bordes y deja el centro intacto.
    Se aplica sobre un div a pantalla completa (absolute inset-0, pointer-events-none). */
