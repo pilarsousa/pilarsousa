@@ -12,7 +12,7 @@ import { TrustScoreCard } from "@/components/mision-origen/ui/TrustScoreCard";
 */
 export function Testimonios() {
   return (
-    <section id="testimonios" className="bg-background py-section">
+    <section id="testimonios" className="bg-background pb-section pt-10 sm:pt-14">
       <Container>
         <div className="flex flex-col gap-12">
           <div className="flex flex-col items-center text-center">

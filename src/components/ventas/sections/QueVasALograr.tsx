@@ -46,7 +46,7 @@ export function QueVasALograr() {
           <div className="mx-auto grid w-full max-w-3xl grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
             {LOGROS.map((logro, i) => (
               <Reveal key={i} delay={0.1 + i * 0.1}>
-                <div className="fancy-card shine-hover group flex h-full flex-col gap-3 p-7">
+                <div className="fancy-card fancy-card--on-black shine-hover group flex h-full flex-col gap-3 p-7">
                   <h3 className="font-display text-lg font-semibold text-foreground">
                     {logro.title}
                   </h3>

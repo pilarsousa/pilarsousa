@@ -948,6 +948,24 @@
     0 0 28px color-mix(in srgb, var(--color-neon-pink) 22%, transparent);
 }
 
+/*
+  Variante para fondo negro puro (ventas): sobre bg-void el mix-blend-mode:
+  overlay del ::after casi no se ve, así que el rectángulo cruzado detrás
+  desaparece. Esta variante lo pinta con el rosa neón directo (sin overlay) y
+  más opaco, para que el "panel tilteado detrás" se lea igual que en registro.
+*/
+.fancy-card--on-black::after {
+  mix-blend-mode: normal;
+  background: color-mix(in srgb, var(--color-neon-pink) 22%, #000000);
+  opacity: 1;
+  border: 1px solid color-mix(in srgb, var(--color-neon-pink) 45%, transparent);
+}
+
+.fancy-card--on-black:hover::after {
+  rotate: 9deg;
+  background: color-mix(in srgb, var(--color-neon-pink) 30%, #000000);
+}
+
 .fancy-card:hover::after {
   rotate: 9deg;
   opacity: 0.68;

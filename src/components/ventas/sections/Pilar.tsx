@@ -32,13 +32,15 @@ export function Pilar() {
           quality={90}
           sizes="100vw"
           placeholder="blur"
-          className="object-cover object-top lg:object-[62%_center] xl:object-[58%_center]"
+          className="object-cover object-top lg:object-[30%_center] xl:object-[34%_center]"
         />
       </picture>
 
+      {/* Legibilidad: en mobile oscurece abajo; en desktop oscurece la DERECHA
+          (donde va el texto), dejando la cara de Pilar (izquierda) descubierta. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[86svh] md:h-[84svh] bg-[linear-gradient(to_top,#000000_0%,rgba(0,0,0,0.9)_24%,rgba(0,0,0,0.5)_42%,transparent_66%)] lg:inset-0 lg:h-full lg:bg-[linear-gradient(to_right,#000000_0%,rgba(0,0,0,0.9)_34%,rgba(0,0,0,0.52)_56%,transparent_78%)]"
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[86svh] md:h-[84svh] bg-[linear-gradient(to_top,#000000_0%,rgba(0,0,0,0.9)_24%,rgba(0,0,0,0.5)_42%,transparent_66%)] lg:inset-0 lg:h-full lg:bg-[linear-gradient(to_left,#000000_0%,rgba(0,0,0,0.9)_34%,rgba(0,0,0,0.52)_56%,transparent_78%)]"
       />
 
       <div
@@ -59,12 +61,14 @@ export function Pilar() {
       />
 
       <Container className="pb-14 pt-[72svh] md:pt-[82svh] lg:pb-10 lg:pt-0 xl:pb-8">
-        <div className="max-w-2xl text-left [text-shadow:0_2px_20px_rgba(0,0,0,0.72)] lg:max-w-[52%]">
+        {/* Desktop: el texto va a la DERECHA (ml-auto), sobre el hueco oscuro,
+            para no tapar la cara de Pilar (izquierda). Sin text-shadow. */}
+        <div className="max-w-2xl text-left lg:ml-auto lg:max-w-[52%]">
           <Reveal delay={0.1}>
             <div>
               <h2 id="pilar-title" className="font-display text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
                 ¿Quién es{" "}
-                <span className="bg-clip-text text-transparent bg-[length:200%_auto] animate-neon-drift bg-[linear-gradient(110deg,#f90281_0%,#f00eb8_30%,#ffffff_52%,#aef0fe_68%,#495cc4_100%)] [filter:drop-shadow(0_0_12px_rgba(240,14,184,0.44))_drop-shadow(0_0_28px_rgba(73,92,196,0.32))]">
+                <span className="bg-clip-text text-transparent bg-[length:200%_auto] animate-neon-drift bg-[linear-gradient(110deg,#f90281_0%,#f00eb8_30%,#ffffff_52%,#aef0fe_68%,#495cc4_100%)]">
                   Pilar Sousa
                 </span>
                 ?
