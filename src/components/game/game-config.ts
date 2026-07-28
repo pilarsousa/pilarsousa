@@ -124,6 +124,6 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
   {
     id: "q7",
     question:
-      "Después de ver todo lo que contiene el programa Volver al Origen, ¿te gustaría formar parte de esta segunda edición? Cuéntanos qué te llama y qué dudas te quedan.",
+      '¿Has podido ver todo lo que contiene el programa "Volver al Origen"? ¿Te gustaría formar parte de esta segunda edición?',
   },
 ];

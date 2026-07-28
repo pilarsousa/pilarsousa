@@ -1,5 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
 import cardUnica from "@/../public/game/seccions/section-2/card-unica/card-unica-sf.png";
+import botonAtras from "@/../public/game/seccions/section-2/card-unica/boton-atras.png";
 import descarga from "@/../public/game/seccions/section-2/card-unica/descarga.png";
 import gema1 from "@/../public/game/seccions/section-2/card-unica/img-gema-1.png";
 import gema2 from "@/../public/game/seccions/section-2/card-unica/img-gema-2.png";
@@ -12,8 +14,8 @@ import { ARCHIVO_OCULTO_PDF } from "@/components/game/game-config";
   Replica la card ornamental de la 1ª card (card-unica-sf.png con el PDF
   desbloqueado de fondo, gemas en los huecos y el botón de descarga encastrado en su
   socket), pero apuntando al PDF "El Archivo Oculto — Código 6 Desclasificado" y
-  SIN el comportamiento de modal (aquí es contenido inline, no hay botón atrás:
-  el usuario ya llegó al material tras registrarse).
+  SIN el comportamiento de modal: aquí es contenido inline. El botón atrás vive
+  dentro del socket superior izquierdo de la card, igual que en la 1ª card.
 
   Las posiciones (% sobre el alpha del PNG del marco) son las mismas que la 1ª
   card, porque es exactamente la misma pieza gráfica.
@@ -72,6 +74,15 @@ export function GameMaterial() {
           sizes="70vh"
           className="pointer-events-none select-none object-contain"
         />
+
+        {/* boton-atras — socket superior izquierdo → vuelve al inicio del game. */}
+        <Link
+          href="/game/home"
+          aria-label="Volver a inicio"
+          className="absolute left-[17.7%] top-[20.8%] w-[18%] -translate-x-1/2 -translate-y-1/2 transition-transform duration-200 ease-out hover:scale-105 active:scale-95 focus-visible:outline-none"
+        >
+          <Image src={botonAtras} alt="" className="h-auto w-full" />
+        </Link>
 
         {/* Botón de descarga — socket inferior derecho → descarga el PDF. */}
         <div className="absolute left-[81.2%] top-[88.2%] w-[18%] -translate-x-1/2 -translate-y-1/2">

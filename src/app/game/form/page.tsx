@@ -51,14 +51,17 @@ export default async function GameFormPage({
         className="pointer-events-none absolute inset-0 -z-10 bg-black/30"
       />
 
-      {/* Volver a /game/home — arriba a la izquierda, en todos los pasos */}
-      <Link
-        href="/game/home"
-        aria-label="Volver a inicio"
-        className="absolute left-4 top-4 z-20 inline-flex size-11 items-center justify-center rounded-full border border-cyan/70 bg-cyan/10 text-cyan shadow-[0_0_16px_rgba(40,191,241,0.35)] backdrop-blur-sm transition-all duration-300 hover:border-cyan hover:bg-cyan/20 hover:shadow-[0_0_24px_rgba(40,191,241,0.55)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
-      >
-        <ArrowLeft size={20} aria-hidden />
-      </Link>
+      {!isNivel2 && (
+        /* Volver a /game/home — arriba a la izquierda para el flujo original.
+           En nivel 2, el botón vive dentro de la card única ornamental. */
+        <Link
+          href="/game/home"
+          aria-label="Volver a inicio"
+          className="absolute left-4 top-4 z-20 inline-flex size-11 items-center justify-center rounded-full border border-cyan/70 bg-cyan/10 text-cyan shadow-[0_0_16px_rgba(40,191,241,0.35)] backdrop-blur-sm transition-all duration-300 hover:border-cyan hover:bg-cyan/20 hover:shadow-[0_0_24px_rgba(40,191,241,0.55)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+        >
+          <ArrowLeft size={20} aria-hidden />
+        </Link>
+      )}
 
       {isNivel2 ? <GameGate /> : <GameFlow />}
 
