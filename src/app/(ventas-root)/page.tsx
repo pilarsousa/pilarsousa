@@ -5,6 +5,7 @@ import { Oferta } from "@/components/ventas/sections/Oferta";
 import { Testimonios } from "@/components/ventas/sections/Testimonios";
 import { Precio } from "@/components/ventas/sections/Precio";
 import { Pilar } from "@/components/ventas/sections/Pilar";
+import { Contacto } from "@/components/ventas/sections/Contacto";
 import { Faq } from "@/components/ventas/sections/Faq";
 import { Footer } from "@/components/mision-origen/sections/Footer";
 
@@ -19,7 +20,8 @@ import { Footer } from "@/components/mision-origen/sections/Footer";
     5. Testimonios (prueba social)
     6. Resumen y precio (cierre + CTA)
     7. Quién es Pilar (autoridad)
-    8. Soporte y FAQ (últimas objeciones)
+    8. Contacto directo con el equipo (duda que necesita respuesta humana)
+    9. Soporte y FAQ (últimas objeciones)
 
   Reutiliza componentes de la landing de registro (testimonios, bio de Pilar,
   footer) para no duplicar contenido ni estilo.
@@ -34,6 +36,7 @@ export default function VentasPage() {
       <Testimonios />
       <Precio />
       <Pilar />
+      <Contacto />
       <Faq />
       <Footer />
     </main>
