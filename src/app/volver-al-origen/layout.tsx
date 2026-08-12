@@ -48,23 +48,31 @@ export default function VolverAlOrigenLayout({
   children: React.ReactNode;
 }>) {
   return (
-    /* overflow-x-clip: los halos y resplandores sangran fuera de sus secciones
-       a propósito; esto evita que eso genere scroll horizontal en mobile. */
-    <div className="vo-scope min-h-full overflow-x-clip bg-background text-foreground">
-      {/* No pinta nada: sólo activa el scroll suave mientras se está en esta
-          landing y lo apaga al salir. */}
-      <SmoothScroll />
-      {children}
+    <>
+      {/* overflow-x-clip: los halos y resplandores sangran fuera de sus
+          secciones a propósito; esto evita que eso genere scroll horizontal en
+          mobile. */}
+      <div className="vo-scope min-h-full overflow-x-clip bg-background text-foreground">
+        {/* No pinta nada: sólo activa el scroll suave mientras se está en esta
+            landing y lo apaga al salir. */}
+        <SmoothScroll />
+        {children}
+      </div>
 
       {/* Desenfoque progresivo en el borde inferior de la ventana: el contenido
           se difumina justo antes de salir de pantalla, en vez de cortarse.
 
+          VA FUERA DEL DIV DE ARRIBA, Y ES OBLIGATORIO. Ese div tiene
+          overflow-x-clip, y en WebKit —Safari de iPhone y iPad— un ancestro que
+          recorta overflow anula el backdrop-filter de sus descendientes: el
+          efecto simplemente no se pinta. Chrome lo tolera, así que el fallo sólo
+          se ve en iOS. Dentro del contenedor el desenfoque no existía en iPhone.
+
           target="page" y no "parent" porque debe seguir a la ventana mientras se
           hace scroll, no quedarse anclado al final del documento.
 
-          z-index 40: por encima del contenido y por debajo tanto del modal de
-          reseñas (200) como de la textura de puntos (9999), que debe seguir
-          leyéndose nítida por encima de todo. */}
+          z-index 40: por encima del contenido y por debajo del modal de reseñas,
+          que está en 200 y debe poder taparlo. */}
       <GradualBlur
         target="page"
         position="bottom"
@@ -76,6 +84,6 @@ export default function VolverAlOrigenLayout({
         opacity={0.9}
         className="z-40"
       />
-    </div>
+    </>
   );
 }

@@ -42,21 +42,27 @@ export function Hero() {
           Mismo patrón que la sección de Pilar: el retrato ocupa la parte alta,
           se funde con el fondo y el contenido arranca en esa costura.
 
-          El fundido es opaco a partir del 77% de la imagen (23% contado desde
-          abajo) y empieza a insinuarse sobre el 35%. Así la cara de Pilar, que
-          está sobre el 45% del alto, queda siempre limpia.
+          El fundido es opaco a partir del 73% de la imagen (27% contado desde
+          abajo) y empieza a insinuarse sobre el 32%. La cara de Pilar está
+          sobre el 45% del alto, así que sigue quedando por encima de la zona
+          sólida.
 
-          Ese 77% no es redondo por capricho: bajarlo desde el 74% anterior
-          desplaza la costura unos 20 px hacia abajo en una pantalla de móvil
-          típica, que era lo que hacía falta para que el sombreado no empezara
-          tan arriba.
+          Ese 73% va ATADO al padding superior del contenido: el panel tiene que
+          apoyarse siempre por debajo de esa marca. Cada vez que el panel sube,
+          el fundido tiene que adelantarse con él o el texto acaba encima de la
+          foto todavía visible. Los dos valores se mueven juntos.
 
-          El bloque mide 86svh y no menos: es lo que deja sitio para que el panel
-          arranque por debajo de la figura completa en lugar de partirla por la
-          cintura. */}
+          El bloque mide 80svh. Acortarlo es la palanca para subir el panel sin
+          tocar el fundido: como las paradas del degradado son porcentajes del
+          bloque, un bloque más corto sitúa la costura más arriba en píxeles
+          mientras el reparto de luz sobre la figura queda exactamente igual.
+
+          La alternativa —adelantar el fundido— habría empezado a oscurecer la
+          cara de Pilar, que está sobre el 45% del alto. El recorte se lleva
+          cuerpo por abajo, que es lo prescindible. */}
       <div
         aria-hidden
-        className="absolute inset-x-0 top-0 -z-20 h-[86svh] lg:hidden"
+        className="absolute inset-x-0 top-0 -z-20 h-[80svh] lg:hidden"
       >
         <Image
           src={heroBgMovil}
@@ -70,7 +76,7 @@ export function Hero() {
         <div className="pointer-events-none absolute inset-0">
           <MatrixRain fade={0} opacity={0.22} />
         </div>
-        <div className="absolute inset-0 bg-[linear-gradient(to_top,#0b1502_0%,#0b1502_23%,rgba(11,21,2,0.55)_41%,transparent_65%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_top,#0b1502_0%,#0b1502_27%,rgba(11,21,2,0.55)_45%,transparent_68%)]" />
       </div>
 
       {/* ══ ESCRITORIO: imagen de fondo a pantalla completa ══
@@ -109,24 +115,29 @@ export function Hero() {
         <div className="absolute inset-x-0 bottom-0 h-32 bg-[linear-gradient(to_top,#0b1502,transparent)]" />
       </div>
 
-      {/* pt-[68svh] en móvil.
+      {/* pt-[calc(68svh-160px)] en móvil.
 
-          El valor es geométrico y va atado al fundido: la imagen mide 86svh y
-          se vuelve opaca en el 77% de ese alto, o sea a 66,2svh. Arrancar aquí
-          deja el panel 1,8svh por debajo de esa marca: justo donde el fondo ya
-          es negro plano, sin hueco de sobra.
+          El panel arranca POR ENCIMA del punto donde la foto acaba de fundirse
+          a negro, y es correcto: es un panel de cristal —fondo translúcido más
+          backdrop-blur— pensado para flotar sobre la imagen. No necesita fondo
+          sólido debajo; el desenfoque que aplica sobre lo que tiene detrás es lo
+          que mantiene legible el texto.
 
-          Los 78svh anteriores dejaban 12svh de aire negro entre la foto y el
-          panel. Los 52svh iniciales caían por encima de la costura y le partían
-          la figura por la cintura. Este valor es el punto medio real: pegado al
-          negro, pero sin invadir la imagen.
+          Durante varios ajustes se estuvo forzando que cayera sobre negro pleno.
+          Era una restricción inventada, y lo único que conseguía era empujar el
+          contenido más abajo de lo que pedía el diseño.
+
+          Los 160 px se restan en píxeles y no en svh: svh depende del alto de
+          cada pantalla, así que el mismo ajuste en svh movería el panel más en
+          un móvil grande que en uno pequeño. Con medida fija el desplazamiento
+          es idéntico en todos.
 
           Si se cambia el fundido, hay que mover este número con él — son las
           dos mitades del mismo ajuste.
 
           En escritorio se anula, porque allí el centrado lo resuelve
           items-center de la sección. */}
-      <VoContainer className="pb-16 pt-[68svh] lg:py-0">
+      <VoContainer className="pb-16 pt-[calc(68svh-160px)] lg:py-0">
         {/* 570 px: la mitad exacta del ancho de contenido (1140 px), que es la
             referencia del diseño. */}
         <div className="mx-auto w-full max-w-[570px] rounded-lg border border-vo-bone/15 bg-vo-bone/8 px-7 py-10 text-center text-foreground shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)] backdrop-blur-md sm:px-10 lg:mx-0">

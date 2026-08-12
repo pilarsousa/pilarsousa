@@ -1113,43 +1113,6 @@
 }
 
 /*
-  Textura de puntos sobre toda la landing.
-
-  Una rejilla de puntos blancos al 5% cada 10 px, fija respecto a la ventana: al
-  no moverse con el scroll se comporta como el grano de una película, una capa
-  de suciedad sobre el objetivo, en lugar de un patrón pegado al contenido.
-
-  Se probó también una trama de rayas verticales; para recuperarla, sustituir el
-  background-image por:
-    repeating-linear-gradient(to right, rgb(255 255 255 / 0.05) 0px,
-      rgb(255 255 255 / 0.05) 1px, transparent 1px, transparent 10px)
-  y quitar el background-size.
-
-  Va en .vo-scope y no en body: body la aplicaría a TODAS las landings del
-  proyecto, que tienen su propia dirección de arte.
-
-  z-index 9999 y no 999999999: basta con quedar por encima de todo lo de esta
-  página —lo más alto es el modal de reseñas, en 200— y un número desmedido
-  sólo dificulta colocar cualquier cosa por encima el día que haga falta.
-
-  pointer-events: none es imprescindible: sin eso la capa taparía la página
-  entera y ningún botón ni campo respondería al ratón.
-*/
-.vo-scope::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  pointer-events: none;
-  background-image: radial-gradient(
-    circle,
-    rgb(255 255 255 / 0.05) 1.5px,
-    transparent 1.5px
-  );
-  background-size: 10px 10px;
-}
-
-/*
   Card de Volver al Origen — misma pieza que .fancy-card de Misión Origen, con
   esta paleta. El recurso es el panel inclinado que asoma por detrás: un ::after
   del mismo tamaño, girado 7 grados y encogido, que al pasar el puntero gira un
@@ -1163,39 +1126,63 @@
 .vo-card {
   position: relative;
   isolation: isolate;
-  border: 1px solid color-mix(in srgb, var(--color-vo-lumen) 30%, transparent);
   border-radius: 1.5rem;
-  background-color: color-mix(in srgb, var(--color-vo-forest) 70%, transparent);
   box-shadow:
     0 0.5rem 1rem rgb(0 0 0 / 0.2),
     0 1rem 3rem rgb(0 0 0 / 0.25);
-  transition:
-    border-color 0.5s ease,
-    box-shadow 0.5s ease;
+  transition: box-shadow 0.5s ease;
 }
 
-.vo-card::after {
+/*
+  La CARA de la card, en su propia capa.
+
+  El fondo y el borde no van en .vo-card directamente, y no es un capricho: por
+  el orden de pintado del CSS, un hijo con z-index negativo se dibuja por encima
+  del fondo del propio elemento y sólo por debajo de su contenido. Con el fondo
+  en .vo-card, el panel inclinado quedaba entre medias y su borde cruzaba la
+  cara, que era lo que hacía raro el conjunto.
+
+  Al mover la cara a su propia capa (-1) y bajar el panel a la de atrás (-2), el
+  panel queda de verdad detrás y sólo asoma por fuera del contorno.
+*/
+.vo-card::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
   border-radius: inherit;
+  border: 1px solid color-mix(in srgb, var(--color-vo-lumen) 30%, transparent);
+  /* Opaca al 92%: si fuese translúcida el panel de atrás se transparentaría a
+     través de ella y volveríamos al problema anterior por otra vía. */
+  background-color: color-mix(in srgb, var(--color-vo-forest) 92%, transparent);
+  transition: border-color 0.5s ease;
+}
+
+/* El panel inclinado, detrás de la cara. */
+.vo-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  border-radius: inherit;
   background: color-mix(in srgb, var(--color-vo-lumen) 18%, #000000);
   border: 1px solid color-mix(in srgb, var(--color-vo-lumen) 40%, transparent);
   rotate: 7deg;
   scale: 0.95;
-  opacity: 1;
   transition:
     rotate 0.5s ease,
     background 0.5s ease;
 }
 
 .vo-card:hover {
-  border-color: color-mix(in srgb, var(--color-vo-lumen) 60%, transparent);
   box-shadow:
     0 0.5rem 1rem rgb(0 0 0 / 0.2),
     0 1rem 3rem rgb(0 0 0 / 0.25),
     0 0 28px color-mix(in srgb, var(--color-vo-lumen) 22%, transparent);
+}
+
+.vo-card:hover::before {
+  border-color: color-mix(in srgb, var(--color-vo-lumen) 60%, transparent);
 }
 
 .vo-card:hover::after {

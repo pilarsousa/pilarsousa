@@ -58,22 +58,18 @@ export function BenefitCard({ icon, title, text }: BenefitCardProps) {
       {/* z-10 sube el contenido por encima de la lluvia. El panel inclinado
           vive en z -1, así que quedan las tres capas en orden. */}
       <div className="relative z-10 flex flex-col">
-        {/* Cabecera centrada en los dos tamaños: en móvil icono y título en
-            fila, desde sm apilados. Sólo cambia la disposición, no la
-            alineación.
-
-            El párrafo de abajo se queda a la izquierda a propósito: en un texto
-            de varios renglones el centrado deja los finales de línea
-            irregulares y cuesta más seguir dónde empieza el siguiente. La
-            cabecera son una o dos palabras y no tiene ese problema. */}
-        <div className="flex items-center justify-center gap-2 sm:block">
+        {/* Todo alineado a la izquierda: cabecera y párrafo comparten el mismo
+            margen y el ojo encuentra un único borde vertical del que colgar la
+            lectura. Lo único que cambia entre tamaños es la disposición —en
+            móvil icono y título en fila, desde sm apilados—, no la alineación. */}
+        <div className="flex items-center gap-2 sm:block">
           {/* Círculo del icono: borde verde tenue y halo luminoso, el mismo
               recurso de "luz encendida" que usan los CTA y el logo.
               shrink-0 para que el título no lo aplaste al ponerse a su lado. */}
           {/* 36 px en móvil, cuatro menos que antes: cada píxel que cede el
               icono es ancho que gana el título, que es lo que permite
               agrandarlo sin que se parta. */}
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-accent/35 bg-vo-forest/40 shadow-[0_0_26px_-8px_var(--vo-glow-strong)] sm:mx-auto sm:mb-6 sm:size-[86px]">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-accent/35 bg-vo-forest/40 shadow-[0_0_26px_-8px_var(--vo-glow-strong)] sm:mb-6 sm:size-[86px]">
             <Icon
               strokeWidth={1.2}
               className="size-[17px] text-accent sm:size-[38px]"
@@ -99,7 +95,7 @@ export function BenefitCard({ icon, title, text }: BenefitCardProps) {
 
               Desde sm se pasa a tamaño fijo, porque ahí el título ya ocupa su
               propia línea y puede partirse sin problema. */}
-          <h3 className="font-display text-[clamp(0.66rem,3.45vw,1.15rem)] uppercase leading-snug tracking-[0.03em] whitespace-nowrap text-foreground sm:text-center sm:text-[1.35rem] sm:tracking-[0.1em] sm:whitespace-normal">
+          <h3 className="font-display text-[clamp(0.66rem,3.45vw,1.15rem)] uppercase leading-snug tracking-[0.03em] whitespace-nowrap text-foreground sm:text-[1.35rem] sm:tracking-[0.1em] sm:whitespace-normal">
             {title}
           </h3>
         </div>
@@ -122,7 +118,7 @@ export function BenefitCard({ icon, title, text }: BenefitCardProps) {
             combinación es la que antes cruzaba el umbral de lectura incómoda
             sobre fondo oscuro. El tamaño puede encoger; el peso y el contraste
             no deberían acompañarlo. */}
-        <p className="mx-auto mt-5 max-w-[16.5rem] font-sans text-sm leading-relaxed text-foreground/85 sm:mx-0 sm:mt-4 sm:max-w-none sm:text-[0.95rem]">
+        <p className="mt-5 max-w-[16.5rem] font-sans text-sm leading-relaxed text-foreground/85 sm:mt-4 sm:max-w-none sm:text-[0.95rem]">
           {text}
         </p>
       </div>
