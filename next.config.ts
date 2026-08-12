@@ -9,17 +9,33 @@ const nextConfig: NextConfig = {
     qualities: [75, 90],
   },
 
+  async rewrites() {
+    return [
+      /* En el dominio de pauta la raíz sirve la landing de LISTA DE ESPERA de
+         la tercera edición, no la de venta.
+
+         Es un rewrite y no un redirect: la URL sigue siendo lp.pilarsousa.es/ y
+         el visitante nunca ve /volver-al-origen. Con un redirect la barra de
+         direcciones cambiaría y las URL de la pauta dejarían de coincidir con
+         lo que se comparte.
+
+         Condicionado por host, igual que el resto de reglas de este archivo:
+         los demás dominios conservan la landing de venta en su raíz. */
+      {
+        source: "/",
+        has: [{ type: "host", value: "lp.pilarsousa.es" }],
+        destination: "/volver-al-origen",
+      },
+    ];
+  },
+
   async redirects() {
     return [
-      /* En el dominio de pauta, /ventas queda como alias técnico viejo: la URL
-         pública/canónica es /. No hacerlo global: otros dominios pueden tener
-         otra raíz. */
-      {
-        source: "/ventas",
-        has: [{ type: "host", value: "lp.pilarsousa.es" }],
-        destination: "/",
-        permanent: false,
-      },
+      /* NOTA: aquí había un redirect de /ventas a / en el dominio de pauta,
+         de cuando la raíz era la landing de venta. Se retiró al pasar la raíz
+         a la lista de espera: mantenerlo habría mandado a quien buscara la
+         página de venta a un formulario de espera, y habría dejado esa landing
+         inalcanzable en ese dominio. Ahora /ventas la sirve directamente. */
       /* La gracias del Bootcamp se movió a /bootcamp/gracias. El checkout de
          Stripe todavía puede apuntar a /gracias: esta red de seguridad evita
          que el comprador caiga en un 404 tras pagar. Quitar una vez que la URL

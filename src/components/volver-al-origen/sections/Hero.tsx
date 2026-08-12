@@ -3,6 +3,7 @@ import { MatrixRain } from "@/components/bootcamp/ui/MatrixRain";
 import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
 import { LogoVao } from "@/components/volver-al-origen/ui/LogoVao";
 import { SparkDivider } from "@/components/volver-al-origen/ui/SparkDivider";
+import { MovingBorder } from "@/components/volver-al-origen/ui/MovingBorder";
 import { WaitlistForm } from "@/components/volver-al-origen/ui/WaitlistForm";
 import { HERO } from "@/components/volver-al-origen/content";
 import heroBg from "@/../public/volver-origen/public/img/hero/hero-seccion.png";
@@ -36,7 +37,17 @@ export function Hero() {
          qué se estaba apuntando. En el título se ven las dos cosas: el nombre
          del programa arriba y los campos justo debajo. */
       aria-labelledby="registro"
-      className="relative isolate flex min-h-svh items-start overflow-hidden lg:items-center lg:py-20"
+      /* lg:min-h-[800px] y no lg:h-[800px]: la sección lleva overflow-hidden,
+         así que una altura FIJA recortaría el formulario si el contenido se
+         pasara aunque fuera por unos píxeles. Con un mínimo se queda en 800
+         cuando cabe y crece si hace falta, sin cortar nada nunca.
+
+         Los 800 px son los de hero-seccion.png, que mide 1920x800. Antes la
+         sección llegaba a ~1100 por culpa del alto del panel: la proporción
+         caía a 1,74:1 frente a los 2,4:1 de la imagen y object-cover compensaba
+         recortando los laterales, con lo que se perdía composición a izquierda
+         y derecha. */
+      className="relative isolate flex min-h-svh items-start overflow-hidden lg:min-h-[800px] lg:items-center lg:py-6"
     >
       {/* ══ MÓVIL: imagen a sangre desde arriba ══
           Mismo patrón que la sección de Pilar: el retrato ocupa la parte alta,
@@ -138,13 +149,58 @@ export function Hero() {
           En escritorio se anula, porque allí el centrado lo resuelve
           items-center de la sección. */}
       <VoContainer className="pb-16 pt-[calc(68svh-160px)] lg:py-0">
-        {/* 570 px: la mitad exacta del ancho de contenido (1140 px), que es la
-            referencia del diseño. */}
-        <div className="mx-auto w-full max-w-[570px] rounded-lg border border-vo-bone/15 bg-vo-bone/8 px-7 py-10 text-center text-foreground shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)] backdrop-blur-md sm:px-10 lg:mx-0">
-          <LogoVao className="mx-auto size-32 text-accent sm:size-36" />
+      {/* 570 px: la mitad exacta del ancho de contenido (1140 px), que es la
+          referencia del diseño. */}
+      <div className="relative mx-auto w-full max-w-[570px] lg:mx-0">
+        {/* Capa de luz. Va como HERMANA del panel, no envolviéndolo, y es
+            deliberado: necesita overflow-hidden para recortar la luz a la forma
+            de la card, y en WebKit un ancestro que recorta overflow anula el
+            backdrop-filter de sus descendientes. Envolviendo el panel se
+            quedaría sin su efecto de cristal en iPhone.
 
-          <p className="mt-6 font-display text-xs uppercase tracking-[0.32em] text-accent sm:text-sm">
-            {HERO.eyebrow}
+            Sobresale 2 px por cada lado: esa rendija es por donde asoma la luz
+            que recorre el borde. El resto queda detrás del panel, que al ser
+            translúcido deja intuir la esfera que lo cruza. */}
+        {/* vo-edge-only recorta esta capa a su marco de 2 px. Es lo que
+            convierte cada disco de luz en un tramo encendido del contorno en
+            vez de un pompón atravesando el panel. */}
+        <div
+          aria-hidden
+          className="vo-edge-only pointer-events-none absolute -inset-[2px] overflow-hidden rounded-lg"
+        >
+          <MovingBorder duration={7000} rx="10px" ry="10px">
+            <span className="block size-28 rounded-full bg-[radial-gradient(circle,#ffffff_0%,var(--color-vo-lumen)_30%,transparent_68%)] opacity-70 blur-[3px]" />
+          </MovingBorder>
+          {/* Segunda luz a media vuelta: con una sola, la mitad del contorno
+              está siempre apagada y en una card tan alta se nota. */}
+          <MovingBorder duration={7000} rx="10px" ry="10px" offset={0.5}>
+            <span className="block size-28 rounded-full bg-[radial-gradient(circle,#ffffff_0%,var(--color-vo-lumen)_30%,transparent_68%)] opacity-70 blur-[3px]" />
+          </MovingBorder>
+        </div>
+
+        {/* La esfera va en su propia capa, SIN recortar al borde: su gracia es
+            justamente cruzar la card por dentro. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 overflow-hidden rounded-lg"
+        >
+          <span className="vo-orb" />
+        </div>
+
+        {/* lg:py-7 recorta 24 px del panel. Todos los "lg:" que aparecen de aquí
+            hacia abajo tienen el mismo origen: encajar el panel dentro de los
+            800 px de la sección. Sumados ahorran unos 190 px. */}
+        <div className="relative rounded-lg border border-vo-bone/15 bg-vo-bone/8 px-7 py-10 text-center text-foreground shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)] backdrop-blur-md sm:px-10 lg:py-7">
+          <LogoVao className="mx-auto size-32 text-accent sm:size-36 lg:size-24" />
+
+          {/* Badge. inline-flex y no block: así la píldora mide lo que el texto
+              y queda centrada por el text-center del panel, en lugar de ocupar
+              todo el ancho. */}
+          <p className="mt-6 inline-flex items-center rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 font-display text-xs uppercase tracking-[0.32em] text-accent sm:text-sm lg:mt-4 lg:py-1">
+            {/* El tracking añade espacio DESPUÉS de la última letra, incluida la
+                final. Sin compensarlo, la píldora tiene 0.32em de más a la
+                derecha y el texto se ve descentrado dentro de ella. */}
+            <span className="-mr-[0.32em]">{HERO.eyebrow}</span>
           </p>
 
           {/* scroll-mt-8: sin margen el título queda pegado al borde superior
@@ -156,15 +212,15 @@ export function Hero() {
             <span className="block text-xl tracking-[0.14em] text-foreground/85 sm:text-2xl">
               {HERO.titleTop}
             </span>
-            <span className="mt-1 block text-4xl tracking-[0.05em] sm:text-[3.1rem]">
+            <span className="mt-1 block text-4xl tracking-[0.05em] sm:text-[3.1rem] lg:text-[2.6rem]">
               {HERO.titleMain[0]}
             </span>
-            <span className="block text-5xl tracking-[0.03em] sm:text-[4rem]">
+            <span className="block text-5xl tracking-[0.03em] sm:text-[4rem] lg:text-[3.3rem]">
               {HERO.titleMain[1]}
             </span>
           </h1>
 
-          <SparkDivider className="mt-5" />
+          <SparkDivider className="mt-5 lg:mt-4" />
 
           {/* Es el subtitular que explica la oferta, así que va por encima del
               cuerpo de texto normal: 18 px y peso normal, no light.
@@ -174,7 +230,7 @@ export function Hero() {
               lo menos legible de la página. Se queda en 18 y no más arriba
               porque la frase es larga (240 caracteres) y dentro del panel de
               570 px cada punto extra le suma una línea. */}
-          <p className="mt-5 font-sans text-base leading-relaxed text-foreground/90 sm:text-lg">
+          <p className="mt-5 font-sans text-base leading-relaxed text-foreground/90 sm:text-lg lg:mt-4 lg:text-base">
             {HERO.intro.map((part) =>
               part.strong ? (
                 <strong key={part.text} className="font-semibold text-foreground">
@@ -186,14 +242,15 @@ export function Hero() {
             )}
           </p>
 
-          <div className="mt-6">
+          <div className="mt-6 lg:mt-5">
             <WaitlistForm />
           </div>
 
-          <p className="mt-4 font-sans text-xs font-light text-foreground/60">
+          <p className="mt-4 font-sans text-xs font-light text-foreground/60 lg:mt-3">
             {HERO.privacy}
           </p>
         </div>
+      </div>
       </VoContainer>
     </section>
   );

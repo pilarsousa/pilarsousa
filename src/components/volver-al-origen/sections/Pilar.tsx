@@ -192,10 +192,16 @@ export function Pilar() {
             <PilarBio />
           </div>
 
-          {/* Centrado respecto a la columna de texto, no alineado a su borde. */}
+          {/* En móvil centrado; en escritorio pegado al borde izquierdo, para
+              que arranque en la misma vertical que los párrafos.
+
+              El tope de 448 px se levanta a partir de lg y el botón pasa a
+              ocupar el ancho de la columna (unos 547 px). Es lo que hace que el
+              texto entre en una sola línea: con el tope puesto no le cabía y
+              partía en "…LISTA DE / ESPERA". */}
           <ScrollIn delay={0.2}>
-            <div className="mt-9 flex justify-center">
-              <VoCta href={FORM_ANCHOR} className="max-w-md">
+            <div className="mt-9 flex justify-center lg:justify-start">
+              <VoCta href={FORM_ANCHOR} className="max-w-md lg:max-w-none">
                 {PILAR.cta}
               </VoCta>
             </div>

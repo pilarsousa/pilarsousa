@@ -1113,6 +1113,81 @@
 }
 
 /*
+  Recorta una capa a la banda de su borde, dejando hueco el interior.
+
+  Sin esto, las luces que recorren el contorno del panel del hero se ven como
+  pompones: son discos difuminados de más de 100 px y el panel es translúcido,
+  así que el disco entero se transparenta hacia dentro en lugar de leerse como
+  una luz sobre el filo.
+
+  Achicar los discos no lo arregla —seguirían desbordando y encima se apagaría
+  el resplandor—. Lo que hace falta es recortar, y para eso se superponen dos
+  máscaras: una cubre toda la caja y otra sólo su interior (content-box). Al
+  componerlas con exclude se cancelan donde coinciden, y lo único que sobrevive
+  es el marco de 2 px. Del disco sólo se ve el tramo que lo pisa.
+
+  El par -webkit- no es redundante: Safari sigue necesitando su prefijo para
+  mask-composite, y su valor equivalente se llama xor, no exclude.
+*/
+.vo-edge-only {
+  padding: 2px;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+/*
+  Esfera luminosa que recorre el panel del hero.
+
+  Deriva en diagonal y vuelve, en un ciclo largo (22 s) y con muy poca opacidad:
+  la idea es que se intuya al mirar fijo, no que llame la atención. Un recorrido
+  corto o un contraste alto la convertirían en un elemento más de la página
+  compitiendo con el formulario.
+
+  Va detrás del panel de cristal, así que el backdrop-filter de éste la difumina
+  todavía más. El blur propio es generoso de todas formas: si el navegador no
+  aplicara ese backdrop —WebKit lo desactiva en cuanto un ancestro recorta
+  overflow— la esfera seguiría leyéndose suave y no como un círculo definido.
+
+  El animation-play-state se detiene bajo prefers-reduced-motion por el reset
+  global de animaciones; la esfera se queda quieta en su posición inicial, que es
+  el comportamiento correcto.
+*/
+@keyframes vo-orb-drift {
+  0% {
+    transform: translate(-12%, 12%) scale(1);
+  }
+  50% {
+    transform: translate(62%, 48%) scale(1.25);
+  }
+  100% {
+    transform: translate(-12%, 12%) scale(1);
+  }
+}
+
+.vo-orb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 58%;
+  aspect-ratio: 1;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    rgb(255 255 255 / 0.15) 0%,
+    rgb(180 226 54 / 0.1) 45%,
+    transparent 70%
+  );
+  filter: blur(30px);
+  animation: vo-orb-drift 22s ease-in-out infinite;
+}
+
+/*
   Card de Volver al Origen — misma pieza que .fancy-card de Misión Origen, con
   esta paleta. El recurso es el panel inclinado que asoma por detrás: un ::after
   del mismo tamaño, girado 7 grados y encogido, que al pasar el puntero gira un

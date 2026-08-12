@@ -48,8 +48,11 @@ type Status = "idle" | "submitting" | "success";
 /* El formulario vive sobre el panel translúcido del hero, encima de la foto.
    Por eso los campos son oscuros y translúcidos con texto claro: un campo
    blanco sólido rompería la transparencia que se buscaba en el panel. */
+/* lg:h-12 baja los campos de 52 a 48 px en escritorio: son 12 px menos entre
+   los tres, parte del recorte que hace caber el panel en los 800 px de alto
+   del hero. */
 const FIELD_CLASS =
-  "h-[52px] w-full rounded-sm border bg-vo-black/40 pl-12 pr-4 font-sans text-sm font-light text-foreground outline-none backdrop-blur-sm transition-all duration-300 placeholder:text-foreground/55";
+  "h-[52px] w-full rounded-sm border bg-vo-black/40 pl-12 pr-4 font-sans text-sm font-light text-foreground outline-none backdrop-blur-sm transition-all duration-300 placeholder:text-foreground/55 lg:h-12";
 
 /* Cuánto se mantiene la confirmación en pantalla antes de navegar. Da tiempo a
    leer el mensaje y a ver el check dibujarse, sin llegar a hacerse espera. */
