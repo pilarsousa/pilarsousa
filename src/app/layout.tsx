@@ -1,6 +1,6 @@
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
-import { Cinzel, Manrope, Cormorant_Garamond } from "next/font/google";
+import { Cinzel, Manrope, Cormorant_Garamond, Montserrat } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -41,6 +41,18 @@ const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   style: ["normal", "italic"],
+  display: "swap",
+});
+
+// ---- Volver al Origen — Lista de espera ----
+
+/* Texto secundario de la landing de lista de espera. Sus títulos usan la Cinzel
+   declarada arriba: la guía de marca pide Cinzel/Trajan para titulares y
+   Montserrat/Lato para el resto, y Cinzel ya estaba en el proyecto. */
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -89,7 +101,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${cinzel.variable} ${manrope.variable} ${cormorant.variable} ${zenDots.variable} ${jost.variable} ${pressStart2P.variable} ${pixelifySans.variable} h-full antialiased`}
+      className={`${cinzel.variable} ${manrope.variable} ${cormorant.variable} ${montserrat.variable} ${zenDots.variable} ${jost.variable} ${pressStart2P.variable} ${pixelifySans.variable} h-full antialiased`}
     >
       {/* suppressHydrationWarning: browser extensions (e.g. ColorZilla) inject
           attributes like cz-shortcut-listen on <body> before React hydrates,

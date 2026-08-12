@@ -72,6 +72,40 @@
   /* Scroll cue impulse — a subtle premium downward nudge with a soft pause. */
   --animate-scroll-cue: scroll-cue 2.4s ease-in-out infinite;
 
+  /* ========= VOLVER AL ORIGEN — LISTA DE ESPERA (/volver-al-origen) ========= */
+  /* Paleta de la guía de marca "Volver al Origen 2.0", entregada por el
+     cliente. Seis colores exactos y ni un dorado: esta pieza NO hereda la
+     paleta del Bootcamp, la reemplaza entera en .vo-scope.
+
+     Los hex van literales a propósito. Son los de la guía, así que no deben
+     "aproximarse" a tokens que ya existan arriba aunque se parezcan: --color-
+     olive ya existe y es otro verde (#7e9d63), de otra marca. */
+  --color-vo-black: #0b1502; /* negro profundo — fondo principal */
+  --color-vo-forest: #1a2b07; /* verde bosque — superficies y cards */
+  --color-vo-olive: #2e4b0f; /* verde oliva — bordes y relleno de los CTA */
+  --color-vo-matrix: #5c8a1f; /* verde matrix — texturas, estados intermedios */
+  --color-vo-lumen: #b4e236; /* verde luminoso — acento, glow, CTA */
+  --color-vo-bone: #f6f6e5; /* blanco hueso — texto y panel claro */
+
+  /* Tinte de la sección de testimonios: un verde apenas más vivo y más claro
+     que el negro profundo del fondo general, lo justo para que el bloque se
+     distinga sin dejar de pertenecer a la misma página.
+
+     Recorrido hasta aquí, por si hace falta volver atrás: se probó como fondo
+     claro al 15% (#e3e9cc), 25% (#cfdbb3), 40% (#b8cb96), 50% (#a9c082) y 65%
+     (#92b064) de verde matrix sobre blanco hueso. Ese camino se abandonó al
+     pedir un verde casi igual al del resto de la página, lo que devuelve la
+     sección a texto CLARO sobre oscuro.
+
+     Los tonos intermedios entre este valor y ~#92b064 son tierra de nadie:
+     demasiado oscuros para texto negro y demasiado claros para texto blanco.
+     Si alguien aclara este token, hay que revisar los textos de la sección. */
+  /* Un escalón más claro que el valor anterior (#172509): en HSL sube la
+     luminosidad del 9% al 12%, manteniendo tono (90°) y saturación (61%) para
+     que sea el mismo verde y no otro. Subirlo o bajarlo es mover sólo esa
+     luminosidad. */
+  --color-vo-sage: #1f310c;
+
   /* ================= VOLVER AL ORIGEN ================= */
   /* Futuristic, neon-lit cyberpunk direction. Raw tokens only — the semantic
      aliases and fonts are in .mo-scope, since those names are already taken
@@ -1262,6 +1296,231 @@ body {
   opacity: 0.08;
   mix-blend-mode: plus-lighter;
 }
+
+/*
+  ===== Volver al Origen — Lista de espera (/volver-al-origen) =====
+
+  Repinta los aliases semánticos con la paleta de marca, igual que hace
+  .mo-scope: dentro de este subárbol bg-background, text-foreground o
+  text-accent resuelven al verde de la guía en lugar de a la tinta y el dorado
+  del Bootcamp. Nada de esto se filtra fuera del scope.
+
+  El glow vive en variables propias porque lo comparten el CTA, los halos de los
+  iconos y el resplandor del retrato: ajustar la intensidad del verde encendido
+  en toda la landing es tocar estas dos líneas.
+*/
+.vo-scope {
+  --color-background: var(--color-vo-black);
+  --color-surface: var(--color-vo-forest);
+  --color-surface-alt: var(--color-vo-olive);
+  --color-foreground: var(--color-vo-bone);
+  --color-accent: var(--color-vo-lumen);
+  --color-accent-soft: var(--color-vo-matrix);
+  --color-muted: color-mix(in srgb, var(--color-vo-bone) 55%, transparent);
+
+  /* Cinzel se mantiene para titulares (ya es la display de :root); la guía pide
+     Montserrat para el texto secundario, que sí sustituye a Manrope. */
+  --font-sans: var(--font-montserrat), system-ui, sans-serif;
+
+  --vo-glow: rgba(180, 226, 54, 0.4);
+  --vo-glow-strong: rgba(180, 226, 54, 0.75);
+}
+
+/*
+  CTA de la lista de espera. Rectangular con esquinas apenas redondeadas (no
+  pill como .neon-btn): la referencia pide una pieza más sobria y editorial,
+  acorde a la Cinzel de los títulos.
+
+  El glow va en tres capas — un contorno cerrado, un halo exterior y una luz
+  interna — para que el borde se lea encendido en lugar de simplemente claro.
+  Se escribe en CSS y no en utilidades porque hover/active reajustan las tres a
+  la vez, y en Tailwind eso serían tres box-shadow completos duplicados.
+*/
+/*
+  Check de confirmación del formulario. Dos animaciones encadenadas: el círculo
+  entra con un rebote corto y, un pelo después, el trazo se dibuja solo.
+
+  El trazo se dibuja con stroke-dasharray + stroke-dashoffset: se declara una
+  línea discontinua cuyo hueco mide todo el recorrido y se desplaza hasta 0, de
+  modo que el trazo "crece" en lugar de aparecer de golpe. Los 30 son la
+  longitud aproximada del path; si se cambia el icono hay que recalcularla.
+
+  Bajo prefers-reduced-motion el reset global las reduce a 0,01 ms: el check
+  aparece igual, sin recorrido. Por eso ambas terminan en `forwards`, para que
+  el estado final se mantenga.
+*/
+@keyframes vo-check-pop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes vo-check-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.vo-check {
+  animation: vo-check-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.vo-check-path {
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  animation: vo-check-draw 0.45s 0.15s ease-out forwards;
+}
+
+/*
+  Cáscara del CTA: recorta la luz que recorre el borde y aloja el estado de
+  pulsado y el foco. El padding de 1px es la rendija por la que asoma esa luz
+  entre la cáscara y la cara; sin él quedaría tapada por completo.
+*/
+.vo-cta-shell {
+  position: relative;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  /* 2px y no 1: es el grosor de la rendija por la que asoma la luz. A 1px el
+     recorrido se veía como un hilo tenue; a 2 se lee como un tubo encendido. */
+  padding: 2px;
+  border-radius: 7px;
+  background: transparent;
+  transition: transform 0.2s ease;
+}
+
+/*
+  Respuesta al puntero. Tres capas que ocurren a la vez:
+
+  1. el botón se levanta 1px,
+  2. el glow fijo del borde crece (más abajo, en .vo-cta),
+  3. una luz diagonal barre la cara una sola vez.
+
+  El barrido es lo que hace que se lea como "luz" y no como un simple cambio de
+  color: recorre el botón en lugar de encenderlo entero de golpe. Va como
+  animación y no como transición porque tiene que recorrer un camino y volver a
+  desaparecer, no ir de un estado a otro y quedarse.
+*/
+.vo-cta-shell:active {
+  transform: scale(0.985);
+}
+
+@media (hover: hover) {
+  .vo-cta-shell:hover {
+    transform: translateY(-1px);
+  }
+}
+
+@keyframes vo-cta-sheen {
+  0% {
+    opacity: 0;
+    transform: translateX(-120%);
+  }
+  18% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(120%);
+  }
+}
+
+/* La luz que barre. Nace fuera del botón por la izquierda y sólo se mueve al
+   pasar el puntero; el resto del tiempo es invisible y no cuesta nada. */
+.vo-cta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-120%);
+  background: linear-gradient(
+    105deg,
+    transparent 32%,
+    rgba(180, 226, 54, 0.3) 44%,
+    rgba(255, 255, 255, 0.55) 50%,
+    rgba(180, 226, 54, 0.3) 56%,
+    transparent 68%
+  );
+}
+
+@media (hover: hover) {
+  .vo-cta-shell:hover .vo-cta::after {
+    animation: vo-cta-sheen 0.85s ease-out;
+  }
+}
+
+/* Las dos luces que giran por el borde. Crecen y se avivan con el puntero. */
+.vo-cta-orb {
+  opacity: 0.9;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+@media (hover: hover) {
+  .vo-cta-shell:hover .vo-cta-orb {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
+
+.vo-cta-shell:focus-visible {
+  outline: 2px solid var(--color-vo-lumen);
+  outline-offset: 4px;
+}
+
+.vo-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  border: 1px solid var(--color-vo-lumen);
+  background: linear-gradient(
+    180deg,
+    var(--color-vo-olive) 0%,
+    var(--color-vo-black) 100%
+  );
+  color: var(--color-vo-bone);
+  /* overflow: hidden recorta la luz del hover a la forma del botón; sin esto
+     el barrido asomaría por fuera de las esquinas redondeadas. */
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(180, 226, 54, 0.18),
+    0 0 22px -2px var(--vo-glow),
+    inset 0 0 26px -6px rgba(180, 226, 54, 0.35);
+  transition:
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+
+/* El hover se dispara desde la cáscara, que es el elemento interactivo real.
+   Colgado de .vo-cta funcionaba por casualidad —la cara ocupa toda la cáscara—
+   pero dejaba fuera el borde de 2px por el que asoma la luz giratoria. */
+@media (hover: hover) {
+  .vo-cta-shell:hover .vo-cta {
+    border-color: #e2f79a;
+    box-shadow:
+      0 0 0 1px rgba(180, 226, 54, 0.45),
+      0 0 46px -2px var(--vo-glow-strong),
+      inset 0 0 36px -6px rgba(180, 226, 54, 0.6);
+  }
+}
+
+/* El pulsado y el foco viven en .vo-cta-shell, que es el elemento interactivo
+   real. Repetirlos aquí encogería la cara dentro de una cáscara que ya se está
+   encogiendo, duplicando el efecto. */
 
 /* Respect users who prefer reduced motion — animations stay subtle/off. */
 @media (prefers-reduced-motion: reduce) {
