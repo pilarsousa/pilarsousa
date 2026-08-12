@@ -1113,6 +1113,217 @@
 }
 
 /*
+  Textura de puntos sobre toda la landing.
+
+  Una rejilla de puntos blancos al 5% cada 10 px, fija respecto a la ventana: al
+  no moverse con el scroll se comporta como el grano de una película, una capa
+  de suciedad sobre el objetivo, en lugar de un patrón pegado al contenido.
+
+  Se probó también una trama de rayas verticales; para recuperarla, sustituir el
+  background-image por:
+    repeating-linear-gradient(to right, rgb(255 255 255 / 0.05) 0px,
+      rgb(255 255 255 / 0.05) 1px, transparent 1px, transparent 10px)
+  y quitar el background-size.
+
+  Va en .vo-scope y no en body: body la aplicaría a TODAS las landings del
+  proyecto, que tienen su propia dirección de arte.
+
+  z-index 9999 y no 999999999: basta con quedar por encima de todo lo de esta
+  página —lo más alto es el modal de reseñas, en 200— y un número desmedido
+  sólo dificulta colocar cualquier cosa por encima el día que haga falta.
+
+  pointer-events: none es imprescindible: sin eso la capa taparía la página
+  entera y ningún botón ni campo respondería al ratón.
+*/
+.vo-scope::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle,
+    rgb(255 255 255 / 0.05) 1.5px,
+    transparent 1.5px
+  );
+  background-size: 10px 10px;
+}
+
+/*
+  Card de Volver al Origen — misma pieza que .fancy-card de Misión Origen, con
+  esta paleta. El recurso es el panel inclinado que asoma por detrás: un ::after
+  del mismo tamaño, girado 7 grados y encogido, que al pasar el puntero gira un
+  poco más y se aviva.
+
+  Sigue la variante --on-black de la original y no la normal, y el motivo es el
+  fondo: aquella usa mix-blend-mode: overlay, que sobre un fondo casi negro como
+  el de esta landing no tiñe nada y hace desaparecer el panel de detrás. Aquí se
+  pinta con el verde directo y opaco, que es lo único que se ve sobre #0b1502.
+*/
+.vo-card {
+  position: relative;
+  isolation: isolate;
+  border: 1px solid color-mix(in srgb, var(--color-vo-lumen) 30%, transparent);
+  border-radius: 1.5rem;
+  background-color: color-mix(in srgb, var(--color-vo-forest) 70%, transparent);
+  box-shadow:
+    0 0.5rem 1rem rgb(0 0 0 / 0.2),
+    0 1rem 3rem rgb(0 0 0 / 0.25);
+  transition:
+    border-color 0.5s ease,
+    box-shadow 0.5s ease;
+}
+
+.vo-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--color-vo-lumen) 18%, #000000);
+  border: 1px solid color-mix(in srgb, var(--color-vo-lumen) 40%, transparent);
+  rotate: 7deg;
+  scale: 0.95;
+  opacity: 1;
+  transition:
+    rotate 0.5s ease,
+    background 0.5s ease;
+}
+
+.vo-card:hover {
+  border-color: color-mix(in srgb, var(--color-vo-lumen) 60%, transparent);
+  box-shadow:
+    0 0.5rem 1rem rgb(0 0 0 / 0.2),
+    0 1rem 3rem rgb(0 0 0 / 0.25),
+    0 0 28px color-mix(in srgb, var(--color-vo-lumen) 22%, transparent);
+}
+
+.vo-card:hover::after {
+  rotate: 9deg;
+  background: color-mix(in srgb, var(--color-vo-lumen) 26%, #000000);
+}
+
+/* La lluvia de código va en su propia capa recortada. No se puede poner
+   overflow: hidden en la card: el panel inclinado de detrás sobresale de sus
+   límites a propósito, y recortarlo lo haría desaparecer. */
+.vo-card-rain {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0.55;
+  transition: opacity 0.5s ease;
+}
+
+.vo-card:hover .vo-card-rain {
+  opacity: 0.9;
+}
+
+/*
+  Campo de teléfono de Volver al Origen — react-phone-number-input repintado.
+
+  La librería trae su propia hoja de estilos, pensada para fondo claro. Estas
+  reglas la sobrescriben para que el selector de país y el número compartan el
+  mismo tratamiento oscuro que el resto de campos del formulario. Los selectores
+  imitan los nombres de clase de la librería, que son los que ella genera.
+
+  Es el mismo planteo que .mo-phone (Misión Origen) pero con esta paleta: allí
+  el acento es cian, aquí verde. Se mantienen separados a propósito — compartir
+  una sola clase obligaría a parametrizar cada color y ataría el aspecto de dos
+  landings que van a evolucionar por su cuenta.
+*/
+.vo-phone {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 52px; /* el mismo alto que el resto de campos */
+  border-radius: 0.125rem;
+  border: 1px solid color-mix(in srgb, var(--color-vo-bone) 20%, transparent);
+  background-color: color-mix(in srgb, var(--color-vo-black) 40%, transparent);
+  padding-inline: 1rem;
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
+}
+
+.vo-phone:focus-within {
+  border-color: var(--color-vo-lumen);
+  box-shadow: 0 0 0 3px rgb(180 226 54 / 0.2);
+}
+
+.vo-phone--error {
+  border-color: rgb(248 113 113 / 0.7);
+}
+
+.vo-phone--error:focus-within {
+  border-color: rgb(248 113 113);
+  box-shadow: 0 0 0 3px rgb(248 113 113 / 0.2);
+}
+
+/* El campo del número: se le quita el cromado de la librería y hereda el
+   nuestro. */
+.vo-phone .PhoneInputInput {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: var(--color-vo-bone);
+  outline: none;
+}
+
+.vo-phone .PhoneInputInput::placeholder {
+  color: color-mix(in srgb, var(--color-vo-bone) 55%, transparent);
+}
+
+/* Selector de país + bandera, separados del número por una línea. */
+.vo-phone .PhoneInputCountry {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-right: 0.25rem;
+  padding-right: 0.6rem;
+  border-right: 1px solid color-mix(in srgb, var(--color-vo-bone) 15%, transparent);
+}
+
+.vo-phone .PhoneInputCountrySelect {
+  color: var(--color-vo-bone);
+}
+
+/* El desplegable lo dibuja el sistema operativo, no la página, así que sus
+   opciones necesitan fondo explícito o heredan uno transparente y se leen
+   sobre lo que haya detrás. */
+.vo-phone .PhoneInputCountrySelect option {
+  background-color: var(--color-vo-forest);
+  color: var(--color-vo-bone);
+}
+
+.vo-phone .PhoneInputCountrySelectArrow {
+  color: var(--color-vo-lumen);
+  opacity: 1;
+}
+
+/* La librería dimensiona la bandera en em; sobre un cuerpo de 14px queda
+   diminuta, así que se le da tamaño explícito. */
+.vo-phone .PhoneInputCountryIcon {
+  width: 1.6rem;
+  height: 1.1rem;
+  box-shadow: none;
+}
+
+.vo-phone .PhoneInputCountryIcon img,
+.vo-phone .PhoneInputCountryIcon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+/*
   Beam card — the "La Proyección" cards. A cyan light beam travels continuously
   around the border, reusing the shared --border-angle property and border-spin
   keyframe declared above.

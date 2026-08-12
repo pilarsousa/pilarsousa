@@ -1,5 +1,5 @@
 import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
-import { Reveal } from "@/components/bootcamp/ui/Reveal";
+import { ScrollIn } from "@/components/volver-al-origen/ui/ScrollIn";
 import { SectionTitle } from "@/components/volver-al-origen/ui/SectionTitle";
 import { TrustScore } from "@/components/volver-al-origen/ui/TrustScore";
 import { TestimonialCarousel } from "@/components/volver-al-origen/ui/TestimonialCarousel";
@@ -82,7 +82,7 @@ export function Testimonios() {
 
 
       <VoContainer>
-        <Reveal>
+        <ScrollIn>
           <SectionTitle
             id="testimonios-title"
             accent={TESTIMONIOS.titleAccent}
@@ -91,7 +91,7 @@ export function Testimonios() {
           >
             {TESTIMONIOS.title}
           </SectionTitle>
-        </Reveal>
+        </ScrollIn>
       </VoContainer>
 
       {/*
@@ -109,19 +109,19 @@ export function Testimonios() {
       */}
       <div className="mx-auto mt-12 w-full max-w-[86rem] px-6 sm:px-8">
         <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:gap-56">
-          <Reveal delay={0.1}>
+          <ScrollIn delay={0.1}>
             <TrustScore className="max-w-sm lg:max-w-none" />
-          </Reveal>
+          </ScrollIn>
 
           {/* min-w-0: un hijo de grid tiene min-width auto por defecto y se
               negaría a encogerse por debajo de su contenido, desbordando la
               fila. */}
           <div className="min-w-0">
-            <Reveal delay={0.15}>
+            <ScrollIn delay={0.15}>
               <p className="text-center font-display text-xl uppercase tracking-[0.06em] sm:text-2xl lg:text-left">
                 {TESTIMONIOS.subtitle}
               </p>
-            </Reveal>
+            </ScrollIn>
 
             <TestimonialCarousel items={FEATURED_TESTIMONIALS} />
           </div>
@@ -129,13 +129,13 @@ export function Testimonios() {
       </div>
 
       <VoContainer>
-        <Reveal delay={0.2}>
+        <ScrollIn delay={0.2}>
           <div className="mt-12 flex justify-center">
             <VoCta href={FORM_ANCHOR} className="max-w-xs">
               {TESTIMONIOS.cta}
             </VoCta>
           </div>
-        </Reveal>
+        </ScrollIn>
       </VoContainer>
     </section>
   );

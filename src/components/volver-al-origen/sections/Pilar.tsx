@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
-import { Reveal } from "@/components/bootcamp/ui/Reveal";
+import { ScrollIn } from "@/components/volver-al-origen/ui/ScrollIn";
 import { SectionTitle } from "@/components/volver-al-origen/ui/SectionTitle";
 import { PilarBio } from "@/components/volver-al-origen/ui/PilarBio";
 import { VoCta } from "@/components/volver-al-origen/ui/VoCta";
@@ -87,11 +87,12 @@ export function Pilar() {
             </SectionTitle>
           </div>
 
-          {/* Firma al 97% del alto: el fundido termina en el 88%, así que va
-              sobre negro plano, pegada al borde del bloque. */}
-          <p className="absolute inset-x-0 bottom-[2.6%] px-6 text-center font-accent text-4xl italic text-accent">
-            {PILAR.signature}
-          </p>
+          {/* Aquí iba la firma "Pilar Sousa". Se retiró: el título que está
+              arriba de la propia foto ya la nombra, y repetirlo a los pocos
+              centímetros duplicaba el nombre sin añadir nada. El hueco que
+              dejaba lo ocupa ahora el texto, que sube hasta esa altura.
+
+              PILAR.signature sigue en content.ts por si se quiere recuperar. */}
         </div>
       </div>
 
@@ -150,7 +151,14 @@ export function Pilar() {
         />
       </div>
 
-      <VoContainer className="pb-16 lg:py-0">
+      {/* relative z-10 es imprescindible, no decorativo.
+
+          En móvil el texto sube con margen negativo y se mete dentro del bloque
+          de la foto. Ese bloque está posicionado y el contenedor del texto no,
+          así que por orden de pintado del CSS el bloque queda por encima y tapa
+          las primeras líneas del primer párrafo. Posicionar este contenedor y
+          darle z-index lo devuelve al frente. */}
+      <VoContainer className="relative z-10 pb-16 lg:py-0">
         {/* En escritorio el contenido ocupa poco menos de la mitad derecha, que
             es donde el velo ya es sólido. */}
         <div className="lg:ml-auto lg:max-w-[48%]">
@@ -161,7 +169,7 @@ export function Pilar() {
               vez, seguidos. En móvil sí tiene sentido, porque allí va sobre el
               retrato y hace de pie de foto. */}
           <div className="hidden lg:block">
-            <Reveal>
+            <ScrollIn>
               <SectionTitle
                 accent={PILAR.titleAccent}
                 after="?"
@@ -169,21 +177,29 @@ export function Pilar() {
               >
                 {PILAR.title}
               </SectionTitle>
-            </Reveal>
+            </ScrollIn>
           </div>
 
-          <div className="mt-9 lg:mt-5">
+          {/* -mt-[62px] en móvil: sube el texto 62 px, hasta el 88% del alto de
+              la foto, justo donde el fundido llega a negro pleno.
+
+              Ese porcentaje es el límite prudente. El fundido llega a negro
+              pleno en el 88%, y por encima del 85% todavía se transparenta la
+              imagen lo suficiente como para que el texto claro empiece a
+              pelearse con ella. Subirlo más pide adelantar también el fundido,
+              no sólo mover este número. */}
+          <div className="-mt-[62px] lg:mt-5">
             <PilarBio />
           </div>
 
           {/* Centrado respecto a la columna de texto, no alineado a su borde. */}
-          <Reveal delay={0.2}>
+          <ScrollIn delay={0.2}>
             <div className="mt-9 flex justify-center">
               <VoCta href={FORM_ANCHOR} className="max-w-md">
                 {PILAR.cta}
               </VoCta>
             </div>
-          </Reveal>
+          </ScrollIn>
         </div>
       </VoContainer>
     </section>

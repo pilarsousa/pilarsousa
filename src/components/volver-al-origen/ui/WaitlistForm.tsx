@@ -2,8 +2,15 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { Mail, MessageCircle, User } from "lucide-react";
+import { Mail, User } from "lucide-react";
+import PhoneInput, {
+  isValidPhoneNumber,
+  type Country,
+} from "react-phone-number-input";
+import flags from "react-phone-number-input/flags";
+import "react-phone-number-input/style.css";
 import { cn } from "@/lib/cn";
+import { useVisitorCountry } from "@/lib/useVisitorCountry";
 import { VoCta } from "@/components/volver-al-origen/ui/VoCta";
 import { FORM, GRACIAS_PATH } from "@/components/volver-al-origen/content";
 
@@ -23,15 +30,17 @@ import { FORM, GRACIAS_PATH } from "@/components/volver-al-origen/content";
       Sólo pasar a "success" si la respuesta es correcta: hoy se pasa siempre.
     · Empujar el evento "lead_registered" a window.dataLayer ANTES de navegar,
       o el redirect corta el evento y Meta no cuenta la conversión.
-  El patrón completo está en mision-origen/ui/ReservaForm.tsx. Conviene además
-  cambiar el <input type="tel"> por el PhoneInput que usa ese formulario, que
-  entrega el número en E.164 y preselecciona el país del visitante.
+  El patrón completo está en mision-origen/ui/ReservaForm.tsx.
 */
 
 /* Mismas reglas que ReservaForm y que la validación de servidor en
-   /api/register, para que la maqueta no acepte datos que el backend rechazaría. */
+   /api/register, para que la maqueta no acepte datos que el backend rechazaría.
+
+   El teléfono NO lleva regex propia: PhoneInput entrega el número ya en formato
+   E.164 (+34600000000) e isValidPhoneNumber comprueba que sea válido para el
+   país elegido. Una expresión regular sólo podía mirar la forma —dígitos y
+   longitud—, así que daba por bueno cualquier número inventado. */
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const PHONE_RE = /^\+?[\d\s()-]{7,}$/;
 
 type Errors = { nombre?: string; telefono?: string; email?: string };
 type Status = "idle" | "submitting" | "success";
@@ -48,6 +57,10 @@ const CONFIRM_MS = 3000;
 
 export function WaitlistForm() {
   const router = useRouter();
+  /* País preseleccionado según la IP del visitante, resuelto por /api/geo. Sin
+     esto todo el mundo empieza en el país por defecto y quien no se dé cuenta
+     manda su número con el prefijo equivocado. */
+  const defaultCountry = useVisitorCountry();
   const [nombre, setNombre] = useState("");
   const [telefono, setTelefono] = useState("");
   const [email, setEmail] = useState("");
@@ -67,7 +80,7 @@ export function WaitlistForm() {
   function validate(): Errors {
     const next: Errors = {};
     if (nombre.trim().length < 2) next.nombre = "Ingresá tu nombre.";
-    if (!PHONE_RE.test(telefono.trim()))
+    if (!telefono || !isValidPhoneNumber(telefono))
       next.telefono = "Ingresá un número de WhatsApp válido.";
     if (!EMAIL_RE.test(email.trim()))
       next.email = "Ingresá un correo válido, por ejemplo: nombre@mail.com";
@@ -126,25 +139,42 @@ export function WaitlistForm() {
         />
       </Field>
 
-      <Field
-        id="vo-telefono"
-        icon={<MessageCircle size={18} strokeWidth={1.4} aria-hidden />}
-        error={errors.telefono}
-      >
-        <input
+      {/* Teléfono — selector de país + número.
+
+          No lleva el icono a la izquierda que sí tienen los otros campos: ese
+          sitio lo ocupa la bandera, que cumple la misma función de señalar de
+          qué va el campo y además dice algo que el icono no podía decir.
+
+          El selector inyecta el prefijo internacional y lo mantiene separado
+          del número, así que el valor sale siempre en E.164 y llega al CRM en
+          el formato que espera. */}
+      <div className="flex flex-col gap-1">
+        <PhoneInput
           id="vo-telefono"
-          type="tel"
           name="telefono"
-          inputMode="tel"
+          international
+          flags={flags}
+          countryCallingCodeEditable={false}
+          defaultCountry={defaultCountry as Country}
           autoComplete="tel"
           placeholder={FORM.fields.telefono}
           value={telefono}
-          onChange={(e) => setTelefono(e.target.value)}
+          /* PhoneInput emite undefined cuando el campo queda vacío; se
+             normaliza a "" para que el estado sea siempre string. */
+          onChange={(value) => setTelefono(value ?? "")}
           aria-invalid={!!errors.telefono}
           aria-describedby={errors.telefono ? "vo-telefono-error" : undefined}
-          className={cn(FIELD_CLASS, borderFor(errors.telefono))}
+          className={cn("vo-phone", errors.telefono && "vo-phone--error")}
         />
-      </Field>
+        {errors.telefono && (
+          <p
+            id="vo-telefono-error"
+            className="font-sans text-xs font-light text-red-300"
+          >
+            {errors.telefono}
+          </p>
+        )}
+      </div>
 
       <Field
         id="vo-email"

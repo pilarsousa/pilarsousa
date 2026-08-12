@@ -141,6 +141,11 @@ export function TestimonialCarousel({ items }: TestimonialCarouselProps) {
           propague y el navegador interprete un "atrás". */}
       <div
         ref={scrollerRef}
+        /* data-lenis-prevent: el scroll suave de la página captura la rueda de
+           forma global, y sin esta marca se quedaría también con el gesto
+           horizontal aquí dentro — la cinta dejaría de poder recorrerse con el
+           trackpad. */
+        data-lenis-prevent
         onPointerDown={() => (pausedRef.current = true)}
         onFocusCapture={() => (pausedRef.current = true)}
         onBlurCapture={() => (pausedRef.current = false)}
@@ -245,7 +250,9 @@ export function TestimonialCarousel({ items }: TestimonialCarouselProps) {
               </svg>
             </button>
 
-            <div className="overflow-y-auto p-8">
+            {/* Mismo motivo que en la cinta: una reseña larga necesita poder
+                recorrerse dentro del modal. */}
+            <div data-lenis-prevent className="overflow-y-auto p-8">
               <div className="flex items-center gap-3">
                 <Avatar t={active} size={52} />
                 <div className="min-w-0">

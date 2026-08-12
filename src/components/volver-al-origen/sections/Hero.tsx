@@ -2,6 +2,7 @@ import Image from "next/image";
 import { MatrixRain } from "@/components/bootcamp/ui/MatrixRain";
 import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
 import { LogoVao } from "@/components/volver-al-origen/ui/LogoVao";
+import { SparkDivider } from "@/components/volver-al-origen/ui/SparkDivider";
 import { WaitlistForm } from "@/components/volver-al-origen/ui/WaitlistForm";
 import { HERO } from "@/components/volver-al-origen/content";
 import heroBg from "@/../public/volver-origen/public/img/hero/hero-seccion.png";
@@ -152,12 +153,7 @@ export function Hero() {
             </span>
           </h1>
 
-          {/* Separador con destello */}
-          <div aria-hidden className="mt-5 flex items-center gap-3">
-            <span className="h-px flex-1 bg-vo-bone/20" />
-            <span className="text-xs text-accent">✦</span>
-            <span className="h-px flex-1 bg-vo-bone/20" />
-          </div>
+          <SparkDivider className="mt-5" />
 
           {/* Es el subtitular que explica la oferta, así que va por encima del
               cuerpo de texto normal: 18 px y peso normal, no light.
