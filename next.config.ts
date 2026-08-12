@@ -10,7 +10,17 @@ const nextConfig: NextConfig = {
   },
 
   async rewrites() {
-    return [
+    /* beforeFiles, y NO la lista suelta que devuelve rewrites() por defecto.
+
+       Esa lista corresponde a "afterFiles": se evalúa DESPUÉS de las rutas del
+       sistema de archivos, así que sólo sirve para URLs que no existen. Como /
+       sí existe —la sirve (ventas-root)— la regla no llegaba a aplicarse nunca
+       y el dominio de pauta seguía mostrando la landing de venta.
+
+       beforeFiles se evalúa antes que los archivos, que es lo que hace falta
+       para sustituir una ruta que ya existe. */
+    return {
+      beforeFiles: [
       /* En el dominio de pauta la raíz sirve la landing de LISTA DE ESPERA de
          la tercera edición, no la de venta.
 
@@ -21,12 +31,13 @@ const nextConfig: NextConfig = {
 
          Condicionado por host, igual que el resto de reglas de este archivo:
          los demás dominios conservan la landing de venta en su raíz. */
-      {
-        source: "/",
-        has: [{ type: "host", value: "lp.pilarsousa.es" }],
-        destination: "/volver-al-origen",
-      },
-    ];
+        {
+          source: "/",
+          has: [{ type: "host", value: "lp.pilarsousa.es" }],
+          destination: "/volver-al-origen",
+        },
+      ],
+    };
   },
 
   async redirects() {
