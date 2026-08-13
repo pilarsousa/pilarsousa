@@ -180,8 +180,16 @@ export function DecryptedText({
     shuffleText,
   ]);
 
-  /* Dispara al entrar en pantalla. threshold 0.1 y no 0: con 0 se lanzaría en
-     cuanto asomara un píxel, y el visitante se perdería el efecto. */
+  /* Dispara cuando el título ya está BIEN dentro de la pantalla, no al asomar.
+
+     Con threshold 0.1 el efecto arrancaba con un 10% del título visible —es
+     decir, todavía pegado al borde inferior— y para cuando el visitante llegaba
+     a leerlo ya había terminado. Con 0.9 el título tiene que estar
+     prácticamente entero en pantalla, que es cuando de verdad se está mirando.
+
+     rootMargin recorta además un 15% por abajo: sin él, en pantallas altas un
+     título puede cumplir el 90% estando aún en la franja inferior, que se lee
+     de refilón mientras se sigue bajando. */
   useEffect(() => {
     if (animateOn !== "view" && animateOn !== "inViewHover") return;
 
@@ -194,7 +202,7 @@ export function DecryptedText({
           }
         });
       },
-      { root: null, rootMargin: "0px", threshold: 0.1 },
+      { root: null, rootMargin: "0px 0px -15% 0px", threshold: 0.9 },
     );
 
     const currentRef = containerRef.current;

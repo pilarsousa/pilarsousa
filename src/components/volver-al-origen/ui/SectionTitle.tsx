@@ -38,10 +38,15 @@ type SectionTitleProps = {
   className?: string;
 };
 
-/* Velocidad del descifrado. 28 ms por letra: a 50 (el valor por defecto de la
-   librería) un titular largo tardaba más de dos segundos en resolverse y el
-   visitante llegaba a pasarlo de largo antes de poder leerlo. */
-const SPEED = 28;
+/* Milisegundos por letra. En modo secuencial el total es este número por el
+   largo del texto, así que un titular de unas 40 letras tarda ~2,4 s.
+
+   Estuvo en 28 ms (~1,1 s) y era demasiado rápido: sumado a que el efecto
+   arrancaba con el título aún asomando por abajo, terminaba antes de que el
+   visitante lo tuviera delante. Ahora el disparo es más tardío —el título tiene
+   que estar casi entero en pantalla, ver DecryptedText— y el recorrido más
+   lento, de modo que el efecto ocurre mientras se está mirando. */
+const SPEED = 60;
 
 /* Sólo letras y signos del propio idioma: el juego por defecto incluye símbolos
    como #$%^&* que sobre Cinzel en versalitas se leen como un error de fuente. */
