@@ -231,8 +231,11 @@ export function WaitlistModalProvider({
                 {MODAL.intro}
               </p>
 
+              {/* El formulario cierra el modal al confirmar, justo antes de
+                  navegar a gracias. Sin esto el panel se quedaba montado sobre
+                  la página de destino. */}
               <div className="mt-6">
-                <WaitlistForm />
+                <WaitlistForm onSuccess={close} />
               </div>
 
               <p className="mt-4 font-sans text-xs font-light text-foreground/60">

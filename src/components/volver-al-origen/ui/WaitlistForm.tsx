@@ -71,7 +71,15 @@ const FIELD_CLASS =
    leer el mensaje y a ver el check dibujarse, sin llegar a hacerse espera. */
 const CONFIRM_MS = 3000;
 
-export function WaitlistForm() {
+type WaitlistFormProps = {
+  /* Se llama justo antes de navegar a la página de gracias. El modal lo usa
+     para cerrarse solo: si no, se queda montado sobre la página nueva y el
+     visitante aterriza en el destino con el formulario todavía por delante,
+     sin saber que ya terminó. */
+  onSuccess?: () => void;
+};
+
+export function WaitlistForm({ onSuccess }: WaitlistFormProps) {
   const router = useRouter();
   /* País preseleccionado según la IP del visitante, resuelto por /api/geo. Sin
      esto todo el mundo empieza en el país por defecto y quien no se dé cuenta
@@ -149,9 +157,17 @@ export function WaitlistForm() {
 
       setStatus("success");
       /* El redirect se encadena tras la confirmación para que dé tiempo a leer
-         el mensaje y a ver el check dibujarse. */
+         el mensaje y a ver el check dibujarse.
+
+         onSuccess va ANTES del push y no después: cierra el modal con su
+         animación de salida mientras la navegación arranca, así que el
+         visitante ve el panel irse y la página de gracias aparecer, en vez de
+         encontrarse el formulario encima del destino. */
       timers.current.push(
-        window.setTimeout(() => router.push(GRACIAS_PATH), CONFIRM_MS),
+        window.setTimeout(() => {
+          onSuccess?.();
+          router.push(GRACIAS_PATH);
+        }, CONFIRM_MS),
       );
     } catch {
       setStatus("error");
