@@ -86,7 +86,7 @@ export default function GraciasPage() {
             {/* El mismo logo que encabeza el hero: quien llega aquí viene de
                 rellenar aquel formulario, y repetir la marca confirma que sigue
                 en el sitio correcto. */}
-            <LogoVao className="size-32 text-accent sm:size-36" />
+            <LogoVao className="w-32 sm:w-36" />
 
             <h1 className="mt-6 font-display text-2xl uppercase leading-tight tracking-[0.06em] text-accent sm:text-3xl md:text-4xl">
               {GRACIAS.title}
