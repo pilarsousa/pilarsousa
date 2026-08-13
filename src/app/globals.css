@@ -1721,12 +1721,17 @@ body {
   pointer-events: none;
   opacity: 0;
   transform: translateX(-120%);
+  /* Barrido OSCURO, no blanco.
+
+     Con el relleno claro un destello blanco no se distingue: se funde con el
+     fondo del propio botón. Una sombra que lo cruza sí se lee, y produce la
+     misma sensación de reflejo pasando por una superficie. */
   background: linear-gradient(
     105deg,
     transparent 32%,
-    rgba(180, 226, 54, 0.3) 44%,
-    rgba(255, 255, 255, 0.55) 50%,
-    rgba(180, 226, 54, 0.3) 56%,
+    rgba(11, 21, 2, 0.12) 44%,
+    rgba(11, 21, 2, 0.28) 50%,
+    rgba(11, 21, 2, 0.12) 56%,
     transparent 68%
   );
 }
@@ -1757,6 +1762,19 @@ body {
   outline-offset: 4px;
 }
 
+/*
+  Relleno verde PLENO con texto negro, y no al revés.
+
+  Antes era oscuro con texto claro, igual que la card que lo contiene, el borde
+  que lo rodea y la lluvia de código del fondo: todo verde oscuro compitiendo
+  entre sí, y el botón se perdía en el conjunto. El problema no era de tono sino
+  de luminosidad, así que la solución no pasa por meter otro color —el dorado es
+  la paleta del Bootcamp, no la de esta landing— sino por invertir el claro y el
+  oscuro. Al ser el único bloque claro de la card, el ojo va ahí solo.
+
+  El texto en negro y no en hueso porque sobre el verde lumen el hueso da 1,6:1
+  de contraste: ilegible. Con el negro de marca sube a 12:1.
+*/
 .vo-cta {
   position: relative;
   display: inline-flex;
@@ -1764,22 +1782,25 @@ body {
   justify-content: center;
   border-radius: 5px;
   border: 1px solid var(--color-vo-lumen);
-  background: linear-gradient(
-    180deg,
-    var(--color-vo-olive) 0%,
-    var(--color-vo-black) 100%
-  );
-  color: var(--color-vo-bone);
+  /* El degradado va de un verde apenas más claro arriba al de marca abajo: da
+     volumen sin llegar a leerse como dos colores. */
+  background: linear-gradient(180deg, #c8ee5e 0%, var(--color-vo-lumen) 100%);
+  color: var(--color-vo-black);
+  font-weight: 600;
   /* overflow: hidden recorta la luz del hover a la forma del botón; sin esto
      el barrido asomaría por fuera de las esquinas redondeadas. */
   overflow: hidden;
+  /* El halo exterior sustituye a la luz interior de la versión oscura: sobre un
+     relleno pleno un inset no se vería, y lo que hace falta es que el botón
+     derrame luz sobre la card. */
   box-shadow:
-    0 0 0 1px rgba(180, 226, 54, 0.18),
-    0 0 22px -2px var(--vo-glow),
-    inset 0 0 26px -6px rgba(180, 226, 54, 0.35);
+    0 0 0 1px rgba(180, 226, 54, 0.35),
+    0 0 28px -4px var(--vo-glow),
+    0 6px 20px -8px rgba(0, 0, 0, 0.7);
   transition:
     box-shadow 0.35s ease,
-    border-color 0.35s ease;
+    border-color 0.35s ease,
+    background 0.35s ease;
 }
 
 /* El hover se dispara desde la cáscara, que es el elemento interactivo real.
@@ -1788,10 +1809,13 @@ body {
 @media (hover: hover) {
   .vo-cta-shell:hover .vo-cta {
     border-color: #e2f79a;
+    /* El relleno se aclara al pasar el puntero: sobre un botón ya luminoso,
+       subir sólo el halo apenas se nota. */
+    background: linear-gradient(180deg, #d8f77e 0%, #bced46 100%);
     box-shadow:
-      0 0 0 1px rgba(180, 226, 54, 0.45),
-      0 0 46px -2px var(--vo-glow-strong),
-      inset 0 0 36px -6px rgba(180, 226, 54, 0.6);
+      0 0 0 1px rgba(180, 226, 54, 0.55),
+      0 0 52px -2px var(--vo-glow-strong),
+      0 8px 24px -8px rgba(0, 0, 0, 0.75);
   }
 }
 

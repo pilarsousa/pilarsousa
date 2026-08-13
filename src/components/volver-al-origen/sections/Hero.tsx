@@ -164,17 +164,22 @@ export function Hero() {
           Era una restricción inventada, y lo único que conseguía era empujar el
           contenido más abajo de lo que pedía el diseño.
 
-          Los 160 px se restan en píxeles y no en svh: svh depende del alto de
+          Los 220 px se restan en píxeles y no en svh: svh depende del alto de
           cada pantalla, así que el mismo ajuste en svh movería el panel más en
           un móvil grande que en uno pequeño. Con medida fija el desplazamiento
           es idéntico en todos.
+
+          Subió de 160 a 220 px: el panel se acortó al reducir el titular y los
+          espaciados, y con el valor anterior quedaba una franja muerta entre él
+          y el pie de la pantalla. Sesenta píxeles más arriba recuperan el
+          equilibrio con la foto.
 
           Si se cambia el fundido, hay que mover este número con él — son las
           dos mitades del mismo ajuste.
 
           En escritorio se anula, porque allí el centrado lo resuelve
           items-center de la sección. */}
-      <VoContainer className="pb-16 pt-[calc(68svh-160px)] lg:py-0">
+      <VoContainer className="pb-16 pt-[calc(68svh-220px)] lg:py-0">
       {/* 570 px: la mitad exacta del ancho de contenido (1140 px), que es la
           referencia del diseño. */}
       <div className="relative mx-auto w-full max-w-[570px] lg:mx-0">
