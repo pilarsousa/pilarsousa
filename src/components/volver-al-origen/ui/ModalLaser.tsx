@@ -41,12 +41,13 @@ export function ModalLaser() {
          separados justamente por esto, porque el encuadre de cada uno pide un
          número distinto y compartirlos obligaría a elegir cuál de los dos sale
          mal. */
-      /* Positivo, y bastante: el offset se mide desde el CENTRO del canvas, y
-         el botón no está en el centro del panel sino al final, después del
-         logo, el título, el texto y tres campos. Con valores negativos el haz
-         moría a la altura del formulario —justo el tramo que no debe tocar— en
-         lugar de llegar al CTA. */
-      verticalBeamOffset={0.34}
+      /* El haz entra por arriba del panel y baja hasta morir en el CTA, que está
+         al final del todo: tras el logo, el título, el texto y tres campos.
+
+         Negativo BAJA el punto de impacto. Se probó 0.34 pensando lo contrario y
+         el resultado fue el haz clavado en la parte de arriba del panel, sin
+         llegar al formulario siquiera. */
+      verticalBeamOffset={-0.62}
       color="#b4e236"
       /* Más contenido que en el hero: aquí el haz cruza por detrás de los
          campos del formulario, y con la intensidad del hero les restaba

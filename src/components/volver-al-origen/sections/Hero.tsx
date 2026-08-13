@@ -256,15 +256,29 @@ export function Hero() {
             Desde sm se vuelve a medidas fijas: ahí ya sobra alto y el vw sólo
             introduciría variación sin motivo. */}
         <div className="relative rounded-lg border border-vo-bone/15 bg-vo-bone/8 px-[clamp(1rem,4.5vw,1.75rem)] py-[clamp(1rem,4vw,2rem)] text-center text-foreground shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)] backdrop-blur-md sm:px-10 sm:py-10 lg:py-7">
-          {/* Margen superior negativo: el logo sube hasta desbordar el borde del
-              panel y queda flotando sobre él, a caballo entre la card y la foto.
-              Es lo que lo saca de la fila de contenido y lo convierte en el
-              remate de la pieza, además de recuperar el alto que ocupaba dentro.
+          {/* Lluvia de código: DENTRO del panel y por detrás de su contenido.
 
-              En escritorio asoma menos (-72 px sobre 96 px de ancho) que en
-              móvil (-95 px sobre 112 px): allí el panel tiene que caber en los
-              800 px de la sección y un logo demasiado alto se despega de la
-              card en lugar de rematarla. */}
+              Recorrió las tres posiciones posibles. Por detrás del panel no se
+              veía —el backdrop-blur-md difumina lo que tiene debajo y la borraba—
+              y por delante de todo opacaba el texto. Aquí queda sobre el cristal
+              pero bajo el contenido, que es lo que la convierte en textura del
+              panel en lugar de una capa que compite con él.
+
+              Su overflow-hidden no rompe el cristal: el backdrop-filter lo aplica
+              este mismo div, y en WebKit el problema es un ANCESTRO que recorte,
+              no un descendiente. */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 overflow-hidden rounded-lg"
+          >
+            <MatrixRain fade={0.08} opacity={0.35} />
+          </div>
+
+          {/* relative sube TODO el contenido por encima de la lluvia de código,
+              que va en la capa absoluta de arriba. Envuelto de una vez y no
+              clase por clase en cada hijo: son ocho elementos y bastaría
+              olvidarse de uno para que quedara enterrado bajo la textura. */}
+          <div className="relative">
           {/* El logo queda a caballo del borde: la mitad fuera del panel y la
               mitad dentro.
 
@@ -276,10 +290,15 @@ export function Hero() {
               móvil el margen superaba al propio logo, que acababa saliéndose
               del panel por completo. Escritos así no pueden desincronizarse.
 
+              Los -5 px extra alinean el centro óptico del círculo con el borde
+              del panel: el logo tiene aire transparente alrededor del aro, así
+              que la mitad geométrica de la imagen cae un pelo por debajo de la
+              mitad de la figura que se ve.
+
               Al no ocupar más que la mitad de su alto dentro de la caja, puede
               ser más grande sin costarle espacio al contenido. */}
           <LogoVao
-            className="mx-auto mt-[calc(var(--logo)/-2)] w-(--logo)"
+            className="mx-auto mt-[calc(var(--logo)/-2-5px)] w-(--logo)"
             style={
               {
                 "--logo": "clamp(5.5rem,24vw,8rem)",
@@ -350,28 +369,7 @@ export function Hero() {
           <div className="mt-[clamp(0.75rem,3vw,1.25rem)] lg:mt-5">
             <WaitlistCta>{HERO.cta}</WaitlistCta>
           </div>
-        </div>
-
-        {/* Lluvia de código, POR DELANTE del panel y no por detrás.
-
-            Detrás no se veía, y no por estar mal montada: el panel lleva
-            backdrop-blur-md, que difumina justo lo que tiene debajo. La textura
-            quedaba emborronada hasta desaparecer.
-
-            Meterla DENTRO del panel tampoco servía: recortarla a la forma de la
-            card exige overflow-hidden, y en WebKit un ancestro que recorta
-            overflow anula el backdrop-filter de sus descendientes — el panel se
-            quedaría sin cristal en iPhone.
-
-            Delante resuelve las dos cosas: el blur no la toca y el panel
-            conserva su efecto. Va a opacidad baja y con pointer-events
-            desactivados para que sea textura sobre el cristal y no una capa que
-            compita con el texto. */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 overflow-hidden rounded-lg"
-        >
-          <MatrixRain fade={0.08} opacity={0.22} />
+          </div>
         </div>
       </div>
       </VoContainer>

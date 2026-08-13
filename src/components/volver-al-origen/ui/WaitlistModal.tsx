@@ -166,12 +166,17 @@ export function WaitlistModalProvider({
             ref={panelRef}
             tabIndex={-1}
             data-lenis-prevent
-            /* overflow-hidden y NO overflow-y-auto: el panel no debe scrollear.
-               El contenido de dentro escala con vw para caber entero en la
-               pantalla más baja, así que el scroll sólo podía aparecer si algo
-               se desbordaba — y en un formulario de tres campos con su botón,
-               tener que desplazar para llegar a enviar es perder registros. */
-            className="vo-modal-panel relative max-h-[92svh] w-full max-w-[520px] overflow-hidden rounded-lg border border-vo-bone/15 bg-vo-black/80 text-center text-foreground shadow-[0_30px_90px_-30px_rgba(0,0,0,0.95)] backdrop-blur-xl outline-none"
+            /* SIN overflow: ni auto ni hidden.
+
+               No debe scrollear —el contenido escala con vw para caber entero, y
+               tener que desplazar dentro de un formulario de tres campos para
+               llegar al botón es perder registros—, pero tampoco puede recortar:
+               el logo sobresale por arriba a propósito y overflow-hidden le
+               cortaba la mitad que queda fuera.
+
+               El fondo sigue recortado igualmente porque la capa de textura de
+               dentro lleva su propio overflow-hidden. */
+            className="vo-modal-panel relative max-h-[92svh] w-full max-w-[520px] rounded-lg border border-vo-bone/15 bg-vo-black/80 text-center text-foreground shadow-[0_30px_90px_-30px_rgba(0,0,0,0.95)] backdrop-blur-xl outline-none"
           >
             {/* Lluvia de código y haz de luz, en una capa que cubre EXACTAMENTE
                 el panel.
@@ -185,9 +190,13 @@ export function WaitlistModalProvider({
                 real, con su barra de direcciones, no.
 
                 El sticky ya no hace falta porque el panel dejó de scrollear. */}
+            {/* rounded-lg además de overflow-hidden: el panel dejó de recortar
+                para que el logo pueda sobresalir, así que es esta capa la que
+                tiene que respetar las esquinas redondeadas — si no, la textura
+                pintaría los cuatro vértices en cuadrado. */}
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 overflow-hidden"
+              className="pointer-events-none absolute inset-0 overflow-hidden rounded-lg"
             >
               <div className="relative size-full">
                 <MatrixRain fade={0.08} opacity={0.4} />
