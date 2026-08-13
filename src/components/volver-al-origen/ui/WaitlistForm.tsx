@@ -325,7 +325,10 @@ function Field({
   return (
     <div className="flex flex-col gap-1">
       <div className="relative">
-        <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-accent/80">
+        {/* El verde a plena intensidad, el mismo del resto de acentos de la
+            landing. Estaba al 80% y sobre el fondo oscuro del campo se leía
+            apagado, sin llegar al encendido que tienen el CTA o el badge. */}
+        <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-accent">
           {icon}
         </span>
         {children}

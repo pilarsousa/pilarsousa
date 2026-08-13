@@ -35,7 +35,7 @@ export const HERO = {
 export const MODAL = {
   title: "Reservá tu lugar",
   intro:
-    "Dejanos tus datos y serás de los primeros en acceder, con precio especial y bonos exclusivos.",
+    "Serás de los primeros en acceder, con precio especial y bonos exclusivos.",
   close: "Cerrar",
 };
 
