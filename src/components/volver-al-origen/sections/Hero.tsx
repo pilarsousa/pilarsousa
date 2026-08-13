@@ -236,23 +236,11 @@ export function Hero() {
         </div>
 
         {/* La esfera va en su propia capa, SIN recortar al borde: su gracia es
-            justamente cruzar la card por dentro.
-
-            La lluvia de código comparte esta capa. Va AQUÍ y no dentro del
-            panel por el overflow: recortarla a la forma de la card exige
-            overflow-hidden, y en WebKit un ancestro que recorta overflow anula
-            el backdrop-filter de sus descendientes — metida dentro, el panel se
-            quedaría sin su efecto de cristal en iPhone. Como capa hermana, cada
-            una conserva lo suyo.
-
-            Mismos valores que las cards de Beneficios (fade 0.08, opacity 0.4):
-            es la misma textura sobre el mismo tipo de superficie, y desviarse
-            aquí rompería la unidad entre las dos piezas. */}
+            justamente cruzar la card por dentro. */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 overflow-hidden rounded-lg"
         >
-          <MatrixRain fade={0.08} opacity={0.4} />
           <span className="vo-orb" />
         </div>
 
@@ -277,10 +265,27 @@ export function Hero() {
               móvil (-95 px sobre 112 px): allí el panel tiene que caber en los
               800 px de la sección y un logo demasiado alto se despega de la
               card en lugar de rematarla. */}
-          {/* El logo y su desbordamiento van juntos en vw: el margen negativo
-              tiene que ser proporcional al tamaño, o en una pantalla estrecha
-              asomaría una porción distinta de la prevista. */}
-          <LogoVao className="mx-auto -mt-[clamp(60px,22vw,95px)] w-[clamp(4.5rem,20vw,7rem)] sm:-mt-[104px] sm:w-32 lg:-mt-[72px] lg:w-24" />
+          {/* El logo queda a caballo del borde: la mitad fuera del panel y la
+              mitad dentro.
+
+              Eso es exactamente lo que consigue un margen superior negativo
+              igual a LA MITAD de su alto, y como la imagen es cuadrada, la
+              mitad de su ancho. Por eso el tamaño se declara una sola vez en
+              --logo y el margen se calcula a partir de él con calc(): antes
+              eran dos clamps independientes —ancho 20vw, margen 22vw— y en
+              móvil el margen superaba al propio logo, que acababa saliéndose
+              del panel por completo. Escritos así no pueden desincronizarse.
+
+              Al no ocupar más que la mitad de su alto dentro de la caja, puede
+              ser más grande sin costarle espacio al contenido. */}
+          <LogoVao
+            className="mx-auto mt-[calc(var(--logo)/-2)] w-(--logo)"
+            style={
+              {
+                "--logo": "clamp(5.5rem,24vw,8rem)",
+              } as React.CSSProperties
+            }
+          />
 
           {/* Badge. inline-flex y no block: así la píldora mide lo que el texto
               y queda centrada por el text-center del panel, en lugar de ocupar
@@ -345,6 +350,28 @@ export function Hero() {
           <div className="mt-[clamp(0.75rem,3vw,1.25rem)] lg:mt-5">
             <WaitlistCta>{HERO.cta}</WaitlistCta>
           </div>
+        </div>
+
+        {/* Lluvia de código, POR DELANTE del panel y no por detrás.
+
+            Detrás no se veía, y no por estar mal montada: el panel lleva
+            backdrop-blur-md, que difumina justo lo que tiene debajo. La textura
+            quedaba emborronada hasta desaparecer.
+
+            Meterla DENTRO del panel tampoco servía: recortarla a la forma de la
+            card exige overflow-hidden, y en WebKit un ancestro que recorta
+            overflow anula el backdrop-filter de sus descendientes — el panel se
+            quedaría sin cristal en iPhone.
+
+            Delante resuelve las dos cosas: el blur no la toca y el panel
+            conserva su efecto. Va a opacidad baja y con pointer-events
+            desactivados para que sea textura sobre el cristal y no una capa que
+            compita con el texto. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 overflow-hidden rounded-lg"
+        >
+          <MatrixRain fade={0.08} opacity={0.22} />
         </div>
       </div>
       </VoContainer>

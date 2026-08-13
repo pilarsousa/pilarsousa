@@ -20,15 +20,20 @@ import logoVao from "@/../public/volver-origen/public/img/Logo-volveralorigen.we
 
 type LogoVaoProps = {
   className?: string;
+  /* Para pasar variables CSS. El hero y el modal declaran en --logo su tamaño y
+     derivan de ahí el margen negativo que lo deja a caballo del borde, de modo
+     que ambos valores no puedan desincronizarse. */
+  style?: React.CSSProperties;
 };
 
-export function LogoVao({ className }: LogoVaoProps) {
+export function LogoVao({ className, style }: LogoVaoProps) {
   return (
     <Image
       src={logoVao}
       alt="Volver al Origen"
       width={300}
       height={300}
+      style={style}
       /* El logo aparece dentro del hero, en lo alto de la página, así que se
          pide con prioridad: es parte de la primera impresión y no debe entrar
          tarde. */

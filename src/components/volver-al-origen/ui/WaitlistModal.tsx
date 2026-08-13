@@ -240,7 +240,23 @@ export function WaitlistModalProvider({
                 entero —con el botón de enviar a la vista— tanto en una pantalla
                 de móvil pequeño como en escritorio. */}
             <div className="relative px-[clamp(1rem,4.5vw,1.5rem)] py-[clamp(1.1rem,4vw,2.25rem)] sm:px-9">
-              <LogoVao className="mx-auto w-[clamp(3.25rem,13vw,5rem)] sm:w-24" />
+              {/* A caballo del borde superior del panel: mitad fuera, mitad
+                  dentro. Lo consigue un margen superior negativo igual a la
+                  mitad del alto —la imagen es cuadrada, así que la mitad del
+                  ancho—, y por eso el tamaño vive en --logo y el margen se
+                  deriva de él: escritos como dos valores sueltos acabarían
+                  desincronizados.
+
+                  Al ocupar dentro de la caja sólo la mitad de su alto, puede
+                  ser mayor que antes sin robarle espacio al formulario. */}
+              <LogoVao
+                className="mx-auto mt-[calc(var(--logo)/-2)] w-(--logo)"
+                style={
+                  {
+                    "--logo": "clamp(4.5rem,18vw,6.5rem)",
+                  } as React.CSSProperties
+                }
+              />
 
               {/* El badge y el título repiten los del hero: el modal tapa la
                   página, así que tiene que decir por sí solo a qué se está
