@@ -143,8 +143,15 @@ export function Hero() {
           taparía la foto con un rectángulo negro. Con screen el negro es
           neutro y sólo se suma lo que el haz ilumina.
 
-          -z-10 lo deja por encima de la foto (-z-20) y por debajo del panel,
-          de modo que la luz pasa por detrás del cristal y no sobre el texto. */}
+          -z-10 lo deja por encima de la foto (-z-20) y POR DETRÁS del panel.
+
+          Se probó a subirlo por delante del cristal, en z-20, para que el
+          backdrop-blur no le difuminara el tramo que cruza la card. Se revirtió:
+          el haz se mezcla con screen, que SUMA luz sobre todo lo que tiene
+          debajo, así que aun quedando el contenido en una capa superior el
+          resplandor lavaba el CTA y le comía el contraste que se acababa de
+          ganar apagando su verde. Detrás del cristal el haz se ve más tenue,
+          pero el botón se lee. */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 mix-blend-screen"

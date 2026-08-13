@@ -66,36 +66,34 @@ export function BenefitCard({ icon, title, text }: BenefitCardProps) {
           {/* Círculo del icono: borde verde tenue y halo luminoso, el mismo
               recurso de "luz encendida" que usan los CTA y el logo.
               shrink-0 para que el título no lo aplaste al ponerse a su lado. */}
-          {/* 36 px en móvil, cuatro menos que antes: cada píxel que cede el
-              icono es ancho que gana el título, que es lo que permite
-              agrandarlo sin que se parta. */}
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-accent/35 bg-vo-forest/40 shadow-[0_0_26px_-8px_var(--vo-glow-strong)] sm:mb-6 sm:size-[86px]">
+          {/* 40 px en móvil. Estaba en 36 para cederle ancho al título, que
+              tenía prohibido partirse; al levantarse esa restricción el icono
+              recupera su tamaño y vuelve a equilibrar con el titular, ahora
+              más grande. */}
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-accent/35 bg-vo-forest/40 shadow-[0_0_26px_-8px_var(--vo-glow-strong)] sm:mb-6 sm:size-[86px]">
             <Icon
               strokeWidth={1.2}
-              className="size-[17px] text-accent sm:size-[38px]"
+              className="size-[19px] text-accent sm:size-[38px]"
               aria-hidden
             />
           </span>
 
-          {/* whitespace-nowrap prohíbe el salto de línea, y el tamaño en vw es
-              lo que hace que esa prohibición no rompa nada: el texto encoge con
-              la pantalla en vez de desbordar.
+          {/* El título puede partirse en dos líneas.
 
-              El 3.45vw sale de la restricción más dura, un móvil de 320 px. Ahí
-              quedan 172 px libres junto al icono y el título más largo
-              —"Regalos y bonos especiales", 26 caracteres— necesita unos 166.
-              Con un tamaño fijo, el que cabe a 430 px se parte a 320.
+              Antes llevaba whitespace-nowrap y un tamaño en vw que encogía con
+              la pantalla para que cupiera de una sola línea: en un móvil de
+              320 px eso lo dejaba en unos 11 px, ilegible para lo que es el
+              titular de la card. El coste de prohibir el salto era demasiado
+              alto para lo que se ganaba.
 
-              Para subir de 3.05 a 3.45 hubo que financiarlo: el icono cedió
-              4 px, el hueco entre ambos 2 y el espaciado entre letras bajó de
-              0.05 a 0.03em. Sin eso, el título no cabía en una línea.
+              Al levantar esa prohibición, el tamaño pasa a ser fijo: 18 px en
+              móvil, que es el mínimo con el que estos tres títulos se leen como
+              titulares. Los que no entren en una línea se parten, y está bien
+              —la card tiene alto de sobra para dos—.
 
-              AQUÍ SE ACABA EL MARGEN. Agrandarlo más obliga a romper la regla
-              de la línea única o a acortar el texto en content.ts.
-
-              Desde sm se pasa a tamaño fijo, porque ahí el título ya ocupa su
-              propia línea y puede partirse sin problema. */}
-          <h3 className="font-display text-[clamp(0.66rem,3.45vw,1.15rem)] uppercase leading-snug tracking-[0.03em] whitespace-nowrap text-foreground sm:text-[1.35rem] sm:tracking-[0.1em] sm:whitespace-normal">
+              leading-tight y no leading-snug: en dos líneas, el interlineado
+              holgado separaba demasiado las mitades de una misma frase. */}
+          <h3 className="font-display text-[1.125rem] uppercase leading-tight tracking-[0.03em] text-foreground sm:text-[1.35rem] sm:tracking-[0.1em]">
             {title}
           </h3>
         </div>
