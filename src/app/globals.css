@@ -1353,6 +1353,10 @@
 
 .vo-phone .PhoneInputCountrySelect {
   color: var(--color-vo-bone);
+  /* El <select> va superpuesto y transparente sobre la bandera, así que es lo
+     que recibe el puntero: sin esto, el área del país no señala que se puede
+     desplegar. */
+  cursor: pointer;
 }
 
 /* El desplegable lo dibuja el sistema operativo, no la página, así que sus
@@ -2109,4 +2113,86 @@ body {
   .ventas-borde-hueco2::after {
     animation: none;
   }
+}
+
+/*
+  ===== Volver al Origen — Modal de la lista de espera =====
+
+  Entrada y salida animadas. La salida obliga a mantener el modal montado
+  mientras dura: el componente pasa a estado "closing", deja correr la
+  animación y desmonta al terminar. Por eso los tiempos de aquí y la constante
+  CLOSE_MS de WaitlistModal.tsx son el mismo número — si se cambia uno hay que
+  cambiar el otro o el panel desaparecerá de golpe o se quedará clavado.
+
+  El fondo lleva backdrop-filter en vez de un negro más opaco: la landing tiene
+  la lluvia de código y el degradado del hero detrás, y difuminarlos mantiene la
+  pieza reconocible mientras aparta la atención del formulario.
+*/
+@keyframes vo-modal-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes vo-modal-backdrop-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* La entrada sube un pelo y escala desde 0.96. El desplazamiento es lo que la
+   hace leerse como que el panel "llega", en lugar de aparecer inflándose. */
+@keyframes vo-modal-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* La salida NO es la entrada al revés: baja menos y escala menos. Una salida
+   simétrica se percibe lenta, porque el ojo ya no tiene nada que leer. */
+@keyframes vo-modal-panel-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(6px) scale(0.985);
+  }
+}
+
+.vo-modal-backdrop {
+  background-color: rgba(11, 21, 2, 0.72);
+  /* -webkit- explícito: Safari sigue necesitando el prefijo para el desenfoque
+     del fondo, y sin él el modal cae a un velo plano en iPhone. */
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  backdrop-filter: blur(14px) saturate(120%);
+  animation: vo-modal-backdrop-in 260ms ease-out both;
+}
+
+.vo-modal-panel {
+  /* cubic-bezier con el último punto por encima de 1: el panel se pasa unos
+     píxeles y vuelve. Es lo que da la sensación de suavidad con cuerpo en vez
+     de un ease-out plano. */
+  animation: vo-modal-panel-in 320ms cubic-bezier(0.22, 1.15, 0.36, 1) both;
+}
+
+/* Estado de cierre: lo aplica el componente antes de desmontar. */
+.vo-modal-closing .vo-modal-backdrop {
+  animation: vo-modal-backdrop-out 200ms ease-in both;
+}
+
+.vo-modal-closing .vo-modal-panel {
+  animation: vo-modal-panel-out 200ms ease-in both;
 }

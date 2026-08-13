@@ -4,7 +4,8 @@ import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
 import { LogoVao } from "@/components/volver-al-origen/ui/LogoVao";
 import { SparkDivider } from "@/components/volver-al-origen/ui/SparkDivider";
 import { MovingBorder } from "@/components/volver-al-origen/ui/MovingBorder";
-import { WaitlistForm } from "@/components/volver-al-origen/ui/WaitlistForm";
+import { WaitlistCta } from "@/components/volver-al-origen/ui/WaitlistCta";
+import { HeroLaser } from "@/components/volver-al-origen/ui/HeroLaser";
 import { HERO } from "@/components/volver-al-origen/content";
 import heroBg from "@/../public/volver-origen/public/img/hero/hero-seccion.png";
 import heroBgMovil from "@/../public/volver-origen/public/img/hero/heroseccion-mobile.jpg";
@@ -29,13 +30,9 @@ import heroBgMovil from "@/../public/volver-origen/public/img/hero/heroseccion-m
 export function Hero() {
   return (
     <section
-      /* El ancla #registro vive en el <h1>, no en la sección ni en el <form>.
-
-         En la sección llevaba al principio del hero y en móvil el formulario
-         quedaba fuera de pantalla. En el formulario dejaba los campos a la
-         vista pero sin el título, y el visitante aterrizaba sin contexto de a
-         qué se estaba apuntando. En el título se ven las dos cosas: el nombre
-         del programa arriba y los campos justo debajo. */
+      /* El id "registro" del <h1> ya no es destino de navegación —los CTA
+         abren el modal—, pero se mantiene porque es lo que nombra a esta
+         sección para los lectores de pantalla. */
       aria-labelledby="registro"
       /* lg:min-h-[800px] y no lg:h-[800px]: la sección lleva overflow-hidden,
          así que una altura FIJA recortaría el formulario si el contenido se
@@ -126,6 +123,35 @@ export function Hero() {
         <div className="absolute inset-x-0 bottom-0 h-32 bg-[linear-gradient(to_top,#0b1502,transparent)]" />
       </div>
 
+      {/* ══ Haz de luz que baja desde arriba hasta el CTA (sólo móvil) ══
+
+          Cubre la SECCIÓN entera, no la card. Estuvo anclado al contenedor de
+          la card con bottom-full, y era un error: la sección lleva
+          overflow-hidden, así que casi todo el canvas caía fuera del recorte y
+          el haz no llegaba a verse. Cubriendo la sección, todo el recorrido
+          queda dentro.
+
+          El punto de impacto se apunta con verticalBeamOffset del shader, no
+          moviendo el canvas: el haz nace arriba del todo y muere a la altura
+          del CTA.
+
+          El propio HeroLaser decide no renderizarse en escritorio; ver el
+          porqué allí.
+
+          mix-blend-screen es OBLIGATORIO, no decorativo: el renderer va con
+          alpha:false y pinta fondo negro opaco, así que sin mezclar por luz
+          taparía la foto con un rectángulo negro. Con screen el negro es
+          neutro y sólo se suma lo que el haz ilumina.
+
+          -z-10 lo deja por encima de la foto (-z-20) y por debajo del panel,
+          de modo que la luz pasa por detrás del cristal y no sobre el texto. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 mix-blend-screen"
+      >
+        <HeroLaser />
+      </div>
+
       {/* pt-[calc(68svh-160px)] en móvil.
 
           El panel arranca POR ENCIMA del punto donde la foto acaba de fundirse
@@ -168,35 +194,65 @@ export function Hero() {
           aria-hidden
           className="vo-edge-only pointer-events-none absolute -inset-[2px] overflow-hidden rounded-lg"
         >
+          {/* El "largo" del trazo es el tamaño de esta luz: el componente sólo
+              la desplaza por el contorno, y lo que se ve encendido es su huella.
+              Un disco de 112 px (size-28) dejaba tramos demasiado cortos en una
+              card tan alta, así que pasa a una elipse de 288x112: estirada en el
+              eje horizontal, la huella se lee como un trazo largo recorriendo el
+              borde en lugar de un punto de luz.
+
+              rounded-full sobre una caja rectangular da la elipse; el degradado
+              pasa a ellipse para acompañar la forma y no recortarse en seco. */}
           <MovingBorder duration={7000} rx="10px" ry="10px">
-            <span className="block size-28 rounded-full bg-[radial-gradient(circle,#ffffff_0%,var(--color-vo-lumen)_30%,transparent_68%)] opacity-70 blur-[3px]" />
+            <span className="block h-28 w-72 rounded-full bg-[radial-gradient(ellipse,#ffffff_0%,var(--color-vo-lumen)_32%,transparent_70%)] opacity-70 blur-[3px]" />
           </MovingBorder>
           {/* Segunda luz a media vuelta: con una sola, la mitad del contorno
               está siempre apagada y en una card tan alta se nota. */}
           <MovingBorder duration={7000} rx="10px" ry="10px" offset={0.5}>
-            <span className="block size-28 rounded-full bg-[radial-gradient(circle,#ffffff_0%,var(--color-vo-lumen)_30%,transparent_68%)] opacity-70 blur-[3px]" />
+            <span className="block h-28 w-72 rounded-full bg-[radial-gradient(ellipse,#ffffff_0%,var(--color-vo-lumen)_32%,transparent_70%)] opacity-70 blur-[3px]" />
           </MovingBorder>
         </div>
 
         {/* La esfera va en su propia capa, SIN recortar al borde: su gracia es
-            justamente cruzar la card por dentro. */}
+            justamente cruzar la card por dentro.
+
+            La lluvia de código comparte esta capa. Va AQUÍ y no dentro del
+            panel por el overflow: recortarla a la forma de la card exige
+            overflow-hidden, y en WebKit un ancestro que recorta overflow anula
+            el backdrop-filter de sus descendientes — metida dentro, el panel se
+            quedaría sin su efecto de cristal en iPhone. Como capa hermana, cada
+            una conserva lo suyo.
+
+            Mismos valores que las cards de Beneficios (fade 0.08, opacity 0.4):
+            es la misma textura sobre el mismo tipo de superficie, y desviarse
+            aquí rompería la unidad entre las dos piezas. */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 overflow-hidden rounded-lg"
         >
+          <MatrixRain fade={0.08} opacity={0.4} />
           <span className="vo-orb" />
         </div>
 
         {/* lg:py-7 recorta 24 px del panel. Todos los "lg:" que aparecen de aquí
             hacia abajo tienen el mismo origen: encajar el panel dentro de los
             800 px de la sección. Sumados ahorran unos 190 px. */}
-        <div className="relative rounded-lg border border-vo-bone/15 bg-vo-bone/8 px-7 py-10 text-center text-foreground shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)] backdrop-blur-md sm:px-10 lg:py-7">
-          <LogoVao className="mx-auto size-32 text-accent sm:size-36 lg:size-24" />
+        <div className="relative rounded-lg border border-vo-bone/15 bg-vo-bone/8 px-7 py-8 text-center text-foreground shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)] backdrop-blur-md sm:px-10 sm:py-10 lg:py-7">
+          {/* Margen superior negativo: el logo sube hasta desbordar el borde del
+              panel y queda flotando sobre él, a caballo entre la card y la foto.
+              Es lo que lo saca de la fila de contenido y lo convierte en el
+              remate de la pieza, además de recuperar el alto que ocupaba dentro.
+
+              En escritorio asoma menos (-72 px sobre 96 px de ancho) que en
+              móvil (-95 px sobre 112 px): allí el panel tiene que caber en los
+              800 px de la sección y un logo demasiado alto se despega de la
+              card en lugar de rematarla. */}
+          <LogoVao className="mx-auto -mt-[95px] w-28 sm:-mt-[104px] sm:w-32 lg:-mt-[72px] lg:w-24" />
 
           {/* Badge. inline-flex y no block: así la píldora mide lo que el texto
               y queda centrada por el text-center del panel, en lugar de ocupar
               todo el ancho. */}
-          <p className="mt-6 inline-flex items-center rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 font-display text-xs uppercase tracking-[0.32em] text-accent sm:text-sm lg:mt-4 lg:py-1">
+          <p className="mt-4 inline-flex items-center rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 font-display text-xs uppercase tracking-[0.32em] text-accent sm:mt-5 sm:text-sm lg:mt-4 lg:py-1">
             {/* El tracking añade espacio DESPUÉS de la última letra, incluida la
                 final. Sin compensarlo, la píldora tiene 0.32em de más a la
                 derecha y el texto se ve descentrado dentro de ella. */}
@@ -204,23 +260,28 @@ export function Hero() {
           </p>
 
           {/* scroll-mt-8: sin margen el título queda pegado al borde superior
-              de la pantalla y parece cortado. */}
+              de la pantalla y parece cortado.
+
+              Los cuerpos bajan un escalón respecto de la primera versión: en
+              móvil el conjunto no entraba de una vez en pantalla y el CTA
+              quedaba por debajo del pliegue, que es justo lo que no puede pasar
+              en la pieza que tiene que convertir. */}
           <h1
             id="registro"
-            className="mt-3 scroll-mt-8 font-display uppercase leading-[1.08]"
+            className="mt-2.5 scroll-mt-8 font-display uppercase leading-[1.08]"
           >
-            <span className="block text-xl tracking-[0.14em] text-foreground/85 sm:text-2xl">
+            <span className="block text-lg tracking-[0.14em] text-foreground/85 sm:text-xl">
               {HERO.titleTop}
             </span>
-            <span className="mt-1 block text-4xl tracking-[0.05em] sm:text-[3.1rem] lg:text-[2.6rem]">
+            <span className="mt-1 block text-[1.9rem] tracking-[0.05em] sm:text-[2.6rem] lg:text-[2.4rem]">
               {HERO.titleMain[0]}
             </span>
-            <span className="block text-5xl tracking-[0.03em] sm:text-[4rem] lg:text-[3.3rem]">
+            <span className="block text-[2.5rem] tracking-[0.03em] sm:text-[3.4rem] lg:text-[3rem]">
               {HERO.titleMain[1]}
             </span>
           </h1>
 
-          <SparkDivider className="mt-5 lg:mt-4" />
+          <SparkDivider className="mt-4 lg:mt-4" />
 
           {/* Es el subtitular que explica la oferta, así que va por encima del
               cuerpo de texto normal: 18 px y peso normal, no light.
@@ -230,7 +291,7 @@ export function Hero() {
               lo menos legible de la página. Se queda en 18 y no más arriba
               porque la frase es larga (240 caracteres) y dentro del panel de
               570 px cada punto extra le suma una línea. */}
-          <p className="mt-5 font-sans text-base leading-relaxed text-foreground/90 sm:text-lg lg:mt-4 lg:text-base">
+          <p className="mt-4 font-sans text-[0.95rem] leading-relaxed text-foreground/90 sm:mt-5 sm:text-lg lg:mt-4 lg:text-base">
             {HERO.intro.map((part) =>
               part.strong ? (
                 <strong key={part.text} className="font-semibold text-foreground">
@@ -242,13 +303,15 @@ export function Hero() {
             )}
           </p>
 
-          <div className="mt-6 lg:mt-5">
-            <WaitlistForm />
+          {/* El formulario ya no vive aquí: lo sirve el modal, que abren todos
+              los CTA de la landing. El panel se queda con la presentación y un
+              único punto de entrada. */}
+          {/* El aviso de privacidad ya no va aquí: acompaña a los campos, y
+              los campos viven en el modal. Repetirlo junto a un botón que sólo
+              abre un diálogo no aportaba nada. */}
+          <div className="mt-5 lg:mt-5">
+            <WaitlistCta>{HERO.cta}</WaitlistCta>
           </div>
-
-          <p className="mt-4 font-sans text-xs font-light text-foreground/60 lg:mt-3">
-            {HERO.privacy}
-          </p>
         </div>
       </div>
       </VoContainer>
