@@ -206,7 +206,7 @@ export function TestimonialCarousel({ items }: TestimonialCarouselProps) {
                   /* El clon queda fuera del recorrido de tabulación: si no, se
                      tabularía dos veces por la misma reseña. */
                   tabIndex={isClone ? -1 : undefined}
-                  className="mt-3 self-start font-sans text-base font-medium text-accent transition-colors duration-300 hover:text-vo-bone focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  className="mt-3 cursor-pointer self-start font-sans text-base font-medium text-accent transition-colors duration-300 hover:text-vo-bone focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
                   Ver más
                 </button>
@@ -235,7 +235,7 @@ export function TestimonialCarousel({ items }: TestimonialCarouselProps) {
               type="button"
               onClick={() => setActive(null)}
               aria-label="Cerrar"
-              className="absolute right-4 top-4 z-10 flex size-8 items-center justify-center rounded-full border border-accent/40 bg-black/60 text-foreground transition-colors hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              className="absolute right-4 top-4 z-10 flex size-8 cursor-pointer items-center justify-center rounded-full border border-accent/40 bg-black/60 text-foreground transition-colors hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
               <svg
                 viewBox="0 0 24 24"
