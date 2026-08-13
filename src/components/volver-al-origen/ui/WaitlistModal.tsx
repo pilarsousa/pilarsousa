@@ -11,6 +11,7 @@ import {
 import { MatrixRain } from "@/components/bootcamp/ui/MatrixRain";
 import { ModalLaser } from "@/components/volver-al-origen/ui/ModalLaser";
 import { LogoVao } from "@/components/volver-al-origen/ui/LogoVao";
+import { MovingBorder } from "@/components/volver-al-origen/ui/MovingBorder";
 import { SparkDivider } from "@/components/volver-al-origen/ui/SparkDivider";
 import { WaitlistForm } from "@/components/volver-al-origen/ui/WaitlistForm";
 import { HERO, MODAL } from "@/components/volver-al-origen/content";
@@ -190,6 +191,30 @@ export function WaitlistModalProvider({
                 real, con su barra de direcciones, no.
 
                 El sticky ya no hace falta porque el panel dejó de scrollear. */}
+            {/* Luz recorriendo el borde, la misma que la card del hero.
+
+                vo-edge-only recorta esta capa a su marco de 2 px: es lo que
+                convierte cada elipse de luz en un tramo encendido del contorno
+                en vez de un pompón atravesando el panel.
+
+                Va como capa hermana y no envolviendo el contenido porque
+                necesita overflow-hidden, y en WebKit un ancestro que recorta
+                overflow anula el backdrop-filter de sus descendientes: el panel
+                se quedaría sin cristal en iPhone. */}
+            <div
+              aria-hidden
+              className="vo-edge-only pointer-events-none absolute -inset-[2px] overflow-hidden rounded-lg"
+            >
+              <MovingBorder duration={7000} rx="10px" ry="10px">
+                <span className="block h-28 w-72 rounded-full bg-[radial-gradient(ellipse,#ffffff_0%,var(--color-vo-lumen)_32%,transparent_70%)] opacity-70 blur-[3px]" />
+              </MovingBorder>
+              {/* Segunda luz a media vuelta: con una sola, la mitad del contorno
+                  está siempre apagada. */}
+              <MovingBorder duration={7000} rx="10px" ry="10px" offset={0.5}>
+                <span className="block h-28 w-72 rounded-full bg-[radial-gradient(ellipse,#ffffff_0%,var(--color-vo-lumen)_32%,transparent_70%)] opacity-70 blur-[3px]" />
+              </MovingBorder>
+            </div>
+
             {/* rounded-lg además de overflow-hidden: el panel dejó de recortar
                 para que el logo pueda sobresalir, así que es esta capa la que
                 tiene que respetar las esquinas redondeadas — si no, la textura
@@ -249,20 +274,25 @@ export function WaitlistModalProvider({
                 entero —con el botón de enviar a la vista— tanto en una pantalla
                 de móvil pequeño como en escritorio. */}
             <div className="relative px-[clamp(1rem,4.5vw,1.5rem)] py-[clamp(1.1rem,4vw,2.25rem)] sm:px-9">
-              {/* A caballo del borde superior del panel: mitad fuera, mitad
-                  dentro. Lo consigue un margen superior negativo igual a la
-                  mitad del alto —la imagen es cuadrada, así que la mitad del
-                  ancho—, y por eso el tamaño vive en --logo y el margen se
-                  deriva de él: escritos como dos valores sueltos acabarían
-                  desincronizados.
+              {/* A caballo del borde superior del panel, igual que en el hero y
+                  con el mismo divisor.
 
-                  Al ocupar dentro de la caja sólo la mitad de su alto, puede
-                  ser mayor que antes sin robarle espacio al formulario. */}
+                  El tamaño vive en --logo y el margen se deriva de él: escritos
+                  como dos valores sueltos acabarían desincronizados, que es
+                  exactamente lo que pasó en el hero cuando el margen creció por
+                  encima del propio logo y lo sacó entero del panel.
+
+                  1.4 y no 2 porque el archivo lleva aire transparente alrededor
+                  del aro: partido por la mitad exacta, la figura visible queda
+                  por debajo del borde en lugar de centrada sobre él.
+
+                  Al ocupar dentro de la caja sólo una fracción de su alto, puede
+                  ser mayor sin robarle espacio al formulario. */}
               <LogoVao
-                className="mx-auto mt-[calc(var(--logo)/-2)] w-(--logo)"
+                className="mx-auto mt-[calc(var(--logo)/-1.4)] w-(--logo)"
                 style={
                   {
-                    "--logo": "clamp(4.5rem,18vw,6.5rem)",
+                    "--logo": "clamp(4.5rem,22vw,6.5rem)",
                   } as React.CSSProperties
                 }
               />

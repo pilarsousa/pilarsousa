@@ -189,7 +189,18 @@ export function WaitlistForm({ onSuccess }: WaitlistFormProps) {
     >
       <Field
         id="vo-nombre"
-        icon={<User size={19} strokeWidth={2} aria-hidden />}
+        icon={
+          <User
+            size={19}
+            strokeWidth={2}
+            /* El color se fija en el propio SVG y no sólo en el span que lo
+               envuelve: lucide pinta con stroke="currentColor", y así el valor
+               llega del elemento más cercano posible sin depender de qué herede
+               el contenedor. */
+            color="var(--color-vo-lumen)"
+            aria-hidden
+          />
+        }
         error={errors.nombre}
       >
         <input
@@ -245,7 +256,14 @@ export function WaitlistForm({ onSuccess }: WaitlistFormProps) {
 
       <Field
         id="vo-email"
-        icon={<Mail size={19} strokeWidth={2} aria-hidden />}
+        icon={
+          <Mail
+            size={19}
+            strokeWidth={2}
+            color="var(--color-vo-lumen)"
+            aria-hidden
+          />
+        }
         error={errors.email}
       >
         <input

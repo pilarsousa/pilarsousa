@@ -290,15 +290,16 @@ export function Hero() {
               móvil el margen superaba al propio logo, que acababa saliéndose
               del panel por completo. Escritos así no pueden desincronizarse.
 
-              Los -5 px extra alinean el centro óptico del círculo con el borde
-              del panel: el logo tiene aire transparente alrededor del aro, así
-              que la mitad geométrica de la imagen cae un pelo por debajo de la
-              mitad de la figura que se ve.
+              El divisor es 1.4 y no 2 —o sea, sube algo más de la mitad— porque
+              el archivo lleva aire transparente alrededor del aro: partiendo la
+              imagen por su mitad exacta, la figura que se ve queda por debajo
+              del borde. Con 1.4 el centro óptico del círculo cae sobre la línea
+              del panel, que es lo que se lee como alineado.
 
-              Al no ocupar más que la mitad de su alto dentro de la caja, puede
-              ser más grande sin costarle espacio al contenido. */}
+              Al no ocupar más que una fracción de su alto dentro de la caja,
+              puede ser más grande sin costarle espacio al contenido. */}
           <LogoVao
-            className="mx-auto mt-[calc(var(--logo)/-2-5px)] w-(--logo)"
+            className="mx-auto mt-[calc(var(--logo)/-1.4)] w-(--logo)"
             style={
               {
                 "--logo": "clamp(5.5rem,24vw,8rem)",

@@ -41,13 +41,13 @@ export function ModalLaser() {
          separados justamente por esto, porque el encuadre de cada uno pide un
          número distinto y compartirlos obligaría a elegir cuál de los dos sale
          mal. */
-      /* El haz entra por arriba del panel y baja hasta morir en el CTA, que está
-         al final del todo: tras el logo, el título, el texto y tres campos.
+      /* El haz entra por arriba del panel y baja hasta morir en el CTA.
 
-         Negativo BAJA el punto de impacto. Se probó 0.34 pensando lo contrario y
-         el resultado fue el haz clavado en la parte de arriba del panel, sin
-         llegar al formulario siquiera. */
-      verticalBeamOffset={-0.62}
+         Negativo BAJA el punto de impacto. Con -0.62 bajaba tanto que el cono
+         quedaba fuera del canvas y sólo asomaba la línea del centro, cortada
+         contra el borde inferior. Este valor lo devuelve dentro, con el
+         ensanchamiento visible antes de apagarse. */
+      verticalBeamOffset={-0.34}
       color="#b4e236"
       /* Más contenido que en el hero: aquí el haz cruza por detrás de los
          campos del formulario, y con la intensidad del hero les restaba
@@ -57,9 +57,11 @@ export function ModalLaser() {
       wispDensity={0.8}
       flowStrength={0.2}
       horizontalSizing={0.5}
-      /* Alargado para que el haz recorra el panel entero sin apagarse antes de
-         llegar al botón. */
-      verticalSizing={40}
+      /* Estaba en 40 y era demasiado para un panel de esta altura: el haz se
+         estiraba mucho más allá del canvas, así que dentro sólo se veía el tramo
+         central —la línea— y nunca el cono. Este valor lo mantiene largo pero
+         dentro de la caja. */
+      verticalSizing={12}
     />
   );
 }
