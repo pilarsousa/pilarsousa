@@ -18,7 +18,7 @@ import "lenis/dist/lenis.css";
   está en estas páginas y se desmonta al salir.
 
   anchors: true es lo que mantiene vivos los enlaces internos. Con Lenis activo,
-  el salto nativo de un href="#registro" pelea con el suavizado y el resultado es
+  el salto nativo de un href a un ancla pelea con el suavizado y el resultado es
   un tirón; con esta opción es la propia librería la que lleva la página hasta el
   ancla, con la misma inercia que el resto.
 

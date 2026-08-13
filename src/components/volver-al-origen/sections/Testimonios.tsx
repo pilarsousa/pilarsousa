@@ -3,10 +3,9 @@ import { ScrollIn } from "@/components/volver-al-origen/ui/ScrollIn";
 import { SectionTitle } from "@/components/volver-al-origen/ui/SectionTitle";
 import { TrustScore } from "@/components/volver-al-origen/ui/TrustScore";
 import { TestimonialCarousel } from "@/components/volver-al-origen/ui/TestimonialCarousel";
-import { VoCta } from "@/components/volver-al-origen/ui/VoCta";
+import { WaitlistCta } from "@/components/volver-al-origen/ui/WaitlistCta";
 import {
   FEATURED_TESTIMONIALS,
-  FORM_ANCHOR,
   TESTIMONIOS,
 } from "@/components/volver-al-origen/content";
 
@@ -131,9 +130,7 @@ export function Testimonios() {
       <VoContainer>
         <ScrollIn delay={0.2}>
           <div className="mt-12 flex justify-center">
-            <VoCta href={FORM_ANCHOR} className="max-w-xs">
-              {TESTIMONIOS.cta}
-            </VoCta>
+            <WaitlistCta className="max-w-xs">{TESTIMONIOS.cta}</WaitlistCta>
           </div>
         </ScrollIn>
       </VoContainer>

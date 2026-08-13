@@ -25,6 +25,8 @@ type VoCtaProps = {
   type?: "button" | "submit";
   disabled?: boolean;
   className?: string;
+  /** Sólo aplica a la variante <button>; con href el componente navega. */
+  onClick?: () => void;
 };
 
 const FACE =
@@ -90,6 +92,7 @@ export function VoCta({
   type = "button",
   disabled,
   className,
+  onClick,
 }: VoCtaProps) {
   /* Los enlaces externos salen como <a> normal y en pestaña nueva. next/link
      está pensado para navegación interna: en un destino de otro dominio no
@@ -102,7 +105,7 @@ export function VoCta({
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className={cn("vo-cta-shell", className)}
+        className={cn("vo-cta-shell cursor-pointer", className)}
       >
         <Inner>{children}</Inner>
       </a>
@@ -111,7 +114,7 @@ export function VoCta({
 
   if (href) {
     return (
-      <Link href={href} className={cn("vo-cta-shell", className)}>
+      <Link href={href} className={cn("vo-cta-shell cursor-pointer", className)}>
         <Inner>{children}</Inner>
       </Link>
     );
@@ -121,9 +124,12 @@ export function VoCta({
     <button
       type={type}
       disabled={disabled}
+      onClick={onClick}
+      /* cursor-pointer explícito: Tailwind v4 dejó de aplicarlo a los <button>
+         por defecto, así que sin esto el CTA no señala que es clicable. */
       className={cn(
         "vo-cta-shell",
-        disabled && "cursor-not-allowed opacity-70",
+        disabled ? "cursor-not-allowed opacity-70" : "cursor-pointer",
         className,
       )}
     >

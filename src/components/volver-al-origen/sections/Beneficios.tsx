@@ -3,8 +3,8 @@ import { ScrollIn } from "@/components/volver-al-origen/ui/ScrollIn";
 import { BenefitCard } from "@/components/volver-al-origen/ui/BenefitCard";
 import { SectionTitle } from "@/components/volver-al-origen/ui/SectionTitle";
 import { SparkDivider } from "@/components/volver-al-origen/ui/SparkDivider";
-import { VoCta } from "@/components/volver-al-origen/ui/VoCta";
-import { BENEFICIOS, FORM_ANCHOR } from "@/components/volver-al-origen/content";
+import { WaitlistCta } from "@/components/volver-al-origen/ui/WaitlistCta";
+import { BENEFICIOS } from "@/components/volver-al-origen/content";
 
 /*
   Sección 2 — Qué te llevarás por acceder a la lista.
@@ -80,9 +80,7 @@ export function Beneficios() {
 
         <ScrollIn delay={0.2}>
           <div className="mt-12 flex justify-center">
-            <VoCta href={FORM_ANCHOR} className="max-w-xs">
-              {BENEFICIOS.cta}
-            </VoCta>
+            <WaitlistCta className="max-w-xs">{BENEFICIOS.cta}</WaitlistCta>
           </div>
         </ScrollIn>
       </VoContainer>

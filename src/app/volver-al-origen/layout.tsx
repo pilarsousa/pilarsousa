@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SmoothScroll } from "@/components/volver-al-origen/ui/SmoothScroll";
 import { GradualBlur } from "@/components/volver-al-origen/ui/GradualBlur";
+import { WaitlistModalProvider } from "@/components/volver-al-origen/ui/WaitlistModal";
 
 /*
   Volver al Origen — lista de espera de la tercera edición, servida en
@@ -26,9 +27,13 @@ export const metadata: Metadata = {
 
      El layout raíz emite además el favicon.ico del sitio para todas las
      páginas; declarar éste explícitamente es lo que hace que en estas dos gane
-     el de la marca. */
+     el de la marca.
+
+     Es el mismo archivo que usa LogoVao en el hero y en el modal: una sola
+     copia para las dos cosas, así que cambiar el logo cambia también el
+     favicon y no hay dos versiones que se desincronicen. */
   icons: {
-    icon: "/volver-origen/public/img/favicon/favicon-vovler.png",
+    icon: "/volver-origen/public/img/Logo-volveralorigen.webp",
   },
   title: "Lista de espera — Tercera edición de Volver al Origen | Pilar Sousa",
   description:
@@ -48,7 +53,17 @@ export default function VolverAlOrigenLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
+    /* El provider envuelve el scope, no al revés: el modal se renderiza como
+       hermano del contenido y queda FUERA del div con overflow-x-clip. En
+       WebKit un ancestro que recorta overflow anula el backdrop-filter de sus
+       descendientes, así que dentro del div el fondo de cristal del modal no se
+       pintaría en iPhone — el mismo motivo por el que GradualBlur va fuera.
+
+       Como el modal cuelga del provider y éste está fuera de .vo-scope, el
+       componente no hereda los tokens de la landing; por eso el panel usa las
+       clases vo-* de la paleta cruda (vo-black, vo-bone), que sí viven en
+       @theme y resuelven en cualquier punto del árbol. */
+    <WaitlistModalProvider>
       {/* overflow-x-clip: los halos y resplandores sangran fuera de sus
           secciones a propósito; esto evita que eso genere scroll horizontal en
           mobile. */}
@@ -84,6 +99,6 @@ export default function VolverAlOrigenLayout({
         opacity={0.9}
         className="z-40"
       />
-    </>
+    </WaitlistModalProvider>
   );
 }

@@ -3,8 +3,8 @@ import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
 import { ScrollIn } from "@/components/volver-al-origen/ui/ScrollIn";
 import { SectionTitle } from "@/components/volver-al-origen/ui/SectionTitle";
 import { PilarBio } from "@/components/volver-al-origen/ui/PilarBio";
-import { VoCta } from "@/components/volver-al-origen/ui/VoCta";
-import { FORM_ANCHOR, PILAR } from "@/components/volver-al-origen/content";
+import { WaitlistCta } from "@/components/volver-al-origen/ui/WaitlistCta";
+import { PILAR } from "@/components/volver-al-origen/content";
 import pilarMovil from "@/../public/volver-origen/public/img/landing/pilarsousa-mobile.jpg";
 import pilarDesktop from "@/../public/volver-origen/public/img/landing/pilarsousa-pc.jpg";
 
@@ -201,9 +201,9 @@ export function Pilar() {
               partía en "…LISTA DE / ESPERA". */}
           <ScrollIn delay={0.2}>
             <div className="mt-9 flex justify-center lg:justify-start">
-              <VoCta href={FORM_ANCHOR} className="max-w-md lg:max-w-none">
+              <WaitlistCta className="max-w-md lg:max-w-none">
                 {PILAR.cta}
-              </VoCta>
+              </WaitlistCta>
             </div>
           </ScrollIn>
         </div>
