@@ -29,8 +29,11 @@ type VoCtaProps = {
   onClick?: () => void;
 };
 
+/* El alto y el cuerpo escalan con el ancho en móvil: el botón es lo último del
+   panel del hero y cada píxel que ahorra aquí es un píxel que ayuda a que se
+   vea sin scrollear en una pantalla baja. Desde sm vuelve a medida fija. */
 const FACE =
-  "vo-cta w-full px-6 py-4.5 text-center font-display text-sm uppercase leading-tight tracking-[0.14em] sm:px-10 sm:text-base";
+  "vo-cta w-full px-[clamp(1rem,4vw,1.5rem)] py-[clamp(0.85rem,3.4vw,1.125rem)] text-center font-display text-[clamp(0.72rem,3.1vw,0.875rem)] uppercase leading-tight tracking-[0.14em] sm:px-10 sm:py-4.5 sm:text-base";
 
 /*
   La luz que recorre el borde. Lo que la hace leerse como neón y no como una

@@ -189,15 +189,17 @@ export function Hero() {
       <VoContainer className="pb-16 pt-[calc(68svh-220px)] lg:py-0">
       {/* 570 px: la mitad exacta del ancho de contenido (1140 px), que es la
           referencia del diseño. */}
-      {/* -mt-16 en móvil: sube la card por encima del punto donde la deja el
-          padding del contenedor. Se hace aquí y no bajando ese padding porque
-          el mismo cálculo está atado al fundido de la foto —los dos valores se
-          mueven juntos, ver el comentario de arriba— y tocarlo obligaría a
-          reajustar el degradado. Un margen negativo desplaza sólo la card.
+      {/* El margen negativo que subía la card se retira en móvil.
 
-          Se anula en lg: en escritorio el centrado lo resuelve items-center de
-          la sección y cualquier margen lo descompensaría. */}
-      <div className="relative mx-auto -mt-16 w-full max-w-[570px] sm:-mt-20 lg:mx-0 lg:mt-0">
+          Estaba en -mt-16 para ganar alto, pero el panel se acortó al pasar sus
+          medidas a vw y con esa subida acababa montándose sobre la cara de
+          Pilar, que está sobre el 45% del alto de la foto. El sitio que hacía
+          falta ya lo da el escalado del contenido, así que la card puede volver
+          a apoyarse donde la deja el padding del contenedor y dejar el retrato
+          despejado.
+
+          En sm se mantiene: ahí la foto es más alta y no hay conflicto. */}
+      <div className="relative mx-auto w-full max-w-[570px] sm:-mt-20 lg:mx-0 lg:mt-0">
         {/* Capa de luz. Va como HERMANA del panel, no envolviéndolo, y es
             deliberado: necesita overflow-hidden para recortar la luz a la forma
             de la card, y en WebKit un ancestro que recorta overflow anula el
@@ -257,7 +259,15 @@ export function Hero() {
         {/* lg:py-7 recorta 24 px del panel. Todos los "lg:" que aparecen de aquí
             hacia abajo tienen el mismo origen: encajar el panel dentro de los
             800 px de la sección. Sumados ahorran unos 190 px. */}
-        <div className="relative rounded-lg border border-vo-bone/15 bg-vo-bone/8 px-7 py-8 text-center text-foreground shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)] backdrop-blur-md sm:px-10 sm:py-10 lg:py-7">
+        {/* Los tamaños de dentro se expresan en vw con clamp: el panel tiene que
+            caber ENTERO —con el botón visible— en una pantalla de 320 px de alto
+            útil y también en un móvil grande, y una escala fija sólo acierta en
+            uno de los dos. El clamp acota los extremos para que ni se
+            microscopice ni se desborde.
+
+            Desde sm se vuelve a medidas fijas: ahí ya sobra alto y el vw sólo
+            introduciría variación sin motivo. */}
+        <div className="relative rounded-lg border border-vo-bone/15 bg-vo-bone/8 px-[clamp(1rem,4.5vw,1.75rem)] py-[clamp(1rem,4vw,2rem)] text-center text-foreground shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)] backdrop-blur-md sm:px-10 sm:py-10 lg:py-7">
           {/* Margen superior negativo: el logo sube hasta desbordar el borde del
               panel y queda flotando sobre él, a caballo entre la card y la foto.
               Es lo que lo saca de la fila de contenido y lo convierte en el
@@ -267,12 +277,15 @@ export function Hero() {
               móvil (-95 px sobre 112 px): allí el panel tiene que caber en los
               800 px de la sección y un logo demasiado alto se despega de la
               card en lugar de rematarla. */}
-          <LogoVao className="mx-auto -mt-[95px] w-28 sm:-mt-[104px] sm:w-32 lg:-mt-[72px] lg:w-24" />
+          {/* El logo y su desbordamiento van juntos en vw: el margen negativo
+              tiene que ser proporcional al tamaño, o en una pantalla estrecha
+              asomaría una porción distinta de la prevista. */}
+          <LogoVao className="mx-auto -mt-[clamp(60px,22vw,95px)] w-[clamp(4.5rem,20vw,7rem)] sm:-mt-[104px] sm:w-32 lg:-mt-[72px] lg:w-24" />
 
           {/* Badge. inline-flex y no block: así la píldora mide lo que el texto
               y queda centrada por el text-center del panel, en lugar de ocupar
               todo el ancho. */}
-          <p className="mt-4 inline-flex items-center rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 font-display text-xs uppercase tracking-[0.32em] text-accent sm:mt-5 sm:text-sm lg:mt-4 lg:py-1">
+          <p className="mt-[clamp(0.6rem,2.5vw,1rem)] inline-flex items-center rounded-full border border-accent/30 bg-accent/10 px-[clamp(0.7rem,3vw,1rem)] py-[clamp(0.25rem,1.2vw,0.375rem)] font-display text-[clamp(0.6rem,2.6vw,0.75rem)] uppercase tracking-[0.32em] text-accent sm:mt-5 sm:text-sm lg:mt-4 lg:py-1">
             {/* El tracking añade espacio DESPUÉS de la última letra, incluida la
                 final. Sin compensarlo, la píldora tiene 0.32em de más a la
                 derecha y el texto se ve descentrado dentro de ella. */}
@@ -288,20 +301,20 @@ export function Hero() {
               en la pieza que tiene que convertir. */}
           <h1
             id="registro"
-            className="mt-2.5 scroll-mt-8 font-display uppercase leading-[1.08]"
+            className="mt-[clamp(0.4rem,1.8vw,0.625rem)] scroll-mt-8 font-display uppercase leading-[1.08]"
           >
-            <span className="block text-lg tracking-[0.14em] text-foreground/85 sm:text-xl">
+            <span className="block text-[clamp(0.85rem,3.8vw,1.125rem)] tracking-[0.14em] text-foreground/85 sm:text-xl">
               {HERO.titleTop}
             </span>
-            <span className="mt-1 block text-[1.9rem] tracking-[0.05em] sm:text-[2.6rem] lg:text-[2.4rem]">
+            <span className="mt-1 block text-[clamp(1.4rem,7vw,1.9rem)] tracking-[0.05em] sm:text-[2.6rem] lg:text-[2.4rem]">
               {HERO.titleMain[0]}
             </span>
-            <span className="block text-[2.5rem] tracking-[0.03em] sm:text-[3.4rem] lg:text-[3rem]">
+            <span className="block text-[clamp(1.85rem,9.2vw,2.5rem)] tracking-[0.03em] sm:text-[3.4rem] lg:text-[3rem]">
               {HERO.titleMain[1]}
             </span>
           </h1>
 
-          <SparkDivider className="mt-4 lg:mt-4" />
+          <SparkDivider className="mt-[clamp(0.6rem,2.5vw,1rem)] lg:mt-4" />
 
           {/* Es el subtitular que explica la oferta, así que va por encima del
               cuerpo de texto normal: 18 px y peso normal, no light.
@@ -311,7 +324,7 @@ export function Hero() {
               lo menos legible de la página. Se queda en 18 y no más arriba
               porque la frase es larga (240 caracteres) y dentro del panel de
               570 px cada punto extra le suma una línea. */}
-          <p className="mt-4 font-sans text-[0.95rem] leading-relaxed text-foreground/90 sm:mt-5 sm:text-lg lg:mt-4 lg:text-base">
+          <p className="mt-[clamp(0.6rem,2.5vw,1rem)] font-sans text-[clamp(0.78rem,3.4vw,0.95rem)] leading-snug text-foreground/90 sm:mt-5 sm:text-lg sm:leading-relaxed lg:mt-4 lg:text-base">
             {HERO.intro.map((part) =>
               part.strong ? (
                 <strong key={part.text} className="font-semibold text-foreground">
@@ -329,7 +342,7 @@ export function Hero() {
           {/* El aviso de privacidad ya no va aquí: acompaña a los campos, y
               los campos viven en el modal. Repetirlo junto a un botón que sólo
               abre un diálogo no aportaba nada. */}
-          <div className="mt-5 lg:mt-5">
+          <div className="mt-[clamp(0.75rem,3vw,1.25rem)] lg:mt-5">
             <WaitlistCta>{HERO.cta}</WaitlistCta>
           </div>
         </div>
