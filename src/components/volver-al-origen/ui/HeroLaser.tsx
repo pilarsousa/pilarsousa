@@ -46,16 +46,19 @@ const LaserFlow = dynamic(
   render en el tamaño donde no aportaba nada.
 */
 const BEAM = {
-  /* Desplazado a la izquierda: el haz entra por ese lado y cruza en diagonal
-     hacia el CTA, en lugar de caer a plomo por el centro. Bajando recto partía
-     la card en dos mitades simétricas y se leía como una costura. */
+  /* Centrado. En móvil la card ocupa todo el ancho, así que desplazarlo a un
+     lado dejaba el haz cayendo sobre el borde en lugar de sobre el botón. */
   horizontal: 0,
   /* Punto de impacto a la altura del CTA, en el pie de la card.
 
      El offset se mide desde el centro del canvas, así que SUBIR este número
      BAJA el impacto: -0.46 lo dejaba en el borde superior del panel y -0.3 se
-     quedaba a media card, todavía por encima del botón. */
-  vertical: -0.36,
+     quedaba a media card, todavía por encima del botón.
+
+     Se hace más negativo al subir la card con el margen negativo de Hero.tsx:
+     el botón se movió hacia arriba y el haz tiene que acompañarlo. Los dos
+     valores van atados. */
+  vertical: -0.38,
 };
 
 export function HeroLaser() {
@@ -90,7 +93,7 @@ export function HeroLaser() {
       horizontalSizing={0.5}
       /* Alargado: el haz tiene que recorrer toda la altura de la sección sin
          apagarse a medio camino. */
-      verticalSizing={20}
+      verticalSizing={50}
     />
   );
 }

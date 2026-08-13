@@ -1763,17 +1763,22 @@ body {
 }
 
 /*
-  Relleno verde PLENO con texto negro, y no al revés.
+  Relleno claro con texto oscuro, y no al revés.
 
-  Antes era oscuro con texto claro, igual que la card que lo contiene, el borde
-  que lo rodea y la lluvia de código del fondo: todo verde oscuro compitiendo
-  entre sí, y el botón se perdía en el conjunto. El problema no era de tono sino
-  de luminosidad, así que la solución no pasa por meter otro color —el dorado es
-  la paleta del Bootcamp, no la de esta landing— sino por invertir el claro y el
-  oscuro. Al ser el único bloque claro de la card, el ojo va ahí solo.
+  Antes era verde oscuro sobre una card verde oscura, con borde verde y lluvia
+  de código verde detrás: todo competía entre sí y el botón se perdía. El
+  problema no era de tono sino de LUMINOSIDAD, así que se invierte el claro y el
+  oscuro en lugar de meter otro color.
 
-  El texto en negro y no en hueso porque sobre el verde lumen el hueso da 1,6:1
-  de contraste: ilegible. Con el negro de marca sube a 12:1.
+  El verde, eso sí, va APAGADO, no el lumen puro. El #b4e236 a pleno sobre este
+  fondo resultaba chillón y le quitaba a la página la sutileza que tiene el
+  resto: es un verde de acento, pensado para trazos finos y glows, no para
+  rellenar un bloque de 300x60. Este oliva claro conserva la familia cromática y
+  sigue siendo el único bloque claro de la card —que es lo que hace que el ojo
+  vaya ahí— sin gritar.
+
+  El texto en negro y no en hueso porque sobre un relleno claro el hueso queda
+  por debajo de 2:1 de contraste: ilegible. Con el negro de marca son 9,7:1.
 */
 .vo-cta {
   position: relative;
@@ -1781,10 +1786,12 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 5px;
+  /* El borde SÍ conserva el lumen: es un trazo fino, que es justo donde ese
+     verde funciona, y mantiene atado el botón al resto de la paleta. */
   border: 1px solid var(--color-vo-lumen);
-  /* El degradado va de un verde apenas más claro arriba al de marca abajo: da
-     volumen sin llegar a leerse como dos colores. */
-  background: linear-gradient(180deg, #c8ee5e 0%, var(--color-vo-lumen) 100%);
+  /* Degradado corto entre dos olivas claros: da volumen sin leerse como dos
+     colores distintos. */
+  background: linear-gradient(180deg, #a8c65a 0%, #8fae44 100%);
   color: var(--color-vo-black);
   font-weight: 600;
   /* overflow: hidden recorta la luz del hover a la forma del botón; sin esto
@@ -1794,8 +1801,8 @@ body {
      relleno pleno un inset no se vería, y lo que hace falta es que el botón
      derrame luz sobre la card. */
   box-shadow:
-    0 0 0 1px rgba(180, 226, 54, 0.35),
-    0 0 28px -4px var(--vo-glow),
+    0 0 0 1px rgba(180, 226, 54, 0.28),
+    0 0 24px -6px var(--vo-glow),
     0 6px 20px -8px rgba(0, 0, 0, 0.7);
   transition:
     box-shadow 0.35s ease,
@@ -1809,12 +1816,13 @@ body {
 @media (hover: hover) {
   .vo-cta-shell:hover .vo-cta {
     border-color: #e2f79a;
-    /* El relleno se aclara al pasar el puntero: sobre un botón ya luminoso,
-       subir sólo el halo apenas se nota. */
-    background: linear-gradient(180deg, #d8f77e 0%, #bced46 100%);
+    /* El relleno se aclara al pasar el puntero, y AQUÍ sí sube hacia el lumen:
+       en hover el destello es momentáneo y buscado, no el estado permanente que
+       resultaba chillón. */
+    background: linear-gradient(180deg, #c2e06e 0%, #a8c65a 100%);
     box-shadow:
-      0 0 0 1px rgba(180, 226, 54, 0.55),
-      0 0 52px -2px var(--vo-glow-strong),
+      0 0 0 1px rgba(180, 226, 54, 0.5),
+      0 0 46px -4px var(--vo-glow-strong),
       0 8px 24px -8px rgba(0, 0, 0, 0.75);
   }
 }

@@ -182,7 +182,15 @@ export function Hero() {
       <VoContainer className="pb-16 pt-[calc(68svh-220px)] lg:py-0">
       {/* 570 px: la mitad exacta del ancho de contenido (1140 px), que es la
           referencia del diseño. */}
-      <div className="relative mx-auto w-full max-w-[570px] lg:mx-0">
+      {/* -mt-16 en móvil: sube la card por encima del punto donde la deja el
+          padding del contenedor. Se hace aquí y no bajando ese padding porque
+          el mismo cálculo está atado al fundido de la foto —los dos valores se
+          mueven juntos, ver el comentario de arriba— y tocarlo obligaría a
+          reajustar el degradado. Un margen negativo desplaza sólo la card.
+
+          Se anula en lg: en escritorio el centrado lo resuelve items-center de
+          la sección y cualquier margen lo descompensaría. */}
+      <div className="relative mx-auto -mt-16 w-full max-w-[570px] sm:-mt-20 lg:mx-0 lg:mt-0">
         {/* Capa de luz. Va como HERMANA del panel, no envolviéndolo, y es
             deliberado: necesita overflow-hidden para recortar la luz a la forma
             de la card, y en WebKit un ancestro que recorta overflow anula el
