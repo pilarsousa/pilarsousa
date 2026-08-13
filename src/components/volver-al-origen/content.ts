@@ -25,6 +25,18 @@ export const HERO = {
     { text: "salud, relaciones, dinero y propósito.", strong: true },
   ],
   privacy: "Tu información está 100% protegida. No enviamos spam.",
+  /* Texto del CTA del hero, que ahora abre el modal en vez de tener el
+     formulario debajo. */
+  cta: "Quiero acceder a la lista de espera",
+};
+
+/* Copy del modal del formulario. El badge y el aviso de privacidad se reutilizan
+   de HERO: son los mismos y duplicarlos los dejaría desincronizados. */
+export const MODAL = {
+  title: "Reservá tu lugar",
+  intro:
+    "Dejanos tus datos y serás de los primeros en acceder, con precio especial y bonos exclusivos.",
+  close: "Cerrar",
 };
 
 export const FORM = {
@@ -36,6 +48,7 @@ export const FORM = {
   submit: "Quiero acceder a la lista de espera",
   submitting: "Registrando…",
   success: "¡Estás en la lista!",
+  error: "No pudimos registrarte. Revisá tu conexión y probá de nuevo.",
 };
 
 /* Los iconos se nombran, no se importan: content.ts es data y no debe arrastrar
@@ -125,6 +138,7 @@ export const GRACIAS = {
    porque es el final del recorrido que describe este archivo. */
 export const GRACIAS_PATH = "/volver-al-origen/gracias";
 
-/* Ancla del formulario del hero. La usan todos los CTA de la página, así que
-   vive aquí para que no haya varios "#registro" sueltos que se desincronicen. */
-export const FORM_ANCHOR = "#registro";
+/* Aquí vivía FORM_ANCHOR ("#registro"), el ancla del formulario del hero. Se
+   retiró al pasar el formulario al modal: los CTA ya no navegan a ninguna
+   parte, lo abren. El id "registro" sigue en el <h1> del hero porque es a lo
+   que apunta el aria-labelledby de la sección. */

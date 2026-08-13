@@ -15,22 +15,21 @@ import { VoCta } from "@/components/volver-al-origen/ui/VoCta";
 import { FORM, GRACIAS_PATH } from "@/components/volver-al-origen/content";
 
 /*
-  ⚠️ MAQUETA — ESTE FORMULARIO NO ENVÍA NADA A NINGÚN SITIO. ⚠️
+  Formulario de la lista de espera de la tercera edición.
 
-  Valida de verdad y recorre los cuatro estados visuales, pero al enviar no hay
-  petición: los datos se quedan en el navegador y se pierden. Está así a pedido,
-  para definir la página antes de decidir el flujo de esta edición.
+  El lead viaja a /api/register, que lo respalda en Supabase y lo reenvía al
+  webhook de Go High Level. Mismo endpoint y mismo contrato que ReservaForm de
+  Misión Origen; lo que separa los registros de cada landing en el CRM es
+  `source`, que aquí vale "volver-al-origen-waitlist".
 
-  El recorrido de después SÍ es el definitivo: confirmación con el check,
-  tres segundos en pantalla y redirección a la página de gracias.
+  Sólo se pasa a "success" si la petición sale bien: la confirmación con el
+  check tiene que significar que el dato está guardado, nunca sólo que el
+  visitante apretó el botón. Si falla, el estado va a "error" y se le ofrece
+  reintentar en lugar de dejarlo creyendo que se registró.
 
-  TODO — para conectarlo, el trabajo pesado ya existe en el repo:
-    · POST a /api/register (guarda en Supabase y reenvía a Go High Level),
-      mandando { nombre, email, telefono, source: "volver-al-origen-waitlist" }.
-      Sólo pasar a "success" si la respuesta es correcta: hoy se pasa siempre.
-    · Empujar el evento "lead_registered" a window.dataLayer ANTES de navegar,
-      o el redirect corta el evento y Meta no cuenta la conversión.
-  El patrón completo está en mision-origen/ui/ReservaForm.tsx.
+  El evento de analítica se empuja ANTES del router.push: el redirect desmonta
+  la página, y un dataLayer.push posterior no llegaría a dispararse — Meta
+  perdería la conversión.
 */
 
 /* Mismas reglas que ReservaForm y que la validación de servidor en
@@ -43,7 +42,21 @@ import { FORM, GRACIAS_PATH } from "@/components/volver-al-origen/content";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 type Errors = { nombre?: string; telefono?: string; email?: string };
-type Status = "idle" | "submitting" | "success";
+type Status = "idle" | "submitting" | "success" | "error";
+
+/* Meta (Advanced Matching / CAPI) quiere el teléfono en E.164: sólo dígitos con
+   el "+" del prefijo. PhoneInput ya lo entrega así; esto lo blinda por si el
+   valor trae espacios, guiones o paréntesis. Sin hashear a propósito: el
+   SHA-256 lo aplican GTM/Stape. Mismo criterio que ReservaForm. */
+function normalizePhone(raw: string): string {
+  const trimmed = raw.trim();
+  const digits = trimmed.replace(/\D/g, "");
+  if (!digits) return "";
+  return trimmed.startsWith("+") ? `+${digits}` : `+34${digits}`;
+}
+
+/* Etiqueta con la que este formulario se distingue del resto en el CRM. */
+const LEAD_SOURCE = "volver-al-origen-waitlist";
 
 /* El formulario vive sobre el panel translúcido del hero, encima de la foto.
    Por eso los campos son oscuros y translúcidos con texto claro: un campo
@@ -90,30 +103,59 @@ export function WaitlistForm() {
     return next;
   }
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const found = validate();
     setErrors(found);
     if (Object.keys(found).length > 0) return;
 
-    /* El aviso en consola es deliberado: si esta maqueta llegara a publicarse
-       sin conectar, el silencio haría creer que los registros se guardan. */
-    console.warn(
-      "[volver-al-origen] Formulario de maqueta: el lead NO se envió a ningún sitio.",
-    );
+    const cleanNombre = nombre.trim();
+    const cleanEmail = email.trim();
+    const cleanTelefono = telefono.trim();
 
     setStatus("submitting");
-    timers.current.push(
-      window.setTimeout(() => {
-        setStatus("success");
-        /* El redirect se encadena aquí, no en paralelo: si se lanzaran los dos
-           desde el envío, un "submitting" más lento comería parte de los
-           segundos de confirmación y el check podría no llegar a verse. */
-        timers.current.push(
-          window.setTimeout(() => router.push(GRACIAS_PATH), CONFIRM_MS),
-        );
-      }, 700),
-    );
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombre: cleanNombre,
+          email: cleanEmail,
+          telefono: cleanTelefono,
+          source: LEAD_SOURCE,
+        }),
+      });
+      /* Sin esto la confirmación mentiría: el check saldría igual con el lead
+         perdido, y el visitante se iría creyendo que quedó en la lista. */
+      if (!res.ok) throw new Error(`register failed: ${res.status}`);
+
+      /* GTM escucha este evento para disparar la conversión "Lead" de Meta.
+         Va antes del router.push porque el redirect desmonta la página.
+         user_data en claro: GTM/Stape hashean antes de mandarlo a Meta. */
+      const [firstName = "", ...restName] = cleanNombre.split(/\s+/);
+      const lastName = restName.join(" ").toLowerCase();
+      window.dataLayer?.push({
+        event: "lead_registered",
+        lead_source: LEAD_SOURCE,
+        user_data: {
+          email_address: cleanEmail.toLowerCase(),
+          phone_number: normalizePhone(cleanTelefono),
+          address: {
+            first_name: firstName.toLowerCase(),
+            ...(lastName ? { last_name: lastName } : {}),
+          },
+        },
+      });
+
+      setStatus("success");
+      /* El redirect se encadena tras la confirmación para que dé tiempo a leer
+         el mensaje y a ver el check dibujarse. */
+      timers.current.push(
+        window.setTimeout(() => router.push(GRACIAS_PATH), CONFIRM_MS),
+      );
+    } catch {
+      setStatus("error");
+    }
   }
 
   return (
@@ -199,8 +241,24 @@ export function WaitlistForm() {
         />
       </Field>
 
+      {/* El envío falló: se avisa y se deja reintentar, en vez de dejar al
+          visitante mirando un botón muerto sin saber qué pasó. */}
+      {status === "error" && (
+        <p
+          role="alert"
+          className="font-sans text-xs font-light text-red-300"
+        >
+          {FORM.error}
+        </p>
+      )}
+
       <div className="mt-2">
-        <VoCta type="submit" disabled={status !== "idle"}>
+        {/* Sólo se bloquea mientras la petición está en vuelo o ya salió bien.
+            En "error" vuelve a estar activo para poder reintentar. */}
+        <VoCta
+          type="submit"
+          disabled={status === "submitting" || status === "success"}
+        >
           {status === "success" ? (
             <span className="inline-flex items-center justify-center gap-2.5">
               <CheckMark />
