@@ -36,6 +36,50 @@ const nextConfig: NextConfig = {
           has: [{ type: "host", value: "lp.pilarsousa.es" }],
           destination: "/volver-al-origen",
         },
+
+        /* La misma landing, además, bajo un slug con nombre.
+
+           La raíz sigue sirviéndola: esto NO la sustituye, se suma. Son dos
+           puertas a la misma página, para poder repartir tráfico de pauta con
+           una URL que se explica sola cuando se comparte por WhatsApp o se lee
+           en pantalla.
+
+           También es rewrite y no redirect, por lo mismo que la regla de
+           arriba: la URL que ve el visitante es la que se compartió, y no salta
+           a /volver-al-origen a mitad de camino.
+
+           El alias sin el ".0" existe porque algunos gestores de anuncios,
+           acortadores y clientes de correo cortan una URL al encontrar un punto
+           seguido de dígitos —lo leen como extensión de archivo— y dejarían el
+           enlace roto. Las dos formas llevan al mismo sitio, así que da igual
+           cuál se pegue.
+
+           Sin condición de host, a diferencia de la raíz: el slug es
+           inequívoco y no pisa ninguna ruta existente, así que puede
+           responder también en el dominio principal. */
+        {
+          source: "/lista-de-espera-3.0",
+          destination: "/volver-al-origen",
+        },
+        {
+          source: "/lista-de-espera-3",
+          destination: "/volver-al-origen",
+        },
+
+        /* La página de gracias bajo el mismo slug.
+
+           Sin esto, quien entra por /lista-de-espera-3.0 y se registra aterriza
+           en /volver-al-origen/gracias: funciona, pero deja a la vista la ruta
+           interna que el rewrite existe para ocultar, y rompe la familia de
+           URL a mitad del recorrido. */
+        {
+          source: "/lista-de-espera-3.0/gracias",
+          destination: "/volver-al-origen/gracias",
+        },
+        {
+          source: "/lista-de-espera-3/gracias",
+          destination: "/volver-al-origen/gracias",
+        },
       ],
     };
   },
