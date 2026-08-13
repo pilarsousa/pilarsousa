@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import { MatrixRain } from "@/components/bootcamp/ui/MatrixRain";
+import { ModalLaser } from "@/components/volver-al-origen/ui/ModalLaser";
 import { LogoVao } from "@/components/volver-al-origen/ui/LogoVao";
 import { SparkDivider } from "@/components/volver-al-origen/ui/SparkDivider";
 import { WaitlistForm } from "@/components/volver-al-origen/ui/WaitlistForm";
@@ -180,6 +181,21 @@ export function WaitlistModalProvider({
             <div aria-hidden className="pointer-events-none sticky top-0 h-0">
               <div className="relative h-[92svh] w-full overflow-hidden">
                 <MatrixRain fade={0.08} opacity={0.4} />
+
+                {/* Haz de luz que baja hasta el CTA, igual que en el hero.
+
+                    mix-blend-screen es OBLIGATORIO, no decorativo: el renderer
+                    va con alpha:false y pinta fondo negro opaco, así que sin
+                    mezclar por luz taparía el panel entero con un rectángulo
+                    negro. Con screen el negro es neutro y sólo se suma lo que
+                    el haz ilumina.
+
+                    Va DESPUÉS de la lluvia para sumarse sobre ella; ambos
+                    quedan por debajo del contenido, que lleva su propio
+                    relative. */}
+                <div className="absolute inset-0 mix-blend-screen">
+                  <ModalLaser />
+                </div>
               </div>
             </div>
 
@@ -234,13 +250,13 @@ export function WaitlistModalProvider({
               {/* El formulario cierra el modal al confirmar, justo antes de
                   navegar a gracias. Sin esto el panel se quedaba montado sobre
                   la página de destino. */}
+              {/* El aviso de privacidad que iba aquí debajo se retiró: eran las
+                  dos líneas que empujaban el CTA fuera de pantalla y obligaban
+                  a scrollear dentro del modal para llegar a él. En un panel que
+                  ya es corto, el botón tiene que verse sin desplazar nada. */}
               <div className="mt-6">
                 <WaitlistForm onSuccess={close} />
               </div>
-
-              <p className="mt-4 font-sans text-xs font-light text-foreground/60">
-                {HERO.privacy}
-              </p>
             </div>
           </div>
         </div>
