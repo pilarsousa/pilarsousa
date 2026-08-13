@@ -64,8 +64,14 @@ const LEAD_SOURCE = "volver-al-origen-waitlist";
 /* lg:h-12 baja los campos de 52 a 48 px en escritorio: son 12 px menos entre
    los tres, parte del recorte que hace caber el panel en los 800 px de alto
    del hero. */
+/* El alto escala con el ancho en móvil: son tres campos, y cada píxel que
+   ahorran es alto que gana el modal para caber sin scroll. El mínimo de 44 px
+   no baja de ahí a propósito — es la altura mínima de un objetivo táctil.
+
+   text-base y no text-sm en móvil: por debajo de 16 px, Safari de iOS hace zoom
+   automático al enfocar un campo y descoloca la página entera. */
 const FIELD_CLASS =
-  "h-[52px] w-full rounded-sm border bg-vo-black/40 pl-12 pr-4 font-sans text-sm font-light text-foreground outline-none backdrop-blur-sm transition-all duration-300 placeholder:text-foreground/55 lg:h-12";
+  "h-[clamp(44px,11vw,52px)] w-full rounded-sm border bg-vo-black/40 pl-12 pr-4 font-sans text-base font-light text-foreground outline-none backdrop-blur-sm transition-all duration-300 placeholder:text-foreground/55 sm:text-sm lg:h-12";
 
 /* Cuánto se mantiene la confirmación en pantalla antes de navegar. Da tiempo a
    leer el mensaje y a ver el check dibujarse, sin llegar a hacerse espera. */
@@ -183,7 +189,7 @@ export function WaitlistForm({ onSuccess }: WaitlistFormProps) {
     >
       <Field
         id="vo-nombre"
-        icon={<User size={18} strokeWidth={1.4} aria-hidden />}
+        icon={<User size={19} strokeWidth={2} aria-hidden />}
         error={errors.nombre}
       >
         <input
@@ -239,7 +245,7 @@ export function WaitlistForm({ onSuccess }: WaitlistFormProps) {
 
       <Field
         id="vo-email"
-        icon={<Mail size={18} strokeWidth={1.4} aria-hidden />}
+        icon={<Mail size={19} strokeWidth={2} aria-hidden />}
         error={errors.email}
       >
         <input
@@ -341,10 +347,14 @@ function Field({
   return (
     <div className="flex flex-col gap-1">
       <div className="relative">
-        {/* El verde a plena intensidad, el mismo del resto de acentos de la
-            landing. Estaba al 80% y sobre el fondo oscuro del campo se leía
-            apagado, sin llegar al encendido que tienen el CTA o el badge. */}
-        <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-accent">
+        {/* Verde lumen explícito y con halo.
+
+            Ya estaba en text-accent, que resuelve a ese mismo verde, y aun así
+            no se notaban: el problema no era el tono sino el PESO. Un trazo de
+            1,4 px a 18 px sobre un campo oscuro casi no tiene superficie que
+            colorear. El drop-shadow le da el encendido que el color solo no
+            conseguía; el grosor lo aporta el strokeWidth de cada icono. */}
+        <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-vo-lumen filter-[drop-shadow(0_0_6px_rgba(180,226,54,0.65))]">
           {icon}
         </span>
         {children}

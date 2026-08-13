@@ -166,20 +166,30 @@ export function WaitlistModalProvider({
             ref={panelRef}
             tabIndex={-1}
             data-lenis-prevent
-            className="vo-modal-panel relative max-h-[92svh] w-full max-w-[520px] overflow-y-auto overflow-x-hidden rounded-lg border border-vo-bone/15 bg-vo-black/80 text-center text-foreground shadow-[0_30px_90px_-30px_rgba(0,0,0,0.95)] backdrop-blur-xl outline-none"
+            /* overflow-hidden y NO overflow-y-auto: el panel no debe scrollear.
+               El contenido de dentro escala con vw para caber entero en la
+               pantalla más baja, así que el scroll sólo podía aparecer si algo
+               se desbordaba — y en un formulario de tres campos con su botón,
+               tener que desplazar para llegar a enviar es perder registros. */
+            className="vo-modal-panel relative max-h-[92svh] w-full max-w-[520px] overflow-hidden rounded-lg border border-vo-bone/15 bg-vo-black/80 text-center text-foreground shadow-[0_30px_90px_-30px_rgba(0,0,0,0.95)] backdrop-blur-xl outline-none"
           >
-            {/* Lluvia de código, la misma textura del hero y de las cards de
-                Beneficios (fade 0.08, opacity 0.4).
+            {/* Lluvia de código y haz de luz, en una capa que cubre EXACTAMENTE
+                el panel.
 
-                sticky y no absolute: el panel scrollea, y una capa absoluta se
-                iría hacia arriba con el contenido dejando el pie sin textura.
-                Con sticky top-0 y alto de panel completo, se queda fija mientras
-                el formulario se desplaza por encima.
+                absolute inset-0, y no la capa sticky de alto 92svh que había
+                antes. Aquel alto era una fracción de la pantalla, no del panel:
+                como el panel mide lo que su contenido, el canvas se extendía muy
+                por debajo de él y el haz —que se sitúa respecto al centro de su
+                canvas— acababa apuntando fuera. En el emulador del navegador
+                coincidían lo suficiente como para que no se notara; en un iPhone
+                real, con su barra de direcciones, no.
 
-                El h-0 del contenedor es lo que impide que esta capa ocupe sitio
-                en el flujo y empuje al contenido hacia abajo. */}
-            <div aria-hidden className="pointer-events-none sticky top-0 h-0">
-              <div className="relative h-[92svh] w-full overflow-hidden">
+                El sticky ya no hace falta porque el panel dejó de scrollear. */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 overflow-hidden"
+            >
+              <div className="relative size-full">
                 <MatrixRain fade={0.08} opacity={0.4} />
 
                 {/* Haz de luz que baja hasta el CTA, igual que en el hero.
@@ -225,25 +235,29 @@ export function WaitlistModalProvider({
 
                 Aquí vive el padding que antes estaba en el panel, para que la
                 textura llegue a los bordes y el contenido siga con su margen. */}
-            <div className="relative px-6 py-9 sm:px-9">
-              <LogoVao className="mx-auto w-20 sm:w-24" />
+            {/* Todo escala con vw acotado por clamp, por el mismo motivo que el
+                panel del hero: el modal no scrollea, así que tiene que caber
+                entero —con el botón de enviar a la vista— tanto en una pantalla
+                de móvil pequeño como en escritorio. */}
+            <div className="relative px-[clamp(1rem,4.5vw,1.5rem)] py-[clamp(1.1rem,4vw,2.25rem)] sm:px-9">
+              <LogoVao className="mx-auto w-[clamp(3.25rem,13vw,5rem)] sm:w-24" />
 
               {/* El badge y el título repiten los del hero: el modal tapa la
                   página, así que tiene que decir por sí solo a qué se está
                   apuntando el visitante. */}
-              <p className="mt-5 inline-flex items-center rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 font-display text-xs uppercase tracking-[0.32em] text-accent">
+              <p className="mt-[clamp(0.6rem,2.2vw,1.25rem)] inline-flex items-center rounded-full border border-accent/30 bg-accent/10 px-[clamp(0.7rem,3vw,1rem)] py-[clamp(0.25rem,1.2vw,0.375rem)] font-display text-[clamp(0.6rem,2.4vw,0.75rem)] uppercase tracking-[0.32em] text-accent">
                 <span className="-mr-[0.32em]">{HERO.eyebrow}</span>
               </p>
 
-              <h2 className="mt-3 font-display uppercase leading-[1.08]">
-                <span className="block text-2xl tracking-[0.05em] sm:text-3xl">
+              <h2 className="mt-[clamp(0.4rem,1.6vw,0.75rem)] font-display uppercase leading-[1.08]">
+                <span className="block text-[clamp(1.25rem,5.4vw,1.5rem)] tracking-[0.05em] sm:text-3xl">
                   {MODAL.title}
                 </span>
               </h2>
 
-              <SparkDivider className="mt-4" />
+              <SparkDivider className="mt-[clamp(0.5rem,2vw,1rem)]" />
 
-              <p className="mt-4 font-sans text-sm leading-relaxed text-foreground/85 sm:text-base">
+              <p className="mt-[clamp(0.5rem,2vw,1rem)] font-sans text-[clamp(0.75rem,3.1vw,0.875rem)] leading-snug text-foreground/85 sm:text-base sm:leading-relaxed">
                 {MODAL.intro}
               </p>
 

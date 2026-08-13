@@ -1300,7 +1300,10 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  height: 52px; /* el mismo alto que el resto de campos */
+  /* El mismo alto que el resto de campos, y con el mismo clamp: si aquí
+     quedara fijo, el teléfono sobresaldría respecto a nombre y correo en cuanto
+     la pantalla obligara a encogerlos. */
+  height: clamp(44px, 11vw, 52px);
   border-radius: 0.125rem;
   border: 1px solid color-mix(in srgb, var(--color-vo-bone) 20%, transparent);
   background-color: color-mix(in srgb, var(--color-vo-black) 40%, transparent);
