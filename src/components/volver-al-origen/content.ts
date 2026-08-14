@@ -18,9 +18,15 @@ export const HERO = {
   titleMain: ["Volver al", "Origen"],
   /* Subtítulo del cliente. Va partido en tramos para poder resaltar los cuatro
      ámbitos del cierre sin meter HTML dentro del string. */
+  /* Dos tramos en negrita: qué es el entrenamiento y sobre qué áreas actúa.
+     Son los dos datos que alguien busca al leer esto por encima, y quedan
+     separados por texto normal para que la frase no se lea como un bloque
+     enfatizado entero — si todo destaca, no destaca nada. */
   intro: [
+    { text: "Entrenamiento intensivo de " },
+    { text: "40 días de metafísica práctica con Pilar Sousa", strong: true },
     {
-      text: "Entrenamiento intensivo de 40 días de metafísica práctica con Pilar Sousa para salir del estancamiento espiritual, encarnar una nueva identidad y manifestar una realidad extraordinaria en ",
+      text: " para salir del estancamiento espiritual, encarnar una nueva identidad y manifestar una realidad extraordinaria en ",
     },
     { text: "salud, relaciones, dinero y propósito.", strong: true },
   ],
@@ -74,6 +80,30 @@ export const BENEFICIOS = {
     },
   ],
   cta: "Quiero acceder",
+};
+
+/* Sección 3 — Qué es el programa. Va después de las ventajas de la lista y
+   antes de la prueba social: primero el motivo para dejar el dato, luego qué es
+   exactamente aquello a lo que se está apuntando, y sólo entonces quién lo
+   avala. */
+export const QUE_ES = {
+  title: "¿Qué es",
+  titleAccent: "Volver al Origen",
+  /* El orden no es sólo de contenido: la rejilla los coloca de dos en dos, y
+     emparejar una frase larga con una corta deja la fila descuadrada. Por eso
+     "Contexto elevado…" va el último, junto a "Material de integración…", que
+     es el más largo de todos; y "Acompañamiento de 90 días", el más corto,
+     sube a acompañar a "13 Códigos Originales…". Cada fila queda así con
+     alturas parecidas. */
+  items: [
+    "6 semanas de transformación en vivo conmigo",
+    "13 mentorías en VIVO / 2 a la semana",
+    "13 Códigos Originales para la manifestación",
+    "Acompañamiento de 90 días",
+    "Material de integración por cada código (Checkpoint del antivirus mental)",
+    "Contexto elevado que te impulsa y sostiene",
+  ],
+  cta: "Quiero acceder a la lista de espera",
 };
 
 export const TESTIMONIOS = {

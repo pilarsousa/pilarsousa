@@ -1113,6 +1113,45 @@
 }
 
 /*
+  Neón que recorre las cards de "¿Qué es Volver al Origen?" de una en una.
+
+  Todas comparten la MISMA animación y el mismo ciclo de 9 s; lo que las
+  encadena es el retardo, que el componente reparte en pasos de 1,5 s (9 s entre
+  6 cards). Cada una se enciende sólo durante su tramo —del 3% al 18% del
+  ciclo— y pasa el resto apagada, así que en cada momento hay una sola viva.
+
+  Encadenarlo con retardos y no con JavaScript tiene una ventaja concreta: no
+  hay temporizador que mantener sincronizado ni estado que se desfase si la
+  pestaña se queda en segundo plano. El navegador lo resuelve solo.
+
+  Bajo prefers-reduced-motion el reset global reduce la duración a 0,01 ms y las
+  cards se quedan en el fotograma final, que es el estado apagado. Correcto: sin
+  parpadeo y con su borde normal.
+*/
+@keyframes vo-neon-cycle {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--color-vo-lumen) 20%, transparent);
+    box-shadow: none;
+  }
+  3%,
+  13% {
+    border-color: var(--color-vo-lumen);
+    box-shadow:
+      0 0 20px -2px color-mix(in srgb, var(--color-vo-lumen) 55%, transparent),
+      inset 0 0 16px -8px color-mix(in srgb, var(--color-vo-lumen) 65%, transparent);
+  }
+  18% {
+    border-color: color-mix(in srgb, var(--color-vo-lumen) 20%, transparent);
+    box-shadow: none;
+  }
+}
+
+.vo-neon-cycle {
+  animation: vo-neon-cycle 9s ease-in-out infinite;
+}
+
+/*
   Recorta una capa a la banda de su borde, dejando hueco el interior.
 
   Sin esto, las luces que recorren el contorno del panel del hero se ven como
