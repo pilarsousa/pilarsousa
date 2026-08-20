@@ -73,14 +73,52 @@ export function MovingBorder({
     progress.set((time * (length / duration) + offset * length) % length);
   });
 
-  const x = useTransform(
-    progress,
-    (value) => pathRef.current?.getPointAtLength(value).x ?? 0,
-  );
-  const y = useTransform(
-    progress,
-    (value) => pathRef.current?.getPointAtLength(value).y ?? 0,
-  );
+  /* Punto del recorrido, A PRUEBA DE ELEMENTOS SIN LAYOUT.
+
+     getPointAtLength lanza InvalidStateError —"the element's path is empty"—
+     cuando el rect no tiene trazado, y eso ocurre siempre que el componente
+     está montado pero no dibujado: dentro de un bloque con display:none, que es
+     exactamente lo que pasa cuando una sección tiene una maquetación de móvil y
+     otra de escritorio y una de las dos está oculta por su breakpoint.
+
+     El bucle de animación ya se protegía comprobando el largo, pero useTransform
+     evalúa su función también en el primer render —con el progreso a 0— y ahí no
+     había guarda: bastaba con que el componente naciera oculto para tumbar la
+     página antes de pintar nada.
+
+     La comprobación del largo cubre el caso normal (0 en un rect sin tamaño) y
+     el try/catch, los motores que prefieren lanzar en getTotalLength en vez de
+     devolver 0. Devolver 0 es el reposo correcto: la luz se queda en la esquina
+     de un elemento que, por definición, no se está viendo.
+
+     La guarda va repetida en las dos funciones en vez de extraída a un ayudante
+     compartido, y no por descuido: la regla react-hooks/refs prohíbe pasar por
+     ahí funciones que lean una ref, y sacarla a una fábrica la hacía saltar.
+     Dentro del callback de useTransform sí está permitido, porque es donde se
+     evalúa. */
+  const x = useTransform(progress, (value) => {
+    const rect = pathRef.current;
+    if (!rect) return 0;
+
+    try {
+      if (!rect.getTotalLength()) return 0;
+      return rect.getPointAtLength(value).x;
+    } catch {
+      return 0;
+    }
+  });
+
+  const y = useTransform(progress, (value) => {
+    const rect = pathRef.current;
+    if (!rect) return 0;
+
+    try {
+      if (!rect.getTotalLength()) return 0;
+      return rect.getPointAtLength(value).y;
+    } catch {
+      return 0;
+    }
+  });
 
   /* Los dos translate del -50% centran la luz sobre el punto del recorrido; sin
      ellos quedaría colgando de su esquina superior izquierda. */

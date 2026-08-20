@@ -32,7 +32,7 @@ import fondoDesktop from "@/../public/volver-origen/public/img/landing/fondo-agr
 */
 
 export const metadata: Metadata = {
-  title: "¡Te falta el último paso! | Volver al Origen",
+  title: "Registro completado | Volver al Origen 3.0",
   description:
     "Tu registro en la lista de espera está completado. Accede al grupo privado de WhatsApp para recibir todas las novedades.",
   robots: { index: false, follow: false },
@@ -119,6 +119,13 @@ export default function GraciasPage() {
                 <VoCta disabled>{GRACIAS.cta}</VoCta>
               )}
             </div>
+
+            {/* La aclaración de para qué se usa el grupo. Va DESPUÉS del botón:
+                antes, sembraría la duda sobre el spam justo cuando lo que hay
+                que hacer es pulsar. */}
+            <p className="mt-5 max-w-md font-sans text-xs leading-relaxed text-foreground/50">
+              {GRACIAS.disclaimer}
+            </p>
 
             {!hasUrl && (
               <p className="mt-3 font-sans text-xs font-light text-foreground/40">

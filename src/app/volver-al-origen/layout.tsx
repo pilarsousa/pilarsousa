@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SectionTexture } from "@/components/volver-al-origen/ui/SectionTexture";
 import { SmoothScroll } from "@/components/volver-al-origen/ui/SmoothScroll";
 import { GradualBlur } from "@/components/volver-al-origen/ui/GradualBlur";
 import { WaitlistModalProvider } from "@/components/volver-al-origen/ui/WaitlistModal";
@@ -67,7 +68,25 @@ export default function VolverAlOrigenLayout({
       {/* overflow-x-clip: los halos y resplandores sangran fuera de sus
           secciones a propósito; esto evita que eso genere scroll horizontal en
           mobile. */}
-      <div className="vo-scope min-h-full overflow-x-clip bg-background text-foreground">
+      {/* Fondo texturado continuo de toda la landing.
+
+          Va FIJO a la ventana y en el layout, no por secciones, y ese es el
+          arreglo de fondo: mientras cada sección pintaba su propia textura,
+          entre dos vecinas quedaba una banda de color plano —donde una ya se
+          había desvanecido y la otra aún no entraba—. Siendo una sola imagen
+          que no se mueve con el scroll, no hay frontera que disimular.
+
+          Las secciones ya no llevan color de fondo propio: si lo llevaran,
+          taparían esta capa. El color base lo aporta aquí el bg-background del
+          contenedor, por debajo de la textura. */}
+      <div className="fixed inset-0 -z-10 bg-background" aria-hidden>
+        <SectionTexture variant="oscuro" fixed fade={false} />
+      </div>
+
+      {/* overflow-x-clip: los halos y resplandores sangran fuera de sus
+          secciones a propósito; esto evita que eso genere scroll horizontal en
+          mobile. */}
+      <div className="vo-scope relative min-h-full overflow-x-clip text-foreground">
         {/* No pinta nada: sólo activa el scroll suave mientras se está en esta
             landing y lo apaga al salir. */}
         <SmoothScroll />

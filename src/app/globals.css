@@ -2270,3 +2270,47 @@ body {
 .vo-modal-closing .vo-modal-panel {
   animation: vo-modal-panel-out 200ms ease-in both;
 }
+
+/*
+  Latido de la píldora "Reflexión clave".
+
+  Es un latido de verdad y no una pulsación simple: dos golpes seguidos y un
+  descanso largo. Una onda continua se lee como algo que respira —o peor, como
+  un elemento cargando—; el doble golpe con pausa es lo que el ojo reconoce como
+  pulso, y es lo que permite que sea tan sutil sin desaparecer.
+
+  Los números son mínimos a propósito: 4,5% de escala en el golpe fuerte y 3% en
+  el segundo. Por encima del 8% deja de leerse como latido y pasa a ser un
+  elemento que se mueve, que en una etiqueta junto a un titular resulta molesto.
+
+  El resplandor acompaña a la escala en vez de ir por libre: crecer y encenderse
+  a la vez es lo que da la sensación de que la luz sale de dentro.
+
+  El animation-play-state se detiene bajo prefers-reduced-motion por el reset
+  global de animaciones, y la píldora se queda en su estado de reposo, que es el
+  comportamiento correcto.
+*/
+@keyframes vo-latido {
+  0%,
+  60%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgb(180 226 54 / 0);
+  }
+  12% {
+    transform: scale(1.045);
+    box-shadow: 0 0 20px 1px rgb(180 226 54 / 0.3);
+  }
+  26% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgb(180 226 54 / 0);
+  }
+  38% {
+    transform: scale(1.03);
+    box-shadow: 0 0 14px 1px rgb(180 226 54 / 0.22);
+  }
+}
+
+.vo-latido {
+  animation: vo-latido 3.6s ease-in-out infinite;
+}
