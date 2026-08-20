@@ -460,22 +460,37 @@ export function Entrenar() {
                     nodo del rombo: el recorrido cuenta el paso de la reflexión
                     al veredicto.
 
-                    Las medidas son fijas y en píxeles porque el trayecto es
-                    concreto —del palo al nodo— y no una decoración que deba
-                    escalar. El ancho de 340 px es la distancia entre la columna
-                    de texto y el centro del contenedor en la rejilla de 1140.
+                    LAS MEDIDAS SALEN DE LA REJILLA, no de un número a ojo.
+                    Estuvieron en píxeles fijos (340x200) y el trazo se quedaba
+                    a media distancia: la separación real hasta el rombo depende
+                    del ancho del contenedor, así que un valor fijo sólo acierta
+                    en una pantalla.
+
+                    · w-[37%] del ancho de la lista. La lista arranca a 256 px
+                      del borde del panel —40 de relleno, 160 del emblema y 56
+                      de hueco— y termina a 40 del borde derecho, así que en el
+                      contenedor de 1140 mide 844. El centro del contenedor cae
+                      a 314 de su inicio: 37% de esos 844. Ahí es donde espera
+                      el rombo.
+                    · h-[100px] es la caída hasta el centro del rombo: 40 del
+                      relleno inferior del panel, 32 del margen del nodo y 28
+                      hasta su mitad.
+
+                    El trazo termina en la esquina inferior derecha del recuadro
+                    (100,100 del viewBox), que por esas dos medidas es
+                    exactamente el centro del rombo.
 
                     vector-effect por lo de siempre: con preserveAspectRatio
                     "none" el trazo se deformaría con la caja. */}
                 <svg
-                  viewBox="0 0 340 200"
+                  viewBox="0 0 100 100"
                   fill="none"
                   preserveAspectRatio="none"
                   aria-hidden
-                  className="pointer-events-none absolute top-full left-[3px] h-[200px] w-[340px] max-w-none text-accent"
+                  className="pointer-events-none absolute top-full left-[3px] h-[100px] w-[37%] text-accent"
                 >
                   <path
-                    d="M2 0 C 2 70, 40 120, 150 150 C 240 174, 290 182, 330 190"
+                    d="M0 0 C 0 38, 14 66, 52 84 C 74 94, 90 97, 100 100"
                     stroke="currentColor"
                     strokeWidth="1.6"
                     strokeDasharray="4 9"
