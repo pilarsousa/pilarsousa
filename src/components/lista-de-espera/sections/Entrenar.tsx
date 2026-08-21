@@ -1,10 +1,10 @@
 import Image from "next/image";
 import { Heart, Sparkle, Sprout } from "lucide-react";
-import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
-import { ScrollIn } from "@/components/volver-al-origen/ui/ScrollIn";
-import { SectionTexture } from "@/components/volver-al-origen/ui/SectionTexture";
-import { SparkDivider } from "@/components/volver-al-origen/ui/SparkDivider";
-import { WaitlistCta } from "@/components/volver-al-origen/ui/WaitlistCta";
+import { VoContainer } from "@/components/lista-de-espera/ui/VoContainer";
+import { ScrollIn } from "@/components/lista-de-espera/ui/ScrollIn";
+import { SectionTexture } from "@/components/lista-de-espera/ui/SectionTexture";
+import { SparkDivider } from "@/components/lista-de-espera/ui/SparkDivider";
+import { WaitlistCta } from "@/components/lista-de-espera/ui/WaitlistCta";
 import {
   ArcosDeFondo,
   CaminoPunteado,
@@ -15,9 +15,9 @@ import {
   Loto,
   NodoRombo,
   OrnamentoRombo,
-} from "@/components/volver-al-origen/ui/Ornamentos";
-import { MovingBorder } from "@/components/volver-al-origen/ui/MovingBorder";
-import { ENTRENAR, type Tramo } from "@/components/volver-al-origen/content";
+} from "@/components/lista-de-espera/ui/Ornamentos";
+import { MovingBorder } from "@/components/lista-de-espera/ui/MovingBorder";
+import { ENTRENAR, type Tramo } from "@/components/lista-de-espera/content";
 import { cn } from "@/lib/cn";
 import fotoBosque from "@/../public/volver-origen/public/img/landing/fondo-agradecimiento-pc.jpg";
 import aureola from "@/../public/volver-origen/public/img/libros/aureolas/aureola-2.png";

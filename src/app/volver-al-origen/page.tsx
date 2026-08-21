@@ -1,67 +1,42 @@
 import { Hero } from "@/components/volver-al-origen/sections/Hero";
-import { Entrenar } from "@/components/volver-al-origen/sections/Entrenar";
-import { ParaVos } from "@/components/volver-al-origen/sections/ParaVos";
-import { QueEntrenas } from "@/components/volver-al-origen/sections/QueEntrenas";
-import { Experiencia } from "@/components/volver-al-origen/sections/Experiencia";
+import { Beneficios } from "@/components/volver-al-origen/sections/Beneficios";
 import { Testimonios } from "@/components/volver-al-origen/sections/Testimonios";
 import { Pilar } from "@/components/volver-al-origen/sections/Pilar";
-import { ListaEspera } from "@/components/volver-al-origen/sections/ListaEspera";
-import { Faq } from "@/components/volver-al-origen/sections/Faq";
 import { Footer } from "@/components/volver-al-origen/sections/Footer";
 
 /*
   Landing de lista de espera — /volver-al-origen.
 
-  Las secciones, en el orden del guion entregado por el cliente:
+  Las secciones, en su orden:
+    1. Hero — promesa + CTA que abre el formulario, visible sin hacer scroll
+    2. Qué te llevarás por entrar en la lista (motivo para dejar el dato)
+    3. Lo que dicen quienes ya dieron el paso (prueba social)
+    4. Quién es Pilar (autoridad)
 
-    1. Hero — promesa, duración y CTA, visible sin hacer scroll
-    2. No venís a aprender más, venís a entrenar — el argumento
-    3. Volver al Origen es para vos si… — identificación
-    4. Qué vas a entrenar — las cinco capacidades
-    5. Una experiencia diseñada para tu vida real — qué incluye
-    6. Lo que dicen quienes ya volvieron al origen — prueba social
-    7. Quién es Pilar — autoridad
-    8. Entrá ahora a la lista de espera — bonos y formulario
-    9. Preguntas frecuentes — las últimas objeciones
+  El orden responde a las preguntas del visitante según van apareciendo: por qué
+  darte mi dato, quién más lo hizo y quién lo dirige.
 
-  El recorrido responde a las preguntas del visitante según van apareciendo: qué
-  es esto, por qué me hace falta, va conmigo, qué me llevo, quién más lo hizo,
-  quién lo dirige, cómo entro y qué me estoy jugando.
+  OCULTA: "¿Qué es Volver al Origen?" (QueEs), que iba entre Beneficios y
+  Testimonios y detallaba lo que incluye el programa. Se retira a pedido, no por
+  un problema técnico: el componente, su copy en content.ts y sus estilos siguen
+  en el repo intactos. Para reponerla basta con descomentar el import y la
+  etiqueta de abajo.
 
-  LOS FONDOS ALTERNAN, y no es decoración: es lo que separa una sección de la
-  siguiente sin dibujar una línea. La página tiene por debajo una textura oscura
-  fija (ver el layout) y las secciones pares montan encima una textura clara que
-  entra y sale difuminada por sus bordes:
+  Los fondos alternan oscuro y tinte verde —Beneficios oscuro, Testimonios con
+  tinte, Pilar oscuro— y cada tinte entra y sale difuminado por sus bordes, así
+  que el cambio se lee como respiración y no como bloques pegados.
 
-    Hero        oscuro
-    Entrenar    claro
-    ParaVos     oscuro
-    QueEntrenas claro
-    Experiencia oscuro
-    Testimonios claro
-    Pilar       oscuro
-    ListaEspera claro
-    Faq         oscuro
-
-  Al añadir una sección hay que respetar la alternancia con la que tenga encima,
-  o dos claras seguidas se leerán como una sola.
-
-  Los CTA repartidos por la página abren el modal de registro. El formulario a
-  la vista está una sola vez, en la sección 8, que es donde el recorrido termina.
+  Todos los CTA abren el mismo modal de registro.
 */
 export default function VolverAlOrigenPage() {
   return (
     <>
       <main>
         <Hero />
-        <Entrenar />
-        <ParaVos />
-        <QueEntrenas />
-        <Experiencia />
+        <Beneficios />
+        {/* <QueEs /> — ver la nota de arriba */}
         <Testimonios />
         <Pilar />
-        <ListaEspera />
-        <Faq />
       </main>
       <Footer />
     </>

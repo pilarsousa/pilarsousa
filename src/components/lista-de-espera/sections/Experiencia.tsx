@@ -1,16 +1,16 @@
 import Image from "next/image";
 import { Check, Coins, Compass, Users, type LucideIcon } from "lucide-react";
-import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
-import { ScrollIn } from "@/components/volver-al-origen/ui/ScrollIn";
-import { SectionTitle } from "@/components/volver-al-origen/ui/SectionTitle";
-import { WaitlistCta } from "@/components/volver-al-origen/ui/WaitlistCta";
+import { VoContainer } from "@/components/lista-de-espera/ui/VoContainer";
+import { ScrollIn } from "@/components/lista-de-espera/ui/ScrollIn";
+import { SectionTitle } from "@/components/lista-de-espera/ui/SectionTitle";
+import { WaitlistCta } from "@/components/lista-de-espera/ui/WaitlistCta";
 import {
   ArcosDeFondo,
   CaminoPunteado,
   FlorDeLaVida,
   OrnamentoSol,
-} from "@/components/volver-al-origen/ui/Ornamentos";
-import { EXPERIENCIA } from "@/components/volver-al-origen/content";
+} from "@/components/lista-de-espera/ui/Ornamentos";
+import { EXPERIENCIA } from "@/components/lista-de-espera/content";
 import imgSeccion from "@/../public/volver-origen/public/img/landing/img-mockup-02.png";
 
 /*

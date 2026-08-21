@@ -1,10 +1,10 @@
 import Image from "next/image";
-import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
-import { ScrollIn } from "@/components/volver-al-origen/ui/ScrollIn";
-import { SectionTitle } from "@/components/volver-al-origen/ui/SectionTitle";
-import { PilarBio } from "@/components/volver-al-origen/ui/PilarBio";
-import { WaitlistCta } from "@/components/volver-al-origen/ui/WaitlistCta";
-import { PILAR } from "@/components/volver-al-origen/content";
+import { VoContainer } from "@/components/lista-de-espera/ui/VoContainer";
+import { ScrollIn } from "@/components/lista-de-espera/ui/ScrollIn";
+import { SectionTitle } from "@/components/lista-de-espera/ui/SectionTitle";
+import { PilarBio } from "@/components/lista-de-espera/ui/PilarBio";
+import { WaitlistCta } from "@/components/lista-de-espera/ui/WaitlistCta";
+import { PILAR } from "@/components/lista-de-espera/content";
 import pilarMovil from "@/../public/volver-origen/public/img/landing/pilarsousa-mobile.jpg";
 import pilarDesktop from "@/../public/volver-origen/public/img/landing/pilarsousa-pc.jpg";
 
@@ -26,6 +26,12 @@ import pilarDesktop from "@/../public/volver-origen/public/img/landing/pilarsous
   MÓVIL — el retrato vertical va a sangre en la parte alta con el título y la
   firma encima, y la historia debajo sobre fondo plano.
 
+  LA HISTORIA VIENE PLEGADA. La columna muestra hasta "…entendí algo
+  fundamental:" y el resto se despliega con un botón. Es una cuestión de alto:
+  el retrato ocupa el fondo de la sección entera, así que el alto de esta
+  columna es el alto de la foto, y con la historia completa a la vista el
+  retrato se estiraba hasta deformarla. Ver PilarBio.
+
   Cada tamaño usa su propio encuadre y ninguno lleva `priority`, así que son
   lazy y el navegador no descarga el que está en display:none.
 
@@ -42,11 +48,29 @@ export function Pilar() {
          oculta con display:none en el tamaño que no le toca. Los lectores de
          pantalla ignoran lo oculto, así que sólo se anuncia una. */
       aria-label={`${PILAR.title} ${PILAR.titleAccent}?`}
-      className="relative isolate overflow-x-clip bg-background lg:flex lg:h-[780px] lg:items-center"
+      className="relative isolate overflow-x-clip lg:flex lg:min-h-[780px] lg:items-center lg:py-24"
     >
       {/* ══ MÓVIL: retrato a sangre con el texto encima ══ */}
       <div className="relative lg:hidden">
-        <div className="relative aspect-3/4 w-full">
+        {/* La foto se funde por arriba y por abajo con MÁSCARA, no con velos de
+            color.
+
+            Antes llevaba dos degradados que pintaban #0b1502 sólido en los
+            extremos. Con fondo liso colaban; sobre la textura continua se leen
+            como dos bloques planos que la tapan. La máscara vuelve transparente
+            la propia foto y deja pasar lo que haya detrás, sea lo que sea.
+
+            El título va al 10% del alto, dentro del tramo en que la foto aún
+            está entrando, así que queda sobre la textura oscura y se lee sin
+            necesitar el velo que antes lo oscurecía.
+
+            El desvanecido de abajo arranca en el 72% y no en el 58%: antes
+            empezaba tan arriba que el pelo y el torso ya se veían apagados. Al
+            cerrarlo, la figura llega entera y sólo se disuelve el pie. */}
+        <div
+          className="relative aspect-3/4 w-full"
+          style={{ maskImage: "linear-gradient(to bottom, transparent 0%, #000 14%, #000 72%, transparent 94%)", WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, #000 14%, #000 72%, transparent 94%)" }}
+        >
           <Image
             src={pilarMovil}
             alt="Pilar Sousa"
@@ -55,29 +79,6 @@ export function Pilar() {
             sizes="100vw"
             placeholder="blur"
             className="object-cover object-top"
-          />
-
-          {/* Velo superior: funde el borde de arriba con el verde de la sección
-              —arranca en el color exacto del fondo, si empieza por debajo del
-              100% se dibuja una línea— y da contraste al título, porque esa
-              zona de la foto es clara. */}
-          <div
-            aria-hidden
-            className="absolute inset-0"
-            style={{
-              backgroundImage:
-                "linear-gradient(to bottom, #0b1502 0%, rgba(11,21,2,0.82) 12%, rgba(11,21,2,0.45) 26%, transparent 42%)",
-            }}
-          />
-
-          {/* Fundido inferior hacia el fondo de la sección */}
-          <div
-            aria-hidden
-            className="absolute inset-0"
-            style={{
-              backgroundImage:
-                "linear-gradient(to top, #0b1502 0%, #0b1502 12%, rgba(11,21,2,0.4) 34%, transparent 62%)",
-            }}
           />
 
           {/* Título sobre la cabeza: la coronilla está sobre el 22% del alto. */}
@@ -97,7 +98,50 @@ export function Pilar() {
       </div>
 
       {/* ══ ESCRITORIO: retrato de fondo ══ */}
-      <div aria-hidden className="absolute inset-0 -z-20 hidden lg:block">
+      {/* Dos máscaras compuestas, en lugar de los tres velos de color que
+          había aquí (el lateral y las dos costuras de arriba y abajo).
+
+          Aquellos pintaban #0b1502 sólido y, sobre la textura continua, se leen
+          como bloques planos que la tapan: justo lo que se ve a la derecha del
+          retrato. Enmascarando, la foto se vuelve transparente y deja pasar la
+          textura, que es lo que debe haber detrás del texto.
+
+          · la horizontal apaga la foto hacia la derecha, donde va la columna de
+            texto. Termina en el 64% del ancho, no en el 70%, para dejar aire
+            entre la figura y el texto;
+          · la vertical la funde con las secciones de arriba y de abajo.
+
+          mask-composite las cruza: sólo se ve la foto donde AMBAS la dejan
+          pasar. Sin componer, la segunda sustituiría a la primera. Safari
+          necesita su propio prefijo y llama "source-in" a lo que el estándar
+          llama "intersect".
+
+          El texto ya no necesita el velo para leerse: cae sobre la textura
+          oscura, que da contraste de sobra. */}
+      {/* ALTO PROPIO Y ANCLADO ARRIBA, no inset-0.
+
+          Con inset-0 la capa medía lo que midiera la sección, así que al
+          desplegar "Ver más" el retrato crecía con el texto: la foto se estiraba
+          y el encuadre cambiaba a mitad de lectura.
+
+          Fijándola en 780 px —el mismo valor que el min-h de la sección— cuando
+          la bio está plegada cubre exactamente la sección, igual que antes, y
+          cuando se despliega la sección crece hacia abajo sin que la foto se
+          entere. El texto que sobresale cae por debajo, donde la máscara
+          vertical ya la ha desvanecido del todo, así que no hay canto.
+
+          Si se cambia el min-h de la sección, hay que cambiar este alto con él o
+          la foto dejará de cubrirla en reposo. */}
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 -z-20 hidden h-[780px] lg:block"
+        style={{
+          maskImage: "linear-gradient(to right, #000 0%, #000 26%, transparent 64%), linear-gradient(to bottom, transparent 0%, #000 10%, #000 90%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to right, #000 0%, #000 26%, transparent 64%), linear-gradient(to bottom, transparent 0%, #000 10%, #000 90%, transparent 100%)",
+          maskComposite: "intersect",
+          WebkitMaskComposite: "source-in",
+        }}
+      >
         {/* La foto ocupa el 72% izquierdo, no el ancho completo.
 
             Es lo que la desplaza a la izquierda, y hacía falta un rodeo:
@@ -124,31 +168,6 @@ export function Pilar() {
           />
         </div>
 
-        {/* Velo lateral: transparente sobre Pilar, sólido bajo el texto. Se
-            cierra en el 68%, antes de que acabe la foto en el 72%, para que su
-            borde derecho quede tapado y no se vea el corte. */}
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, transparent 0%, transparent 20%, rgba(11,21,2,0.45) 38%, rgba(11,21,2,0.92) 56%, #0b1502 68%)",
-          }}
-        />
-
-        {/* Costuras con las secciones vecinas, para que la foto no corte en
-            seco ni arriba ni abajo. */}
-        <div
-          className="absolute inset-x-0 top-0 h-32"
-          style={{
-            backgroundImage: "linear-gradient(to bottom, #0b1502, transparent)",
-          }}
-        />
-        <div
-          className="absolute inset-x-0 bottom-0 h-32"
-          style={{
-            backgroundImage: "linear-gradient(to top, #0b1502, transparent)",
-          }}
-        />
       </div>
 
       {/* relative z-10 es imprescindible, no decorativo.
@@ -161,7 +180,7 @@ export function Pilar() {
       <VoContainer className="relative z-10 pb-16 lg:py-0">
         {/* En escritorio el contenido ocupa poco menos de la mitad derecha, que
             es donde el velo ya es sólido. */}
-        <div className="lg:ml-auto lg:max-w-[48%]">
+        <div className="lg:ml-auto lg:max-w-[42%]">
           {/* Sólo el título en escritorio; en móvil va sobre la foto.
 
               La firma no se repite aquí: el título ya nombra a Pilar dos líneas
@@ -178,35 +197,48 @@ export function Pilar() {
                 {PILAR.title}
               </SectionTitle>
             </ScrollIn>
+
+            {/* Entradilla del copy nuevo: resume una década en una línea antes
+                de que empiece la historia larga. Sólo en escritorio, como el
+                título que acompaña — en móvil ese título va sobre la foto y
+                colgarle un párrafo encima taparía el retrato. */}
+            <ScrollIn delay={0.05}>
+              <p className="mt-4 font-sans text-base leading-relaxed text-foreground/70 sm:text-lg">
+                {PILAR.subtitle}
+              </p>
+            </ScrollIn>
           </div>
 
-          {/* -mt-[62px] en móvil: sube el texto 62 px, hasta el 88% del alto de
-              la foto, justo donde el fundido llega a negro pleno.
+          {/* -mt-[42px] en móvil: sube el texto 42 px, hasta el 89% del alto de
+              la foto, ya dentro del tramo en que el fundido es negro pleno.
 
               Ese porcentaje es el límite prudente. El fundido llega a negro
               pleno en el 88%, y por encima del 85% todavía se transparenta la
               imagen lo suficiente como para que el texto claro empiece a
               pelearse con ella. Subirlo más pide adelantar también el fundido,
               no sólo mover este número. */}
-          <div className="-mt-[62px] lg:mt-5">
+          <div className="-mt-[42px] lg:mt-5">
             <PilarBio />
           </div>
 
-          {/* En móvil centrado; en escritorio pegado al borde izquierdo, para
-              que arranque en la misma vertical que los párrafos.
+          {/* Centrado en los dos tamaños, y con su tope de ancho también en
+              escritorio.
 
-              El tope de 448 px se levanta a partir de lg y el botón pasa a
-              ocupar el ancho de la columna (unos 547 px). Es lo que hace que el
-              texto entre en una sola línea: con el tope puesto no le cabía y
-              partía en "…LISTA DE / ESPERA". */}
+              Estuvo pegado al borde izquierdo y a ancho de columna, con la idea
+              de que el texto entrara en una sola línea. No lo conseguía: la
+              columna mide un 42% del contenedor —unos 479 px— y este rótulo
+              necesita cerca de 560, así que partía igualmente en "…LISTA DE /
+              ESPERA". Se pagaba un botón descentrado a cambio de nada.
+
+              Centrado comparte eje con el "Ver más" que tiene justo encima, que
+              es lo que hace que los dos se lean como un bloque. */}
           <ScrollIn delay={0.2}>
-            <div className="mt-9 flex justify-center lg:justify-start">
-              <WaitlistCta className="max-w-md lg:max-w-none">
-                {PILAR.cta}
-              </WaitlistCta>
+            <div className="mt-9 flex justify-center">
+              <WaitlistCta className="max-w-md">{PILAR.cta}</WaitlistCta>
             </div>
           </ScrollIn>
         </div>
+
       </VoContainer>
     </section>
   );

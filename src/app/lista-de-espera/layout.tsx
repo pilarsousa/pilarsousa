@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { SmoothScroll } from "@/components/volver-al-origen/ui/SmoothScroll";
-import { GradualBlur } from "@/components/volver-al-origen/ui/GradualBlur";
-import { WaitlistModalProvider } from "@/components/volver-al-origen/ui/WaitlistModal";
+import { SectionTexture } from "@/components/lista-de-espera/ui/SectionTexture";
+import { SmoothScroll } from "@/components/lista-de-espera/ui/SmoothScroll";
+import { GradualBlur } from "@/components/lista-de-espera/ui/GradualBlur";
+import { WaitlistModalProvider } from "@/components/lista-de-espera/ui/WaitlistModal";
 
 /*
   Volver al Origen — lista de espera de la tercera edición, servida en
-  /volver-al-origen.
+  /lista-de-espera.
 
   Ojo con los nombres: la raíz pública (/) también es "Volver al Origen", pero
   es la landing de VENTA del entrenamiento. Esta es la de CAPTACIÓN previa a la
@@ -35,7 +36,13 @@ export const metadata: Metadata = {
   icons: {
     icon: "/volver-origen/public/img/Logo-volveralorigen.webp",
   },
-  title: "Lista de espera — Tercera edición de Volver al Origen | Pilar Sousa",
+  /* noindex: esta ruta es el BORRADOR de la próxima versión de la landing,
+     mientras la publicada sigue viviendo en /volver-al-origen. Sin esto Google
+     indexaría ambas con el mismo título y descripción, competirían entre sí por
+     las mismas búsquedas y algún visitante aterrizaría en una versión todavía
+     en construcción. Se retira el día que ésta pase a ser la definitiva. */
+  robots: { index: false, follow: false },
+  title: "Lista de espera (borrador) — Tercera edición de Volver al Origen | Pilar Sousa",
   description:
     "Apúntate a la lista de espera de la tercera edición de Volver al Origen y accede antes que nadie, con precio especial y bonos exclusivos.",
   openGraph: {
@@ -67,12 +74,64 @@ export default function VolverAlOrigenLayout({
       {/* overflow-x-clip: los halos y resplandores sangran fuera de sus
           secciones a propósito; esto evita que eso genere scroll horizontal en
           mobile. */}
-      <div className="vo-scope min-h-full overflow-x-clip bg-background text-foreground">
+      {/* Fondo texturado continuo de toda la landing.
+
+          Va FIJO a la ventana y en el layout, no por secciones, y ese es el
+          arreglo de fondo: mientras cada sección pintaba su propia textura,
+          entre dos vecinas quedaba una banda de color plano —donde una ya se
+          había desvanecido y la otra aún no entraba—. Siendo una sola imagen
+          que no se mueve con el scroll, no hay frontera que disimular.
+
+          Las secciones ya no llevan color de fondo propio: si lo llevaran,
+          taparían esta capa. El color base lo aporta aquí el bg-background del
+          contenedor, por debajo de la textura. */}
+      <div className="fixed inset-0 -z-10 bg-background" aria-hidden>
+        <SectionTexture variant="oscuro" fixed fade={false} />
+      </div>
+
+      {/* overflow-x-clip: los halos y resplandores sangran fuera de sus
+          secciones a propósito; esto evita que eso genere scroll horizontal en
+          mobile. */}
+      <div className="vo-scope relative min-h-full overflow-x-clip text-foreground">
         {/* No pinta nada: sólo activa el scroll suave mientras se está en esta
             landing y lo apaga al salir. */}
         <SmoothScroll />
         {children}
       </div>
+
+      {/* Sombreado de los dos costados, a lo largo de toda la landing.
+
+          Enmarca el contenido y hace que la página se lea como una pieza y no
+          como un fondo infinito: al oscurecer los cantos, el ojo se queda en el
+          centro. Es el mismo recurso que ya usa la página de gracias con su
+          viñeta, aquí sólo en el eje horizontal.
+
+          VA FUERA DEL DIV DE ARRIBA, como el desenfoque de abajo, y por el mismo
+          motivo: ese div tiene overflow-x-clip, y en WebKit un ancestro que
+          recorta overflow anula efectos de composición en sus descendientes.
+
+          Fijo a la ventana y no a la página: acompaña al scroll en vez de
+          quedarse anclado a una altura concreta del documento.
+
+          Los tramos son estrechos —del 0 al 6% y del 94 al 100%— y el color
+          nunca llega a opaco: tiene que leerse como que los bordes se apagan,
+          no como dos barras oscuras. Y por eso el degradado va a transparente
+          en el centro y no a un color: cualquier tinte central velaría la
+          página entera.
+
+          z-30 lo deja por encima del contenido y por debajo del desenfoque
+          inferior (40) y del modal (200), que deben poder taparlo.
+
+          pointer-events-none es imprescindible: cubre la pantalla completa y sin
+          él se comería los clics de los CTA que caen cerca de los bordes. */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-30"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, rgba(4,9,1,0.55) 0%, rgba(4,9,1,0) 6%, rgba(4,9,1,0) 94%, rgba(4,9,1,0.55) 100%)",
+        }}
+      />
 
       {/* Desenfoque progresivo en el borde inferior de la ventana: el contenido
           se difumina justo antes de salir de pantalla, en vez de cortarse.

@@ -1,9 +1,9 @@
 import { Check } from "lucide-react";
-import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
-import { ScrollIn } from "@/components/volver-al-origen/ui/ScrollIn";
-import { SectionTitle } from "@/components/volver-al-origen/ui/SectionTitle";
-import { RaicesFondo } from "@/components/volver-al-origen/ui/RaicesFondo";
-import { PARA_VOS } from "@/components/volver-al-origen/content";
+import { VoContainer } from "@/components/lista-de-espera/ui/VoContainer";
+import { ScrollIn } from "@/components/lista-de-espera/ui/ScrollIn";
+import { SectionTitle } from "@/components/lista-de-espera/ui/SectionTitle";
+import { RaicesFondo } from "@/components/lista-de-espera/ui/RaicesFondo";
+import { PARA_VOS } from "@/components/lista-de-espera/content";
 import { cn } from "@/lib/cn";
 
 /*

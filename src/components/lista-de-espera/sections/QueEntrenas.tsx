@@ -6,12 +6,12 @@ import {
   TrendingUp,
   type LucideIcon,
 } from "lucide-react";
-import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
-import { ScrollIn } from "@/components/volver-al-origen/ui/ScrollIn";
-import { SectionTitle } from "@/components/volver-al-origen/ui/SectionTitle";
-import { SectionTexture } from "@/components/volver-al-origen/ui/SectionTexture";
-import { SymbolCloud } from "@/components/volver-al-origen/ui/SymbolCloud";
-import { QUE_ENTRENAS } from "@/components/volver-al-origen/content";
+import { VoContainer } from "@/components/lista-de-espera/ui/VoContainer";
+import { ScrollIn } from "@/components/lista-de-espera/ui/ScrollIn";
+import { SectionTitle } from "@/components/lista-de-espera/ui/SectionTitle";
+import { SectionTexture } from "@/components/lista-de-espera/ui/SectionTexture";
+import { SymbolCloud } from "@/components/lista-de-espera/ui/SymbolCloud";
+import { QUE_ENTRENAS } from "@/components/lista-de-espera/content";
 
 /*
   Seccion 4 — Que vas a entrenar durante el proceso.

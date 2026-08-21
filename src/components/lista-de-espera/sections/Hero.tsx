@@ -1,12 +1,12 @@
 import Image from "next/image";
 import { MatrixRain } from "@/components/bootcamp/ui/MatrixRain";
-import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
-import { LogoVao } from "@/components/volver-al-origen/ui/LogoVao";
-import { SparkDivider } from "@/components/volver-al-origen/ui/SparkDivider";
-import { MovingBorder } from "@/components/volver-al-origen/ui/MovingBorder";
-import { WaitlistCta } from "@/components/volver-al-origen/ui/WaitlistCta";
-import { HeroLaser } from "@/components/volver-al-origen/ui/HeroLaser";
-import { HERO } from "@/components/volver-al-origen/content";
+import { VoContainer } from "@/components/lista-de-espera/ui/VoContainer";
+import { LogoVao } from "@/components/lista-de-espera/ui/LogoVao";
+import { SparkDivider } from "@/components/lista-de-espera/ui/SparkDivider";
+import { MovingBorder } from "@/components/lista-de-espera/ui/MovingBorder";
+import { WaitlistCta } from "@/components/lista-de-espera/ui/WaitlistCta";
+import { HeroLaser } from "@/components/lista-de-espera/ui/HeroLaser";
+import { HERO } from "@/components/lista-de-espera/content";
 import heroBg from "@/../public/volver-origen/public/img/hero/hero-seccion.png";
 import heroBgMovil from "@/../public/volver-origen/public/img/hero/heroseccion-mobile.jpg";
 
@@ -71,6 +71,16 @@ export function Hero() {
       <div
         aria-hidden
         className="absolute inset-x-0 top-0 -z-20 h-[80svh] lg:hidden"
+        /* El fundido es una MÁSCARA sobre la foto, no un degradado de color.
+
+           Antes había encima un degradado que pintaba #0b1502 opaco en su tramo
+           inferior, justo donde se apoya el panel: sobre la textura continua eso
+           se lee como un bloque verde liso detrás del contenido. La máscara
+           vuelve transparente la foto y deja pasar la textura.
+
+           Las paradas son las del degradado anterior: la foto llega entera al
+           32% del bloque y ha desaparecido en el 73%. */
+        style={{ maskImage: "linear-gradient(to bottom, #000 32%, transparent 73%)", WebkitMaskImage: "linear-gradient(to bottom, #000 32%, transparent 73%)" }}
       >
         <Image
           src={heroBgMovil}
@@ -84,7 +94,6 @@ export function Hero() {
         <div className="pointer-events-none absolute inset-0">
           <MatrixRain fade={0} opacity={0.22} />
         </div>
-        <div className="absolute inset-0 bg-[linear-gradient(to_top,#0b1502_0%,#0b1502_27%,rgba(11,21,2,0.55)_45%,transparent_68%)]" />
       </div>
 
       {/* ══ ESCRITORIO: imagen de fondo a pantalla completa ══
@@ -96,7 +105,22 @@ export function Hero() {
           y cada visitante se descargaría también el encuadre que no va a ver.
           Al ser lazy, sólo se pide la del breakpoint activo — y como están en lo
           alto de la página, entran en el viewport de inmediato igualmente. */}
-      <div aria-hidden className="absolute inset-0 -z-20 hidden lg:block">
+      {/* El pie de la foto se funde con MÁSCARA y no con un degradado de color.
+
+          Antes había abajo una franja que pintaba #0b1502 sólido. Con fondo
+          liso pasaba desapercibida; sobre la textura continua se ve como una
+          banda plana con un canto marcado justo donde empieza la sección
+          siguiente. La máscara vuelve transparente la propia foto y deja pasar
+          la textura, así que no hay frontera que dibujar.
+
+          El desvanecido es largo a propósito —del 62% al 100% del alto, frente
+          a los 128 px de la franja anterior—: cuanto más recorrido tiene, menos
+          se percibe dónde empieza. */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-20 hidden lg:block"
+        style={{ maskImage: "linear-gradient(to bottom, #000 62%, transparent 100%)", WebkitMaskImage: "linear-gradient(to bottom, #000 62%, transparent 100%)" }}
+      >
         <Image
           src={heroBg}
           alt=""
@@ -117,10 +141,6 @@ export function Hero() {
           <MatrixRain fade={0} opacity={0.3} />
         </div>
 
-        {/* Difuminado hacia la sección siguiente. El velo de arriba no sirve
-            para esto: al ser horizontal deja el pie de la foto a plena
-            intensidad y la imagen chocaba en seco contra el verde de abajo. */}
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-[linear-gradient(to_top,#0b1502,transparent)]" />
       </div>
 
       {/* ══ Haz de luz que baja desde arriba hasta el CTA (sólo móvil) ══
@@ -156,7 +176,31 @@ export function Hero() {
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 mix-blend-screen"
       >
-        <HeroLaser />
+        {/* Desvanecido de los últimos 140 px del haz.
+
+            Sin esto se cortaba en seco al acabar la sección y dejaba una línea
+            horizontal. Se nota más que en una capa normal justamente por el
+            mix-blend-screen del contenedor: al SUMAR luz, la diferencia entre
+            "hay resplandor" y "no hay nada" es un salto de brillo, no un cambio
+            de color que el ojo perdone.
+
+            Es una máscara y no un degradado encima: un degradado tendría que
+            pintar de algún color, y sobre una capa que se mezcla por luz
+            cualquier color SUMA brillo en lugar de quitarlo. La máscara baja la
+            aportación del haz hasta cero, que es lo que hace falta.
+
+            Va en un div interior y no en el contenedor para que el recorte
+            ocurra ANTES de que la mezcla por luz lo sume. */}
+        <div
+          className="size-full"
+          style={{
+            maskImage: "linear-gradient(to top, transparent 0px, #000 140px)",
+            WebkitMaskImage:
+              "linear-gradient(to top, transparent 0px, #000 140px)",
+          }}
+        >
+          <HeroLaser />
+        </div>
       </div>
 
       {/* pt-[calc(68svh-160px)] en móvil.
@@ -341,6 +385,15 @@ export function Hero() {
 
           <SparkDivider className="mt-[clamp(0.6rem,2.5vw,1rem)] lg:mt-4" />
 
+          {/* El claim, por delante del párrafo explicativo.
+
+              Va en la fuente de titular y no en la de texto: es la frase que
+              tiene que quedarse aunque no se lea nada más, y compartir tipografía
+              con el párrafo que sigue la haría desaparecer dentro de él. */}
+          <p className="mt-[clamp(0.6rem,2.5vw,1rem)] font-display text-[clamp(0.85rem,3.9vw,1.05rem)] leading-snug text-foreground sm:mt-5 sm:text-xl lg:mt-4 lg:text-lg">
+            {HERO.claim}
+          </p>
+
           {/* Es el subtitular que explica la oferta, así que va por encima del
               cuerpo de texto normal: 18 px y peso normal, no light.
 
@@ -359,6 +412,15 @@ export function Hero() {
                 <span key={part.text}>{part.text}</span>
               ),
             )}
+          </p>
+
+          {/* La duración, en su propia píldora.
+
+              Es el único dato duro del panel —cuánto dura y cuánto acompañan— y
+              en mitad del párrafo se perdía. Aparte y enmarcado se localiza de
+              un vistazo, que es como se lee esta clase de dato. */}
+          <p className="mt-[clamp(0.6rem,2.5vw,1rem)] inline-flex rounded-full border border-accent/25 bg-accent/5 px-[clamp(0.7rem,3vw,1rem)] py-[clamp(0.3rem,1.4vw,0.45rem)] font-sans text-[clamp(0.7rem,3vw,0.85rem)] leading-snug text-foreground/90 sm:mt-5 sm:text-[0.95rem] lg:mt-4">
+            {HERO.duracion}
           </p>
 
           {/* El formulario ya no vive aquí: lo sirve el modal, que abren todos

@@ -1,10 +1,10 @@
-import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
-import { ScrollIn } from "@/components/volver-al-origen/ui/ScrollIn";
-import { SectionTitle } from "@/components/volver-al-origen/ui/SectionTitle";
-import { SectionTexture } from "@/components/volver-al-origen/ui/SectionTexture";
-import { BenefitCard } from "@/components/volver-al-origen/ui/BenefitCard";
-import { WaitlistForm } from "@/components/volver-al-origen/ui/WaitlistForm";
-import { LISTA, HERO } from "@/components/volver-al-origen/content";
+import { VoContainer } from "@/components/lista-de-espera/ui/VoContainer";
+import { ScrollIn } from "@/components/lista-de-espera/ui/ScrollIn";
+import { SectionTitle } from "@/components/lista-de-espera/ui/SectionTitle";
+import { SectionTexture } from "@/components/lista-de-espera/ui/SectionTexture";
+import { BenefitCard } from "@/components/lista-de-espera/ui/BenefitCard";
+import { WaitlistForm } from "@/components/lista-de-espera/ui/WaitlistForm";
+import { LISTA, HERO } from "@/components/lista-de-espera/content";
 
 /*
   Sección 8 — Entrá ahora a la lista de espera.

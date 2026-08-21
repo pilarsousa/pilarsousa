@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
-import { LogoVao } from "@/components/volver-al-origen/ui/LogoVao";
-import { VoCta } from "@/components/volver-al-origen/ui/VoCta";
-import { WhatsAppIcon } from "@/components/volver-al-origen/ui/WhatsAppIcon";
-import { Footer } from "@/components/volver-al-origen/sections/Footer";
-import { GRACIAS } from "@/components/volver-al-origen/content";
+import { VoContainer } from "@/components/lista-de-espera/ui/VoContainer";
+import { LogoVao } from "@/components/lista-de-espera/ui/LogoVao";
+import { VoCta } from "@/components/lista-de-espera/ui/VoCta";
+import { WhatsAppIcon } from "@/components/lista-de-espera/ui/WhatsAppIcon";
+import { Footer } from "@/components/lista-de-espera/sections/Footer";
+import { GRACIAS } from "@/components/lista-de-espera/content";
 import fondoMovil from "@/../public/volver-origen/public/img/landing/fondo-agradecimiento-mobile.jpg";
 import fondoDesktop from "@/../public/volver-origen/public/img/landing/fondo-agradecimiento-pc.jpg";
 
 /*
-  Página de gracias — /volver-al-origen/gracias.
+  Página de gracias — /lista-de-espera/gracias.
 
   El registro no termina en el formulario: el paso que de verdad importa es
   entrar al grupo de WhatsApp, así que la página tiene un solo objetivo y un
@@ -32,7 +32,7 @@ import fondoDesktop from "@/../public/volver-origen/public/img/landing/fondo-agr
 */
 
 export const metadata: Metadata = {
-  title: "¡Te falta el último paso! | Volver al Origen",
+  title: "Registro completado | Volver al Origen 3.0",
   description:
     "Tu registro en la lista de espera está completado. Accede al grupo privado de WhatsApp para recibir todas las novedades.",
   robots: { index: false, follow: false },
@@ -119,6 +119,13 @@ export default function GraciasPage() {
                 <VoCta disabled>{GRACIAS.cta}</VoCta>
               )}
             </div>
+
+            {/* La aclaración de para qué se usa el grupo. Va DESPUÉS del botón:
+                antes, sembraría la duda sobre el spam justo cuando lo que hay
+                que hacer es pulsar. */}
+            <p className="mt-5 max-w-md font-sans text-xs leading-relaxed text-foreground/50">
+              {GRACIAS.disclaimer}
+            </p>
 
             {!hasUrl && (
               <p className="mt-3 font-sans text-xs font-light text-foreground/40">

@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/cn";
-import { DecryptedText } from "@/components/volver-al-origen/ui/DecryptedText";
+import { DecryptedText } from "@/components/lista-de-espera/ui/DecryptedText";
 
 /*
   Título de sección: Cinzel en versalitas con un tramo en verde luminoso.
@@ -77,19 +77,38 @@ export function SectionTitle({
         animateOn="view"
       />
       {accent && (
-        <span className={accentClassName}>
+        <>
+          {/* El espacio va FUERA del nowrap de abajo: es el único punto por
+              donde el título debería poder partirse, y meterlo dentro pegaría
+              el tramo resaltado a la frase que lo precede. */}
           {" "}
-          <DecryptedText
-            text={accent}
-            speed={SPEED}
-            characters={CHARS}
-            sequential
-            revealDirection="start"
-            animateOn="view"
-          />
-        </span>
+          {/* nowrap para que el "?" no se quede solo en una línea.
+
+              DecryptedText se pinta como inline-block, y entre una caja de ésas
+              y el texto que la sigue el navegador puede partir línea aunque no
+              haya espacio entre medias. En escritorio, "¿Quién es Pilar Sousa"
+              llenaba el ancho de su columna y el signo caía al renglón
+              siguiente, él solo.
+
+              No fuerza al tramo resaltado a caber en una línea: eso lo decide
+              su propio inline-block, que sigue partiéndose por dentro. Lo único
+              que impide es el corte entre la caja y el signo. */}
+          <span className="whitespace-nowrap">
+            <span className={accentClassName}>
+              <DecryptedText
+                text={accent}
+                speed={SPEED}
+                characters={CHARS}
+                sequential
+                revealDirection="start"
+                animateOn="view"
+              />
+            </span>
+            {after}
+          </span>
+        </>
       )}
-      {after}
+      {!accent && after}
     </h2>
   );
 }

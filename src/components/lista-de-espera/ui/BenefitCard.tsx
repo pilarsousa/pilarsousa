@@ -47,7 +47,7 @@ export function BenefitCard({ icon, title, text }: BenefitCardProps) {
      puede crecer más sin comerse el ancho del título de la cabecera, que tiene
      prohibido partirse en dos líneas. */
   return (
-    <div className="vo-card flex h-full flex-col px-7 py-8 sm:px-8 sm:py-10">
+    <div className="vo-card flex h-full flex-col px-7 py-8 sm:px-8 sm:py-10 lg:px-7 lg:py-7">
       {/* Lluvia de código de fondo, la misma del hero. Se pausa sola cuando la
           card sale de pantalla y no se dibuja bajo "reducir movimiento", así
           que tener tres a la vez no penaliza. */}
@@ -70,10 +70,13 @@ export function BenefitCard({ icon, title, text }: BenefitCardProps) {
               tenía prohibido partirse; al levantarse esa restricción el icono
               recupera su tamaño y vuelve a equilibrar con el titular, ahora
               más grande. */}
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-accent/35 bg-vo-forest/40 shadow-[0_0_26px_-8px_var(--vo-glow-strong)] sm:mb-6 sm:size-[86px]">
+          {/* En lg el círculo baja de 86 a 64 px y su margen inferior de 24 a
+              16: apiladas en columna, tres iconos grandes alargaban la pila
+              mucho más que el texto que acompañan. */}
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-accent/35 bg-vo-forest/40 shadow-[0_0_26px_-8px_var(--vo-glow-strong)] sm:mb-6 sm:size-[86px] lg:mb-4 lg:size-16">
             <Icon
               strokeWidth={1.2}
-              className="size-[19px] text-accent sm:size-[38px]"
+              className="size-[19px] text-accent sm:size-[38px] lg:size-7"
               aria-hidden
             />
           </span>

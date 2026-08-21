@@ -1,13 +1,14 @@
-import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
-import { ScrollIn } from "@/components/volver-al-origen/ui/ScrollIn";
-import { SectionTitle } from "@/components/volver-al-origen/ui/SectionTitle";
-import { TrustScore } from "@/components/volver-al-origen/ui/TrustScore";
-import { TestimonialCarousel } from "@/components/volver-al-origen/ui/TestimonialCarousel";
-import { WaitlistCta } from "@/components/volver-al-origen/ui/WaitlistCta";
+import { VoContainer } from "@/components/lista-de-espera/ui/VoContainer";
+import { ScrollIn } from "@/components/lista-de-espera/ui/ScrollIn";
+import { SectionTexture } from "@/components/lista-de-espera/ui/SectionTexture";
+import { SectionTitle } from "@/components/lista-de-espera/ui/SectionTitle";
+import { TrustScore } from "@/components/lista-de-espera/ui/TrustScore";
+import { TestimonialCarousel } from "@/components/lista-de-espera/ui/TestimonialCarousel";
+import { WaitlistCta } from "@/components/lista-de-espera/ui/WaitlistCta";
 import {
   FEATURED_TESTIMONIALS,
   TESTIMONIOS,
-} from "@/components/volver-al-origen/content";
+} from "@/components/lista-de-espera/content";
 
 /*
   Sección 3 — Prueba social.
@@ -36,9 +37,6 @@ import {
   celda y aparecería scroll horizontal en la página.
 */
 
-/* Tinte de la sección. Literal y no var(--color-vo-sage) porque va dentro de un
-   radial-gradient() en un style inline. */
-const TINT = "#1f310c";
 
 export function Testimonios() {
   return (
@@ -47,37 +45,15 @@ export function Testimonios() {
       /* El mínimo del clamp baja a 5rem: los 7rem anteriores eran un colchón
          desproporcionado en pantallas de móvil, donde el alto es el recurso
          escaso. En escritorio el máximo sigue igual. */
-      className="relative isolate bg-background py-[clamp(5rem,3rem+8vh,10rem)] text-foreground"
+      className="relative isolate py-[clamp(5rem,3rem+8vh,10rem)] text-foreground"
     >
-      {/* Difuminado del tinte, de dentro hacia fuera.
+      {/* Textura clara: es la que alterna con las dos oscuras que la rodean.
 
-          LINEAL VERTICAL Y NO RADIAL, y el motivo es matemático, no estético.
-          En un radial los radios se miden sobre el tamaño de la caja, pero la
-          distancia del centro al borde es sólo la MITAD del alto. Con un radio
-          vertical del 72% —como estaba— el borde de la sección cae en el 69% del
-          recorrido del degradado, donde todavía queda un 44% de opacidad: el
-          color nunca llegaba a transparente dentro de la sección y en la juntura
-          aparecía un escalón. Ese era el corte que se veía.
-
-          En un lineal vertical el 0% y el 100% caen exactamente en los bordes
-          superior e inferior, así que el desvanecido completo está garantizado
-          sin depender del alto que acabe teniendo la sección.
-
-          Las paradas están en 35% y 65%: el tinte sólo es pleno en el tercio
-          central y dedica un 35% del alto a entrar y otro 35% a salir. Esa
-          transición larga es lo que hace que el paso entre el color de esta
-          sección y el de las vecinas se lea como una difuminación y no como un
-          cambio de bloque.
-
-          -z-10 lo mantiene por debajo del contenido: es un elemento posicionado
-          y sin esto pintaría por encima del texto. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          backgroundImage: `linear-gradient(to bottom, transparent 0%, ${TINT} 35%, ${TINT} 65%, transparent 100%)`,
-        }}
-      />
+          Sustituye al degradado de tinte liso que había aquí. El desvanecido de
+          los bordes lo aporta ahora la máscara del propio componente, con las
+          mismas paradas (35% y 65%) que usaba aquel, así que la transición
+          entre secciones se lee igual que antes. */}
+      <SectionTexture variant="claro" />
 
 
       <VoContainer>
@@ -90,6 +66,17 @@ export function Testimonios() {
           >
             {TESTIMONIOS.title}
           </SectionTitle>
+        </ScrollIn>
+
+        {/* Entradilla del copy nuevo. Las dos líneas van separadas y no en un
+            párrafo: la primera desarma la objeción ("no nos creas") y la segunda
+            invita, y leídas de corrido se anulan entre sí. */}
+        <ScrollIn delay={0.05}>
+          <div className="mx-auto mt-4 max-w-2xl space-y-1 text-center font-sans text-base leading-relaxed text-foreground/75 sm:text-lg">
+            {TESTIMONIOS.intro.map((linea) => (
+              <p key={linea}>{linea}</p>
+            ))}
+          </div>
         </ScrollIn>
       </VoContainer>
 

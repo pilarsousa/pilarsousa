@@ -2,7 +2,7 @@
 
 import { memo, useEffect, useState, type ComponentProps } from "react";
 import { Cloud } from "react-icon-cloud";
-import { NUBE } from "@/components/volver-al-origen/content";
+import { NUBE } from "@/components/lista-de-espera/content";
 
 /*
   Nube de símbolos que gira en tres dimensiones.
