@@ -26,6 +26,12 @@ import pilarDesktop from "@/../public/volver-origen/public/img/landing/pilarsous
   MÓVIL — el retrato vertical va a sangre en la parte alta con el título y la
   firma encima, y la historia debajo sobre fondo plano.
 
+  LA HISTORIA VIENE PLEGADA. La columna muestra hasta "…entendí algo
+  fundamental:" y el resto se despliega con un botón. Es una cuestión de alto:
+  el retrato ocupa el fondo de la sección entera, así que el alto de esta
+  columna es el alto de la foto, y con la historia completa a la vista el
+  retrato se estiraba hasta deformarla. Ver PilarBio.
+
   Cada tamaño usa su propio encuadre y ninguno lleva `priority`, así que son
   lazy y el navegador no descarga el que está en display:none.
 
@@ -112,9 +118,23 @@ export function Pilar() {
 
           El texto ya no necesita el velo para leerse: cae sobre la textura
           oscura, que da contraste de sobra. */}
+      {/* ALTO PROPIO Y ANCLADO ARRIBA, no inset-0.
+
+          Con inset-0 la capa medía lo que midiera la sección, así que al
+          desplegar "Ver más" el retrato crecía con el texto: la foto se estiraba
+          y el encuadre cambiaba a mitad de lectura.
+
+          Fijándola en 780 px —el mismo valor que el min-h de la sección— cuando
+          la bio está plegada cubre exactamente la sección, igual que antes, y
+          cuando se despliega la sección crece hacia abajo sin que la foto se
+          entere. El texto que sobresale cae por debajo, donde la máscara
+          vertical ya la ha desvanecido del todo, así que no hay canto.
+
+          Si se cambia el min-h de la sección, hay que cambiar este alto con él o
+          la foto dejará de cubrirla en reposo. */}
       <div
         aria-hidden
-        className="absolute inset-0 -z-20 hidden lg:block"
+        className="absolute inset-x-0 top-0 -z-20 hidden h-[780px] lg:block"
         style={{
           maskImage: "linear-gradient(to right, #000 0%, #000 26%, transparent 64%), linear-gradient(to bottom, transparent 0%, #000 10%, #000 90%, transparent 100%)",
           WebkitMaskImage: "linear-gradient(to right, #000 0%, #000 26%, transparent 64%), linear-gradient(to bottom, transparent 0%, #000 10%, #000 90%, transparent 100%)",
@@ -201,21 +221,24 @@ export function Pilar() {
             <PilarBio />
           </div>
 
-          {/* En móvil centrado; en escritorio pegado al borde izquierdo, para
-              que arranque en la misma vertical que los párrafos.
+          {/* Centrado en los dos tamaños, y con su tope de ancho también en
+              escritorio.
 
-              El tope de 448 px se levanta a partir de lg y el botón pasa a
-              ocupar el ancho de la columna (unos 547 px). Es lo que hace que el
-              texto entre en una sola línea: con el tope puesto no le cabía y
-              partía en "…LISTA DE / ESPERA". */}
+              Estuvo pegado al borde izquierdo y a ancho de columna, con la idea
+              de que el texto entrara en una sola línea. No lo conseguía: la
+              columna mide un 42% del contenedor —unos 479 px— y este rótulo
+              necesita cerca de 560, así que partía igualmente en "…LISTA DE /
+              ESPERA". Se pagaba un botón descentrado a cambio de nada.
+
+              Centrado comparte eje con el "Ver más" que tiene justo encima, que
+              es lo que hace que los dos se lean como un bloque. */}
           <ScrollIn delay={0.2}>
-            <div className="mt-9 flex justify-center lg:justify-start">
-              <WaitlistCta className="max-w-md lg:max-w-none">
-                {PILAR.cta}
-              </WaitlistCta>
+            <div className="mt-9 flex justify-center">
+              <WaitlistCta className="max-w-md">{PILAR.cta}</WaitlistCta>
             </div>
           </ScrollIn>
         </div>
+
       </VoContainer>
     </section>
   );

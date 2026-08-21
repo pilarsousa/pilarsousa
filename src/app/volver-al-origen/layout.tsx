@@ -93,6 +93,40 @@ export default function VolverAlOrigenLayout({
         {children}
       </div>
 
+      {/* Sombreado de los dos costados, a lo largo de toda la landing.
+
+          Enmarca el contenido y hace que la página se lea como una pieza y no
+          como un fondo infinito: al oscurecer los cantos, el ojo se queda en el
+          centro. Es el mismo recurso que ya usa la página de gracias con su
+          viñeta, aquí sólo en el eje horizontal.
+
+          VA FUERA DEL DIV DE ARRIBA, como el desenfoque de abajo, y por el mismo
+          motivo: ese div tiene overflow-x-clip, y en WebKit un ancestro que
+          recorta overflow anula efectos de composición en sus descendientes.
+
+          Fijo a la ventana y no a la página: acompaña al scroll en vez de
+          quedarse anclado a una altura concreta del documento.
+
+          Los tramos son estrechos —del 0 al 6% y del 94 al 100%— y el color
+          nunca llega a opaco: tiene que leerse como que los bordes se apagan,
+          no como dos barras oscuras. Y por eso el degradado va a transparente
+          en el centro y no a un color: cualquier tinte central velaría la
+          página entera.
+
+          z-30 lo deja por encima del contenido y por debajo del desenfoque
+          inferior (40) y del modal (200), que deben poder taparlo.
+
+          pointer-events-none es imprescindible: cubre la pantalla completa y sin
+          él se comería los clics de los CTA que caen cerca de los bordes. */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-30"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, rgba(4,9,1,0.55) 0%, rgba(4,9,1,0) 6%, rgba(4,9,1,0) 94%, rgba(4,9,1,0.55) 100%)",
+        }}
+      />
+
       {/* Desenfoque progresivo en el borde inferior de la ventana: el contenido
           se difumina justo antes de salir de pantalla, en vez de cortarse.
 

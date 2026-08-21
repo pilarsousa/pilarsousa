@@ -6,6 +6,8 @@ import { SectionTexture } from "@/components/volver-al-origen/ui/SectionTexture"
 import { SparkDivider } from "@/components/volver-al-origen/ui/SparkDivider";
 import { WaitlistCta } from "@/components/volver-al-origen/ui/WaitlistCta";
 import {
+  ArcosDeFondo,
+  CaminoPunteado,
   Emblema,
   FlorDeLaVida,
   IconoDuda,
@@ -111,41 +113,6 @@ const ICONOS = {
   ),
 } satisfies Record<string, (p: { className?: string }) => React.ReactElement>;
 
-/* Camino de puntos que cose la sección en escritorio.
-
-   preserveAspectRatio="none" a propósito: no es un dibujo que deba mantener su
-   forma sino una guía que se estira con la caja que recorre. En móvil no
-   aparece — allí no hay ancho para que el trazo serpentee y acabaría cruzando
-   el texto, y el montaje de móvil tampoco lo lleva. */
-function CaminoPunteado({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 100 100"
-      fill="none"
-      preserveAspectRatio="none"
-      aria-hidden
-      className={className}
-    >
-      {/* vector-effect="non-scaling-stroke" es imprescindible aquí, no un
-          detalle. Con preserveAspectRatio="none" la caja estira el sistema de
-          coordenadas del SVG de forma desigual, y con él el grosor del trazo y
-          la longitud de los guiones: en una pantalla ancha el punteado fino se
-          convertía en un zigzag de guiones enormes. Con esta propiedad el trazo
-          se dibuja en píxeles de pantalla y sólo se estira el RECORRIDO, que es
-          lo único que se quería estirar. */}
-      <path
-        d="M78 4 C 78 16, 55 14, 55 27 C 55 40, 92 38, 92 52 C 92 66, 16 58, 16 72 C 16 84, 50 80, 50 92"
-        stroke="var(--color-accent)"
-        strokeWidth="1.5"
-        strokeDasharray="4 10"
-        strokeLinecap="round"
-        vectorEffect="non-scaling-stroke"
-        opacity="0.35"
-      />
-    </svg>
-  );
-}
-
 /* Nodo luminoso del recorrido de escritorio: un punto con halo. Va como
    elemento y no como marker del SVG porque necesita su propio resplandor. */
 function Nodo({ className }: { className?: string }) {
@@ -188,10 +155,24 @@ export function Entrenar() {
         className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(80%_65%_at_50%_45%,rgba(6,12,2,0.78)_0%,rgba(6,12,2,0.55)_55%,transparent_100%)]"
       />
 
+      {/* Arcos de fondo, arriba a la derecha, como en el montaje de escritorio.
+          Círculos enormes y descentrados de los que sólo entra en el encuadre el
+          tramo de órbita; el overflow-hidden de la sección los recorta. Opacidad
+          muy baja — su trabajo es que el fondo no sea liso, no que se los mire. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-20 -right-40 -z-10 w-[38rem] opacity-[0.12]"
+      >
+        <ArcosDeFondo />
+      </div>
+
       {/* El camino recorre la sección entera por detrás del contenido. -z-10 lo
           deja sobre la textura y bajo los paneles: se asoma entre bloques y
           desaparece detrás de ellos. */}
-      <CaminoPunteado className="pointer-events-none absolute inset-x-[8%] inset-y-0 -z-10 hidden h-full lg:block" />
+      <CaminoPunteado
+        d="M78 4 C 78 16, 55 14, 55 27 C 55 40, 92 38, 92 52 C 92 66, 16 58, 16 72 C 16 84, 50 80, 50 92"
+        className="pointer-events-none absolute inset-x-[8%] inset-y-0 -z-10 hidden h-full lg:block"
+      />
 
       <VoContainer>
         {/* ══ Fila superior ══ */}
@@ -466,15 +447,20 @@ export function Entrenar() {
                     del ancho del contenedor, así que un valor fijo sólo acierta
                     en una pantalla.
 
-                    · w-[37%] del ancho de la lista. La lista arranca a 256 px
+                    · w-[35%] del ancho de la lista. La lista arranca a 256 px
                       del borde del panel —40 de relleno, 160 del emblema y 56
                       de hueco— y termina a 40 del borde derecho, así que en el
-                      contenedor de 1140 mide 844. El centro del contenedor cae
-                      a 314 de su inicio: 37% de esos 844. Ahí es donde espera
-                      el rombo.
-                    · h-[100px] es la caída hasta el centro del rombo: 40 del
-                      relleno inferior del panel, 32 del margen del nodo y 28
-                      hasta su mitad.
+                      contenedor de 1140 mide 844. El rombo, que vive en la
+                      columna central de la rejilla del veredicto, cae sobre los
+                      558 px: 299 desde el inicio de la lista, o sea un 35%.
+                    · h-[210px] es la caída hasta su centro: 40 del relleno
+                      inferior del panel, 56 del margen superior de la rejilla y
+                      unos 114 hasta la mitad de la fila, que la marca el alto
+                      del panel del veredicto.
+
+                    Esos 210 están calibrados sobre el alto actual de ese panel.
+                    Si se le cambia el relleno o el cuerpo del titular, el trazo
+                    se queda corto o se pasa, y hay que rehacer la cuenta.
 
                     El trazo termina en la esquina inferior derecha del recuadro
                     (100,100 del viewBox), que por esas dos medidas es
@@ -487,10 +473,16 @@ export function Entrenar() {
                   fill="none"
                   preserveAspectRatio="none"
                   aria-hidden
-                  className="pointer-events-none absolute top-full left-[3px] h-[100px] w-[37%] text-accent"
+                  className="pointer-events-none absolute top-full left-[3px] h-[210px] w-[35%] text-accent"
                 >
+                  {/* El recorrido cae primero y se abre después, en vez de ir en
+                      diagonal recta: baja pegado al palo unos 40 puntos —así
+                      parece que sigue siendo el palo—, luego se tumba y recorre
+                      a lo ancho, y remata con una caída corta sobre el rombo.
+                      Es el gesto de una raíz que busca, no el de una línea que
+                      conecta dos puntos. */}
                   <path
-                    d="M0 0 C 0 38, 14 66, 52 84 C 74 94, 90 97, 100 100"
+                    d="M0 0 C 2 18, 3 32, 9 43 C 22 62, 52 72, 76 82 C 89 88, 96 94, 100 100"
                     stroke="currentColor"
                     strokeWidth="1.6"
                     strokeDasharray="4 9"
@@ -526,69 +518,90 @@ export function Entrenar() {
           </div>
         </ScrollIn>
 
-        {/* ══ Paso al veredicto ══ */}
-        {/* En móvil una flecha fina; en escritorio el nodo-rombo. Los dos
-            montajes marcan aquí el mismo giro con distinta pieza. */}
+        {/* ══ Del problema al veredicto ══ */}
+        {/* UNA REJILLA DE TRES CELDAS EN ESCRITORIO: la constatación, la flecha
+            y el panel del veredicto. En móvil es una columna y el orden se
+            mantiene, así que el mismo marcado sirve para los dos.
+
+            El porqué de ponerlos enfrentados y no uno debajo del otro: son las
+            dos mitades de una misma frase —"el problema ya no es X… es Y"— y en
+            vertical se leen como dos afirmaciones sueltas separadas por un
+            hueco. Lado a lado, con la flecha señalando, la segunda se lee como
+            respuesta de la primera.
+
+            auto en la columna del medio: la flecha ocupa lo que mide y no una
+            fracción del ancho, que dejaría a los dos textos innecesariamente
+            estrechos. */}
         <ScrollIn delay={0.05}>
-          <div className="mt-8 flex flex-col items-center gap-2">
-            <NodoRombo className="hidden size-14 lg:block" />
-            <svg
-              viewBox="0 0 12 20"
-              fill="none"
-              aria-hidden
-              className="h-8 w-3 text-accent/60 lg:h-4"
+          <div className="mt-10 grid items-center gap-6 lg:mt-14 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:gap-8">
+            {/* ── La constatación ──
+                Fuera de todo panel: es la bisagra entre la reflexión y el
+                veredicto, y encerrarla la convertiría en un bloque más.
+
+                Alineada a la derecha en escritorio, hacia la flecha: el texto
+                empuja al ojo en la dirección en la que tiene que seguir. */}
+            <div className="text-center lg:text-right">
+              <p className="font-sans text-[1.05rem] leading-relaxed text-foreground/85 sm:text-lg">
+                <Tramos
+                  partes={ENTRENAR.diagnostico.lead}
+                  acento="font-bold text-foreground"
+                />
+              </p>
+              <p className="mt-1 font-accent text-[clamp(1.5rem,7vw,2.1rem)] leading-[1.25] italic text-accent">
+                {ENTRENAR.diagnostico.leadAcento}
+              </p>
+            </div>
+
+            {/* ── El paso ──
+                La misma flecha en los dos tamaños, girada. En móvil apunta hacia
+                abajo, que es donde está lo siguiente; en escritorio, -90 grados
+                la deja apuntando a la derecha, hacia el panel. Un solo dibujo
+                para las dos direcciones evita mantener dos SVG sincronizados.
+
+                El nodo sólo en escritorio: en vertical el recorrido ya se
+                entiende con la flecha, y añadirlo alargaba el hueco entre los
+                dos bloques justo donde tienen que estar juntos. */}
+            <div className="flex flex-col items-center gap-2 lg:flex-row lg:gap-3">
+              <NodoRombo className="hidden size-12 lg:block" />
+              <svg
+                viewBox="0 0 12 20"
+                fill="none"
+                aria-hidden
+                className="h-8 w-3 text-accent/60 lg:-rotate-90"
+              >
+                <path
+                  d="M6 1V18M6 18L1.5 13.5M6 18L10.5 13.5"
+                  stroke="currentColor"
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+
+            {/* ── El veredicto ── */}
+            <div
+              className={`relative overflow-hidden rounded-[1.75rem] border border-accent/25 bg-vo-forest/35 px-6 py-10 text-center backdrop-blur-sm sm:px-10 sm:py-12 ${BRILLO}`}
             >
-              <path
-                d="M6 1V18M6 18L1.5 13.5M6 18L10.5 13.5"
-                stroke="currentColor"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+              {/* Haz de luz asomando por el canto inferior, como en el montaje:
+                  cierra el panel igual que el del hero cierra el suyo. */}
+              <span
+                aria-hidden
+                className="absolute -bottom-9 left-1/2 h-16 w-[65%] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(ellipse,var(--vo-glow-strong)_0%,transparent_70%)] blur-lg"
               />
-            </svg>
-          </div>
-        </ScrollIn>
 
-        {/* ══ La constatación ══ */}
-        {/* Fuera de todo panel: es la bisagra entre la reflexión y el veredicto,
-            y encerrarla la convertiría en un bloque más. */}
-        <ScrollIn delay={0.05}>
-          <div className="mt-6 text-center">
-            <p className="font-sans text-[1.05rem] leading-relaxed text-foreground/85 sm:text-lg">
-              <Tramos
-                partes={ENTRENAR.diagnostico.lead}
-                acento="font-bold text-foreground"
-              />
-            </p>
-            <p className="mt-1 font-accent text-[clamp(1.5rem,7vw,2.1rem)] leading-[1.25] italic text-accent">
-              {ENTRENAR.diagnostico.leadAcento}
-            </p>
-          </div>
-        </ScrollIn>
+              <Loto className="mx-auto h-7 w-10" />
 
-        {/* ══ Panel del veredicto ══ */}
-        <ScrollIn delay={0.05}>
-          <div
-            className={`relative mt-8 overflow-hidden rounded-[1.75rem] border border-accent/25 bg-vo-forest/35 px-6 py-10 text-center backdrop-blur-sm sm:px-12 sm:py-12 ${BRILLO}`}
-          >
-            {/* Haz de luz asomando por el canto inferior, como en el montaje:
-                cierra el panel igual que el del hero cierra el suyo. */}
-            <span
-              aria-hidden
-              className="absolute -bottom-9 left-1/2 h-16 w-[65%] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(ellipse,var(--vo-glow-strong)_0%,transparent_70%)] blur-lg"
-            />
-
-            <Loto className="mx-auto h-7 w-10" />
-
-            {/* El veredicto, y lo único de la sección en versalitas: aquí sí es
-                un rótulo. La primera línea en crema nombra y la segunda en verde
-                señala, que es lo que hay que recordar. */}
-            <p className="mt-5 font-display text-[clamp(1.7rem,8vw,3.1rem)] uppercase leading-[1.06] tracking-[0.02em] text-foreground">
-              {ENTRENAR.diagnostico.afirma}
-            </p>
-            <p className="mt-1 font-display text-[clamp(1.35rem,6.6vw,2.4rem)] uppercase leading-[1.12] tracking-[0.02em] text-accent">
-              {ENTRENAR.diagnostico.afirmaResto}
-            </p>
+              {/* El veredicto, y lo único de la sección en versalitas: aquí sí es
+                  un rótulo. La primera línea en crema nombra y la segunda en
+                  verde señala, que es lo que hay que recordar. */}
+              <p className="mt-5 font-display text-[clamp(1.7rem,8vw,2.6rem)] uppercase leading-[1.06] tracking-[0.02em] text-foreground">
+                {ENTRENAR.diagnostico.afirma}
+              </p>
+              <p className="mt-1 font-display text-[clamp(1.35rem,6.6vw,2rem)] uppercase leading-[1.12] tracking-[0.02em] text-accent">
+                {ENTRENAR.diagnostico.afirmaResto}
+              </p>
+            </div>
           </div>
         </ScrollIn>
 

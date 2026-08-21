@@ -263,3 +263,47 @@ export function Loto({ className }: { className?: string }) {
     </svg>
   );
 }
+
+/* Camino de puntos, compartido por las secciones que lo usan.
+
+   El recorrido llega como prop porque cada sección tiene el suyo: aquí sólo
+   vive cómo se dibuja, que es lo que tienen en común.
+
+   preserveAspectRatio="none" a propósito: no es un dibujo que deba mantener su
+   forma sino una guía que se estira con la caja que recorre. Y por eso mismo
+   vector-effect="non-scaling-stroke" es obligatorio — sin él, la caja estira el
+   sistema de coordenadas de forma desigual y con él el grosor del trazo y la
+   longitud de los guiones, que en una pantalla ancha se convierten en un zigzag
+   de guiones enormes.
+
+   El viewBox es 0-100 en los dos ejes, así que los recorridos se escriben en
+   porcentaje de la caja y no en píxeles. */
+export function CaminoPunteado({
+  d,
+  className,
+  opacidad = 0.35,
+}: {
+  d: string;
+  className?: string;
+  opacidad?: number;
+}) {
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      fill="none"
+      preserveAspectRatio="none"
+      aria-hidden
+      className={className}
+    >
+      <path
+        d={d}
+        stroke="var(--color-accent)"
+        strokeWidth="1.5"
+        strokeDasharray="4 10"
+        strokeLinecap="round"
+        vectorEffect="non-scaling-stroke"
+        opacity={opacidad}
+      />
+    </svg>
+  );
+}

@@ -2,6 +2,7 @@ import { Check } from "lucide-react";
 import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
 import { ScrollIn } from "@/components/volver-al-origen/ui/ScrollIn";
 import { SectionTitle } from "@/components/volver-al-origen/ui/SectionTitle";
+import { RaicesFondo } from "@/components/volver-al-origen/ui/RaicesFondo";
 import { PARA_VOS } from "@/components/volver-al-origen/content";
 import { cn } from "@/lib/cn";
 
@@ -38,18 +39,30 @@ import { cn } from "@/lib/cn";
   <li> a ancho completo, los porcentajes vuelven a referirse al ancho de la
   sección, que es contra lo que hay que medir para llegar al borde de la card.
 
-  AQUÍ NO VA NADA ENTRE LAS CARDS, y ha costado dos intentos llegar a eso.
+  EL FONDO LO CRUZA UN SISTEMA DE RAÍCES, y llegó tras cuatro intentos.
 
-  Primero hubo flechas, y se cambiaron por un camino punteado porque una flecha
-  dice "y entonces" —implica secuencia— y estos seis puntos son condiciones
-  independientes: con reconocerse en una basta. Después se retiró también el
-  camino, a petición: el zigzag de las cards ya cuenta por sí solo que hay que
-  seguir bajando, y cualquier trazo entre ellas resultaba ruido sobre esa
-  lectura.
+  Primero fueron flechas entre card y card. Se cambiaron porque una flecha dice
+  "y entonces" —implica secuencia— y estos seis puntos son condiciones
+  independientes: con reconocerse en una basta. Después, un camino punteado por
+  hueco. Después, una raíz por hueco.
 
-  Lo que queda es la maquetación en zigzag y nada más. Si algún día hiciera
-  falta reponer el enlace, el componente CaminoZigzag sigue en ui/ y el PNG de
-  la flecha, en public.
+  Los tres compartían el mismo problema de fondo: eran un ENLACE, una pieza que
+  iba de A a B, y por muy orgánico que se dibujara se leía como un conector
+  colocado. Una raíz de verdad no une dos cosas — nace en un sitio, se extiende,
+  y por el camino pasa cerca de unas cuantas.
+
+  Por eso ahora es una sola pieza a nivel de sección: los troncos entran por los
+  cantos de la pantalla y bajan cruzando el hueco que deja el zigzag. Ver
+  RaicesFondo.
+
+  Es también lo único de la página que no va punteado, y no es incoherencia: el
+  punteado es el hilo que cose unas secciones con otras; esto es el suelo de
+  ésta.
+
+  Los tres intentos anteriores están en el historial de git, no en ui/: dejar
+  componentes muertos "por si acaso" sólo consigue que alguien los encuentre y
+  no sepa si están en uso. El PNG de la flecha sí sigue en public, que es un
+  asset y no código.
 
   Sin CTA a propósito. Aquí el visitante todavía está decidiendo si esto le
   habla; pedirle el dato en mitad de esa lectura interrumpe justo lo que la
@@ -69,6 +82,24 @@ export function ParaVos() {
          el filete mucho más cerca de lo de arriba que de lo de abajo. */
       className="relative isolate pt-0 pb-[clamp(4rem,2.5rem+7vh,8rem)] text-foreground"
     >
+      {/* Las raíces van A NIVEL DE SECCIÓN y no dentro del contenedor: el
+          contenedor tiene ancho máximo y márgenes, así que un trazo que naciera
+          en su borde nacería a mitad de pantalla. Aquí abarcan el ancho
+          completo, y el x=0 del dibujo es el canto real de la ventana.
+
+          -z-10 las deja sobre el fondo y bajo las cards. Que una raíz se meta
+          por debajo de una card y salga por el otro lado es justamente lo que
+          la hace parecer que estaba ahí antes que ella.
+
+          inset-y-8 en vez de inset-y-0: recorta el nacimiento y el final para
+          que no lleguen a tocar las secciones vecinas.
+
+          SÓLO EN MÓVIL. Cada tronco muere en el borde de una card concreta, y
+          esos destinos están calculados sobre el zigzag; en escritorio las cards
+          van en rejilla de dos columnas y no significarían nada. Allí queda la
+          espina vertical de más abajo. */}
+      <RaicesFondo className="absolute inset-x-0 inset-y-8 -z-10 lg:hidden" />
+
       <VoContainer>
         <ScrollIn>
           <SectionTitle id="para-vos-title" accent={PARA_VOS.titleAccent}>

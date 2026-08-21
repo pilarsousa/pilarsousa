@@ -4,7 +4,12 @@ import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
 import { ScrollIn } from "@/components/volver-al-origen/ui/ScrollIn";
 import { SectionTitle } from "@/components/volver-al-origen/ui/SectionTitle";
 import { WaitlistCta } from "@/components/volver-al-origen/ui/WaitlistCta";
-import { OrnamentoSol } from "@/components/volver-al-origen/ui/Ornamentos";
+import {
+  ArcosDeFondo,
+  CaminoPunteado,
+  FlorDeLaVida,
+  OrnamentoSol,
+} from "@/components/volver-al-origen/ui/Ornamentos";
 import { EXPERIENCIA } from "@/components/volver-al-origen/content";
 import imgSeccion from "@/../public/volver-origen/public/img/landing/img-mockup-02.png";
 
@@ -44,6 +49,41 @@ export function Experiencia() {
          convierte en scroll horizontal en toda la página. */
       className="relative isolate overflow-x-clip py-[clamp(5rem,3rem+8vh,10rem)] text-foreground"
     >
+      {/* Arcos de fondo, abajo a la izquierda — al revés que en la sección de
+          la reflexión, que los tiene arriba a la derecha. Alternando la esquina,
+          las dos secciones comparten recurso sin parecer la misma pantalla
+          repetida. El overflow-x-clip de la sección los recorta. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-40 -left-52 -z-10 w-[42rem] opacity-[0.12]"
+      >
+        <ArcosDeFondo />
+      </div>
+
+      {/* Flor de la vida tras el bloque de puntos, muy apagada: da grano al
+          fondo justo donde sólo hay cards apiladas. */}
+      <FlorDeLaVida className="pointer-events-none absolute top-1/3 -right-24 -z-10 hidden size-[26rem] opacity-[0.06] lg:block" />
+
+      {/* El camino cruza la sección por detrás: es el mismo hilo que recorre la
+          reflexión, y verlo reaparecer aquí es lo que hace que las dos se lean
+          como partes de un recorrido.
+
+          ENTRA Y SALE POR LOS COSTADOS, no empieza ni acaba en el aire. Antes
+          arrancaba en (12,6) —dentro del encuadre y a un 6% del techo— y el
+          trazo aparecía de la nada en mitad del fondo, que es lo que se veía
+          como un cabo suelto. Ahora nace en x=0, o sea pegado al borde
+          izquierdo, y muere en x=100: el ojo lo lee como un hilo que viene de
+          fuera y se va fuera, no como una línea que empieza y termina aquí.
+
+          El borde es literal, no aproximado: el <svg> recorta por defecto lo que
+          se sale del viewBox, así que coordenadas negativas no servirían — hay
+          que tocar el canto justo. */}
+      <CaminoPunteado
+        d="M0 3 C 16 5, 14 18, 16 28 C 18 44, 48 36, 50 50 C 52 66, 8 62, 10 78 C 12 92, 74 88, 100 94"
+        opacidad={0.28}
+        className="pointer-events-none absolute inset-x-[6%] inset-y-0 -z-10 hidden h-full lg:block"
+      />
+
       <VoContainer>
         {/* El sol corona la sección, igual que en la de la reflexión: es lo que
             hermana las dos y marca que empieza un bloque, no un apartado.
@@ -104,9 +144,26 @@ export function Experiencia() {
       <div
         aria-hidden
         className="relative mt-9 lg:hidden"
+        /* Se desvanece por los CUATRO lados, y el vertical va en los dos
+           sentidos y no sólo hacia abajo.
+
+           El lineal era "to top", así que sólo apagaba el pie: por arriba la
+           imagen empezaba con un canto recto que se leía como un rectángulo
+           pegado sobre la textura, justo donde la sección acaba de terminar su
+           encabezado. Ahora entra desde transparente en el 0%, es opaco entre
+           el 14% y el 80%, y vuelve a transparente al final — funde por los dos
+           extremos.
+
+           El radial se ocupa de los costados. mask-composite los cruza: sólo se
+           ve la imagen donde AMBOS la dejan pasar. Safari llama "source-in" a
+           lo que el estándar llama "intersect". */
         style={{
-          maskImage: "linear-gradient(to top, transparent 0%, #000 45%)",
-          WebkitMaskImage: "linear-gradient(to top, transparent 0%, #000 45%)",
+          maskImage:
+            "radial-gradient(80% 80% at 50% 48%, #000 28%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 14%, #000 80%, transparent 100%)",
+          WebkitMaskImage:
+            "radial-gradient(80% 80% at 50% 48%, #000 28%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 14%, #000 80%, transparent 100%)",
+          maskComposite: "intersect",
+          WebkitMaskComposite: "source-in",
         }}
       >
         <Image
@@ -152,7 +209,7 @@ export function Experiencia() {
                   como resplandor y no como un borde. */}
               <div
                 aria-hidden
-                className="absolute -inset-10 -z-10 rounded-full bg-[radial-gradient(55%_55%_at_50%_50%,var(--vo-glow)_0%,transparent_70%)] blur-2xl"
+                className="absolute -inset-16 -z-10 rounded-full bg-[radial-gradient(50%_50%_at_50%_50%,var(--vo-glow)_0%,transparent_72%)] blur-3xl"
               />
               <Image
                 src={imgSeccion}
@@ -161,11 +218,29 @@ export function Experiencia() {
                 sizes="(min-width: 1024px) 60vw, 100vw"
                 placeholder="blur"
                 className="h-auto w-full"
+                /* DOS MÁSCARAS CRUZADAS, porque con una no bastaba.
+
+                   La imagen trae su propio fondo oscuro, así que su rectángulo
+                   se recortaba contra la textura de la página por mucho que se
+                   apagaran las esquinas: un radial que empieza a desvanecer en
+                   el 60% deja el 60% central intacto, bordes rectos incluidos.
+
+                   · el radial ahora arranca en el 25% del radio, así que tres
+                     cuartas partes del recorrido son desvanecido y no queda
+                     canto que localizar;
+                   · el lineal vertical remata el techo y el suelo, que son los
+                     dos bordes que más se notaban por ser los más rectos.
+
+                   mask-composite las cruza: sólo se ve la imagen donde AMBAS la
+                   dejan pasar. Safari llama "source-in" a lo que el estándar
+                   llama "intersect". */
                 style={{
                   maskImage:
-                    "radial-gradient(70% 70% at 50% 50%, #000 60%, transparent 100%)",
+                    "radial-gradient(62% 62% at 50% 48%, #000 25%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 16%, #000 82%, transparent 100%)",
                   WebkitMaskImage:
-                    "radial-gradient(70% 70% at 50% 50%, #000 60%, transparent 100%)",
+                    "radial-gradient(62% 62% at 50% 48%, #000 25%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 16%, #000 82%, transparent 100%)",
+                  maskComposite: "intersect",
+                  WebkitMaskComposite: "source-in",
                 }}
               />
             </figure>

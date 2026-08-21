@@ -361,6 +361,9 @@ export const PILAR = {
     "Por eso creé Volver al Origen: un proceso que reúne aquello que he estudiado, vivido e integrado durante estos años para ayudar a otras personas a convertir su espiritualidad en decisiones, estándares y una nueva forma de vivir.",
     "Hoy comparto estas enseñanzas con una comunidad de más de 600.000 personas alrededor del mundo.",
   ],
+  /* Etiquetas del botón que despliega la segunda mitad de la historia. */
+  verMas: "Ver más",
+  verMenos: "Ver menos",
   cta: "Quiero entrar a la lista de espera",
 };
 
