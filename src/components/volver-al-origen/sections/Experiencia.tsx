@@ -4,8 +4,9 @@ import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
 import { ScrollIn } from "@/components/volver-al-origen/ui/ScrollIn";
 import { SectionTitle } from "@/components/volver-al-origen/ui/SectionTitle";
 import { WaitlistCta } from "@/components/volver-al-origen/ui/WaitlistCta";
+import { OrnamentoSol } from "@/components/volver-al-origen/ui/Ornamentos";
 import { EXPERIENCIA } from "@/components/volver-al-origen/content";
-import imgSeccion from "@/../public/volver-origen/public/img/hero/img-seccion.png";
+import imgSeccion from "@/../public/volver-origen/public/img/landing/img-mockup-02.png";
 
 /*
   Sección 5 — Una experiencia diseñada para que lo lleves a tu vida real.
@@ -38,11 +39,41 @@ export function Experiencia() {
   return (
     <section
       aria-labelledby="experiencia-title"
-      className="relative isolate py-[clamp(5rem,3rem+8vh,10rem)] text-foreground"
+      /* overflow-x-clip: la imagen del producto sangra 10vw por la izquierda
+         para llegar al canto de la pantalla, y sin recortar aquí ese exceso se
+         convierte en scroll horizontal en toda la página. */
+      className="relative isolate overflow-x-clip py-[clamp(5rem,3rem+8vh,10rem)] text-foreground"
     >
       <VoContainer>
+        {/* El sol corona la sección, igual que en la de la reflexión: es lo que
+            hermana las dos y marca que empieza un bloque, no un apartado.
+            Pequeño y flanqueado por dos filetes que se desvanecen. */}
         <ScrollIn>
-          <SectionTitle id="experiencia-title" accent={EXPERIENCIA.titleAccent}>
+          <div className="flex items-center justify-center gap-4">
+            <span
+              aria-hidden
+              className="h-px w-full max-w-[5rem] bg-[linear-gradient(to_right,transparent,var(--color-accent))] opacity-50"
+            />
+            <span className="relative shrink-0">
+              <span
+                aria-hidden
+                className="absolute inset-0 -z-10 rounded-full bg-[radial-gradient(circle,var(--vo-glow)_0%,transparent_65%)] blur-md"
+              />
+              <OrnamentoSol className="size-9" />
+            </span>
+            <span
+              aria-hidden
+              className="h-px w-full max-w-[5rem] bg-[linear-gradient(to_left,transparent,var(--color-accent))] opacity-50"
+            />
+          </div>
+        </ScrollIn>
+
+        <ScrollIn delay={0.05}>
+          <SectionTitle
+            id="experiencia-title"
+            accent={EXPERIENCIA.titleAccent}
+            className="mt-6 text-[clamp(1.6rem,6vw,2.2rem)] leading-[1.12] lg:text-[3rem]"
+          >
             {EXPERIENCIA.title}
           </SectionTitle>
         </ScrollIn>
@@ -94,24 +125,48 @@ export function Experiencia() {
           allí la imagen va dentro de la rejilla y no tiene cola que
           compensar. */}
       <VoContainer className="-mt-14 lg:mt-0">
-        <div className="grid grid-cols-1 items-center gap-10 lg:mt-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-x-[68px]">
+        {/* Mitad y mitad, como el montaje. La imagen dejó de ser un apoyo del
+            texto —era 1,05 contra 0,95— para pesar lo mismo que él: es el
+            producto, y en el montaje ocupa medio ancho a sangre por la
+            izquierda. */}
+        <div className="grid grid-cols-1 items-center gap-10 lg:mt-12 lg:grid-cols-2 lg:gap-x-12">
           {/* ── Imagen, sólo escritorio ── */}
+          {/* SIN MARCO NI ESQUINAS REDONDEADAS, al revés que antes. En el
+              montaje el producto no está dentro de una card: flota sobre el
+              fondo y se disuelve por los bordes, y ése es el motivo de que se
+              lea como un escaparate y no como una captura pegada.
+
+              El desbordamiento hacia la izquierda —el ancho de la columna más
+              10vw— es lo que la lleva hasta el canto de la pantalla. El
+              overflow-x-clip de la sección impide que genere scroll lateral.
+
+              La máscara radial la apaga por los cuatro lados: intacta hasta el
+              60% del radio y transparente en el 100%. Es máscara y no degradado
+              por el motivo de siempre — un degradado tendría que fundir hacia un
+              color y el fondo es una textura que cambia con la posición, así que
+              cualquier color dibujaría un halo. */}
           <ScrollIn from="left" className="hidden lg:block">
-            <figure className="relative">
+            <figure className="relative -ml-[10vw] w-[calc(100%+10vw)]">
               {/* Halo verde detrás, el mismo recurso de "luz encendida" que usan
                   el logo y los CTA. Va desenfocado y con -z-10 para que se lea
                   como resplandor y no como un borde. */}
               <div
                 aria-hidden
-                className="absolute -inset-6 -z-10 rounded-3xl bg-[radial-gradient(60%_60%_at_50%_50%,rgba(180,226,54,0.18),transparent_70%)] blur-xl"
+                className="absolute -inset-10 -z-10 rounded-full bg-[radial-gradient(55%_55%_at_50%_50%,var(--vo-glow)_0%,transparent_70%)] blur-2xl"
               />
               <Image
                 src={imgSeccion}
                 alt="Volver al Origen"
                 quality={90}
-                sizes="(min-width: 1024px) 50vw, 100vw"
+                sizes="(min-width: 1024px) 60vw, 100vw"
                 placeholder="blur"
-                className="h-auto w-full rounded-2xl"
+                className="h-auto w-full"
+                style={{
+                  maskImage:
+                    "radial-gradient(70% 70% at 50% 50%, #000 60%, transparent 100%)",
+                  WebkitMaskImage:
+                    "radial-gradient(70% 70% at 50% 50%, #000 60%, transparent 100%)",
+                }}
               />
             </figure>
           </ScrollIn>
@@ -120,23 +175,31 @@ export function Experiencia() {
           {/* Una sola columna aunque haya sitio para dos: cuatro de los nueve
               llevan una línea de detalle debajo, y en dos columnas las tarjetas
               con detalle y las de una línea dejan las filas descuadradas. */}
-          <ul className="flex flex-col gap-3">
+          <ul className="flex flex-col gap-3.5">
             {EXPERIENCIA.items.map((item, i) => (
               /* Paso corto, 0,05 s: son nueve y con un retardo mayor el último
                  llegaría mucho después de que el bloque esté a la vista. */
               <ScrollIn key={item.text} delay={i * 0.05}>
-                <li className="flex items-start gap-3 rounded-xl border border-accent/20 bg-vo-forest/40 p-4 backdrop-blur-sm">
-                  <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border border-accent/40 bg-accent/10">
+                {/* Cards con borde visible y resplandor, no el contorno al 20%
+                    que había: sobre la textura, un canto tan tenue desaparece y
+                    la card se lee como una mancha. Mismo tratamiento que el
+                    resto de paneles de la página — luz de 1 px en el canto
+                    superior y halo verde difuso por fuera. */}
+                <li className="flex items-start gap-4 rounded-2xl border border-accent/30 bg-vo-forest/45 px-5 py-4 shadow-[inset_0_1px_0_0_rgba(180,226,54,0.2),0_18px_46px_-32px_var(--vo-glow-strong)] backdrop-blur-sm">
+                  {/* El disco del check crece de 24 a 32 px y va perfilado, como
+                      en el montaje: es la marca que se repite nueve veces y a
+                      tamaño pequeño se leía como un bullet. */}
+                  <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full border border-accent/45 bg-accent/10">
                     <Check
-                      size={14}
-                      strokeWidth={2.4}
+                      size={16}
+                      strokeWidth={2.2}
                       className="text-accent"
                       aria-hidden
                     />
                   </span>
 
                   <div>
-                    <p className="font-sans text-sm leading-relaxed text-foreground/90 sm:text-[0.95rem]">
+                    <p className="font-sans text-[0.95rem] leading-relaxed text-foreground sm:text-base">
                       {item.text}
                     </p>
                     {/* El detalle baja de tamaño y de contraste: es una

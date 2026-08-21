@@ -2,7 +2,6 @@ import { Check } from "lucide-react";
 import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
 import { ScrollIn } from "@/components/volver-al-origen/ui/ScrollIn";
 import { SectionTitle } from "@/components/volver-al-origen/ui/SectionTitle";
-import { CaminoZigzag } from "@/components/volver-al-origen/ui/CaminoZigzag";
 import { PARA_VOS } from "@/components/volver-al-origen/content";
 import { cn } from "@/lib/cn";
 
@@ -39,13 +38,18 @@ import { cn } from "@/lib/cn";
   <li> a ancho completo, los porcentajes vuelven a referirse al ancho de la
   sección, que es contra lo que hay que medir para llegar al borde de la card.
 
-  AQUÍ HUBO FLECHAS y se cambiaron por el camino punteado. El motivo no es
-  estético sino de significado: una flecha dice "y entonces", implica secuencia,
-  y estos seis puntos son condiciones independientes — con reconocerse en una
-  basta. El camino une sin ordenar, que es la relación real entre ellos. De paso
-  hermana esta sección con la de la reflexión, que ya llevaba uno igual.
+  AQUÍ NO VA NADA ENTRE LAS CARDS, y ha costado dos intentos llegar a eso.
 
-  El PNG de la flecha sigue en public por si se quisiera recuperar.
+  Primero hubo flechas, y se cambiaron por un camino punteado porque una flecha
+  dice "y entonces" —implica secuencia— y estos seis puntos son condiciones
+  independientes: con reconocerse en una basta. Después se retiró también el
+  camino, a petición: el zigzag de las cards ya cuenta por sí solo que hay que
+  seguir bajando, y cualquier trazo entre ellas resultaba ruido sobre esa
+  lectura.
+
+  Lo que queda es la maquetación en zigzag y nada más. Si algún día hiciera
+  falta reponer el enlace, el componente CaminoZigzag sigue en ui/ y el PNG de
+  la flecha, en public.
 
   Sin CTA a propósito. Aquí el visitante todavía está decidiendo si esto le
   habla; pedirle el dato en mitad de esa lectura interrumpe justo lo que la
@@ -57,8 +61,6 @@ import { cn } from "@/lib/cn";
 */
 
 export function ParaVos() {
-  const ultimo = PARA_VOS.items.length - 1;
-
   return (
     <section
       aria-labelledby="para-vos-title"
@@ -111,7 +113,7 @@ export function ParaVos() {
             return (
               /* A ancho completo y relative: es el sistema de referencia de la
                  flecha. El pb abre el hueco por el que baja. */
-              <li key={item} className="relative pb-14 last:pb-0 lg:pb-0">
+              <li key={item} className="relative pb-12 last:pb-0 lg:pb-0">
                 <div
                   className={cn(
                     "w-[58%] lg:w-full",
@@ -129,7 +131,17 @@ export function ParaVos() {
                     delay={i * 0.06}
                     from={aLaIzquierda ? "left" : "right"}
                   >
-                    <div className="flex items-start gap-3 rounded-xl border border-accent/20 bg-vo-forest/40 p-5 backdrop-blur-sm">
+                    {/* El borde va al 40% y con resplandor, no al 20% liso: la
+                        textura del fondo tiene grano y contraste propios, y un
+                        contorno tan tenue se perdía dentro de ella — la card se
+                        leía como una mancha oscura sin canto.
+
+                        El resplandor es el mismo recurso de los paneles de la
+                        sección anterior: una línea de luz de 1 px sobre el canto
+                        superior, donde da la luz, y un halo verde muy difuso por
+                        fuera. Sobre fondo oscuro una sombra negra no se ve; en
+                        verde, la card se recorta contra la textura. */}
+                    <div className="flex items-start gap-3 rounded-xl border border-accent/40 bg-vo-forest/45 p-5 shadow-[inset_0_1px_0_0_rgba(180,226,54,0.25),0_18px_46px_-30px_var(--vo-glow-strong)] backdrop-blur-sm">
                       {/* shrink-0 para que el disco no se aplaste cuando el
                           texto ocupa varias líneas, y mt-0.5 para alinearlo con
                           la primera línea en vez de con el bloque entero. */}
@@ -148,46 +160,6 @@ export function ParaVos() {
                   </ScrollIn>
                 </div>
 
-                {/* El tramo vive dentro del <li> de la card de la que sale, no
-                    suelta entre elementos: así la lista sigue siendo seis
-                    elementos y un lector de pantalla no se encuentra huecos
-                    vacíos entre ellos. Nada después de la última, que no enlaza
-                    con nada.
-
-                    SALE DEL COSTADO Y CRUZA EL HUECO EN DIAGONAL. Los tres
-                    números que lo consiguen, y de dónde salen:
-
-                    · w-[30%] con proporción cuadrada. Deja el trazo en unos
-                      100 px de alto: se lee como un enlace entre dos cards sin
-                      robarles protagonismo.
-                    · left-[56%] se mide contra el ancho completo de la sección
-                      —por eso el 58% de la card va en un div interior, ver
-                      arriba—. La card llega al 58% y el trazo arranca sobre el
-                      2% de la caja, así que el nacimiento cae justo en su
-                      borde derecho y parece brotar de ella.
-                    · -bottom-1 lo sitúa de modo que el arranque del trazo quede
-                      a la ALTURA de la card, solapándola un poco, y la punta
-                      aterrice justo encima de la siguiente. Es la diferencia
-                      entre salir del costado y colgar del pie.
-
-                    La caja se sale por debajo del <li> y pisa el siguiente, pero
-                    lo que invade es margen transparente. pointer-events-none por
-                    si algún día hay algo pulsable ahí debajo.
-
-                    Estas clases de posición se le pasan al componente en vez de
-                    envolverlo en un div: dentro necesita colgar de ellas la
-                    referencia del observador que dispara el trazado, y esa
-                    referencia no puede ir en el elemento recortado. El porqué,
-                    en CaminoZigzag. */}
-                {i < ultimo && (
-                  <CaminoZigzag
-                    espejo={!aLaIzquierda}
-                    className={cn(
-                      "pointer-events-none absolute -bottom-1 aspect-square w-[30%] lg:hidden",
-                      aLaIzquierda ? "left-[56%]" : "right-[56%]",
-                    )}
-                  />
-                )}
               </li>
             );
           })}
