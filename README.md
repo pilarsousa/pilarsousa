@@ -3,13 +3,56 @@
 Landing pages served from one Next.js app: **one repo, one branch, one
 Vercel project, one deploy**. Next.js 16 (App Router, Turbopack) + Tailwind v4.
 
-| URL                 | Landing                  | Lives in                       |
-| ------------------- | ------------------------ | ------------------------------ |
-| `/`                 | Volver al Origen            | `src/app/(mision-origen)/`     |
-| `/bootcamp`         | Bootcamp Reset Identidad | `src/app/bootcamp/`            |
-| `/bootcamp/gracias` | Bootcamp — thank you     | `src/app/bootcamp/gracias/`    |
-| `/game`             | Game (código + form)     | `src/app/game/`                |
-| `/game/form`        | Game — formulario        | `src/app/game/form/`           |
+| URL                        | Landing                              | Lives in                                  |
+| -------------------------- | ------------------------------------ | ----------------------------------------- |
+| `/`                        | Volver al Origen — venta             | `src/app/(ventas-root)/`                  |
+| `/mision-origen`           | Misión Origen                        | `src/app/(mision-origen)/mision-origen/`  |
+| `/gracias-mision-origen`   | Misión Origen — gracias              | `src/app/(mision-origen)/gracias-mision-origen/` |
+| `/bootcamp`                | Bootcamp Reset Identidad             | `src/app/bootcamp/`                       |
+| `/bootcamp/gracias`        | Bootcamp — thank you                 | `src/app/bootcamp/gracias/`               |
+| `/game`                    | Game (código + form)                 | `src/app/game/`                           |
+| `/game/home`, `/game/form` | Game — pantallas internas            | `src/app/game/`                           |
+| `/volver-al-origen`        | **Lista de espera 3.ª ed. (en producción)** | `src/app/volver-al-origen/`        |
+| `/lista-de-espera`         | **Lista de espera — rediseño (borrador)**   | `src/app/lista-de-espera/`         |
+
+`/ventas` no es una landing: es un `permanentRedirect` a `/`, que quedó de
+cuando la de venta vivía en esa ruta.
+
+## Las dos listas de espera
+
+Hay **dos árboles completos y separados** de la misma landing, y la separación
+es deliberada:
+
+- **`/volver-al-origen`** es la que está publicada. Es el destino del rewrite de
+  la raíz para el dominio de pauta, así que **cualquier cambio aquí sale a
+  producción en el siguiente deploy**.
+- **`/lista-de-espera`** es el rediseño de la 3.ª edición, donde se trabaja sin
+  tocar lo anterior. Va con `robots: noindex`.
+
+**No comparten un solo componente, a propósito.** Con una carpeta común, cada
+retoque del borrador se filtraría a la landing publicada — que es exactamente el
+problema que esta separación viene a resolver. Duplicar es la decisión correcta
+aquí; si algo hay que arreglar en las dos, se arregla dos veces.
+
+Tres cosas más que las mantienen despegadas, y conviene no unificarlas:
+
+| | `/volver-al-origen` | `/lista-de-espera` |
+| --- | --- | --- |
+| `robots` | indexable | `noindex, nofollow` |
+| `GRACIAS_PATH` | `/volver-al-origen/gracias` | `/lista-de-espera/gracias` |
+| `LEAD_SOURCE` | `volver-al-origen-waitlist` | `lista-de-espera-borrador` |
+
+Ese `LEAD_SOURCE` distinto es lo que permite distinguir en el CRM de qué landing
+vino cada registro. Compartiéndolo, las pruebas del borrador ensuciarían las
+métricas de la real.
+
+**Cuidado con los slugs parecidos.** `/lista-de-espera-3.0` y `/lista-de-espera-3`
+son rewrites hacia la landing **publicada** (URLs de pauta antiguas), mientras
+que `/lista-de-espera`, sin sufijo, es el **borrador**. Un guion de diferencia
+lleva a sitios opuestos.
+
+Respaldo de la versión publicada antes de la separación: tag
+`respaldo-volver-al-origen-3f79fd8` y rama `respaldo-mi-landing`.
 
 **Game** (`/game`) is a standalone one-screen landing (no scroll) over
 `public/game/game-img/hero-game.jpg`, reusing Volver al Origen's `.mo-scope`
@@ -20,11 +63,21 @@ verification animation + reward PDF). Codes, preview copy and PDF paths all
 live in `src/components/game/game-config.ts`; drop the PDFs in
 `public/game/pdf/` (see the LEEME there).
 
-Two redirects in `next.config.ts` cover the URLs from before the root swap:
-`/mision-origen` → `/` and `/gracias` → `/bootcamp/gracias`, both temporary
-(307). The second is a safety net while the Stripe checkout still points its
-success URL at `/gracias`; remove it once the checkout is updated to
-`/bootcamp/gracias`.
+## Rewrites y redirects (`next.config.ts`)
+
+Los **rewrites van en `beforeFiles`**, no en la lista suelta que devuelve
+`rewrites()` por defecto: aquella se evalúa *después* de los archivos, así que
+una regla sobre `/` nunca llegaría a aplicarse porque la raíz ya existe como
+página.
+
+- **`/` con `Host: lp.pilarsousa.es` → `/volver-al-origen`.** Es lo que hace que
+  el dominio de pauta sirva la lista de espera en su raíz. Condicionado por
+  host: en cualquier otro dominio, `/` sigue siendo la landing de venta.
+- **`/lista-de-espera-3.0` y `/lista-de-espera-3` → `/volver-al-origen`** (y sus
+  `/gracias`). Son URLs de pauta antiguas, sin condición de host.
+- **`/gracias` → `/bootcamp/gracias`**, redirect temporal (307). Es una red de
+  seguridad mientras el checkout de Stripe siga apuntando ahí su success URL;
+  se puede quitar en cuanto se actualice.
 
 ```bash
 npm install
@@ -35,7 +88,8 @@ npm run build    # production build
 ## Branch and deploy
 
 There is a single branch: **`master`**. It is the Production Branch of the
-`pilarsousa` Vercel project, so **pushing to `master` deploys both landings**.
+`pilarsousa` Vercel project, so **pushing to `master` deploys every landing at
+once** — incluida la lista de espera que está en producción.
 There is no second branch and no second Vercel project — if you find yourself
 wanting either, read the palettes section below first.
 
@@ -55,79 +109,100 @@ git log mision-origen-rewrite-proxy     # a vercel.json proxy stopgap, supersede
 ```
 src/app/
   layout.tsx              root: <html>/<body>, GTM, Analytics, ALL font vars
-  globals.css             design tokens for BOTH landings — read the next section
-  (mision-origen)/        route group: stripped from the URL
-    layout.tsx            Volver al Origen metadata + .mo-scope + AnnouncementBar
+  globals.css             design tokens for ALL landings — read the next section
+  (ventas-root)/          route group: stripped from the URL
+    layout.tsx            metadata de la landing de venta
     page.tsx              -> /
-  bootcamp/
-    layout.tsx            Bootcamp metadata + .bc-scope
-    page.tsx              -> /bootcamp
-    gracias/page.tsx      -> /bootcamp/gracias
+  (mision-origen)/        route group
+    mision-origen/        -> /mision-origen
+    gracias-mision-origen/
+  bootcamp/               -> /bootcamp, /bootcamp/gracias
+  game/                   -> /game, /game/home, /game/form
+  volver-al-origen/       -> lista de espera PUBLICADA (+ /gracias)
+  lista-de-espera/        -> lista de espera REDISEÑO, noindex (+ /gracias)
+  ventas/page.tsx         permanentRedirect a /
+  api/                    register, geo, game-quiz
 src/components/
   sections/  ui/          Bootcamp's components
-  mision-origen/          Volver al Origen's components, namespaced
-  ui/Container.tsx        shared (byte-identical in both landings)
+  mision-origen/          Misión Origen, namespaced
+  ventas/                 la landing de venta
+  game/                   el juego
+  volver-al-origen/       árbol completo de la lista de espera publicada
+  lista-de-espera/        árbol completo del rediseño — NO comparte nada con el anterior
+  shared/                 lo verdaderamente común
 src/lib/cn.ts             shared
 public/
-  mision-origen/          Volver al Origen's images
-  fonts/                  self-hosted Jost + Zen Dots (Volver al Origen)
-  Testimonios/            shared by both landings
-  *.jpg|png               Bootcamp's images, loose at the root (historical)
+  mision-origen/          imágenes de Misión Origen
+  volver-origen/          imágenes de las dos listas de espera
+  game/                   imágenes y PDFs del juego
+  fonts/                  self-hosted Jost + Zen Dots
+  Testimonios/            compartidas
+  *.jpg|png               imágenes del Bootcamp, sueltas en la raíz (histórico)
 ```
 
-`(mision-origen)` is a **route group**: the parentheses keep it out of the URL,
-so `page.tsx` there serves `/`. Each landing has its own layout so it owns its
-own `metadata` and visual chrome without leaking either onto the other. Which
-landing sits at the root is decided purely by which one is the route group —
-swapping them is a matter of moving folders, not touching Vercel.
+`(ventas-root)` y `(mision-origen)` son **route groups**: los paréntesis los
+mantienen fuera de la URL, así que el `page.tsx` del primero sirve `/`. Cada
+landing tiene su propio layout, de modo que es dueña de su `metadata` y de su
+cromo visual sin filtrarlo a las demás.
 
-## The part that will bite you: two palettes, one Tailwind
+Qué landing ocupa la raíz lo decide **sólo** cuál está en el route group sin
+segmento: cambiarlo es mover carpetas, no tocar Vercel. La excepción es el
+dominio de pauta, que llega ahí por el rewrite condicionado por host descrito
+arriba y no por la estructura de carpetas.
 
-Tailwind v4's `@theme` is **global** — one build, one `:root`. Both landings
-define the same semantic tokens with different values:
+## The part that will bite you: varias paletas, un solo Tailwind
 
-|                      | Bootcamp      | Volver al Origen  |
-| -------------------- | ------------- | -------------- |
-| `--color-background` | `#080808` ink | `#000000` void |
-| `--color-accent`     | gold          | hot pink       |
-| `--font-display`     | Cinzel        | Zen Dots       |
+El `@theme` de Tailwind v4 es **global** — un build, un `:root`. Y aquí hay
+varias landings que declaran los mismos tokens semánticos con valores distintos:
 
-They are kept apart like this:
+|                      | Bootcamp      | Misión Origen  | Volver al Origen |
+| -------------------- | ------------- | -------------- | ---------------- |
+| `--color-background` | `#080808` ink | `#000000` void | `#0b1502` negro verdoso |
+| `--color-accent`     | gold          | hot pink       | verde luminoso   |
+| `--font-display`     | Cinzel        | Zen Dots       | Cinzel           |
 
-- The **raw palettes** never collide (gold/forest vs neon/cyan), so both sit in
-  `@theme` together.
-- The **seven colliding semantic aliases** are declared in `@theme` with the
-  Bootcamp's values (it is the landing at the domain root), and redefined in the
-  **`.mo-scope`** block in `globals.css`. Volver al Origen's layout wraps itself in
-  that class, so `bg-background` resolves to void inside it and to ink outside.
+Se mantienen separadas así:
 
-This works only because Tailwind compiles utilities to `var(--token)` rather
-than inlining values. Two consequences:
+- Las **paletas crudas** nunca colisionan (gold/forest vs neon/cyan vs
+  lumen/forest), así que conviven en `@theme`.
+- Los **alias semánticos que sí colisionan** se declaran en `@theme` con los
+  valores del Bootcamp y se redefinen en bloques de ámbito dentro de
+  `globals.css`: **`.mo-scope`** (Misión Origen) y **`.vo-scope`** (las dos
+  listas de espera). El layout de cada landing se envuelve en su clase, y ahí
+  `bg-background` resuelve a lo suyo.
 
-1. **Adding a semantic token to `@theme` means deciding whether `.mo-scope`
-   needs a counterpart.** Forget, and the Bootcamp's value silently bleeds into
-   Volver al Origen.
-2. **Never make a shared component branch on which landing it is in.** Duplicate
-   it into `components/mision-origen/` instead. These are marketing landings;
-   they are meant to diverge.
+Esto funciona sólo porque Tailwind compila las utilidades a `var(--token)` en
+vez de incrustar el valor. Dos consecuencias:
 
-The dot-grain texture is on `.bc-scope::before` for the same reason — it used to
-be on `body::before`, which would now cover both landings.
+1. **Añadir un token semántico a `@theme` obliga a decidir si cada `*-scope`
+   necesita su contrapartida.** Si se olvida, el valor del Bootcamp se cuela sin
+   avisar en las demás.
+2. **Nunca hagas que un componente compartido decida según la landing en la que
+   está.** Duplícalo en su carpeta. Son landings de marketing: están hechas para
+   divergir, y ésa es también la razón de que `/volver-al-origen` y
+   `/lista-de-espera` no compartan nada.
+
+La textura de grano va en `.bc-scope::before` por lo mismo — estuvo en
+`body::before`, que ahora cubriría todas las landings a la vez.
 
 ## Lead registration (Go High Level)
 
-Volver al Origen's Hero form posts to `src/app/api/register/route.ts`, a
-server-side route handler that forwards the lead to a Go High Level inbound
-webhook. The webhook URL is read from the `GHL_WEBHOOK_URL` env var and never
-ships to the browser. Until that var is set (in Vercel, and in `.env.local` for
-local dev), the form returns an error on submit instead of a false success.
+Todos los formularios del repo —el hero de Misión Origen, el del juego y los de
+las dos listas de espera— postean a `src/app/api/register/route.ts`, un route
+handler de servidor que reenvía el lead a un webhook entrante de Go High Level.
+La URL se lee de la variable `GHL_WEBHOOK_URL` y **nunca viaja al navegador**.
+Mientras esa variable no esté puesta (en Vercel, y en `.env.local` para local),
+el formulario devuelve error al enviar en lugar de un falso éxito.
 
-The `source` field on the payload tags each lead by landing in the CRM. The
-endpoint re-validates server-side and returns 400 (bad input), 502 (GHL
-unreachable) or 500 (webhook URL not configured).
+El campo `source` del payload es lo que etiqueta cada lead por landing en el
+CRM, y por eso cada formulario declara su propia constante `LEAD_SOURCE`. El
+endpoint revalida en servidor y devuelve 400 (entrada inválida), 502 (GHL
+inalcanzable) o 500 (webhook sin configurar).
 
-Step-by-step setup — creating the webhook, mapping fields, adding the env var:
-**[docs/conectar-go-high-level.md](docs/conectar-go-high-level.md)**.
+- Alta paso a paso —crear el webhook, mapear campos, añadir la variable—:
+  **[docs/conectar-go-high-level.md](docs/conectar-go-high-level.md)**.
+- Copia de seguridad de los leads en Supabase, por si GHL falla o hay que
+  auditar: **[docs/respaldo-leads-supabase.md](docs/respaldo-leads-supabase.md)**.
 
 ## Conventions
 

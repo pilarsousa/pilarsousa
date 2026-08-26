@@ -1,15 +1,3 @@
-/*
-  Estrellas estilo Trustpilot: cuadrado relleno con una estrella blanca calada.
-
-  Es la misma forma que usa StarRating en Misión Origen, pero repintada al verde
-  de la guía en lugar del degradado neón cian/rosa. Se rehace en vez de
-  reutilizarse porque aquel componente tiene el degradado y su animación
-  incrustados, y aquí sobran los dos.
-
-  La casualidad afortunada es que las estrellas reales de Trustpilot ya son
-  verdes, así que esta versión se parece más al original que la neón.
-*/
-
 type StarTileProps = {
   filled: boolean;
   size: number;

@@ -1,142 +1,94 @@
-import {
-  Anchor,
-  Compass,
-  Crown,
-  Layers,
-  TrendingUp,
-  type LucideIcon,
-} from "lucide-react";
-import { VoContainer } from "@/components/lista-de-espera/ui/VoContainer";
-import { ScrollIn } from "@/components/lista-de-espera/ui/ScrollIn";
-import { SectionTitle } from "@/components/lista-de-espera/ui/SectionTitle";
-import { SectionTexture } from "@/components/lista-de-espera/ui/SectionTexture";
-import { SymbolCloud } from "@/components/lista-de-espera/ui/SymbolCloud";
-import { QUE_ENTRENAS } from "@/components/lista-de-espera/content";
+import { CtaLista } from "@/components/lista-de-espera/ui/CtaLista";
+import { PilaCards } from "@/components/lista-de-espera/ui/PilaCards";
+import { HERO, QUE_ENTRENAS } from "@/components/lista-de-espera/content";
+import card1 from "@/../public/volver-origen/public/Recursos/generales/card1-web.webp";
+import card2 from "@/../public/volver-origen/public/Recursos/generales/card2-web.webp";
+import card3 from "@/../public/volver-origen/public/Recursos/generales/card3-web.webp";
+import card4 from "@/../public/volver-origen/public/Recursos/generales/card4-web.webp";
+import card5 from "@/../public/volver-origen/public/Recursos/generales/card5-web.webp";
+import card1m from "@/../public/volver-origen/public/Recursos/mobile/card1-mobile.webp";
+import card2m from "@/../public/volver-origen/public/Recursos/mobile/card2-mobile.webp";
+import card3m from "@/../public/volver-origen/public/Recursos/mobile/card3-mobile.webp";
+import card4m from "@/../public/volver-origen/public/Recursos/mobile/card4-mobile.webp";
+import card5m from "@/../public/volver-origen/public/Recursos/mobile/card5-mobile.webp";
+
+const FONDOS = [card1, card2, card3, card4, card5];
+
+/* Los de móvil no son los mismos reencuadrados: miden 674x720 —casi cuadrados—
+   frente a los 754x300 apaisados del escritorio. La ilustración está recompuesta
+   para dejar sitio al texto abajo en vez de a la izquierda. */
+const FONDOS_MOVIL = [card1m, card2m, card3m, card4m, card5m];
 
 /*
-  Seccion 4 — Que vas a entrenar durante el proceso.
+  Sección 4 — ¿Qué vas a entrenar durante el proceso?
 
-  Las cinco capacidades, con la nube de simbolos al lado en escritorio. Es la
-  respuesta concreta a la seccion anterior: alli el lector se reconocio en seis
-  frases, aqui ve que se hace con eso.
+  EL APILADO VIVE EN PilaCards, que es cliente: necesita un IntersectionObserver
+  para recortar a un renglón los títulos de dos renglones antes de que la card
+  siguiente se los coma por la mitad. El resto de la sección es servidor.
 
-  AQUI HUBO UN RECORRIDO ANCLADO —el bloque se quedaba clavado y las capacidades
-  se relevaban de una en una— y se retiro. El motivo no fue el efecto en si sino
-  su geometria, y conviene dejarlo escrito porque es un callejon conocido:
+  El apilado en sí es `position: sticky` y nada más —sin escuchar el scroll—, que
+  es justo lo que pedía el encargo de que no rompa en móvil: un apilado guiado por
+  JS recalcula en cada evento y ahí pelea con el scroll inercial y con la barra de
+  direcciones, que cambia el alto del viewport a media animación. Los detalles,
+  en el propio componente.
 
-  · Con el bloque del alto de la ventana, el contenido queda centrado pero le
-    sobran unos 200 px por arriba y por abajo, y ese sobrante se ve como un
-    hueco en las dos junturas con las secciones vecinas.
-  · Ajustando el bloque a su contenido desaparece el hueco, pero entonces el
-    fondo de la seccion —una capa del alto de la pista de scroll— se ve
-    deslizarse por detras del contenido quieto.
-  · Fijando ademas el fondo a la ventana se arregla eso, pero vuelve el hueco.
+  UNA CONDICIÓN QUE HAY QUE RESPETAR: `sticky` deja de funcionar, en silencio, si
+  cualquier ancestro tiene `overflow` distinto de `visible`. Si algún día la pila
+  deja de pegarse, el culpable es un `overflow-hidden` nuevo por encima.
 
-  Las tres cosas no pueden darse a la vez mientras el contenido ocupe bastante
-  menos que la pantalla, que es el caso de esta seccion. Con las cinco
-  capacidades a la vista no hace falta ninguna.
+  ── LAS CARDS ──
 
-  La nube solo en escritorio: necesita ancho para que los simbolos se separen y
-  se lean, y en movil ese ancho lo necesita el texto. Es decorativa —va con
-  aria-hidden desde el propio componente—, asi que no verla en movil no cuesta
-  informacion.
+  El archivo trae YA DIBUJADO el panel negro de la izquierda y las esquinas
+  redondeadas, así que el texto va superpuesto sobre ese panel y no hace falta ni
+  velo ni `border-radius`: la mitad derecha es ilustración y la izquierda está
+  reservada para la letra.
 
-  Fondo texturado claro, alternando con las oscuras que la rodean. Ojo si se
-  cambia el orden de la pagina: la alternancia es lo que separa una seccion de
-  la siguiente sin dibujar una linea, y dos claras seguidas se leen como una.
+  ── LAS MEDIDAS ──
 
-  El mapa de iconos vive aqui y no en content.ts: ese archivo es data
-  serializable y no debe arrastrar componentes de React. Es cerrado a proposito
-  — si alguien escribe un nombre que no existe, TypeScript lo marca en
-  content.ts en lugar de fallar en tiempo de ejecucion.
+  La columna mide el 39,27% del ancho de la ventana, y no es un número redondeado
+  a ojo: a 1920 px eso da 754, que es el ancho nativo exacto de los archivos. La
+  card se ve a tamaño real y no se interpola.
 */
-
-const ICONS = {
-  crown: Crown,
-  compass: Compass,
-  trending: TrendingUp,
-  layers: Layers,
-  anchor: Anchor,
-} satisfies Record<string, LucideIcon>;
-
-export type QueEntrenasIcon = keyof typeof ICONS;
-
 export function QueEntrenas() {
   return (
     <section
-      aria-labelledby="que-entrenas-title"
-      className="relative isolate py-[clamp(5rem,3rem+8vh,10rem)] text-foreground"
+      aria-labelledby="que-entrenas-titulo"
+      className="relative bg-white pt-[14vw] pb-[16vw] md:pt-[6vw] md:pb-[10vw]"
     >
-      <SectionTexture variant="claro" />
+      <h2
+        id="que-entrenas-titulo"
+        className="px-[6.5vw] text-center font-display text-[6.4vw] leading-[1.2] text-[#141b0a] md:px-0 md:text-[clamp(0.85rem,1.45vw,1.9rem)] md:leading-[1.25]"
+      >
+        {QUE_ENTRENAS.title}
+        <br />
+        {QUE_ENTRENAS.titleAccent}?
+      </h2>
 
-      <VoContainer>
-        <ScrollIn>
-          <SectionTitle
-            id="que-entrenas-title"
-            accent={QUE_ENTRENAS.titleAccent}
-            after="?"
-          >
-            {QUE_ENTRENAS.title}
-          </SectionTitle>
-        </ScrollIn>
+      {/* El subtítulo va en un tarjetón verde, el mismo recurso que la sección 3:
+          sobre blanco el verde de marca no aguanta como tinta, así que se usa
+          como fondo y la letra va oscura encima. Se ajusta a su contenido. */}
+      <p className="mx-auto mt-[6vw] w-fit max-w-[86%] rounded-[2vw] border border-[#4a6b12] bg-[linear-gradient(180deg,#a8cf3c_0%,#93c02c_45%,#7cae1f_100%)] px-[4.5vw] py-[3vw] text-center font-sans text-[3.7vw] leading-[1.4] text-[#16210a] md:mt-[1.65vw] md:max-w-none md:rounded-[0.45vw] md:border-[max(0.06vw,1px)] md:px-[1.1vw] md:py-[0.7vw] md:text-[clamp(0.45rem,0.79vw,1rem)] md:leading-none shadow-[inset_0_0.06vw_0_0_rgba(255,255,255,0.4),0_0.3vw_1vw_-0.35vw_rgba(124,181,24,0.5)]">
+        <strong className="font-bold">Una nueva forma</strong>
+        {QUE_ENTRENAS.subtitle.replace("Una nueva forma", "")}
+      </p>
 
-        <ScrollIn delay={0.05}>
-          <p className="mx-auto mt-4 max-w-2xl text-center font-sans text-base leading-relaxed text-foreground/75 sm:text-lg">
-            {QUE_ENTRENAS.subtitle}
-          </p>
-        </ScrollIn>
+      <div className="mt-[9vw] md:mt-[3.5vw]">
+        <PilaCards
+          items={QUE_ENTRENAS.items}
+          fondos={FONDOS}
+          fondosMovil={FONDOS_MOVIL}
+        />
+      </div>
 
-        {/* La nube pesa menos que el texto en el reparto (0,9 frente a 1,1):
-            son cinco bloques con titulo y parrafo, y la nube se lee igual en
-            algo menos de ancho. */}
-        <div className="mt-12 grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-x-16">
-          <div className="hidden lg:block">
-            <SymbolCloud />
-          </div>
-
-          <ol className="flex flex-col gap-4">
-            {QUE_ENTRENAS.items.map((item, i) => {
-              const Icon = ICONS[item.icon];
-
-              return (
-                <ScrollIn key={item.title} delay={i * 0.07}>
-                  <li className="rounded-xl border border-accent/20 bg-vo-forest/40 p-5 backdrop-blur-sm">
-                    {/* Icono y titulo en la misma fila. Apilados, el disco
-                        quedaba suelto sobre el texto y la card empezaba con un
-                        elemento que no dice nada; al lado, el ojo entra por el
-                        icono y sigue de corrido hasta el titular.
-
-                        items-center y no items-start: el titulo ocupa una o dos
-                        lineas segun el ancho, y anclado arriba el disco se
-                        descolgaba en cuanto partia. */}
-                    <div className="flex items-center gap-4">
-                      <span className="flex size-11 shrink-0 items-center justify-center rounded-full border border-accent/35 bg-vo-forest/50 shadow-[0_0_26px_-8px_var(--vo-glow-strong)]">
-                        <Icon
-                          strokeWidth={1.3}
-                          className="size-5 text-accent"
-                          aria-hidden
-                        />
-                      </span>
-
-                      <h3 className="font-display text-base uppercase leading-tight tracking-[0.04em] text-foreground sm:text-lg lg:text-xl">
-                        {item.title}
-                      </h3>
-                    </div>
-
-                    {/* En escritorio el cuerpo sube a 1,05 rem. La columna es
-                        ancha y el texto se leia pequeno para el sitio que
-                        tiene; en movil se queda como estaba, que ahi el ancho
-                        si es escaso. */}
-                    <p className="mt-3 font-sans text-sm leading-relaxed text-foreground/80 sm:text-[0.95rem] lg:text-[1.05rem] lg:leading-[1.7]">
-                      {item.text}
-                    </p>
-                  </li>
-                </ScrollIn>
-              );
-            })}
-          </ol>
-        </div>
-      </VoContainer>
+      {/* El hueco hasta el botón es corto a propósito. Lo que separa de verdad no
+          es este margen sino el relleno inferior de la pila, que es lo que
+          retrasa el soltado: durante mucho tiempo hizo falta largo para que la
+          pila terminada no se deshiciera en pantalla. Ahora que todas las cards
+          se sueltan a la vez y la pila se va entera, ya no hace falta retenerla,
+          así que ese relleno se recortó y el botón subió con él. */}
+      <div className="mx-auto mt-[7vw] w-[87%] text-[3.35vw] md:mt-[0.5vw] md:w-fit md:text-[clamp(0.5rem,0.85vw,1.05rem)]">
+        <CtaLista>{HERO.cta}</CtaLista>
+      </div>
     </section>
   );
 }

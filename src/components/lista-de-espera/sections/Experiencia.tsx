@@ -1,346 +1,239 @@
 import Image from "next/image";
-import { Check, Coins, Compass, Users, type LucideIcon } from "lucide-react";
-import { VoContainer } from "@/components/lista-de-espera/ui/VoContainer";
-import { ScrollIn } from "@/components/lista-de-espera/ui/ScrollIn";
-import { SectionTitle } from "@/components/lista-de-espera/ui/SectionTitle";
-import { WaitlistCta } from "@/components/lista-de-espera/ui/WaitlistCta";
-import {
-  ArcosDeFondo,
-  CaminoPunteado,
-  FlorDeLaVida,
-  OrnamentoSol,
-} from "@/components/lista-de-espera/ui/Ornamentos";
+import { CtaLista } from "@/components/lista-de-espera/ui/CtaLista";
+import { LluviaCodigo } from "@/components/lista-de-espera/ui/LluviaCodigo";
+import { FlechaBajar } from "@/components/lista-de-espera/ui/FlechaBajar";
 import { EXPERIENCIA } from "@/components/lista-de-espera/content";
-import imgSeccion from "@/../public/volver-origen/public/img/landing/img-mockup-02.png";
+import banner from "@/../public/volver-origen/public/Recursos/generales/banner-3-web.webp";
+import mockup1 from "@/../public/volver-origen/public/Recursos/generales/mockup1.webp";
+import mockup2 from "@/../public/volver-origen/public/Recursos/generales/mockup2.webp";
+import mockup3 from "@/../public/volver-origen/public/Recursos/generales/mockup3.webp";
+import cardRelaciones from "@/../public/volver-origen/public/Recursos/generales/card-relaciones.webp";
+import cardProposito from "@/../public/volver-origen/public/Recursos/generales/card-proposito.webp";
+import cardDinero from "@/../public/volver-origen/public/Recursos/generales/card-dinero.webp";
+
+const MOCKUPS = [mockup1, mockup2, mockup3];
+
+/*
+  Los tres fondos, y uno no es como los otros dos.
+
+  card-relaciones llegó después y con otras características: 1283x1226 en vez
+  de 366x350 —más resolución, que viene bien— pero SIN canal alfa y SIN el
+  borde. Sus dos hermanas traen horneadas las esquinas redondeadas (radio de
+  12 px sobre 366, el 3,3% del ancho) y un filete de 1 px en degradado vertical
+  que va de #bfdb74 arriba a casi negro abajo.
+
+  Puesta tal cual, esa card se vería con las esquinas en pico y sin filete al
+  lado de las otras dos. Así que se le reponen por CSS, y sólo a ella: aplicarlo
+  a las tres duplicaría el borde ya dibujado de las hermanas.
+
+  Lo limpio sería reexportarla con las mismas características y quitar esta
+  compensación. Mientras tanto, `compensar` marca exactamente qué es un apaño.
+*/
+const FONDOS_AREA = [
+  { src: cardRelaciones, compensar: true },
+  { src: cardProposito, compensar: false },
+  { src: cardDinero, compensar: false },
+];
 
 /*
   Sección 5 — Una experiencia diseñada para que lo lleves a tu vida real.
 
-  Es la sección de contenido: qué incluye exactamente el programa. Sustituye a
-  la antigua "¿Qué es Volver al Origen?", de la que hereda la maquetación de
-  imagen + puntos y a la que amplía con las tres áreas del cierre.
+  ENGRANA CON LA SECCIÓN ANTERIOR IGUAL QUE EL HERO CON LA 2, y las medidas salen
+  del alfa de los archivos, no de la vista: banner-2 termina en y=1433 de 1500 en
+  los bordes y banner-3 arranca en y=0, así que se solapan 67 px —el 3,49% del
+  ancho— y el canto cierra sin hueco ni pisarse.
 
-  Dos bloques, y el orden importa: primero QUÉ recibe (nueve puntos, concretos y
-  contables) y después SOBRE QUÉ trabaja (tres áreas de vida). Lo tangible
-  primero, porque es lo que responde a "¿qué me llevo?"; lo transformador
-  después, porque es lo que se recuerda.
+  La muesca de 122 px que banner-3 trae en el centro de su borde superior no es un
+  defecto: es la cuña blanca por la que asoma el disco de la flecha, y por eso el
+  disco va al 6,4% del alto y no pegado al canto como el de la sección 2.
 
-  Sin textura propia: se queda con el fondo oscuro continuo de la página, que es
-  el que alterna con las claras de las secciones vecinas.
+  SE SIRVE SIN OPTIMIZAR. Aquí no es por calidad sino porque no hay nada que
+  ganar: el archivo pesa 39 KB y lo que devuelve el optimizador pesa 38: un
+  kilobyte de diferencia a cambio de una segunda pasada de WebP con pérdida sobre
+  un fondo de degradados oscuros, que es justo donde se nota (ver PanelCodigo).
 
-  El mapa de iconos vive aquí y no en content.ts: ese archivo es data
-  serializable y no debe arrastrar componentes de React.
+  LAS DOS COLUMNAS VAN EN PORCENTAJES DEL ANCHO DE LA VENTANA, como el resto de la
+  landing: la de texto al 20,1% y la de mockups al 54,3%. Los mockups miden 483 px
+  de ancho nativo y la columna el 25,3%, que a 1920 da 486: se ven a tamaño real.
+
+  LA SECCIÓN VA EN DOS MITADES sobre el mismo banner: arriba el listado con los
+  mockups, y del 63,5% hacia abajo la banda de las tres áreas con su propio
+  titular y su botón. Todo colocado en absoluto sobre la imagen, que es la que
+  fija el alto.
 */
-
-const ICONS = {
-  users: Users,
-  compass: Compass,
-  coins: Coins,
-} satisfies Record<string, LucideIcon>;
-
-export type AreaIcon = keyof typeof ICONS;
-
 export function Experiencia() {
   return (
     <section
-      aria-labelledby="experiencia-title"
-      /* overflow-x-clip: la imagen del producto sangra 10vw por la izquierda
-         para llegar al canto de la pantalla, y sin recortar aquí ese exceso se
-         convierte en scroll horizontal en toda la página. */
-      className="relative isolate overflow-x-clip py-[clamp(5rem,3rem+8vh,10rem)] text-foreground"
+      id="experiencia"
+      aria-labelledby="experiencia-titulo"
+      className="relative isolate z-20 overflow-x-clip bg-black px-[6.5vw] py-[14vw] md:-mt-[3.49%] md:bg-white md:p-0"
     >
-      {/* Arcos de fondo, abajo a la izquierda — al revés que en la sección de
-          la reflexión, que los tiene arriba a la derecha. Alternando la esquina,
-          las dos secciones comparten recurso sin parecer la misma pantalla
-          repetida. El overflow-x-clip de la sección los recorta. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-40 -left-52 -z-10 w-[42rem] opacity-[0.12]"
-      >
-        <ArcosDeFondo />
-      </div>
+      {/* SE RECORTA UN 1,05% POR CADA LADO, y hace falta: el archivo trae un
+          triángulo transparente en el canto izquierdo —de (0, 1839) a (20, 0),
+          20 columnas de 1945— por el que se colaba una tira blanca de arriba
+          abajo. Es un residuo de la exportación, no una forma del diseño.
 
-      {/* Flor de la vida tras el bloque de puntos, muy apagada: da grano al
-          fondo justo donde sólo hay cards apiladas. */}
-      <FlorDeLaVida className="pointer-events-none absolute top-1/3 -right-24 -z-10 hidden size-[26rem] opacity-[0.06] lg:block" />
+          El recorte va SIMÉTRICO a propósito. Desplazar la imagen sólo hacia la
+          izquierda bastaría para tapar la tira, pero correría su centro medio
+          punto porcentual, y justo en el centro está la muesca por la que asoma
+          el disco de la flecha: se vería descentrado unos 10 px sobre un disco
+          de 31. Quitando lo mismo por los dos lados el centro se queda en el
+          50%, y lo que se pierde por la derecha es fondo liso.
 
-      {/* El camino cruza la sección por detrás: es el mismo hilo que recorre la
-          reflexión, y verlo reaparecer aquí es lo que hace que las dos se lean
-          como partes de un recorrido.
-
-          ENTRA Y SALE POR LOS COSTADOS, no empieza ni acaba en el aire. Antes
-          arrancaba en (12,6) —dentro del encuadre y a un 6% del techo— y el
-          trazo aparecía de la nada en mitad del fondo, que es lo que se veía
-          como un cabo suelto. Ahora nace en x=0, o sea pegado al borde
-          izquierdo, y muere en x=100: el ojo lo lee como un hilo que viene de
-          fuera y se va fuera, no como una línea que empieza y termina aquí.
-
-          El borde es literal, no aproximado: el <svg> recorta por defecto lo que
-          se sale del viewBox, así que coordenadas negativas no servirían — hay
-          que tocar el canto justo. */}
-      <CaminoPunteado
-        d="M0 3 C 16 5, 14 18, 16 28 C 18 44, 48 36, 50 50 C 52 66, 8 62, 10 78 C 12 92, 74 88, 100 94"
-        opacidad={0.28}
-        className="pointer-events-none absolute inset-x-[6%] inset-y-0 -z-10 hidden h-full lg:block"
+          max-w-none es imprescindible: el preflight de Tailwind pone un
+          max-width del 100% a las imágenes, que anularía el 102,1% sin avisar. */}
+      <Image
+        src={banner}
+        alt=""
+        unoptimized
+        sizes="100vw"
+        placeholder="blur"
+        className="hidden h-auto max-w-none md:-ml-[1.05%] md:block md:w-[102.1%]"
       />
 
-      <VoContainer>
-        {/* El sol corona la sección, igual que en la de la reflexión: es lo que
-            hermana las dos y marca que empieza un bloque, no un apartado.
-            Pequeño y flanqueado por dos filetes que se desvanecen. */}
-        <ScrollIn>
-          <div className="flex items-center justify-center gap-4">
-            <span
-              aria-hidden
-              className="h-px w-full max-w-[5rem] bg-[linear-gradient(to_right,transparent,var(--color-accent))] opacity-50"
-            />
-            <span className="relative shrink-0">
-              <span
-                aria-hidden
-                className="absolute inset-0 -z-10 rounded-full bg-[radial-gradient(circle,var(--vo-glow)_0%,transparent_65%)] blur-md"
-              />
-              <OrnamentoSol className="size-9" />
-            </span>
-            <span
-              aria-hidden
-              className="h-px w-full max-w-[5rem] bg-[linear-gradient(to_left,transparent,var(--color-accent))] opacity-50"
-            />
-          </div>
-        </ScrollIn>
+      {/* LOS DOS HALOS DE LOS CANTOS.
 
-        <ScrollIn delay={0.05}>
-          <SectionTitle
-            id="experiencia-title"
-            accent={EXPERIENCIA.titleAccent}
-            className="mt-6 text-[clamp(1.6rem,6vw,2.2rem)] leading-[1.12] lg:text-[3rem]"
-          >
-            {EXPERIENCIA.title}
-          </SectionTitle>
-        </ScrollIn>
+          Van como capa aparte porque en el archivo apenas vienen insinuados, y
+          el montaje los quiere bien presentes.
 
-        <ScrollIn delay={0.05}>
-          <p className="mx-auto mt-4 max-w-2xl text-center font-sans text-base leading-relaxed text-foreground/75 sm:text-lg">
-            {EXPERIENCIA.subtitle}
-          </p>
-        </ScrollIn>
-      </VoContainer>
+          mix-blend-screen y no una capa verde con transparencia: "screen" no
+          puede oscurecer: sobre el negro del fondo suma luz, y sobre el blanco
+          da blanco. Cada halo está centrado en el canto, así que la mitad de su
+          elipse cae fuera de la imagen. La sección recorta sólo el eje X para que
+          esas cajas luminosas no ensanchen el documento; no es ancestro del
+          apilado sticky de la sección anterior, así que no interfiere con él.
 
-      {/* ══ MÓVIL: imagen a sangre con fundido inferior ══
-
-          Mismo patrón que el retrato de Pilar: ocupa todo el ancho, sin margen
-          del contenedor ni esquinas redondeadas, y se funde con el fondo por
-          abajo. El fundido es lo que cose la imagen con los puntos que vienen
-          debajo, en lugar de cortarla con un borde.
-
-          Va fuera del VoContainer a propósito: dentro se quedaría con los 24 px
-          de margen a cada lado y no llegaría a sangrar.
-
-          EL FUNDIDO ES UNA MÁSCARA, no un degradado de color encima. Con un
-          degradado habría que elegir hacia qué color desvanecer, y el fondo real
-          es una textura que cambia con la altura: cualquier color que se
-          eligiera dibujaría una banda plana con su canto marcado. La máscara
-          vuelve transparente la propia imagen y deja pasar lo que haya
-          detrás. */}
+          El `isolate` de la sección es lo que mantiene la mezcla aquí dentro y no
+          deja que se aplique contra lo que haya debajo en la página. */}
       <div
         aria-hidden
-        className="relative mt-9 lg:hidden"
-        /* Se desvanece por los CUATRO lados, y el vertical va en los dos
-           sentidos y no sólo hacia abajo.
-
-           El lineal era "to top", así que sólo apagaba el pie: por arriba la
-           imagen empezaba con un canto recto que se leía como un rectángulo
-           pegado sobre la textura, justo donde la sección acaba de terminar su
-           encabezado. Ahora entra desde transparente en el 0%, es opaco entre
-           el 14% y el 80%, y vuelve a transparente al final — funde por los dos
-           extremos.
-
-           El radial se ocupa de los costados. mask-composite los cruza: sólo se
-           ve la imagen donde AMBOS la dejan pasar. Safari llama "source-in" a
-           lo que el estándar llama "intersect". */
-        style={{
-          maskImage:
-            "radial-gradient(80% 80% at 50% 48%, #000 28%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 14%, #000 80%, transparent 100%)",
-          WebkitMaskImage:
-            "radial-gradient(80% 80% at 50% 48%, #000 28%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 14%, #000 80%, transparent 100%)",
-          maskComposite: "intersect",
-          WebkitMaskComposite: "source-in",
-        }}
-      >
-        <Image
-          src={imgSeccion}
-          alt=""
-          quality={90}
-          sizes="100vw"
-          placeholder="blur"
-          className="h-auto w-full"
-        />
+        className="pointer-events-none absolute top-[12.4%] left-0 hidden h-[38.5%] w-[17%] md:block -translate-x-1/2 bg-[radial-gradient(50%_50%_at_50%_50%,rgba(150,228,72,0.55)_0%,rgba(126,198,52,0.24)_42%,transparent_74%)] mix-blend-screen blur-[1.4vw]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute top-[10%] right-0 hidden h-[37.3%] w-[18%] md:block translate-x-1/2 bg-[radial-gradient(50%_50%_at_50%_50%,rgba(150,228,72,0.5)_0%,rgba(126,198,52,0.22)_42%,transparent_74%)] mix-blend-screen blur-[1.4vw]"
+      />
+      {/* Sin banner en móvil el fondo negro se queda liso, así que la lluvia
+          pasa a ser el fondo. En escritorio no hace falta: viene dibujada. */}
+      <div aria-hidden className="absolute inset-0 md:hidden">
+        <LluviaCodigo opacidad={0.4} />
       </div>
 
-      {/* -mt-14 en móvil: recupera el hueco que deja la cola de la imagen. La
-          máscara la vuelve transparente por abajo, pero esa parte invisible
-          sigue ocupando su altura en el flujo. En escritorio se anula, porque
-          allí la imagen va dentro de la rejilla y no tiene cola que
-          compensar. */}
-      <VoContainer className="-mt-14 lg:mt-0">
-        {/* Mitad y mitad, como el montaje. La imagen dejó de ser un apoyo del
-            texto —era 1,05 contra 0,95— para pesar lo mismo que él: es el
-            producto, y en el montaje ocupa medio ancho a sangre por la
-            izquierda. */}
-        <div className="grid grid-cols-1 items-center gap-10 lg:mt-12 lg:grid-cols-2 lg:gap-x-12">
-          {/* ── Imagen, sólo escritorio ── */}
-          {/* SIN MARCO NI ESQUINAS REDONDEADAS, al revés que antes. En el
-              montaje el producto no está dentro de una card: flota sobre el
-              fondo y se disuelve por los bordes, y ése es el motivo de que se
-              lea como un escaparate y no como una captura pegada.
+      <FlechaBajar
+        destino="experiencia"
+        className="absolute top-[6.4%] left-1/2 hidden w-[clamp(0.9rem,1.6vw,2rem)] -translate-x-1/2 -translate-y-1/2 cursor-pointer md:block"
+      />
 
-              El desbordamiento hacia la izquierda —el ancho de la columna más
-              10vw— es lo que la lleva hasta el canto de la pantalla. El
-              overflow-x-clip de la sección impide que genere scroll lateral.
+      {/* ── Izquierda: el titular y el listado ── */}
+      <div className="relative md:absolute md:top-[11.6%] md:left-[20.1%] md:w-[25.2%]">
+        <h2
+          id="experiencia-titulo"
+          className="font-display text-[6.4vw] leading-[1.22] text-[#f4f1e4] md:text-[clamp(0.9rem,1.55vw,2rem)] md:leading-[1.3]"
+        >
+          {EXPERIENCIA.title}{" "}
+          <span className="text-[#e3e63a]">{EXPERIENCIA.titleAccent}</span>
+        </h2>
 
-              La máscara radial la apaga por los cuatro lados: intacta hasta el
-              60% del radio y transparente en el 100%. Es máscara y no degradado
-              por el motivo de siempre — un degradado tendría que fundir hacia un
-              color y el fondo es una textura que cambia con la posición, así que
-              cualquier color dibujaría un halo. */}
-          <ScrollIn from="left" className="hidden lg:block">
-            <figure className="relative -ml-[10vw] w-[calc(100%+10vw)]">
-              {/* Halo verde detrás, el mismo recurso de "luz encendida" que usan
-                  el logo y los CTA. Va desenfocado y con -z-10 para que se lea
-                  como resplandor y no como un borde. */}
-              <div
-                aria-hidden
-                className="absolute -inset-16 -z-10 rounded-full bg-[radial-gradient(50%_50%_at_50%_50%,var(--vo-glow)_0%,transparent_72%)] blur-3xl"
-              />
-              <Image
-                src={imgSeccion}
-                alt="Volver al Origen"
-                quality={90}
-                sizes="(min-width: 1024px) 60vw, 100vw"
-                placeholder="blur"
-                className="h-auto w-full"
-                /* DOS MÁSCARAS CRUZADAS, porque con una no bastaba.
+        <p className="mt-[5vw] font-sans text-[3.9vw] leading-[1.5] text-[#cfd3c6] md:mt-[1.1vw] md:text-[clamp(0.5rem,0.88vw,1.1rem)] md:leading-[1.45]">
+          Esto es parte de lo que vas a encontrar dentro de{" "}
+          <strong className="font-bold text-white">Volver al Origen.</strong>
+        </p>
 
-                   La imagen trae su propio fondo oscuro, así que su rectángulo
-                   se recortaba contra la textura de la página por mucho que se
-                   apagaran las esquinas: un radial que empieza a desvanecer en
-                   el 60% deja el 60% central intacto, bordes rectos incluidos.
+        {/* Los filetes van como borde SUPERIOR de cada punto y no como separador
+            entre ellos: así el primero también lleva raya —que es lo que hace el
+            montaje— sin tener que meter un elemento suelto que no dice nada. */}
+        <ul className="mt-[7vw] md:mt-[1.5vw]">
+          {EXPERIENCIA.items.map((item) => (
+            <li
+              key={item.text}
+              className="border-t border-[#a3ca23] py-[3.4vw] pl-[3.5vw] md:border-t-[max(0.05vw,1px)] md:py-[0.6vw] md:pl-[1.1vw]"
+            >
+              <p className="font-sans text-[3.9vw] leading-[1.35] font-semibold text-[#f4f1e4] md:text-[clamp(0.48rem,0.86vw,1.05rem)]">
+                {item.text}
+              </p>
+              {item.detalle && (
+                <p className="mt-[1.4vw] font-sans text-[3.6vw] leading-[1.45] text-[#a9b09b] md:mt-[0.2vw] md:text-[clamp(0.45rem,0.82vw,1rem)] md:leading-[1.4]">
+                  {item.detalle}
+                </p>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
 
-                   · el radial ahora arranca en el 25% del radio, así que tres
-                     cuartas partes del recorrido son desvanecido y no queda
-                     canto que localizar;
-                   · el lineal vertical remata el techo y el suelo, que son los
-                     dos bordes que más se notaban por ser los más rectos.
+      {/* ── Derecha: los mockups del programa ── */}
+      <div className="relative mt-[9vw] space-y-[4vw] md:absolute md:top-[11.6%] md:left-[54.3%] md:mt-0 md:w-[25.3%] md:space-y-[1.5vw]">
+        {MOCKUPS.map((src) => (
+          <Image
+            key={src.src}
+            src={src}
+            alt=""
+            aria-hidden
+            quality={90}
+            sizes="(min-width: 768px) 26vw, 87vw"
+            className="h-auto w-full"
+          />
+        ))}
+      </div>
+      {/* ── Abajo: las tres áreas ── */}
+      <div className="relative mt-[13vw] md:absolute md:top-[63.5%] md:left-[20.5%] md:mt-0 md:w-[59%]">
+        <h3 className="text-center font-display text-[5.6vw] leading-[1.3] text-[#f4f1e4] md:text-[clamp(0.8rem,1.35vw,1.75rem)] md:leading-[1.35]">
+          {EXPERIENCIA.areasTitle.lead}{" "}
+          <span className="text-[#a3ca23]">{EXPERIENCIA.areasTitle.acento}</span>{" "}
+          {EXPERIENCIA.areasTitle.resto}
+        </h3>
 
-                   mask-composite las cruza: sólo se ve la imagen donde AMBAS la
-                   dejan pasar. Safari llama "source-in" a lo que el estándar
-                   llama "intersect". */
-                style={{
-                  maskImage:
-                    "radial-gradient(62% 62% at 50% 48%, #000 25%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 16%, #000 82%, transparent 100%)",
-                  WebkitMaskImage:
-                    "radial-gradient(62% 62% at 50% 48%, #000 25%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 16%, #000 82%, transparent 100%)",
-                  maskComposite: "intersect",
-                  WebkitMaskComposite: "source-in",
-                }}
-              />
-            </figure>
-          </ScrollIn>
-
-          {/* ── Los nueve puntos ── */}
-          {/* Una sola columna aunque haya sitio para dos: cuatro de los nueve
-              llevan una línea de detalle debajo, y en dos columnas las tarjetas
-              con detalle y las de una línea dejan las filas descuadradas. */}
-          <ul className="flex flex-col gap-3.5">
-            {EXPERIENCIA.items.map((item, i) => (
-              /* Paso corto, 0,05 s: son nueve y con un retardo mayor el último
-                 llegaría mucho después de que el bloque esté a la vista. */
-              <ScrollIn key={item.text} delay={i * 0.05}>
-                {/* Cards con borde visible y resplandor, no el contorno al 20%
-                    que había: sobre la textura, un canto tan tenue desaparece y
-                    la card se lee como una mancha. Mismo tratamiento que el
-                    resto de paneles de la página — luz de 1 px en el canto
-                    superior y halo verde difuso por fuera. */}
-                <li className="flex items-start gap-4 rounded-2xl border border-accent/30 bg-vo-forest/45 px-5 py-4 shadow-[inset_0_1px_0_0_rgba(180,226,54,0.2),0_18px_46px_-32px_var(--vo-glow-strong)] backdrop-blur-sm">
-                  {/* El disco del check crece de 24 a 32 px y va perfilado, como
-                      en el montaje: es la marca que se repite nueve veces y a
-                      tamaño pequeño se leía como un bullet. */}
-                  <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full border border-accent/45 bg-accent/10">
-                    <Check
-                      size={16}
-                      strokeWidth={2.2}
-                      className="text-accent"
-                      aria-hidden
-                    />
-                  </span>
-
-                  <div>
-                    <p className="font-sans text-[0.95rem] leading-relaxed text-foreground sm:text-base">
-                      {item.text}
-                    </p>
-                    {/* El detalle baja de tamaño y de contraste: es una
-                        aclaración del punto, no otro punto. */}
-                    {item.detalle && (
-                      <p className="mt-1 font-sans text-[0.8rem] leading-relaxed text-foreground/60">
-                        {item.detalle}
-                      </p>
-                    )}
-                  </div>
-                </li>
-              </ScrollIn>
-            ))}
-          </ul>
-        </div>
-
-        {/* ── Las tres áreas ── */}
-        {/* Cambian de forma respecto de los puntos de arriba: icono grande
-            arriba y texto centrado, en tres columnas. Es a propósito — son otro
-            nivel de la oferta (sobre qué se trabaja, no qué se recibe) y si se
-            maquetaran igual se leerían como doce puntos seguidos. */}
-        <ScrollIn delay={0.05}>
-          <h3 className="mt-16 text-center font-display text-lg uppercase leading-snug tracking-[0.05em] text-foreground sm:text-xl">
-            {EXPERIENCIA.areasTitle}
-          </h3>
-        </ScrollIn>
-
-        <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-3">
-          {EXPERIENCIA.areas.map((area, i) => {
-            const Icon = ICONS[area.icon];
-
-            return (
-              <ScrollIn key={area.nombre} delay={i * 0.1} className="h-full">
-                <div className="flex h-full flex-col items-center rounded-2xl border border-accent/25 bg-vo-forest/40 p-6 text-center backdrop-blur-sm">
-                  <span className="flex size-14 items-center justify-center rounded-full border border-accent/35 bg-vo-forest/50 shadow-[0_0_26px_-8px_var(--vo-glow-strong)]">
-                    <Icon
-                      strokeWidth={1.2}
-                      className="size-6 text-accent"
-                      aria-hidden
-                    />
-                  </span>
-
-                  <h4 className="mt-5 font-display text-lg uppercase tracking-[0.08em] text-accent">
-                    {area.nombre}
-                  </h4>
-                  {/* El lema en versalitas pequeñas bajo el nombre: es el título
-                      interno del módulo y funciona como subtítulo, no como
-                      frase del párrafo. */}
-                  <p className="mt-1 font-display text-[0.8rem] uppercase leading-snug tracking-[0.12em] text-foreground/70">
-                    {area.lema}
-                  </p>
-                  <p className="mt-4 font-sans text-sm leading-relaxed text-foreground/80">
-                    {area.text}
-                  </p>
+        <ul className="mt-[7vw] grid grid-cols-1 gap-[4.5vw] md:mt-[1.6vw] md:grid-cols-3 md:gap-[1.55vw]">
+          {EXPERIENCIA.areas.map((area, i) => (
+            <li key={area.nombre} className="relative">
+              {/* Los archivos reservan oscura la franja de arriba, así que el
+                  texto va encima sin necesidad de velo. */}
+              {/* El filete en degradado se hace con un envoltorio de 1 px: un
+                  `border` liso no puede degradar, y `border-image` sí puede pero
+                  ignora el redondeo de las esquinas. Con el fondo en el
+                  envoltorio y la imagen encima, el degradado sólo asoma por el
+                  milímetro que la imagen no tapa, y respeta el radio. */}
+              {FONDOS_AREA[i].compensar ? (
+                <div className="rounded-[0.61vw] bg-[linear-gradient(180deg,#bfdb74_0%,#647239_45%,#080a09_100%)] p-[max(0.055vw,1px)]">
+                  <Image
+                    src={FONDOS_AREA[i].src}
+                    alt=""
+                    aria-hidden
+                    quality={90}
+                    sizes="(min-width: 768px) 20vw, 87vw"
+                    className="h-auto w-full rounded-[calc(0.61vw-1px)]"
+                  />
                 </div>
-              </ScrollIn>
-            );
-          })}
-        </div>
+              ) : (
+                <Image
+                  src={FONDOS_AREA[i].src}
+                  alt=""
+                  aria-hidden
+                  quality={90}
+                  sizes="(min-width: 768px) 20vw, 87vw"
+                  className="h-auto w-full"
+                />
+              )}
 
-        <ScrollIn delay={0.2}>
-          <div className="mt-12 flex justify-center">
-            <WaitlistCta className="max-w-md">{EXPERIENCIA.cta}</WaitlistCta>
-          </div>
-        </ScrollIn>
-      </VoContainer>
+              <div className="absolute top-[9%] left-[7%] w-[86%] text-center md:top-[11.5%]">
+                <p className="font-display text-[5vw] leading-[1.2] text-[#e3e63a] md:text-[clamp(0.55rem,1vw,1.3rem)]">
+                  {area.nombre}
+                </p>
+                <p className="font-display text-[5.2vw] leading-[1.25] text-[#f4f1e4] md:text-[clamp(0.58rem,1.05vw,1.35rem)]">
+                  {area.lema}
+                </p>
+                <p className="mt-[3.5vw] font-sans text-[3.5vw] leading-[1.45] text-[#dfe3d6] md:mt-[0.75vw] md:text-[clamp(0.4rem,0.7vw,0.9rem)]">
+                  {area.text}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mx-auto mt-[9vw] w-full text-[3.35vw] md:mt-[1.7vw] md:w-fit md:text-[clamp(0.45rem,0.78vw,0.98rem)]">
+          <CtaLista>{EXPERIENCIA.cta}</CtaLista>
+        </div>
+      </div>
     </section>
   );
 }

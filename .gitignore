@@ -50,3 +50,6 @@ CLAUDE.md
 AGENTS.md
 .backup-images/
 .tmp*
+
+# Capturas de trabajo de sesiones de agente — no son del proyecto.
+.codex/

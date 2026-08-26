@@ -40,10 +40,17 @@ export const HERO = {
     },
     { text: "decisiones, relaciones, dinero y propósito.", strong: true },
   ],
+  /* La línea de duración va partida: el montaje la escribe con el arranque en
+     texto normal y el dato en negrita, y separarla evita meter marcado dentro
+     del copy. */
+  duracionLead: "Un entrenamiento intensivo de ",
   duracion:
     "40 días de entrenamiento intensivo + acompañamiento durante 90 días.",
   privacy: "Tu información está 100% protegida. No enviamos spam.",
-  cta: "Quiero entrar a la lista de espera",
+  /* El montaje escribe "Quiero entrar a la lista", más corto que el
+     "…a la lista de espera" del documento de copy. Manda el montaje: el rótulo
+     largo parte en dos líneas dentro del botón que dibuja el diseño. */
+  cta: "Quiero entrar a la lista",
 };
 
 /* Copy del modal del formulario. El badge y el aviso de privacidad se reutilizan
@@ -72,123 +79,104 @@ export const FORM = {
 /* Tramo de texto con posible resaltado. Se guarda troceado en vez de como una
    frase con marcas porque content.ts es data plana y no debe llevar HTML
    dentro; cada sección decide cómo pinta el resaltado. */
-export type Tramo = { text: string; acento?: boolean };
+export type Tramo = {
+  text: string;
+  /** Resaltado en verde. */
+  acento?: boolean;
+  /** Resaltado por peso, sin cambiar de color. */
+  fuerte?: boolean;
+};
 
 export const ENTRENAR = {
-  /* Etiqueta de la píldora que abre la sección. */
-  badge: "Reflexión clave",
-
-  /* El titular grande. Era la primera línea de la premisa: al maquetarse como
-     titular deja de ser una frase más del bloque y pasa a ser la declaración de
-     entrada.
-
-     El resaltado va en la última palabra y no en "muchísimo". Los dos montajes
-     entregados no coinciden en esto —el de escritorio marca "muchísimo", el de
-     móvil "manifestación"— y se elige el segundo porque cae al final de la
-     frase: rematar en verde cierra el titular, mientras que marcar una palabra
-     del medio lo parte en dos. */
-  titular: [
-    { text: "Podés saber muchísimo sobre " },
-    { text: "manifestación.", acento: true },
-  ] as Tramo[],
-
-  /* Las otras dos frases de la premisa, como apoyo del titular. La segunda
-     lleva DOS resaltados y no uno: son los dos polos que la frase contrapone
-     —saber frente a poder vivir—, y marcarlos por separado es lo que hace
-     visible la oposición. */
-  apoyos: [
-    [
-      {
-        text: "Podés entender de energía, consciencia, leyes universales y espiritualidad.",
-      },
-    ],
-    [
-      { text: "Pero existe una enorme diferencia entre " },
-      { text: "saber algo", acento: true },
-      { text: " y ser capaz de " },
-      { text: "vivirlo", acento: true },
-      { text: "." },
-    ],
-  ] as Tramo[][],
-
-  /* Las tres condicionales, cada una con su icono y su remate resaltado. El
-     remate es la palabra en la que el lector se reconoce, y aislarla del resto
-     de la frase es lo que convierte la enumeración en reflexión.
-
-     Los iconos se nombran, no se importan: content.ts es data y no debe
-     arrastrar componentes de React. */
-  sintomas: [
-    {
-      icono: "duda" as const,
-      partes: [
-        { text: "Porque si cuando llega el momento de elegir volvés a " },
-        { text: "dudar…", acento: true },
+  /* Panel izquierdo, sobre negro. Es el diagnóstico: enumera lo que el lector
+     ya sabe hacer y lo remata con lo que no. */
+  izquierda: {
+    titulo: "No venís a aprender más. Venís a entrenar.",
+    /* Los dos primeros párrafos llevan resaltado el final; los tres siguientes
+       son las condicionales en cascada, y el último es el veredicto. Van en un
+       solo array porque en el diseño se leen como un bloque continuo, sin
+       cambios de tamaño ni de peso entre ellos. */
+    parrafos: [
+      [
+        { text: "Podés saber muchísimo sobre " },
+        { text: "manifestación.", acento: true },
       ],
-    },
-    {
-      icono: "corazon" as const,
-      partes: [
-        { text: "Si sabés que deberías priorizarte, pero volvés a " },
-        { text: "dejarte para después…", acento: true },
-      ],
-    },
-    {
-      icono: "ojo" as const,
-      partes: [
+      [
         {
-          text: "Si visualizás una realidad diferente, pero seguís reaccionando ",
+          text: "Podés entender de energía, consciencia, leyes universales y espiritualidad.",
         },
-        { text: "desde los mismos patrones…", acento: true },
       ],
-    },
-  ] as { icono: "duda" | "corazon" | "ojo"; partes: Tramo[] }[],
-
-  /* El diagnóstico. La constatación va troceada para poder marcar el "no", que
-     es la palabra que niega todo lo anterior; el remate va aparte porque se
-     pinta en cursiva verde y a otro tamaño. */
-  diagnostico: {
-    lead: [
-      { text: "El problema ya " },
-      { text: "no", acento: true },
-      { text: " es" },
-    ] as Tramo[],
-    leadAcento: "falta de información.",
-    afirma: "Es la identidad",
-    afirmaResto: "desde la que estás viviendo.",
+      [
+        {
+          text: "Pero existe una enorme diferencia entre saber algo y ser capaz de vivirlo.",
+        },
+      ],
+      [
+        {
+          text: "Porque si cuando llega el momento de elegir volvés a dudar…",
+        },
+      ],
+      [
+        {
+          text: "Si sabés que deberías priorizarte, pero volvés a dejarte para después…",
+        },
+      ],
+      [
+        {
+          text: "Si visualizás una realidad diferente, pero seguís reaccionando desde los mismos patrones…",
+        },
+      ],
+      [{ text: "El problema ya no es falta de información." }],
+    ] as Tramo[][],
   },
 
-  /* La metáfora que da nombre a la sección. "GYM" se deja en mayúsculas porque
-     es una sigla en el original, no un grito. */
-  metafora: {
-    lead: "Volver al Origen funciona como un",
-    resaltado: "GYM para tu identidad",
+  /* Panel derecho, sobre la lluvia de código. Es la respuesta al panel de la
+     izquierda, y por eso su titular empieza en mitad de la frase: "El problema…
+     ES LA IDENTIDAD DESDE LA QUE ESTÁS VIVIENDO". Los dos paneles son una sola
+     frase partida en dos columnas. */
+  derecha: {
+    titulo: "Es la identidad desde la que estás viviendo.",
+    parrafos: [
+      [
+        { text: "Volver al Origen funciona como un " },
+        { text: "GYM", acento: true },
+        { text: " para tu identidad." },
+      ],
+      [
+        {
+          text: "Durante 40 días no venís simplemente a escuchar conceptos.",
+        },
+      ],
+      [
+        {
+          text: "Venís a observarte, desafiar tus patrones, tomar decisiones diferentes y entrenar una nueva manera de relacionarte con vos mismo y con tu realidad.",
+        },
+      ],
+      [{ text: "No es filosófico. Es práctico.", fuerte: true }],
+    ] as Tramo[][],
+    cta: "Quiero ser parte de la próxima edición",
   },
-  desarrollo: [
-    "Durante 40 días no venís simplemente a escuchar conceptos.",
-    "Venís a observarte, desafiar tus patrones, tomar decisiones diferentes y entrenar una nueva manera de relacionarte con vos mismo y con tu realidad.",
-  ],
-  cierre: ["No es filosófico.", "Es práctico."],
-  cta: "Quiero ser parte de la próxima edición",
 
-  /* El titular que la sección tenía antes del rediseño. Ya no se pinta —los
-     montajes arrancan con la píldora y el titular grande— pero sigue siendo el
-     nombre de la sección, así que se usa como aria-label: un lector de pantalla
-     necesita saber a qué sección ha entrado, y "Podés saber muchísimo sobre
-     manifestación" no lo dice. */
+  /* Nombre de la sección para lectores de pantalla: el titular está partido
+     entre los dos paneles, así que ninguno de los dos sirve por sí solo. */
   nombre: "No venís a aprender más. Venís a entrenar.",
 };
 
 /* ─── 03. Volver al Origen es para vos si… ─────────────────────────────── */
 
+/* Las seis condiciones. En el diseño van en seis cards de fondo verde repartidas
+   en dos columnas, así que el orden importa: se leen por FILAS, y cada fila
+   empareja una condición larga con una corta para que las dos cards de una misma
+   fila queden de alto parecido. */
 export const PARA_VOS = {
   title: "Volver al Origen",
   titleAccent: "es para vos si…",
   items: [
     "Llevás tiempo trabajando en vos, pero todavía repetís patrones que creías haber superado.",
-    "Sabés que necesitás priorizarte, pero te cuesta sostenerte cuando llega el momento de hacerlo.",
-    "Consumiste libros, cursos o contenido espiritual, pero sentís que necesitás integrar, no seguir acumulando.",
     "Querés tomar decisiones con mayor seguridad y dejar de cuestionarte constantemente.",
+    "Sabés que necesitás priorizarte, pero te cuesta sostenerte cuando llega el momento de hacerlo.",
     "Sentís que tu próximo nivel requiere elevar tus estándares, tu entorno y aquello que estás dispuesto a aceptar.",
+    "Consumiste libros, cursos o contenido espiritual, pero sentís que necesitás integrar, no seguir acumulando.",
     "Querés ordenar tu espiritualidad y convertirla en una forma de vivir más simple, práctica y coherente.",
   ],
 };
@@ -236,10 +224,13 @@ export const EXPERIENCIA = {
   title: "Una experiencia diseñada para que",
   titleAccent: "lo lleves a tu vida real",
   subtitle: "Esto es parte de lo que vas a encontrar dentro de Volver al Origen.",
-  /* Nueve puntos. Los que traen aclaración la llevan en `detalle`; el resto son
-     una línea. La rejilla los coloca de dos en dos, así que el orden importa:
-     los cortos van emparejados entre sí para que las filas no queden
-     descuadradas. */
+  /* Nueve puntos, en una sola columna separados por filetes. Los que traen
+     aclaración la llevan en `detalle`; el resto son una línea.
+
+     EL ORDEN ES EL DEL MONTAJE y no el que tenía antes: la versión anterior
+     los colocaba de dos en dos en una rejilla y estaban emparejados por
+     longitud para que las filas no quedaran descuadradas. Al pasar a columna
+     única ese criterio dejó de valer, y manda el del diseño. */
   items: [
     { text: "6 semanas de transformación en vivo junto a Pilar Sousa" },
     {
@@ -257,12 +248,18 @@ export const EXPERIENCIA = {
     { text: "Intervenciones personalizadas 1 a 1" },
     { text: "Roadmap personal con un plan de 90 días" },
     { text: "90 días de acompañamiento" },
-    { text: "Una comunidad y un contexto diseñado para impulsarte y sostenerte" },
     {
       text: "Acceso a futuros encuentros y experiencias presenciales en diferentes partes del mundo",
     },
+    { text: "Una comunidad y un contexto diseñado para impulsarte y sostenerte" },
   ],
-  areasTitle: "Y además, vas a trabajar tres áreas fundamentales de tu realidad",
+  /* El titular lleva el acento EN MEDIO, no al final como los demás de la
+     página, así que va partido en tres y no en el par title/titleAccent. */
+  areasTitle: {
+    lead: "Y además,",
+    acento: "vas a trabajar tres áreas",
+    resto: "fundamentales de tu realidad",
+  },
   areas: [
     {
       icon: "users" as const,
@@ -322,16 +319,15 @@ export const TESTIMONIOS = {
 };
 
 /*
-  Qué reseñas entran en el carrusel, por índice sobre TESTIMONIALS.
+  Qué reseñas entran en el carrusel.
 
-  El cliente pidió "los 5 mejores": estas cinco son las de 5 estrellas que
-  además tienen foto de perfil, así que ninguna card cae en el avatar de
-  respaldo con la inicial. Para mostrar las trece, cambiar FEATURED por
-  TESTIMONIALS.map((_, i) => i).
+  Volvemos a la selección corta de la landing anterior: cinco reseñas de 5
+  estrellas y con foto de perfil, para que el carrusel conserve el aspecto
+  original y ninguna card caiga en el avatar de respaldo con inicial.
 */
-const FEATURED = [1, 11, 0, 12, 4];
+const INDICES = [1, 11, 0, 12, 4];
 
-export const FEATURED_TESTIMONIALS = FEATURED.map((i) => TESTIMONIALS[i]).filter(
+export const FEATURED_TESTIMONIALS = INDICES.map((i) => TESTIMONIALS[i]).filter(
   Boolean,
 );
 
@@ -343,17 +339,14 @@ export const PILAR = {
   signature: "Pilar Sousa",
   subtitle:
     "Más de una década convirtiendo una búsqueda espiritual en una forma práctica de vivir.",
-  /* Bio entregada por el cliente para esta landing. Es distinta de la de Misión
-     Origen —más larga y con otro orden— así que son textos separados a
-     propósito y no deben unificarse.
-
-     Las dos frases sueltas del original ("Saber no es suficiente…" y "Por eso
-     creé Volver al Origen.") van en `destacados` y no aquí: en el original
-     están aisladas entre párrafos y esa separación es la que les da el peso. */
+  /* Bio corta de la landing original. La primera frase se pinta en negrita en
+     la sección porque en el montaje funciona como bajada de autoridad antes de
+     la historia. */
   paragraphs: [
-    "Hace más de diez años comenzó mi propio despertar espiritual. Desde entonces inicié una búsqueda profunda por comprender cómo funcionan realmente la consciencia, la identidad y las leyes universales que influyen sobre nuestra experiencia.",
-    "Ese camino me llevó a estudiar, experimentar, escribir mi primer libro y acompañar a cientos de personas en sus propios procesos de transformación.",
-    "Pero durante esos años entendí algo fundamental:",
+    "Hace más de 10 años tuve mi despertar espiritual.",
+    "Desde entonces comenzó una búsqueda incansable por comprender cómo funcionan realmente la realidad, la consciencia y las leyes universales que gobiernan nuestra vida.",
+    "Ese camino me llevó a escribir mi primer libro y a acompañar a cientos de personas en sus propios procesos de transformación.",
+    "Hoy, después de haber compartido mis enseñanzas con una comunidad de más de 600.000 personas, Volver al Origen reúne todo aquello que he aprendido, vivido y aplicado durante estos años.",
   ],
   destacado: "Saber no es suficiente. Hay que encarnarlo.",
   paragraphsPost: [
@@ -374,7 +367,7 @@ export const LISTA = {
   titleAccent: "la lista de espera",
   intro: [
     "Volver al Origen 3.0 abrirá sus puertas próximamente.",
-    "Y las personas que estén dentro de la lista serán las primeras en recibir toda la información.",
+    "Y las personas que estén dentro de la lista serán las primeras en recibir toda la información. Por eso por registrarte a la lista de espera obtendrás:",
   ],
   bonosTitle: "Por registrarte tendrás",
   bonos: [
@@ -396,7 +389,7 @@ export const LISTA = {
   ],
   cierre:
     "Si sentís que tu próxima etapa no necesita más conocimiento, sino una versión de vos capaz de sostenerla, este puede ser tu momento.",
-  cta: "Quiero entrar a la lista de espera",
+  cta: "Quiero entrar a la lista",
 };
 
 /* ─── Preguntas frecuentes ─────────────────────────────────────────────── */

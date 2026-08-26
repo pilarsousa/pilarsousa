@@ -1,64 +1,52 @@
 import { Hero } from "@/components/lista-de-espera/sections/Hero";
-import { Entrenar } from "@/components/lista-de-espera/sections/Entrenar";
-import { ParaVos } from "@/components/lista-de-espera/sections/ParaVos";
+import { PanelCodigo } from "@/components/lista-de-espera/sections/PanelCodigo";
 import { QueEntrenas } from "@/components/lista-de-espera/sections/QueEntrenas";
 import { Experiencia } from "@/components/lista-de-espera/sections/Experiencia";
-import { Testimonios } from "@/components/lista-de-espera/sections/Testimonios";
+import { Resenas } from "@/components/lista-de-espera/sections/Resenas";
 import { Pilar } from "@/components/lista-de-espera/sections/Pilar";
 import { ListaEspera } from "@/components/lista-de-espera/sections/ListaEspera";
 import { Faq } from "@/components/lista-de-espera/sections/Faq";
 import { Footer } from "@/components/lista-de-espera/sections/Footer";
 
 /*
-  Landing de lista de espera (BORRADOR) — /lista-de-espera.
+  Landing de lista de espera — rediseño de la 3.ª edición, en /lista-de-espera.
 
-  Las secciones, en el orden del guion entregado por el cliente:
+  EN CONSTRUCCIÓN. El diseño anterior se retiró entero y la página se está
+  rehaciendo sobre el montaje nuevo, sección a sección. Montadas hasta ahora:
 
-    1. Hero — promesa, duración y CTA, visible sin hacer scroll
-    2. No venís a aprender más, venís a entrenar — el argumento
-    3. Volver al Origen es para vos si… — identificación
-    4. Qué vas a entrenar — las cinco capacidades
-    5. Una experiencia diseñada para tu vida real — qué incluye
-    6. Lo que dicen quienes ya volvieron al origen — prueba social
-    7. Quién es Pilar — autoridad
-    8. Entrá ahora a la lista de espera — bonos y formulario
-    9. Preguntas frecuentes — las últimas objeciones
+    01 Hero                ✓
+    02 Diagnóstico         ✓ ┐ comparten banner-2 y por eso van las dos
+    03 Es para vos si      ✓ ┘ dentro de PanelCodigo, no sueltas aquí
+    04 Qué vas a entrenar  ✓
+    05 Una experiencia     ◐ montada la mitad de arriba; falta la banda de las
+                             tres áreas, que ocupa el 40% inferior del banner
+    06 Testimonios         ✓
+    07 Quién es Pilar      ✓
+    08 Entrá ahora a la lista ✓
+    FAQ                    ✓
 
-  El recorrido responde a las preguntas del visitante según van apareciendo: qué
-  es esto, por qué me hace falta, va conmigo, qué me llevo, quién más lo hizo,
-  quién lo dirige, cómo entro y qué me estoy jugando.
+  EL FONDO DE LA PÁGINA ES BLANCO, al revés que en el diseño anterior. Cada
+  sección trae su propio banner con los cortes diagonales ya dibujados y con
+  zonas transparentes; lo que asoma por ellas es este blanco. Un fondo oscuro
+  global —como el que había— taparía justo eso.
 
-  LOS FONDOS ALTERNAN, y no es decoración: es lo que separa una sección de la
-  siguiente sin dibujar una línea. La página tiene por debajo una textura oscura
-  fija (ver el layout) y las secciones pares montan encima una textura clara que
-  entra y sale difuminada por sus bordes:
+  Los ANCESTROS de la sección 4 no pueden llevar `overflow` distinto de
+  `visible`: sus cards usan `position: sticky`, que deja de funcionar sin avisar
+  en cuanto un ancestro recorta. Las secciones hermanas sí pueden recortar su
+  propio eje X cuando un asset decorativo sangra fuera del viewport.
 
-    Hero        oscuro
-    Entrenar    claro
-    ParaVos     oscuro
-    QueEntrenas claro
-    Experiencia oscuro
-    Testimonios claro
-    Pilar       oscuro
-    ListaEspera claro
-    Faq         oscuro
-
-  Al añadir una sección hay que respetar la alternancia con la que tenga encima,
-  o dos claras seguidas se leerán como una sola.
-
-  Los CTA repartidos por la página abren el modal de registro. El formulario a
-  la vista está una sola vez, en la sección 8, que es donde el recorrido termina.
+  El Footer se mantiene montado para que la página no quede sin cierre mientras
+  se construye; su diseño se revisará al llegar a él.
 */
-export default function VolverAlOrigenPage() {
+export default function ListaDeEsperaPage() {
   return (
     <>
-      <main>
+      <main className="bg-white">
         <Hero />
-        <Entrenar />
-        <ParaVos />
+        <PanelCodigo />
         <QueEntrenas />
         <Experiencia />
-        <Testimonios />
+        <Resenas />
         <Pilar />
         <ListaEspera />
         <Faq />

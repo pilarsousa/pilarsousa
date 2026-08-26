@@ -1646,6 +1646,164 @@ body {
 }
 
 /*
+  Ámbito del REDISEÑO de la lista de espera (/lista-de-espera).
+
+  Va ADEMÁS de .vo-scope, no en su lugar: hereda de él la paleta y los glows, y
+  sólo redefine lo que el rediseño cambia.
+
+  Y tiene que ser una clase aparte por un motivo concreto: .vo-scope lo
+  comparten las DOS listas de espera, y la otra está EN PRODUCCIÓN. Redefinir
+  ahí la tipografía se la cambiaría también a la landing publicada, que es justo
+  lo que la separación en dos rutas vino a evitar.
+
+  Trajan Pro es la display de la guía de marca. Hasta ahora se sustituía por
+  Cinzel —su pariente más cercano en Google Fonts— porque no teníamos el
+  archivo; Cinzel se queda detrás como respaldo por si la carga falla.
+
+  OJO AL USARLA: Trajan NO TIENE CAJA BAJA. Sus minúsculas son versalitas de
+  diseño, no el resultado de un text-transform, así que "Podés saber" sale en
+  versalitas igualmente. Sirve para titulares y para nada más; el texto corrido
+  sigue en Montserrat.
+*/
+.le-scope {
+  --font-display: var(--font-trajan), var(--font-cinzel), serif;
+}
+
+/*
+  Deriva vertical de la aureola verde del panel de código.
+
+  VA EN CSS Y NO EN JS porque es decorativa, infinita y no depende de nada: un
+  keyframe lo resuelve el compositor sin tocar el hilo principal, y un bucle en
+  JS pelearía con el scroll para no aportar nada.
+
+  EL DESPLAZAMIENTO EN X VA DENTRO DEL KEYFRAME, no en una clase de Tailwind.
+  `transform` es una sola propiedad: si el keyframe animara sólo la Y, pisaría
+  el translate-x-1/2 que centra la elipse en el canto y la aureola saltaría
+  media pantalla al arrancar la animación.
+
+  La amplitud es del 4% de su propio alto —unos 30 px— y el ciclo dura 18 s. A
+  esa velocidad no se percibe como movimiento sino como que la luz respira, que
+  es lo que se busca; más rápido delata el truco.
+*/
+@keyframes le-deriva {
+  0%,
+  100% {
+    transform: translate(50%, 0%);
+  }
+  50% {
+    transform: translate(50%, 138%);
+  }
+}
+
+.le-aureola {
+  transform: translate(50%, 0%);
+  animation: le-deriva 24s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Quien pidió menos movimiento la recibe quieta y a media altura, que es donde
+   la deja el recorrido la mitad del tiempo. */
+@media (prefers-reduced-motion: reduce) {
+  .le-aureola {
+    animation: none;
+    transform: translate(50%, 69%);
+  }
+}
+
+/*
+  Cuerpo del botón de llamada a la acción de la lista de espera.
+
+  VIVE AQUÍ Y NO EN UNA CLASE DE TAILWIND porque son DOS capas de fondo, y la
+  coma que las separa rompe el parseo del valor arbitrario: la utilidad se
+  escribía en el HTML pero no llegaba a generarse ninguna regla, así que el
+  botón salía sin fondo. Comprobado en la hoja servida, cero apariciones.
+
+  La capa de arriba es una lámina de verde oscuro muy diluida que cubre la
+  mitad superior y se corta en seco al 50%. Ese canto limpio a media altura es
+  lo que hace que la pieza parezca llevar un cristal encima en vez de estar
+  sólo pintada. El alfa baja de 0,20 a 0,08 antes del corte: plano se leería
+  como una mancha, y en degradado la lámina tiene su propio brillo.
+
+  Debajo, el degradado del diseño: lima #A3CA23 a la izquierda, verde bosque
+  #3A5E04 a la derecha.
+*/
+.le-cta-cuerpo {
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(26, 46, 6, 0.28) 0%,
+      rgba(26, 46, 6, 0.11) 49%,
+      rgba(26, 46, 6, 0) 50%
+    ),
+    linear-gradient(90deg, #a3ca23 0%, #3a5e04 100%);
+}
+
+/*
+  Filete de las cards de bonus: el verde claro da la vuelta al borde.
+
+  ES UN DEGRADADO CÓNICO Y NO LINEAL. El lineal reparte el color de arriba
+  abajo, así que el claro sólo se veía en el canto superior y los laterales
+  quedaban apagados. El cónico gira alrededor del centro, de modo que el mismo
+  claro recorre los cuatro lados.
+
+  SE ANIMA EL ÁNGULO, NO EL ELEMENTO. Girar la caja con `rotate` arrastraría
+  también la card de dentro; aquí lo que gira es el punto de partida del
+  degradado, así que la pieza no se mueve y la luz sí.
+
+  Hace falta @property: un ángulo declarado como variable suelta es una cadena
+  de texto para el navegador, y las cadenas no se interpolan — la animación
+  saltaría de 0 a 360 de golpe. Declarándolo como <angle> pasa a ser un valor
+  animable y el giro sale continuo.
+
+  Dos claros opuestos y no uno: con uno solo, media vuelta de cada ciclo deja
+  la card entera apagada y el efecto parece intermitente.
+*/
+@property --le-giro {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes le-giro {
+  to {
+    --le-giro: 360deg;
+  }
+}
+
+.le-borde-giro {
+  /* Los arcos de luz son cortos —unos 45° cada uno, no 150— para que se lean
+     como un destello que recorre el borde y no como medio marco encendido. */
+  background-image: conic-gradient(
+    from var(--le-giro),
+    #080a09 0deg,
+    #bfdb74 20deg,
+    #080a09 45deg,
+    #080a09 180deg,
+    #bfdb74 200deg,
+    #080a09 225deg,
+    #080a09 360deg
+  );
+  animation: le-giro 7s linear infinite;
+}
+
+/* Sin movimiento, el filete se queda quieto con el claro arriba: el mismo
+   remate que tenían antes las cards. */
+@media (prefers-reduced-motion: reduce) {
+  .le-borde-giro {
+    animation: none;
+    --le-giro: 200deg;
+  }
+}
+
+/* Quien pidió menos movimiento la recibe quieta y centrada: el transform base
+   de la regla de arriba es el que queda al anular la animación. */
+@media (prefers-reduced-motion: reduce) {
+  .le-aureola {
+    animation: none;
+  }
+}
+
+/*
   CTA de la lista de espera. Rectangular con esquinas apenas redondeadas (no
   pill como .neon-btn): la referencia pide una pieza más sobria y editorial,
   acorde a la Cinzel de los títulos.
@@ -2314,3 +2472,8 @@ body {
 .vo-latido {
   animation: vo-latido 3.6s ease-in-out infinite;
 }
+
+
+
+
+

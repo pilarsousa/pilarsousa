@@ -30,7 +30,10 @@ const cinzel = Cinzel({
 const manrope = Manrope({
   variable: "--font-manrope",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  /* El 800 lo piden el rótulo del CTA de la lista de espera y el arranque de
+     la bio de Pilar. Sin cargarlo, el navegador lo falsifica engordando el 700,
+     que en una sans geométrica ensucia las curvas. */
+  weight: ["300", "400", "500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -57,6 +60,35 @@ const montserrat = Montserrat({
 });
 
 // ---- Volver al Origen ----
+
+/* Titulares del rediseño de la lista de espera (/lista-de-espera).
+
+   Trajan Pro es la tipografía de la guía de marca para titulares, y hasta ahora
+   se sustituía por Cinzel —que es su pariente más cercano en Google Fonts—
+   porque no teníamos el archivo. Ya lo tenemos.
+
+   Dos pesos y dos formatos, tal como vienen del cliente: la regular en TTF y la
+   negrita en OTF. next/font/local acepta ambos sin convertir nada.
+
+   Es una fuente SÓLO de titulares: no tiene minúsculas de caja baja —las
+   versalitas son su diseño, no un text-transform— así que no sirve para texto
+   corrido. Ver el comentario de --font-display en globals.css. */
+const trajan = localFont({
+  variable: "--font-trajan",
+  src: [
+    {
+      path: "../../public/fonts/Trajan_Pro/TrajanPro-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Trajan_Pro/TrajanPro-Bold.otf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  display: "swap",
+});
 
 /* Títulos y subtítulos — futurista, tecnológica, cyberpunk */
 const zenDots = localFont({
@@ -101,7 +133,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${cinzel.variable} ${manrope.variable} ${cormorant.variable} ${montserrat.variable} ${zenDots.variable} ${jost.variable} ${pressStart2P.variable} ${pixelifySans.variable} h-full antialiased`}
+      className={`${cinzel.variable} ${trajan.variable} ${manrope.variable} ${cormorant.variable} ${montserrat.variable} ${zenDots.variable} ${jost.variable} ${pressStart2P.variable} ${pixelifySans.variable} h-full antialiased`}
     >
       {/* suppressHydrationWarning: browser extensions (e.g. ColorZilla) inject
           attributes like cz-shortcut-listen on <body> before React hydrates,

@@ -4,31 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { StarTiles } from "@/components/lista-de-espera/ui/StarTiles";
 import type { Testimonial } from "@/components/mision-origen/ui/testimonials";
+import arrowPrev from "@/../public/volver-origen/public/Recursos/generales/boton1.svg";
+import arrowNext from "@/../public/volver-origen/public/Recursos/generales/boton2.svg";
 
-/*
-  Cinta de reseñas en movimiento continuo, arrastrable.
-
-  Por qué no es una animación CSS: una animación no se puede "agarrar". Para que
-  el visitante mueva la cinta con el dedo hace falta que lo que se desplace sea
-  el scroll real del contenedor, así que el movimiento automático se hace
-  empujando scrollLeft en cada frame. A cambio se obtiene gratis el arrastre
-  táctil nativo, con su inercia y su rebote, que es justo lo que se pedía.
-
-  El bucle sin costura: la lista se renderiza DOS veces, y en cuanto el scroll
-  pasa de la mitad del ancho se le resta esa mitad. Como la segunda copia es
-  idéntica a la primera, el reinicio es invisible. La resta se aplica también
-  mientras está en pausa, para que arrastrando a mano también dé la vuelta.
-
-  Pausa: SÓLO al mantener pulsado (dedo o ratón) y al enfocar con el teclado.
-  Pasar el ratón por encima no la detiene — es deliberado, no un olvido: no
-  añadir aquí un onMouseEnter/onMouseLeave.
-
-  Eso tiene un coste que conviene tener presente: el botón "Ver más" es un
-  objetivo en movimiento para quien use ratón. Sigue siendo alcanzable porque
-  pulsar para hacer clic ya frena la cinta, pero exige más puntería.
-*/
-
-/** Velocidad del desplazamiento automático, en píxeles por segundo. */
 const SPEED = 45;
 
 type TestimonialCarouselProps = {
@@ -37,34 +15,41 @@ type TestimonialCarouselProps = {
 
 export function TestimonialCarousel({ items }: TestimonialCarouselProps) {
   const scrollerRef = useRef<HTMLDivElement>(null);
-  /* En ref y no en estado: cambia con cada pulsación y no debe provocar
-     re-render — el bucle de animación lo lee directamente. */
   const pausedRef = useRef(false);
   const [active, setActive] = useState<Testimonial | null>(null);
+
+  const scrollByCard = (direction: -1 | 1) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+
+    const card = el.querySelector("li");
+    const cardWidth = card?.getBoundingClientRect().width ?? el.clientWidth * 0.8;
+    const gap = card ? Number.parseFloat(getComputedStyle(card).marginRight) : 0;
+
+    pausedRef.current = true;
+    window.setTimeout(() => {
+      pausedRef.current = false;
+    }, 650);
+
+    el.scrollBy({
+      left: direction * (cardWidth + (Number.isFinite(gap) ? gap : 0)),
+      behavior: "smooth",
+    });
+  };
 
   useEffect(() => {
     const el = scrollerRef.current;
     if (!el) return;
 
-    /* Quien pida menos movimiento no recibe desplazamiento automático. La cinta
-       sigue existiendo y se puede recorrer a mano. */
     const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     let raf = 0;
     let last = performance.now();
     let onScreen = true;
-    /* Sobrante sub-píxel acumulado entre frames.
-
-       Hace falta porque a 45 px/s cada frame avanza ~0,7 px, y hay navegadores
-       que redondean scrollLeft a enteros: al leerlo de vuelta daría 0 y la
-       cinta no arrancaría nunca. Acumulando aquí y aplicando sólo píxeles
-       enteros, el avance es correcto redondee el navegador o no. */
     let carry = 0;
 
     const step = (now: number) => {
       raf = requestAnimationFrame(step);
-      /* dt acotado: si la pestaña estuvo en segundo plano, el primer frame al
-         volver traería un delta enorme y la cinta pegaría un salto. */
       const dt = Math.min((now - last) / 1000, 0.1);
       last = now;
 
@@ -85,8 +70,6 @@ export function TestimonialCarousel({ items }: TestimonialCarouselProps) {
     };
     raf = requestAnimationFrame(step);
 
-    /* Fuera de pantalla no se mueve: no tiene sentido gastar frames animando
-       algo que nadie ve. */
     const io = new IntersectionObserver(
       ([entry]) => {
         onScreen = entry.isIntersecting;
@@ -96,9 +79,6 @@ export function TestimonialCarousel({ items }: TestimonialCarouselProps) {
     );
     io.observe(el);
 
-    /* El "soltar" se escucha en window y no en el elemento: si el dedo o el
-       ratón se levantan fuera de la cinta, sin esto se quedaría pausada para
-       siempre. */
     const release = () => {
       pausedRef.current = false;
     };
@@ -113,8 +93,6 @@ export function TestimonialCarousel({ items }: TestimonialCarouselProps) {
     };
   }, []);
 
-  /* Cierra con Escape y bloquea el scroll del fondo mientras el modal está
-     abierto. */
   useEffect(() => {
     if (!active) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setActive(null);
@@ -129,41 +107,14 @@ export function TestimonialCarousel({ items }: TestimonialCarouselProps) {
 
   return (
     <div className="relative w-full">
-      {/* py-12: el contenedor de scroll recorta también en vertical, y ahí no
-          hay degradado que suavice el corte. Las cards proyectan un resplandor
-          de unos 30 px, así que sin este colchón el halo se cortaría en seco
-          contra el borde.
-
-          El fundido lateral llega al 14%: por debajo de eso la card parece
-          cortada con tijera en lugar de desvanecerse.
-
-          overscroll-x-contain: evita que al llegar al extremo el gesto se
-          propague y el navegador interprete un "atrás". */}
       <div
         ref={scrollerRef}
-        /* data-lenis-prevent: el scroll suave de la página captura la rueda de
-           forma global, y sin esta marca se quedaría también con el gesto
-           horizontal aquí dentro — la cinta dejaría de poder recorrerse con el
-           trackpad. */
         data-lenis-prevent
         onPointerDown={() => (pausedRef.current = true)}
         onFocusCapture={() => (pausedRef.current = true)}
         onBlurCapture={() => (pausedRef.current = false)}
-        /* El fundido lateral es del 6% en móvil y del 14% a partir de sm. El
-           porcentaje se mide sobre el ancho del contenedor: en escritorio son
-           unos 90 px, pero en un móvil de 380 px serían 53 px comiéndose media
-           card. Al ser la pista mucho más estrecha, un fundido corto ya se lee
-           como transición. */
-        className="overflow-x-auto overscroll-x-contain scrollbar-none py-10 mask-[linear-gradient(to_right,transparent,black_6%,black_94%,transparent)] sm:py-12 sm:mask-[linear-gradient(to_right,transparent,black_14%,black_86%,transparent)]"
+        className="overflow-x-auto overscroll-x-contain scrollbar-none py-6 mask-[linear-gradient(to_right,transparent,black_6%,black_94%,transparent)] sm:py-8 sm:mask-[linear-gradient(to_right,transparent,black_14%,black_86%,transparent)]"
       >
-        {/* Sin `gap`: la separación va como margen derecho de cada card.
-
-            No es capricho. El bucle resta exactamente la mitad del ancho, y eso
-            sólo cuadra si las dos mitades miden lo mismo. Con `gap` hay 2N-1
-            huecos para 2N cards —falta el que iría al final de la primera
-            mitad— así que la mitad se queda corta por medio hueco y el reinicio
-            da un salto. Con margen derecho cada card aporta ancho + separación
-            siempre, y las dos mitades son idénticas. */}
         <ul className="flex w-max">
           {[...items, ...items].map((t, i) => {
             const isClone = i >= items.length;
@@ -171,16 +122,16 @@ export function TestimonialCarousel({ items }: TestimonialCarouselProps) {
               <li
                 key={`${t.name}-${i}`}
                 aria-hidden={isClone || undefined}
-                className="mr-16 flex h-[23rem] w-[82vw] max-w-[380px] shrink-0 flex-col rounded-2xl border border-accent/25 bg-[radial-gradient(90%_70%_at_20%_0%,rgba(180,226,54,0.12),transparent_60%),linear-gradient(180deg,#1a2b07,#0b1502)] p-7 text-left shadow-[0_24px_60px_-30px_rgba(180,226,54,0.5),inset_0_1px_0_rgba(255,255,255,0.06)] sm:w-[380px]"
+                className="mr-4 flex h-[17rem] w-[58vw] max-w-[305px] shrink-0 flex-col sm:mr-8 sm:h-[19rem] sm:w-[74vw] rounded-xl border border-accent/25 bg-[radial-gradient(90%_70%_at_20%_0%,rgba(180,226,54,0.12),transparent_60%),linear-gradient(180deg,#1a2b07,#0b1502)] p-5 text-left shadow-[0_18px_46px_-26px_rgba(180,226,54,0.5),inset_0_1px_0_rgba(255,255,255,0.06)] sm:mr-10 sm:w-[305px]"
               >
                 <div className="flex items-center gap-3">
-                  <Avatar t={t} size={50} />
+                  <Avatar t={t} size={42} />
                   <div className="min-w-0">
-                    <p className="truncate font-sans text-base font-medium text-foreground">
+                    <p className="truncate font-sans text-sm font-medium text-foreground">
                       {t.name}
                     </p>
                     {t.date && (
-                      <p className="font-sans text-sm text-foreground/50">
+                      <p className="font-sans text-xs text-foreground/50">
                         {t.date}
                       </p>
                     )}
@@ -188,25 +139,21 @@ export function TestimonialCarousel({ items }: TestimonialCarouselProps) {
                 </div>
 
                 <div className="mt-3">
-                  <StarTiles value={t.stars} size={20} />
+                  <StarTiles value={t.stars} size={16} />
                 </div>
 
                 <div className="relative mt-3 min-h-0 flex-1 overflow-hidden">
-                  <p className="font-sans text-base leading-relaxed text-foreground/85">
+                  <p className="font-sans text-sm leading-relaxed text-foreground/85">
                     {t.text}
                   </p>
-                  {/* Desvanecido del texto sobrante, opaco porque el pie de la
-                      card es #0b1502 sólido. */}
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-linear-to-t from-vo-black to-transparent" />
                 </div>
 
                 <button
                   type="button"
                   onClick={() => setActive(t)}
-                  /* El clon queda fuera del recorrido de tabulación: si no, se
-                     tabularía dos veces por la misma reseña. */
                   tabIndex={isClone ? -1 : undefined}
-                  className="mt-3 cursor-pointer self-start font-sans text-base font-medium text-accent transition-colors duration-300 hover:text-vo-bone focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  className="mt-3 cursor-pointer self-start font-sans text-sm font-medium text-accent transition-colors duration-300 hover:text-vo-bone focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
                   Ver más
                 </button>
@@ -216,13 +163,45 @@ export function TestimonialCarousel({ items }: TestimonialCarouselProps) {
         </ul>
       </div>
 
-      {/* Modal con la reseña completa */}
+      <div
+        aria-label="Controles del carrusel de reseñas"
+        className="mt-1 mb-4 flex justify-center gap-3"
+      >
+        <button
+          type="button"
+          aria-label="Ver reseñas anteriores"
+          onClick={() => scrollByCard(-1)}
+          className="cursor-pointer rounded-[6px] transition-transform duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          <Image
+            src={arrowPrev}
+            alt=""
+            aria-hidden
+            className="h-auto w-[34px] sm:w-[36px]"
+          />
+        </button>
+
+        <button
+          type="button"
+          aria-label="Ver más reseñas"
+          onClick={() => scrollByCard(1)}
+          className="cursor-pointer rounded-[6px] transition-transform duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          <Image
+            src={arrowNext}
+            alt=""
+            aria-hidden
+            className="h-auto w-[34px] sm:w-[36px]"
+          />
+        </button>
+      </div>
+
       {active && (
         <div
           role="dialog"
           aria-modal="true"
           aria-label={`Reseña de ${active.name}`}
-          className="fixed inset-0 z-200 flex items-center justify-center p-4"
+          className="fixed inset-0 z-[200] flex items-center justify-center p-4"
         >
           <button
             type="button"
@@ -250,8 +229,6 @@ export function TestimonialCarousel({ items }: TestimonialCarouselProps) {
               </svg>
             </button>
 
-            {/* Mismo motivo que en la cinta: una reseña larga necesita poder
-                recorrerse dentro del modal. */}
             <div data-lenis-prevent className="overflow-y-auto p-8">
               <div className="flex items-center gap-3">
                 <Avatar t={active} size={52} />
@@ -280,7 +257,6 @@ export function TestimonialCarousel({ items }: TestimonialCarouselProps) {
   );
 }
 
-/** Foto de perfil, o la inicial del nombre sobre un disco verde. */
 function Avatar({ t, size = 44 }: { t: Testimonial; size?: number }) {
   if (t.photo) {
     return (
@@ -294,6 +270,7 @@ function Avatar({ t, size = 44 }: { t: Testimonial; size?: number }) {
       />
     );
   }
+
   return (
     <span
       aria-hidden

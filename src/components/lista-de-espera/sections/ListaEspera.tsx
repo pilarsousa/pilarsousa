@@ -1,108 +1,151 @@
-import { VoContainer } from "@/components/lista-de-espera/ui/VoContainer";
-import { ScrollIn } from "@/components/lista-de-espera/ui/ScrollIn";
-import { SectionTitle } from "@/components/lista-de-espera/ui/SectionTitle";
-import { SectionTexture } from "@/components/lista-de-espera/ui/SectionTexture";
-import { BenefitCard } from "@/components/lista-de-espera/ui/BenefitCard";
-import { WaitlistForm } from "@/components/lista-de-espera/ui/WaitlistForm";
-import { LISTA, HERO } from "@/components/lista-de-espera/content";
+import Image from "next/image";
+import { Clock, Gift, Tag } from "lucide-react";
+import { CtaLista } from "@/components/lista-de-espera/ui/CtaLista";
+import { LluviaCodigo } from "@/components/lista-de-espera/ui/LluviaCodigo";
+import { LISTA } from "@/components/lista-de-espera/content";
+import bonusBg from "@/../public/volver-origen/public/Recursos/generales/banner-5.webp";
+
+const BONUS_TITLE_LINES = [
+  ["Acceso", "anticipado"],
+  ["Condiciones", "especiales"],
+  ["Bonos y regalos", "exclusivos"],
+] as const;
 
 /*
-  Sección 8 — Entrá ahora a la lista de espera.
+  Un icono por bono, elegidos por lo que promete cada uno y no por decorar:
 
-  Es el cierre de la página y la única que trae el FORMULARIO A LA VISTA, sin
-  pasar por el modal. Los CTA de las secciones anteriores lo abren en una capa
-  porque interrumpen una lectura en curso; aquí no hay lectura que interrumpir:
-  el visitante ha llegado al final y lo que toca es el campo de nombre.
+  · reloj — llegar antes que nadie; el tiempo es lo que se gana.
+  · etiqueta — condiciones, que es lenguaje de precio y de trato.
+  · regalo — bonos y obsequios.
 
-  Los tres bonos van ANTES del formulario, no después: son el motivo para
-  rellenarlo, y leídos después ya no cambian ninguna decisión.
+  Van con trazo fino (1,6) y no relleno: junto a las versalitas de Trajan, un
+  icono macizo pesa más que el titular al que acompaña.
+*/
+const BONUS_ICONOS = [Clock, Tag, Gift] as const;
 
-  Reutiliza BenefitCard, la misma caja de las ventajas, con sus tres iconos
-  (clock, tag, gift). El componente del formulario es el mismo que monta el
-  modal — sin onSuccess, porque aquí no hay capa que cerrar: navega a la página
-  de gracias por sí solo.
+/*
+  Seccion 8 - bonus de lista de espera.
 
-  Fondo texturado claro: alterna con el oscuro de la sección de Pilar que tiene
-  encima y con el de las preguntas frecuentes que viene debajo.
+  El fondo oscuro tambien es un asset del montaje; asi el corte con el fundido
+  inferior de Pilar queda igual al original y el contenido puede apoyarse sobre
+  medidas proporcionales al lienzo 1920x808.
 */
 export function ListaEspera() {
   return (
     <section
-      id="lista-espera"
-      aria-labelledby="lista-title"
-      className="relative isolate py-[clamp(5rem,3rem+8vh,10rem)] text-foreground"
+      aria-labelledby="lista-espera-titulo"
+      className="relative isolate -mt-px overflow-hidden bg-[#111111] text-center text-vo-bone"
     >
-      <SectionTexture variant="claro" />
+      <Image
+        src={bonusBg}
+        alt=""
+        fill
+        quality={90}
+        sizes="100vw"
+        placeholder="blur"
+        className="-z-10 object-cover"
+      />
 
-      <VoContainer>
-        <ScrollIn>
-          <SectionTitle id="lista-title" accent={LISTA.titleAccent}>
-            {LISTA.title}
-          </SectionTitle>
-        </ScrollIn>
+      {/* LA LLUVIA VA ENTRE EL BANNER Y EL CONTENIDO: por encima de la foto para
+          que se vea, y por debajo del texto —que lleva z-10— para no cruzarle
+          glifos por delante. Es la razón de que el contenedor no pueda perder su
+          `isolate`: sin él, esos z-index se medirían contra el resto de la
+          página. */}
+      <LluviaCodigo />
 
-        <ScrollIn delay={0.05}>
-          <div className="mx-auto mt-4 max-w-2xl space-y-2 text-center font-sans text-base leading-relaxed text-foreground/80 sm:text-lg">
-            {LISTA.intro.map((linea) => (
-              <p key={linea}>{linea}</p>
-            ))}
-          </div>
-        </ScrollIn>
+      <div className="relative mx-auto flex min-h-[43.5rem] w-full flex-col items-center px-6 py-16 md:aspect-[1920/808] md:min-h-0 md:px-0 md:pb-[4vw] md:pt-[4.55vw]">
+        <div className="relative z-10 flex flex-col items-center">
+          <h2
+            id="lista-espera-titulo"
+            className="max-w-[32rem] font-display text-[clamp(0.95rem,3.8vw,1.35rem)] leading-[1.32] tracking-normal uppercase md:max-w-[20.7em] md:text-[clamp(0.82rem,1vw,1.25rem)]"
+          >
+            <span className="text-vo-lumen">Volver al Origen 3.0</span>{" "}
+            <span className="text-vo-bone">abrirá sus puertas próximamente.</span>
+          </h2>
 
-        {/* ── Los tres bonos ── */}
-        <ScrollIn delay={0.05}>
-          <h3 className="mt-14 text-center font-display text-lg uppercase tracking-[0.08em] text-accent sm:text-xl">
-            {LISTA.bonosTitle}
-          </h3>
-        </ScrollIn>
-
-        {/* items-stretch por defecto, así que el h-full de BenefitCard iguala
-            las tres alturas aunque sus textos no midan lo mismo. */}
-        <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-3">
-          {LISTA.bonos.map((bono, i) => (
-            <ScrollIn key={bono.icon} delay={i * 0.1} className="h-full">
-              <BenefitCard
-                icon={bono.icon}
-                title={bono.title}
-                text={bono.text}
-              />
-            </ScrollIn>
-          ))}
+          <p className="mt-4 max-w-[26rem] font-sans text-sm leading-snug font-medium tracking-normal text-white md:mt-[0.72vw] md:max-w-[34em] md:text-[clamp(0.52rem,0.72vw,0.82rem)]">
+            {LISTA.intro[1]}
+          </p>
         </div>
 
-        {/* ── El cierre y el formulario ── */}
-        <ScrollIn delay={0.05}>
-          <p className="mx-auto mt-14 max-w-2xl text-center font-display text-lg uppercase leading-snug tracking-[0.03em] text-foreground sm:text-xl">
-            {LISTA.cierre}
-          </p>
-        </ScrollIn>
+        {/* ⚠️ POSICIÓN APROBADA — NO "ARREGLAR". La palabra asoma medio tapada por
+            las cards y así tiene que quedarse en escritorio; validado a 1920.
 
-        {/* El formulario en su propio panel de cristal, con halo.
+            LA PALABRA SE METE UN POCO DETRÁS DE LAS CARDS, y es a propósito: es
+            una marca de agua, y que el borde superior de las cards le muerda el
+            pie es lo que la asienta detrás en vez de dejarla flotando como una
+            línea de texto más.
 
-            No es decoración: es lo único de la página donde hay que escribir, y
-            necesita leerse como una pieza aparte del texto que lo rodea para
-            que se entienda dónde empieza la acción.
+            El equilibrio es fino. A 1920 el hueco libre entre el intro y las
+            cards es de 108 px y su caja mide 118, así que estaba puesta tan abajo
+            que sólo asomaban las puntas de las letras y no se leía. El 30,45%
+            deja los trazos legibles y sólo tapa el remate de abajo.
 
-            max-w-[34rem] — un formulario de tres campos a 1140 px de ancho
-            resulta incómodo de rellenar y parece un pie de página. */}
-        <ScrollIn delay={0.1}>
-          <div className="relative mx-auto mt-10 max-w-[34rem]">
-            <div
-              aria-hidden
-              className="absolute -inset-4 -z-10 rounded-3xl bg-[radial-gradient(60%_60%_at_50%_50%,rgba(180,226,54,0.16),transparent_70%)] blur-xl"
-            />
-            <div className="rounded-2xl border border-accent/25 bg-vo-forest/45 p-6 backdrop-blur-sm sm:p-8">
-              <WaitlistForm />
+            Si se toca, se toca poco: unos pocos puntos porcentuales arriba la
+            estampan contra el párrafo del intro, y unos pocos abajo vuelven a
+            hacerla ilegible. */}
+        <div
+          aria-hidden
+          className="absolute left-1/2 top-[27.2%] -translate-x-1/2 font-display text-[clamp(4.9rem,17vw,7rem)] leading-none tracking-normal text-[#6f990c]/70 md:top-[30.45%] md:text-[clamp(3.2rem,6.15vw,7.5rem)]"
+        >
+          BONUS
+        </div>
 
-              {/* El aviso de privacidad se toma de HERO y no se duplica aquí:
-                  es el mismo texto y dos copias acabarían desincronizadas. */}
-              <p className="mt-4 text-center font-sans text-xs leading-relaxed text-foreground/55">
-                {HERO.privacy}
-              </p>
-            </div>
-          </div>
-        </ScrollIn>
-      </VoContainer>
+        {/* EL FILETE VA PEGADO AL CUERPO, sin anillo separado. Llegó a llevarlo
+            —con su hueco de cristal, como el botón— y se retiró: ese doble borde
+            es cosa del botón y aquí no va.
+
+            Se hace con un envoltorio de 1 px y no con `border` porque un borde no
+            puede degradar, y este filete además gira (ver .le-borde-giro en
+            globals.css). `border-image` sí degrada, pero ignora el redondeo de
+            las esquinas y lo dejaría en ángulo recto sobre una card
+            redondeada. */}
+        <div className="relative z-10 mt-20 grid w-full max-w-[34rem] grid-cols-1 gap-4 md:mt-[5.7vw] md:w-[59.5%] md:max-w-none md:grid-cols-3 md:gap-[0.8vw]">
+          {LISTA.bonos.map((bonus, index) => {
+            const Icono = BONUS_ICONOS[index];
+            return (
+              <div
+                key={bonus.title}
+                className="le-borde-giro h-full rounded-[1.05rem] p-px md:rounded-[0.78vw]"
+              >
+                <article className="flex h-full min-h-[7.8rem] flex-col items-center justify-center rounded-[calc(1.05rem-1px)] bg-[radial-gradient(120%_85%_at_50%_112%,#16250a_0%,#080d04_48%,#030502_100%)] px-7 py-7 md:min-h-[12.75vw] md:rounded-[calc(0.78vw-1px)] md:px-[1.8vw] md:py-[1.25vw]">
+                  {/* Disco oscuro con el icono en lima: los mismos papeles
+                      invertidos que los tildes de "es para vos si…". */}
+                  {Icono && (
+                    <span
+                      aria-hidden
+                      className="mb-4 flex size-11 items-center justify-center rounded-full border border-[#3f5a17] bg-[#0d1505] text-vo-lumen md:mb-[0.9vw] md:size-[2.6vw]"
+                    >
+                      <Icono
+                        strokeWidth={1.6}
+                        className="size-5 md:size-[1.25vw]"
+                      />
+                    </span>
+                  )}
+
+                  <h3 className="font-display text-[clamp(0.86rem,3.6vw,1.1rem)] leading-[1.04] tracking-normal text-vo-lumen uppercase md:text-[clamp(0.7rem,1.05vw,1.25rem)]">
+                    {BONUS_TITLE_LINES[index]?.map((line) => (
+                      <span key={line} className="block">
+                        {line}
+                      </span>
+                    ))}
+                  </h3>
+
+                  <p className="mt-4 max-w-[17rem] font-sans text-xs leading-snug font-semibold tracking-normal text-white md:mt-[1.1vw] md:max-w-[86%] md:text-[clamp(0.48rem,0.63vw,0.78rem)]">
+                    {bonus.text}
+                  </p>
+                </article>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="relative z-10 mt-6 md:mt-[1.45vw]">
+          <CtaLista className="text-[0.58rem] sm:text-[0.62rem] md:text-[clamp(0.5rem,0.58vw,0.72rem)]">
+            {LISTA.cta}
+          </CtaLista>
+        </div>
+      </div>
     </section>
   );
 }
