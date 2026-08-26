@@ -90,19 +90,35 @@ export function ListaParaVos({ items }: { items: readonly string[] }) {
       whileInView="visible"
       viewport={{ once: true, margin: "0px 0px -12% 0px" }}
     >
-      {items.map((item) => (
+      {items.map((item, i) => (
         <motion.li
           key={item}
           variants={sinMovimiento ? undefined : pildora}
           className={[
-            "relative flex items-start gap-[2.6vw] md:gap-[0.6vw]",
-            "rounded-[2vw] border border-[#4a6b12] md:rounded-[0.45vw] md:border-[max(0.06vw,1px)]",
+            "group relative flex items-start gap-[2.6vw] overflow-hidden md:gap-[0.6vw]",
+            "rounded-[2vw] border border-[#4a6b12] md:rounded-[0.6vw] md:border-[max(0.06vw,1px)]",
+            "transition-[transform,box-shadow] duration-300 md:hover:-translate-y-[0.18vw]",
             "bg-[linear-gradient(180deg,#a8cf3c_0%,#93c02c_45%,#7cae1f_100%)]",
             "px-[4vw] py-[3.4vw] md:px-[0.85vw] md:py-[0.7vw]",
             "shadow-[inset_0_0.06vw_0_0_rgba(255,255,255,0.4),0_0.3vw_1vw_-0.35vw_rgba(124,181,24,0.5)]",
+            "md:hover:shadow-[inset_0_0.06vw_0_0_rgba(255,255,255,0.55),0_0.7vw_1.8vw_-0.4vw_rgba(150,220,40,0.75)]",
             "font-sans text-[3.7vw] leading-[1.45] text-[#16210a] md:text-[clamp(0.45rem,0.79vw,1rem)]",
           ].join(" ")}
         >
+          {/* EL DESTELLO EN REPOSO. Cruza en 1,3 s y descansa casi seis; el
+              retardo lo pone el índice, así que las seis cruzan por turnos y no
+              a la vez. Arranca a los 1,8 s para no pisarse con la entrada.
+
+              overflow-hidden en la card es lo que lo recorta: la banda mide más
+              que la píldora a propósito, para entrar y salir por fuera. */}
+          {!sinMovimiento && (
+            <span
+              aria-hidden
+              className="le-destello pointer-events-none absolute inset-y-0 -left-[15%] w-[40%]"
+              style={{ animationDelay: `${1.8 + i * 0.9}s` }}
+            />
+          )}
+
           {!sinMovimiento && (
             <motion.span
               aria-hidden
@@ -127,7 +143,13 @@ export function ListaParaVos({ items }: { items: readonly string[] }) {
           <motion.span
             aria-hidden
             variants={sinMovimiento ? undefined : tilde}
-            className="mt-[0.6vw] flex size-[5.6vw] shrink-0 md:mt-[0.14vw] md:size-[1.3vw] md:max-h-[26px] md:min-h-[15px] md:max-w-[26px] md:min-w-[15px] items-center justify-center rounded-full bg-[#16210a] text-[#b8ea3c]"
+            /* AL PASAR EL RATÓN EL DISCO SE INVIERTE: se llena de lima y el
+               tilde se vuelve oscuro. La sección se titula "es para vos si…", así
+               que cada punto es algo en lo que el lector se reconoce; invertir la
+               marca hace que pasar por encima se sienta como ir tildando una
+               casilla. Es la razón de que la animación sea ésta y no un adorno
+               cualquiera. */
+            className="relative z-10 mt-[0.6vw] flex size-[5.6vw] shrink-0 items-center justify-center rounded-full bg-[#16210a] text-[#b8ea3c] transition-colors duration-300 md:mt-[0.14vw] md:size-[1.3vw] md:max-h-[26px] md:min-h-[15px] md:max-w-[26px] md:min-w-[15px] md:group-hover:bg-[#b8ea3c] md:group-hover:text-[#16210a]"
           >
             <svg
               viewBox="0 0 24 24"
@@ -142,7 +164,7 @@ export function ListaParaVos({ items }: { items: readonly string[] }) {
             </svg>
           </motion.span>
 
-          <span>{item}</span>
+          <span className="relative z-10">{item}</span>
         </motion.li>
       ))}
     </motion.ul>

@@ -6,17 +6,22 @@ import { LineaGlow } from "@/components/lista-de-espera/ui/LineaGlow";
 import { cn } from "@/lib/cn";
 
 /* Todo en vw, porque la columna mide un porcentaje del ancho de la ventana. */
-/* Franja que asoma de cada card ya tapada, en vw.
+/*
+  Franja que asoma de cada card ya tapada, en vw. HAY DOS, y no es capricho:
 
-   VA A CERO A PROPÓSITO: cada card cubre entera a la anterior y en pantalla sólo
-   hay una a la vez. Con franja visible se veían las cinco a la vez —cinco líneas
-   de neón y cinco títulos recortados— y eso se lee como una lista, no como una
-   pila.
+  · En ESCRITORIO la card es apaisada y su texto va arriba a la izquierda, así
+    que una franja del 28% de su alto enseña la línea de neón y el primer
+    renglón del título. Se ven las cinco apiladas.
 
-   Es el único número que hay que tocar para que vuelvan a asomar: subirlo a 0.5
-   deja un canto de unos 10 px por card. El resto del cálculo —relleno, margen y
-   calzo— se ajusta solo a partir de él. */
-const PASO = 0;
+  · En MÓVIL la card es vertical y su texto va ABAJO, sobre la ilustración. Una
+    franja superior no enseñaría más que artwork, así que el paso es cero y
+    cada card tapa entera a la anterior.
+
+  Cambiar el de escritorio es cambiar un número: el relleno, el margen y el
+  calzo final se derivan de él.
+*/
+const PASO_ESC = 4.37;
+const PASO_MOV = 0;
 /* EL HUECO VA EN PÍXELES Y NO EN vw, al revés que todo lo demás de esta pantalla.
    A propósito: en vw se encogía al bajar la resolución —25 px a 1920 se quedaban
    en 19 a 1440— y una separación entre cards no es una medida del diseño que
@@ -134,7 +139,9 @@ export function PilaCards({
 
         const clavado = Number.parseFloat(getComputedStyle(li).top);
         if (!Number.isFinite(clavado)) continue;
-        const adelanto = window.innerWidth * ((FIN_TITULO - PASO) / 100);
+        /* Se adelanta con el paso de ESCRITORIO: el recorte del título sólo
+           importa donde hay franja visible. */
+        const adelanto = window.innerWidth * ((FIN_TITULO - PASO_ESC) / 100);
 
         const obs = new IntersectionObserver(
           ([entrada]) => {
@@ -186,11 +193,13 @@ export function PilaCards({
                —un `style` en línea no entiende de puntos de ruptura— pero con el
                paso a cero todas valen lo mismo en cualquier ancho: relleno 0 y
                margen de 30 px. Así que el apilado no necesita variante. */
-            className="sticky top-[12vh] mb-[var(--le-abajo)] pt-[var(--le-arriba)]"
+            className="sticky top-[12vh] mb-[var(--le-abajo-mov)] pt-[var(--le-arriba-mov)] md:mb-[var(--le-abajo-esc)] md:pt-[var(--le-arriba-esc)]"
             style={
               {
-                "--le-arriba": `${i * PASO}vw`,
-                "--le-abajo": `calc(${HUECO} - ${(i + 1) * PASO}vw)`,
+                "--le-arriba-mov": `${i * PASO_MOV}vw`,
+                "--le-abajo-mov": `calc(${HUECO} - ${(i + 1) * PASO_MOV}vw)`,
+                "--le-arriba-esc": `${i * PASO_ESC}vw`,
+                "--le-abajo-esc": `calc(${HUECO} - ${(i + 1) * PASO_ESC}vw)`,
               } as CSSProperties
             }
           >
@@ -199,7 +208,7 @@ export function PilaCards({
                 src={fondosMovil[i]}
                 alt=""
                 aria-hidden
-                quality={88}
+                quality={90}
                 sizes="87vw"
                 className="h-auto w-full md:hidden"
               />
@@ -262,8 +271,22 @@ export function PilaCards({
             formas. */}
         <li
           aria-hidden
+          className="md:hidden"
           style={{
-            height: `max(1px, calc(${items.length * PASO + AIRE}vw - ${HUECO}))`,
+            height: `max(1px, calc(${items.length * PASO_MOV + AIRE}vw - ${HUECO}))`,
+          }}
+        />
+        {/* DOS CALZOS Y NO UNO CON CLASES POR PUNTO DE RUPTURA: su alto depende
+            del paso, y una clase de Tailwind armada en tiempo de ejecución no
+            existe — Tailwind rastrea el código fuente en busca de cadenas
+            literales, así que nunca generaría esa regla. Con dos elementos, el
+            alto va en estilo en línea, que sí admite valores calculados, y el
+            punto de ruptura decide cuál de los dos está en el flujo. */}
+        <li
+          aria-hidden
+          className="hidden md:block"
+          style={{
+            height: `max(1px, calc(${items.length * PASO_ESC + AIRE}vw - ${HUECO}))`,
           }}
         />
       </ol>

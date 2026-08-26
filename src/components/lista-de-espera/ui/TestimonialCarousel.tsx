@@ -4,8 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { StarTiles } from "@/components/lista-de-espera/ui/StarTiles";
 import type { Testimonial } from "@/components/mision-origen/ui/testimonials";
-import arrowPrev from "@/../public/volver-origen/public/Recursos/generales/boton1.svg";
-import arrowNext from "@/../public/volver-origen/public/Recursos/generales/boton2.svg";
 
 const SPEED = 45;
 
@@ -17,25 +15,6 @@ export function TestimonialCarousel({ items }: TestimonialCarouselProps) {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const pausedRef = useRef(false);
   const [active, setActive] = useState<Testimonial | null>(null);
-
-  const scrollByCard = (direction: -1 | 1) => {
-    const el = scrollerRef.current;
-    if (!el) return;
-
-    const card = el.querySelector("li");
-    const cardWidth = card?.getBoundingClientRect().width ?? el.clientWidth * 0.8;
-    const gap = card ? Number.parseFloat(getComputedStyle(card).marginRight) : 0;
-
-    pausedRef.current = true;
-    window.setTimeout(() => {
-      pausedRef.current = false;
-    }, 650);
-
-    el.scrollBy({
-      left: direction * (cardWidth + (Number.isFinite(gap) ? gap : 0)),
-      behavior: "smooth",
-    });
-  };
 
   useEffect(() => {
     const el = scrollerRef.current;
@@ -161,39 +140,6 @@ export function TestimonialCarousel({ items }: TestimonialCarouselProps) {
             );
           })}
         </ul>
-      </div>
-
-      <div
-        aria-label="Controles del carrusel de reseñas"
-        className="mt-1 mb-4 flex justify-center gap-3"
-      >
-        <button
-          type="button"
-          aria-label="Ver reseñas anteriores"
-          onClick={() => scrollByCard(-1)}
-          className="cursor-pointer rounded-[6px] transition-transform duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-        >
-          <Image
-            src={arrowPrev}
-            alt=""
-            aria-hidden
-            className="h-auto w-[34px] sm:w-[36px]"
-          />
-        </button>
-
-        <button
-          type="button"
-          aria-label="Ver más reseñas"
-          onClick={() => scrollByCard(1)}
-          className="cursor-pointer rounded-[6px] transition-transform duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-        >
-          <Image
-            src={arrowNext}
-            alt=""
-            aria-hidden
-            className="h-auto w-[34px] sm:w-[36px]"
-          />
-        </button>
       </div>
 
       {active && (

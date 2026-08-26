@@ -61,6 +61,19 @@ import flecha from "@/../public/volver-origen/public/Recursos/generales/flecha-b
   sostiene la silueta ahí es el anillo lima, y por eso ya no hace falta el
   contorno negro que llevaba antes.
 
+  ── LAS PROPORCIONES SALEN DE UNA MEDIDA DEL MONTAJE ──
+
+  El diseño da el botón del hero en 496x79 px a 1920. Con el relleno que tenía
+  antes la pieza medía 5,76em de alto, o sea 105 px con el rótulo al tamaño
+  aprobado: para bajar a 79 había dos caminos, y sólo uno es el correcto.
+
+  Encoger el rótulo habría dado los 79 px, pero dejando la letra a 13,7 px —muy
+  por debajo de lo que se aprobó dos revisiones antes—. Así que lo que se aprieta
+  es el RELLENO: el anillo baja de 0,85 a 0,5em y el relleno interno de 1,4 a
+  1,04em, con lo que la pieza mide 4,33em y da exactamente 79 px sin tocar el
+  tamaño de letra. El ancho lo pone la columna del hero: 490 px contra los 496
+  del montaje.
+
   El volumen son tres sombras interiores y ninguna exterior: una línea de luz de
   1 px arriba, un oscurecido en el canto de abajo y un filete oscuro perimetral
   muy tenue. La única sombra exterior es el resplandor verde, y va difuminada al
@@ -80,7 +93,7 @@ export function CtaLista({
       type="button"
       onClick={open}
       className={cn(
-        "group inline-flex w-full cursor-pointer rounded-[0.9em] p-[0.62em] md:p-[0.85em]",
+        "group inline-flex w-full cursor-pointer rounded-[0.9em] p-[0.42em] md:p-[0.5em]",
         /* EL HUECO ENTRE EL FILETE Y EL CUERPO NO VA VACÍO, LLEVA CRISTAL, y ese
            cristal es VERDE OSCURO, no blanco. Llegó a ser un blanco al 10% y
            salía grisáceo: un blanco diluido sobre fondo oscuro no tiñe, sólo
@@ -100,7 +113,7 @@ export function CtaLista({
       <span
         className={cn(
           "inline-flex w-full items-center justify-center gap-[0.9em]",
-          "rounded-[0.9em] px-[1em] py-[1.25em] md:px-[1.8em] md:py-[1.4em]",
+          "rounded-[0.9em] px-[1em] py-[0.9em] md:px-[1.8em] md:py-[1.04em]",
           /* El fondo son DOS capas —la lámina de cristal encima y el degradado
              lima→bosque debajo— y por eso vive en globals.css y no aquí: la coma
              que separa las dos capas rompe el parseo del valor arbitrario de

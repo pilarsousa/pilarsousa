@@ -58,7 +58,7 @@ export function Diagnostico() {
             frente a 1,15— y no es un descuido del montaje: el hero se apoya en
             la foto para captar, y aquí el titular carga solo con el peso de la
             sección. Con 0,95vw se leía como un antetítulo. */}
-        <h2 className="font-display text-[5.4vw] leading-[1.28] text-[#141b0a] md:text-[clamp(0.8rem,1.25vw,1.6rem)] md:leading-[1.3]">
+        <h2 className="font-display text-[5.4vw] leading-[1.28] text-[#141b0a] md:text-[clamp(0.95rem,1.4583vw,1.9rem)] md:leading-[1.3]">
           {ENTRENAR.izquierda.titulo}
         </h2>
 
@@ -66,7 +66,7 @@ export function Diagnostico() {
           {ENTRENAR.izquierda.parrafos.map((partes) => (
             <p
               key={partes[0].text}
-              className="font-sans text-[3.75vw] leading-[1.6] text-[#3d4436] md:text-[clamp(0.45rem,0.68vw,0.88rem)]"
+              className="font-sans text-[3.75vw] leading-[1.6] text-[#3d4436] md:text-[clamp(0.68rem,0.9375vw,1.2rem)]"
             >
               {/* El resaltado de este panel no puede ser el verde de la marca:
                   sobre blanco pierde contraste y se lee como un error. Aquí
@@ -82,12 +82,12 @@ export function Diagnostico() {
       </div>
 
       {/* ── Derecha: la respuesta, sobre la lluvia de código ── */}
-      <div className="relative isolate overflow-hidden bg-black px-[6.5vw] py-[13vw] md:pointer-events-auto md:absolute md:top-[13.5%] md:left-[55.6%] md:overflow-visible md:bg-transparent md:p-0">
+      <div className="relative isolate overflow-hidden bg-black px-[6.5vw] py-[13vw] md:pointer-events-auto md:absolute md:top-[13.5%] md:left-[55.6%] md:mt-0 md:w-[23.9%] md:overflow-visible md:bg-transparent md:p-0">
         <div aria-hidden className="absolute inset-0 md:hidden">
           <LluviaCodigo opacidad={0.38} />
         </div>
 
-        <h2 className="relative font-display text-[5.4vw] leading-[1.28] text-[#f4f1e4] md:text-[clamp(0.8rem,1.25vw,1.6rem)] md:leading-[1.3]">
+        <h2 className="relative font-display text-[5.4vw] leading-[1.28] text-[#f4f1e4] md:text-[clamp(0.95rem,1.4583vw,1.9rem)] md:leading-[1.3]">
           {ENTRENAR.derecha.titulo}
         </h2>
 
@@ -95,7 +95,7 @@ export function Diagnostico() {
           {ENTRENAR.derecha.parrafos.map((partes) => (
             <p
               key={partes[0].text}
-              className="relative font-sans text-[3.75vw] leading-[1.6] text-[#cfd3c6] md:text-[clamp(0.45rem,0.68vw,0.88rem)]"
+              className="relative font-sans text-[3.75vw] leading-[1.6] text-[#cfd3c6] md:text-[clamp(0.68rem,0.9375vw,1.2rem)]"
             >
               <Tramos
                 partes={partes}
@@ -106,7 +106,7 @@ export function Diagnostico() {
           ))}
         </div>
 
-        <div className="relative mt-[7vw] text-[3.35vw] md:mt-[1.6vw] md:text-[clamp(0.42rem,0.66vw,0.85rem)]">
+        <div className="relative mt-[7vw] text-[3.35vw] md:mt-[1.6vw] md:text-[clamp(0.55rem,0.89vw,1.12rem)]">
           <CtaLista>{ENTRENAR.derecha.cta}</CtaLista>
         </div>
       </div>

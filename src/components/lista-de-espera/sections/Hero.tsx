@@ -56,18 +56,31 @@ export function Hero() {
         src={bannerMovil}
         alt=""
         priority
-        quality={85}
+        quality={90}
         sizes="100vw"
         placeholder="blur"
         className="h-[74vw] w-full object-cover object-top md:hidden"
       />
+      {/* SE ENSANCHA UN 0,3% PARA TIRAR EL CANTO DERECHO FUERA DEL CONTENEDOR.
+          banner-1 trae 4 columnas de alfa 0 pegadas a su borde derecho —el
+          izquierdo está limpio, y es el único de los cinco banners con este
+          defecto—. Como la sección es blanca en escritorio, por esos 4 px se
+          colaba una tira blanca de arriba abajo pegada al canto de la foto.
+
+          El 0,3% deja las columnas malas empezando en el 100,05% del ancho, o
+          sea fuera; las recorta el overflow-x-clip de la sección. Se ensancha en
+          vez de desplazar para no correr la foto hacia la izquierda, y el 0,3%
+          de escala no se percibe.
+
+          max-w-none es imprescindible: el preflight de Tailwind pone un
+          max-width del 100% a las imágenes y anularía el ensanche sin avisar. */}
       <Image
         src={banner}
         alt=""
         quality={90}
         sizes="100vw"
         placeholder="blur"
-        className="hidden h-auto w-full md:block"
+        className="hidden h-auto w-full max-w-none md:block md:w-[100.3%]"
       />
 
       {/* EN MÓVIL EL TEXTO NO VA SOBRE LA FOTO SINO DEBAJO, y no es pereza: el
@@ -78,45 +91,49 @@ export function Hero() {
           Y se recorta a 74vw de los 156 que mide el archivo: por debajo de su
           45% de alto es negro liso —luminancia 2 sobre 255— así que mostrarlo
           entero sólo añadía media pantalla de vacío entre la foto y el texto. */}
-      <div className="relative -mt-[8vw] bg-[linear-gradient(180deg,transparent_0%,#000_8vw)] px-[6.5vw] pt-[8vw] pb-[12vw] md:absolute md:top-[17%] md:left-[20.3%] md:mt-0 md:w-[25.5%] md:bg-none md:p-0">
-        {/* EL ALTO QUE SE PIDE AQUÍ NO ES EL QUE SE VE, y la diferencia es
-            grande: los dos PNG miden 169 px de alto pero su píldora sólo 108
-            —hay 30 px transparentes arriba y 31 abajo—, así que el 36% de esta
-            caja es aire. A 3,42vw la caja mide 66 px a 1920 y la píldora que se
-            ve, 42.
+      <div className="relative -mt-[8vw] bg-[linear-gradient(180deg,transparent_0%,#000_8vw)] px-[6.5vw] pt-[8vw] pb-[12vw] md:absolute md:top-[15%] md:left-[20.3%] md:mt-0 md:w-[25.5%] md:bg-none md:p-0">
+        {/* EL ALTO QUE SE PIDE AQUÍ NO ES EL QUE SE VE. Los dos PNG miden 169 px
+            de alto y su píldora sólida sólo 87: el resto es margen transparente
+            y resplandor. O sea que la mitad de esta caja es aire, y hay que
+            multiplicar por 0,515 para saber qué se verá.
 
-            Por eso el número parece siempre mayor de lo que aparenta en
-            pantalla, y por eso el hueco entre los dos sellos es más ancho que el
-            gap: la mayor parte de esa separación son sus márgenes vacíos.
+            EL 4,45vw SALE DE AHÍ, no de probar. El montaje pide una píldora de
+            44 px de alto a 1920; 44 x 169/87 da 85,5 px de caja, que es el
+            4,45% de 1920. La comprobación es que el ancho sólido resultante da
+            207 y 166 px contra los 205 y 164 del montaje: un 1% de error.
 
-            Si hiciera falta afinarlo de verdad, lo limpio sería recortar ese
-            margen del archivo; mientras siga ahí, cualquier medida que se ponga
-            aquí hay que multiplicarla por 0,64 para saber qué se verá. */}
+            OJO CON MEDIR LA PÍLDORA CON UN UMBRAL DE ALFA BAJO. A >24 salen
+            428x108 y una relación de 3,96, que no cuadra con la del montaje
+            (4,66) y lleva a números equivocados; el resplandor cuenta como
+            píldora. A >200 salen 410x87 y relación 4,71, que sí cuadra.
+
+            El hueco entre los dos sellos también es más ancho que el gap por lo
+            mismo: la mayor parte son sus márgenes vacíos laterales. */}
         <div className="flex items-center gap-[2vw] md:gap-[0.5vw]">
           <Image
             src={selloLista}
             alt={HERO.eyebrow}
             quality={90}
             sizes="220px"
-            className="h-[11vw] w-auto md:h-[clamp(1.62rem,3.42vw,4.32rem)]"
+            className="h-[11vw] w-auto md:h-[clamp(2.11rem,4.45vw,5.62rem)]"
           />
           <Image
             src={selloEdicion}
             alt="3.ª edición"
             quality={90}
             sizes="190px"
-            className="h-[11vw] w-auto md:h-[clamp(1.62rem,3.42vw,4.32rem)]"
+            className="h-[11vw] w-auto md:h-[clamp(2.11rem,4.45vw,5.62rem)]"
           />
         </div>
 
         <h1
           id="hero-title"
-          className="mt-[4.5vw] font-display text-[5.4vw] leading-[1.3] text-[#f4f1e4] md:mt-[0.8vw] md:text-[clamp(0.72rem,1.15vw,1.5rem)] md:leading-[1.36]"
+          className="mt-[4.5vw] font-display text-[5.4vw] leading-[1.3] text-balance text-[#f4f1e4] md:mt-[0.8vw] md:text-[clamp(0.82rem,1.3542vw,1.73rem)] md:leading-[1.34]"
         >
           {HERO.claim}
         </h1>
 
-        <p className="mt-[4.5vw] font-sans text-[3.75vw] leading-[1.6] text-[#d5d2c6] md:mt-[1.1vw] md:text-[clamp(0.5rem,0.75vw,0.95rem)] md:leading-[1.65]">
+        <p className="mt-[4.5vw] font-sans text-[3.75vw] leading-[1.6] text-[#d5d2c6] md:mt-[1.1vw] md:text-[clamp(0.6rem,0.8333vw,1.05rem)] md:leading-[1.6]">
           {HERO.intro.map((parte) =>
             parte.strong ? (
               <strong key={parte.text} className="font-bold text-white">
@@ -128,7 +145,7 @@ export function Hero() {
           )}
         </p>
 
-        <p className="mt-[3vw] font-sans text-[3.75vw] leading-[1.6] text-[#d5d2c6] md:mt-[0.7vw] md:text-[clamp(0.5rem,0.75vw,0.95rem)] md:leading-[1.65]">
+        <p className="mt-[3vw] font-sans text-[3.75vw] leading-[1.6] text-[#d5d2c6] md:mt-[0.7vw] md:text-[clamp(0.6rem,0.8333vw,1.05rem)] md:leading-[1.6]">
           {HERO.duracionLead}
           <strong className="font-bold text-white">{HERO.duracion}</strong>
         </p>

@@ -1,8 +1,10 @@
 import Image from "next/image";
+import { CircleCheck } from "lucide-react";
 import { CtaLista } from "@/components/lista-de-espera/ui/CtaLista";
 import { LluviaCodigo } from "@/components/lista-de-espera/ui/LluviaCodigo";
 import { FlechaBajar } from "@/components/lista-de-espera/ui/FlechaBajar";
 import { EXPERIENCIA } from "@/components/lista-de-espera/content";
+import { cn } from "@/lib/cn";
 import banner from "@/../public/volver-origen/public/Recursos/generales/banner-3-web.webp";
 import mockup1 from "@/../public/volver-origen/public/Recursos/generales/mockup1.webp";
 import mockup2 from "@/../public/volver-origen/public/Recursos/generales/mockup2.webp";
@@ -12,6 +14,7 @@ import cardProposito from "@/../public/volver-origen/public/Recursos/generales/c
 import cardDinero from "@/../public/volver-origen/public/Recursos/generales/card-dinero.webp";
 
 const MOCKUPS = [mockup1, mockup2, mockup3];
+const PRIMER_ITEM_CON_AIRE_EXTRA = 4;
 
 /*
   Los tres fondos, y uno no es como los otros dos.
@@ -143,19 +146,32 @@ export function Experiencia() {
             entre ellos: así el primero también lleva raya —que es lo que hace el
             montaje— sin tener que meter un elemento suelto que no dice nada. */}
         <ul className="mt-[7vw] md:mt-[1.5vw]">
-          {EXPERIENCIA.items.map((item) => (
+          {EXPERIENCIA.items.map((item, i) => (
             <li
               key={item.text}
-              className="border-t border-[#a3ca23] py-[3.4vw] pl-[3.5vw] md:border-t-[max(0.05vw,1px)] md:py-[0.6vw] md:pl-[1.1vw]"
-            >
-              <p className="font-sans text-[3.9vw] leading-[1.35] font-semibold text-[#f4f1e4] md:text-[clamp(0.48rem,0.86vw,1.05rem)]">
-                {item.text}
-              </p>
-              {item.detalle && (
-                <p className="mt-[1.4vw] font-sans text-[3.6vw] leading-[1.45] text-[#a9b09b] md:mt-[0.2vw] md:text-[clamp(0.45rem,0.82vw,1rem)] md:leading-[1.4]">
-                  {item.detalle}
-                </p>
+              className={cn(
+                "border-t border-[#a3ca23] py-[3.4vw] pl-[3.5vw] md:border-t-[max(0.05vw,1px)] md:py-[0.6vw] md:pl-[1.1vw]",
+                i >= PRIMER_ITEM_CON_AIRE_EXTRA &&
+                  "py-[calc(3.4vw+5px)] md:py-[calc(0.6vw+5px)]",
               )}
+            >
+              <div className="flex items-start gap-[2.2vw] md:gap-[0.45vw]">
+                <CircleCheck
+                  aria-hidden
+                  strokeWidth={1.9}
+                  className="mt-[0.12em] size-[3.7vw] shrink-0 text-[#a3ca23] drop-shadow-[0_0_0.35em_rgba(163,202,35,0.7)] md:size-[clamp(0.55rem,0.72vw,0.95rem)]"
+                />
+                <div className="min-w-0">
+                  <p className="font-sans text-[3.9vw] leading-[1.35] font-semibold text-[#f4f1e4] md:text-[clamp(0.48rem,0.86vw,1.05rem)]">
+                    {item.text}
+                  </p>
+                  {item.detalle && (
+                    <p className="mt-[1.4vw] font-sans text-[3.6vw] leading-[1.45] text-[#a9b09b] md:mt-[0.2vw] md:text-[clamp(0.45rem,0.82vw,1rem)] md:leading-[1.4]">
+                      {item.detalle}
+                    </p>
+                  )}
+                </div>
+              </div>
             </li>
           ))}
         </ul>
@@ -171,7 +187,7 @@ export function Experiencia() {
             aria-hidden
             quality={90}
             sizes="(min-width: 768px) 26vw, 87vw"
-            className="h-auto w-full"
+            className="h-auto w-full rounded-[2.1vw] shadow-[0_0_18px_rgba(163,202,35,0.22),0_18px_45px_rgba(0,0,0,0.65)] transition-all duration-500 ease-out md:rounded-[0.78vw] md:hover:-translate-y-[0.28vw] md:hover:scale-[1.015] md:hover:brightness-110 md:hover:saturate-[1.08] md:hover:shadow-[0_0_32px_rgba(163,202,35,0.4),0_24px_58px_rgba(0,0,0,0.8)]"
           />
         ))}
       </div>

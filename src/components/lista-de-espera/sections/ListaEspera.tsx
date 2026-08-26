@@ -141,7 +141,7 @@ export function ListaEspera() {
         </div>
 
         <div className="relative z-10 mt-6 md:mt-[1.45vw]">
-          <CtaLista className="text-[0.58rem] sm:text-[0.62rem] md:text-[clamp(0.5rem,0.58vw,0.72rem)]">
+          <CtaLista className="text-[0.84rem] sm:text-[0.9rem] md:text-[clamp(0.72rem,0.82vw,1rem)]">
             {LISTA.cta}
           </CtaLista>
         </div>

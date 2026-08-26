@@ -80,14 +80,17 @@ export function QueEntrenas() {
         />
       </div>
 
-      {/* El hueco hasta el botón es corto a propósito. Lo que separa de verdad no
-          es este margen sino el relleno inferior de la pila, que es lo que
-          retrasa el soltado: durante mucho tiempo hizo falta largo para que la
-          pila terminada no se deshiciera en pantalla. Ahora que todas las cards
-          se sueltan a la vez y la pila se va entera, ya no hace falta retenerla,
-          así que ese relleno se recortó y el botón subió con él. */}
-      <div className="mx-auto mt-[7vw] w-[87%] text-[3.35vw] md:mt-[0.5vw] md:w-fit md:text-[clamp(0.5rem,0.85vw,1.05rem)]">
-        <CtaLista>{HERO.cta}</CtaLista>
+      {/* El CTA tiene su propia pista sticky en escritorio. Como es el último
+          elemento de la sección, pegarlo directamente no le daba recorrido real:
+          al scrollear seguía subiendo sobre la pila. Esta pista lo mantiene
+          abajo, separado de las cards, hasta que la sección siguiente entra. */}
+      <div className="mt-[7vw] md:mt-[2vw] md:h-[28vw]">
+        <div
+          className="relative z-30 mx-auto w-[87%] text-[3.35vw] md:sticky md:w-fit md:text-[clamp(0.5rem,0.85vw,1.05rem)]"
+          style={{ top: "min(calc(12vh + 36vw), calc(100svh - 5.2em))" }}
+        >
+          <CtaLista>{HERO.cta}</CtaLista>
+        </div>
       </div>
     </section>
   );
