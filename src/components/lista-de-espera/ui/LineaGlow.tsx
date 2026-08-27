@@ -35,9 +35,13 @@ export function LineaGlow({ className }: { className?: string }) {
       ref={ref}
       className={cn(
         "h-[max(0.15vw,2px)] rounded-full bg-[#b8ea3c]",
-        "shadow-[0_0_0.35vw_0.02vw_rgba(184,234,60,0.95),0_0_1.5vw_0.18vw_rgba(138,205,40,0.5)]",
-        "transition-[width] duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
-        enVista ? "w-[76%]" : "w-[100px]",
+              /* TRES SOMBRAS Y NO DOS. El filamento corto y saturado da el borde, la
+         media da cuerpo y la ancha derrama la luz sobre el fondo. Con dos había
+         que elegir entre canto duro o mancha sin centro, y la barra se leía
+         apagada al lado de los neones del resto de la landing. */
+      "shadow-[0_0_0.3vw_0.03vw_rgba(214,255,140,1),0_0_0.9vw_0.1vw_rgba(184,234,60,0.85),0_0_2.4vw_0.3vw_rgba(138,205,40,0.55)]",
+        "transition-[width] duration-[1100ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
+        enVista ? "w-[76%]" : "w-[42px]",
         className,
       )}
     />

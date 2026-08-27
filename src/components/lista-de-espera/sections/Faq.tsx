@@ -102,7 +102,7 @@ export function Faq() {
       <div className="relative mx-auto w-[87%] md:w-[59%]">
         <h2
           id="faq-titulo"
-          className="text-center font-display text-[6.4vw] leading-[1.25] text-[#141b0a] md:text-[clamp(0.8rem,1.35vw,1.75rem)] md:leading-[1.3]"
+          className="text-center font-display text-[6.4vw] leading-[1.25] text-[#141b0a] md:text-[clamp(0.95rem,1.4583vw,1.9rem)] md:leading-[1.3] md:font-bold"
         >
           {FAQ.title} <span className="text-[#5f8a12]">{FAQ.titleAccent}</span>
         </h2>

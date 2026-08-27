@@ -58,7 +58,7 @@ export function Diagnostico() {
             frente a 1,15— y no es un descuido del montaje: el hero se apoya en
             la foto para captar, y aquí el titular carga solo con el peso de la
             sección. Con 0,95vw se leía como un antetítulo. */}
-        <h2 className="font-display text-[5.4vw] leading-[1.28] text-[#141b0a] md:text-[clamp(0.95rem,1.4583vw,1.9rem)] md:leading-[1.3]">
+        <h2 className="font-display text-[5.4vw] leading-[1.28] text-[#141b0a] md:text-[clamp(0.95rem,1.4583vw,1.9rem)] md:leading-[1.3] md:font-bold">
           {ENTRENAR.izquierda.titulo}
         </h2>
 
@@ -66,14 +66,14 @@ export function Diagnostico() {
           {ENTRENAR.izquierda.parrafos.map((partes) => (
             <p
               key={partes[0].text}
-              className="font-sans text-[3.75vw] leading-[1.6] text-[#3d4436] md:text-[clamp(0.68rem,0.9375vw,1.2rem)]"
+              className="font-sans text-[3.75vw] leading-[1.6] text-[#3d4436] md:text-[clamp(0.68rem,0.9375vw,1.2rem)] md:font-medium"
             >
               {/* El resaltado de este panel no puede ser el verde de la marca:
                   sobre blanco pierde contraste y se lee como un error. Aquí
                   destaca por peso y tinta plena. */}
               <Tramos
                 partes={partes}
-                acento="font-bold text-[#141b0a]"
+                acento="font-bold italic text-[#141b0a]"
                 fuerte="font-bold text-[#141b0a]"
               />
             </p>
@@ -87,7 +87,7 @@ export function Diagnostico() {
           <LluviaCodigo opacidad={0.38} />
         </div>
 
-        <h2 className="relative font-display text-[5.4vw] leading-[1.28] text-[#f4f1e4] md:text-[clamp(0.95rem,1.4583vw,1.9rem)] md:leading-[1.3]">
+        <h2 className="relative font-display text-[5.4vw] leading-[1.28] text-[#f4f1e4] md:text-[clamp(0.95rem,1.4583vw,1.9rem)] md:leading-[1.3] md:font-bold">
           {ENTRENAR.derecha.titulo}
         </h2>
 
@@ -95,18 +95,18 @@ export function Diagnostico() {
           {ENTRENAR.derecha.parrafos.map((partes) => (
             <p
               key={partes[0].text}
-              className="relative font-sans text-[3.75vw] leading-[1.6] text-[#cfd3c6] md:text-[clamp(0.68rem,0.9375vw,1.2rem)]"
+              className="relative font-sans text-[3.75vw] leading-[1.6] text-[#cfd3c6] md:text-[clamp(0.68rem,0.9375vw,1.2rem)] md:font-medium"
             >
               <Tramos
                 partes={partes}
-                acento="font-bold text-white"
+                acento="font-bold italic text-white"
                 fuerte="font-bold text-white"
               />
             </p>
           ))}
         </div>
 
-        <div className="relative mt-[7vw] text-[3.35vw] md:mt-[1.6vw] md:text-[clamp(0.55rem,0.89vw,1.12rem)]">
+        <div className="relative mt-[7vw] md:mt-[15px]">
           <CtaLista>{ENTRENAR.derecha.cta}</CtaLista>
         </div>
       </div>

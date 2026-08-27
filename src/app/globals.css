@@ -1739,6 +1739,89 @@ body {
 }
 
 /*
+  El disco que invita a bajar, en el paso entre secciones.
+
+  SE MUEVE POCO Y DESPACIO: 4 px en 2,4 s. Un indicador de scroll que salta
+  mucho pide atención en vez de ofrecerla, y compite con el botón, que es la
+  acción de verdad de esa pantalla.
+
+  El resplandor late con el mismo ciclo pero no en fase: la sombra crece
+  cuando el disco está abajo, así que parece asentarse en vez de flotar.
+*/
+@keyframes le-baja {
+  0%,
+  100% {
+    transform: translateY(0);
+    filter: drop-shadow(0 0 0.35rem rgba(163, 202, 35, 0.45));
+  }
+  50% {
+    transform: translateY(4px);
+    filter: drop-shadow(0 0.25rem 0.9rem rgba(163, 202, 35, 0.9));
+  }
+}
+
+.le-baja {
+  animation: le-baja 2.4s ease-in-out infinite;
+}
+
+/*
+  Los dos halos de la sección 5 se mueven EN SENTIDOS OPUESTOS y respiran.
+
+  Opuestos y no a la vez: dos luces subiendo juntas se leen como una sola capa
+  desplazándose, y el efecto desaparece. Cruzándose, cada canto tiene su propio
+  pulso y la sección parece iluminada por dos fuentes y no por una.
+
+  El recorrido y la escala van en el mismo keyframe pero con distinto ritmo
+  —el ciclo es de 19 y 23 s, números primos entre sí— así que no vuelven a
+  coincidir en la misma postura y el conjunto no se percibe como un bucle.
+
+  Se anima transform y no width/height: transform lo resuelve el compositor,
+  mientras que animar el tamaño de una caja con blur de 1,4vw obligaría a
+  rehacer el desenfoque en cada frame.
+*/
+@keyframes le-halo-a {
+  0%,
+  100% {
+    transform: translate(-50%, 0) scale(1);
+  }
+  50% {
+    transform: translate(-50%, 42%) scale(1.18);
+  }
+}
+
+@keyframes le-halo-b {
+  0%,
+  100% {
+    transform: translate(50%, 38%) scale(1.14);
+  }
+  50% {
+    transform: translate(50%, 0) scale(1);
+  }
+}
+
+.le-halo-a {
+  animation: le-halo-a 19s ease-in-out infinite;
+}
+
+.le-halo-b {
+  animation: le-halo-b 23s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .le-halo-a,
+  .le-halo-b {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .le-baja {
+    animation: none;
+    filter: drop-shadow(0 0 0.5rem rgba(163, 202, 35, 0.6));
+  }
+}
+
+/*
   Destello que cruza las píldoras de 'es para vos si…'.
 
   ES UN VIAJE CORTO CON UNA ESPERA LARGA, no un vaivén continuo. La luz cruza
@@ -2517,3 +2600,5 @@ body {
 .vo-latido {
   animation: vo-latido 3.6s ease-in-out infinite;
 }
+
+

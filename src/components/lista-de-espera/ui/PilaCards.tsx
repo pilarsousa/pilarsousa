@@ -21,7 +21,12 @@ import { cn } from "@/lib/cn";
   calzo final se derivan de él.
 */
 const PASO_ESC = 4.37;
-const PASO_MOV = 0;
+/* En móvil la card es vertical y su texto va ABAJO, así que la franja que asoma
+   enseña ilustración y la línea de neón, nunca el título. Aun así se deja
+   franja: sin ella no se lee como pila —se ve la card siguiente subiendo por
+   debajo, una detrás de otra— y el efecto no existe. Con 3vw asoma un canto de
+   unos 12 px por card, lo justo para que se lea como baraja. */
+const PASO_MOV = 3;
 /* EL HUECO VA EN PÍXELES Y NO EN vw, al revés que todo lo demás de esta pantalla.
    A propósito: en vw se encogía al bajar la resolución —25 px a 1920 se quedaban
    en 19 a 1440— y una separación entre cards no es una medida del diseño que
@@ -242,7 +247,7 @@ export function PilaCards({
                   el título: si fluyera, su arranque dependería de si el título
                   ocupó uno o dos renglones y en unas cards asomaría por debajo
                   del recorte y en otras no. */}
-              <p className="mt-[2.5vw] font-sans text-[4vw] leading-[1.45] text-[#c9cec0] md:absolute md:top-[38%] md:left-[10%] md:mt-0 md:w-[36%] md:text-[clamp(0.45rem,0.8vw,1rem)] md:leading-[1.5]">
+              <p className="mt-[2.5vw] font-sans text-[4vw] leading-[1.45] text-[#c9cec0] md:absolute md:top-[calc(14%+2.1em)] md:left-[10%] md:mt-0 md:w-[36%] md:text-[clamp(0.45rem,0.8vw,1rem)] md:leading-[1.5]">
                 {item.text}
               </p>
               </div>

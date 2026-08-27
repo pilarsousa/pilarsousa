@@ -25,8 +25,16 @@ export const HERO = {
   titleMain: ["Volver al", "Origen"],
   /* El golpe de entrada, aparte del párrafo explicativo: es la frase que tiene
      que leerse aunque no se lea nada más. */
-  claim:
-    "No necesitás más información. Necesitás entrenar a la identidad capaz de sostener la vida que querés crear.",
+  /* SE RESALTAN DOS TRAMOS Y NO UNO: el verbo que promete —entrenar a la
+     identidad— y el resultado —la vida que querés crear—. Son las dos mitades
+     de la promesa, separadas por texto normal para que la frase no se lea como
+     un bloque enfatizado entero; si todo destaca, no destaca nada. */
+  claim: [
+    { text: "No necesitás más información. Necesitás " },
+    { text: "entrenar a la identidad", strong: true },
+    { text: " capaz de sostener la " },
+    { text: "vida que querés crear.", strong: true },
+  ],
   /* Va partido en tramos para poder resaltar sin meter HTML dentro del string.
      Dos tramos en negrita: qué es el entrenamiento y sobre qué áreas actúa. Son
      los dos datos que alguien busca al leer por encima, y quedan separados por
@@ -43,9 +51,11 @@ export const HERO = {
   /* La línea de duración va partida: el montaje la escribe con el arranque en
      texto normal y el dato en negrita, y separarla evita meter marcado dentro
      del copy. */
-  duracionLead: "Un entrenamiento intensivo de ",
-  duracion:
-    "40 días de entrenamiento intensivo + acompañamiento durante 90 días.",
+  /* NO REPITE "entrenamiento intensivo": el párrafo de arriba ya abre con esa
+     misma fórmula, y volver a decirlo dos líneas después suena a plantilla mal
+     rellenada. Aquí la frase arranca por el dato. */
+  duracionLead: "Son ",
+  duracion: "40 días intensivos + acompañamiento durante 90 días.",
   privacy: "Tu información está 100% protegida. No enviamos spam.",
   /* El montaje escribe "Quiero entrar a la lista", más corto que el
      "…a la lista de espera" del documento de copy. Manda el montaje: el rótulo
@@ -68,7 +78,7 @@ export const FORM = {
     telefono: "Teléfono / WhatsApp",
     email: "Correo electrónico",
   },
-  submit: "Quiero entrar a la lista de espera",
+  submit: "Quiero entrar a la lista",
   submitting: "Registrando…",
   success: "¡Estás en la lista!",
   error: "No pudimos registrarte. Revisá tu conexión y probá de nuevo.",
@@ -154,7 +164,7 @@ export const ENTRENAR = {
       ],
       [{ text: "No es filosófico. Es práctico.", fuerte: true }],
     ] as Tramo[][],
-    cta: "Quiero ser parte de la próxima edición",
+    cta: "Quiero ser parte",
   },
 
   /* Nombre de la sección para lectores de pantalla: el titular está partido
@@ -168,16 +178,43 @@ export const ENTRENAR = {
    en dos columnas, así que el orden importa: se leen por FILAS, y cada fila
    empareja una condición larga con una corta para que las dos cards de una misma
    fila queden de alto parecido. */
+/* Cada punto lleva marcado su concepto clave: es lo que hace que la lista se
+   pueda barrer con la vista sin leerla entera. Uno por ítem y no dos: con dos
+   resaltados en una línea de dos renglones ya no destaca ninguno. */
 export const PARA_VOS = {
   title: "Volver al Origen",
   titleAccent: "es para vos si…",
   items: [
-    "Llevás tiempo trabajando en vos, pero todavía repetís patrones que creías haber superado.",
-    "Querés tomar decisiones con mayor seguridad y dejar de cuestionarte constantemente.",
-    "Sabés que necesitás priorizarte, pero te cuesta sostenerte cuando llega el momento de hacerlo.",
-    "Sentís que tu próximo nivel requiere elevar tus estándares, tu entorno y aquello que estás dispuesto a aceptar.",
-    "Consumiste libros, cursos o contenido espiritual, pero sentís que necesitás integrar, no seguir acumulando.",
-    "Querés ordenar tu espiritualidad y convertirla en una forma de vivir más simple, práctica y coherente.",
+    [
+      { text: "Llevás tiempo trabajando en vos, pero todavía " },
+      { text: "repetís patrones", clave: true },
+      { text: " que creías haber superado." },
+    ],
+    [
+      { text: "Querés tomar " },
+      { text: "decisiones con mayor seguridad", clave: true },
+      { text: " y dejar de cuestionarte constantemente." },
+    ],
+    [
+      { text: "Sabés que necesitás " },
+      { text: "priorizarte", clave: true },
+      { text: ", pero te cuesta sostenerte cuando llega el momento de hacerlo." },
+    ],
+    [
+      { text: "Sentís que tu próximo nivel requiere " },
+      { text: "elevar tus estándares", clave: true },
+      { text: ", tu entorno y aquello que estás dispuesto a aceptar." },
+    ],
+    [
+      { text: "Consumiste libros, cursos o contenido espiritual, pero sentís que necesitás " },
+      { text: "integrar, no seguir acumulando", clave: true },
+      { text: "." },
+    ],
+    [
+      { text: "Querés ordenar tu espiritualidad y convertirla en una " },
+      { text: "forma de vivir más simple, práctica y coherente", clave: true },
+      { text: "." },
+    ],
   ],
 };
 
@@ -280,7 +317,7 @@ export const EXPERIENCIA = {
       text: "Transformá tu relación con recibir, expandirte y permitir mayor abundancia en tu vida.",
     },
   ],
-  cta: "Quiero entrar a la lista de espera",
+  cta: "Quiero entrar a la lista",
 };
 
 /* Símbolos de la nube que gira.
@@ -315,7 +352,7 @@ export const TESTIMONIOS = {
     "No queremos que simplemente nos creas.",
     "Mirá lo que ocurrió con personas que ya atravesaron la experiencia.",
   ],
-  cta: "Quiero ser parte de la próxima edición",
+  cta: "Quiero ser parte",
 };
 
 /*
@@ -357,7 +394,7 @@ export const PILAR = {
   /* Etiquetas del botón que despliega la segunda mitad de la historia. */
   verMas: "Ver más",
   verMenos: "Ver menos",
-  cta: "Quiero entrar a la lista de espera",
+  cta: "Quiero entrar a la lista",
 };
 
 /* ─── 08. Entrá ahora a la lista de espera ─────────────────────────────── */

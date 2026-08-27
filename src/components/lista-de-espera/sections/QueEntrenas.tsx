@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { CtaLista } from "@/components/lista-de-espera/ui/CtaLista";
 import { PilaCards } from "@/components/lista-de-espera/ui/PilaCards";
 import { HERO, QUE_ENTRENAS } from "@/components/lista-de-espera/content";
@@ -86,8 +87,18 @@ export function QueEntrenas() {
           abajo, separado de las cards, hasta que la sección siguiente entra. */}
       <div className="mt-[7vw] md:mt-[2vw] md:h-[28vw]">
         <div
-          className="relative z-30 mx-auto w-[87%] text-[3.35vw] md:sticky md:w-fit md:text-[clamp(0.5rem,0.85vw,1.05rem)]"
-          style={{ top: "min(calc(12vh + 36vw), calc(100svh - 5.2em))" }}
+          /* EL DESPLAZAMIENTO VIAJA COMO VARIABLE Y SÓLO SE APLICA DE md: HACIA
+             ARRIBA. Iba como `top` en estilo en línea, y un estilo en línea no
+             entiende de puntos de ruptura: en móvil el elemento se queda en
+             `relative` —porque el sticky es md:— y ahí `top` deja de ser un
+             anclaje y pasa a ser un empujón. Bajaba el botón unos 250 px desde
+             su sitio y lo dejaba encima de la sección siguiente. */
+          className="relative z-30 mx-auto w-[87%] md:sticky md:top-[var(--le-cta-top)] md:w-fit"
+          style={
+            {
+              "--le-cta-top": "min(calc(12vh + 36vw), calc(100svh - 5.2em))",
+            } as CSSProperties
+          }
         >
           <CtaLista>{HERO.cta}</CtaLista>
         </div>

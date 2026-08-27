@@ -32,9 +32,13 @@ const BONUS_ICONOS = [Clock, Tag, Gift] as const;
 */
 export function ListaEspera() {
   return (
+    /* #252525 EN MÓVIL Y NO NEGRO PURO: ahí no se carga el banner, y sobre negro
+       absoluto la lluvia de código y los filetes de las cards pierden el poco
+       contraste que tienen. Un gris muy oscuro les devuelve un fondo contra el
+       que recortarse. En escritorio manda el banner, así que se queda. */
     <section
       aria-labelledby="lista-espera-titulo"
-      className="relative isolate -mt-px overflow-hidden bg-[#111111] text-center text-vo-bone"
+      className="relative isolate -mt-px overflow-hidden bg-[#252525] text-center text-vo-bone md:bg-[#111111]"
     >
       <Image
         src={bonusBg}
@@ -53,22 +57,48 @@ export function ListaEspera() {
           página. */}
       <LluviaCodigo />
 
-      <div className="relative mx-auto flex min-h-[43.5rem] w-full flex-col items-center px-6 py-16 md:aspect-[1920/808] md:min-h-0 md:px-0 md:pb-[4vw] md:pt-[4.55vw]">
+      <div className="relative mx-auto flex min-h-[43.5rem] w-full flex-col items-center px-6 pt-10 pb-16 md:aspect-[1920/808] md:min-h-0 md:px-0 md:pb-[4vw] md:pt-[4.55vw]">
         <div className="relative z-10 flex flex-col items-center">
           <h2
             id="lista-espera-titulo"
-            className="max-w-[32rem] font-display text-[clamp(0.95rem,3.8vw,1.35rem)] leading-[1.32] tracking-normal uppercase md:max-w-[20.7em] md:text-[clamp(0.82rem,1vw,1.25rem)]"
+            className="max-w-[32rem] font-display text-[6.4vw] leading-[1.28] font-bold tracking-normal uppercase md:max-w-[20.7em] md:text-[clamp(0.95rem,1.4583vw,1.9rem)] md:leading-[1.32]"
           >
             <span className="text-vo-lumen">Volver al Origen 3.0</span>{" "}
             <span className="text-vo-bone">abrirá sus puertas próximamente.</span>
           </h2>
 
-          <p className="mt-4 max-w-[26rem] font-sans text-sm leading-snug font-medium tracking-normal text-white md:mt-[0.72vw] md:max-w-[34em] md:text-[clamp(0.52rem,0.72vw,0.82rem)]">
+          <p className="mt-4 max-w-[26rem] font-sans text-[3.9vw] leading-[1.5] font-medium tracking-normal text-white md:mt-[15px] md:max-w-[34em] md:text-[clamp(0.8rem,0.9375vw,1.15rem)]">
             {LISTA.intro[1]}
           </p>
         </div>
 
-        {/* ⚠️ POSICIÓN APROBADA — NO "ARREGLAR". La palabra asoma medio tapada por
+        {/* ⚠️ LA POSICIÓN DE ESCRITORIO (md:top-[30.45%]) ESTÁ APROBADA — NO
+            "ARREGLAR". La de móvil es otra historia y costó dos pasadas.
+
+            EN MÓVIL LA PALABRA NO PUEDE IR ARRIBA. Se probó subiéndola al 24,6%
+            y ahí no la tapaban las cards: la tapaba el PÁRRAFO, que es peor,
+            porque el párrafo sí hay que leerlo. La palabra es marca de agua y su
+            sitio es el hueco entre el texto y las cards — que a esa altura no
+            existía porque el párrafo llegaba hasta donde empiezan ellas.
+
+            Y EN MÓVIL NO PUEDE IR EN ABSOLUTO. Se intentó con porcentajes y falla
+            siempre por lo mismo: el porcentaje se mide contra el alto REAL de la
+            sección, que aquí lo fija el contenido —tres cards apiladas, no una
+            fila de tres— así que ronda los 960 px y no los 696 del min-h. Cada
+            vez que se movía algo, el mismo porcentaje señalaba otro sitio y la
+            palabra volvía a esconderse detrás de una card.
+
+            Así que en móvil entra en el FLUJO, entre el párrafo y la rejilla: su
+            posición ya no la calcula nadie, la ocupa. Y el margen inferior
+            negativo es lo que le devuelve el remate del diseño: -0,78em hace que
+            las cards suban y le muerdan el tercio de abajo, igual que en
+            escritorio. Va en em y no en píxeles porque se mide contra la propia
+            palabra: si cambia su tamaño, el mordisco se mantiene proporcional.
+
+            En escritorio sigue en absoluto al 30,45%, que es donde tiene que
+            morderla la fila de tres cards.
+
+            ⚠️ POSICIÓN APROBADA — NO "ARREGLAR". La palabra asoma medio tapada por
             las cards y así tiene que quedarse en escritorio; validado a 1920.
 
             LA PALABRA SE METE UN POCO DETRÁS DE LAS CARDS, y es a propósito: es
@@ -84,9 +114,19 @@ export function ListaEspera() {
             Si se toca, se toca poco: unos pocos puntos porcentuales arriba la
             estampan contra el párrafo del intro, y unos pocos abajo vuelven a
             hacerla ilegible. */}
+        {/* VELO QUE VA DE VERDE ARRIBA A NADA ABAJO. Asienta el bloque de bonus
+            sobre el fondo en vez de dejarlo flotar, y refuerza que BONUS es una
+            marca de agua y no un texto: la palabra nace de la luz y se apaga con
+            ella. Va con mix-blend-screen para que sume luz sin ensuciar el
+            banner de debajo — "screen" no puede oscurecer. */}
         <div
           aria-hidden
-          className="absolute left-1/2 top-[27.2%] -translate-x-1/2 font-display text-[clamp(4.9rem,17vw,7rem)] leading-none tracking-normal text-[#6f990c]/70 md:top-[30.45%] md:text-[clamp(3.2rem,6.15vw,7.5rem)]"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[62%] bg-[linear-gradient(180deg,rgba(120,180,30,0.32)_0%,rgba(95,150,25,0.2)_28%,rgba(60,100,15,0.09)_60%,transparent_100%)] mix-blend-screen"
+        />
+
+        <div
+          aria-hidden
+          className="relative z-0 mt-8 -mb-[0.78em] font-display text-[clamp(4.9rem,17vw,7rem)] leading-none tracking-normal text-[#6f990c]/70 md:absolute md:left-1/2 md:top-[30.45%] md:mt-0 md:-translate-x-1/2 md:text-[clamp(3.2rem,6.15vw,7.5rem)]"
         >
           BONUS
         </div>
@@ -100,7 +140,7 @@ export function ListaEspera() {
             globals.css). `border-image` sí degrada, pero ignora el redondeo de
             las esquinas y lo dejaría en ángulo recto sobre una card
             redondeada. */}
-        <div className="relative z-10 mt-20 grid w-full max-w-[34rem] grid-cols-1 gap-4 md:mt-[5.7vw] md:w-[59.5%] md:max-w-none md:grid-cols-3 md:gap-[0.8vw]">
+        <div className="relative z-10 mt-6 grid w-full max-w-[34rem] grid-cols-1 gap-4 md:mt-[5.7vw] md:w-[59.5%] md:max-w-none md:grid-cols-3 md:gap-[0.8vw]">
           {LISTA.bonos.map((bonus, index) => {
             const Icono = BONUS_ICONOS[index];
             return (
@@ -123,7 +163,7 @@ export function ListaEspera() {
                     </span>
                   )}
 
-                  <h3 className="font-display text-[clamp(0.86rem,3.6vw,1.1rem)] leading-[1.04] tracking-normal text-vo-lumen uppercase md:text-[clamp(0.7rem,1.05vw,1.25rem)]">
+                  <h3 className="font-display text-[clamp(0.86rem,3.6vw,1.1rem)] leading-[1.04] tracking-normal text-vo-lumen uppercase md:text-[clamp(0.9rem,1.25vw,1.6rem)]">
                     {BONUS_TITLE_LINES[index]?.map((line) => (
                       <span key={line} className="block">
                         {line}
@@ -131,7 +171,7 @@ export function ListaEspera() {
                     ))}
                   </h3>
 
-                  <p className="mt-4 max-w-[17rem] font-sans text-xs leading-snug font-semibold tracking-normal text-white md:mt-[1.1vw] md:max-w-[86%] md:text-[clamp(0.48rem,0.63vw,0.78rem)]">
+                  <p className="mt-4 max-w-[17rem] font-sans text-[3.6vw] leading-[1.5] font-medium tracking-normal text-white md:mt-[1.1vw] md:max-w-[86%] md:text-[clamp(0.75rem,0.9375vw,1.15rem)]">
                     {bonus.text}
                   </p>
                 </article>
@@ -140,8 +180,11 @@ export function ListaEspera() {
           })}
         </div>
 
-        <div className="relative z-10 mt-6 md:mt-[1.45vw]">
-          <CtaLista className="text-[0.84rem] sm:text-[0.9rem] md:text-[clamp(0.72rem,0.82vw,1rem)]">
+        {/* El botón toma el ancho de la rejilla de cards: mismo max-w-[34rem] y mismo
+            w-full. Así en móvil cierra la columna a ras con ellas en vez de
+            quedar flotando más estrecho en el centro. */}
+        <div className="relative z-10 mt-8 w-full max-w-[34rem] md:mt-[1.45vw] md:w-auto md:max-w-none">
+          <CtaLista>
             {LISTA.cta}
           </CtaLista>
         </div>

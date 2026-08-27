@@ -91,7 +91,7 @@ export function Hero() {
           Y se recorta a 74vw de los 156 que mide el archivo: por debajo de su
           45% de alto es negro liso —luminancia 2 sobre 255— así que mostrarlo
           entero sólo añadía media pantalla de vacío entre la foto y el texto. */}
-      <div className="relative -mt-[8vw] bg-[linear-gradient(180deg,transparent_0%,#000_8vw)] px-[6.5vw] pt-[8vw] pb-[12vw] md:absolute md:top-[15%] md:left-[20.3%] md:mt-0 md:w-[25.5%] md:bg-none md:p-0">
+      <div className="relative -mt-[20vw] bg-[linear-gradient(180deg,transparent_0%,#000_14vw)] px-[6.5vw] pt-[14vw] pb-[12vw] md:absolute md:top-[15%] md:left-[20.3%] md:mt-0 md:w-[25.5%] md:bg-none md:p-0">
         {/* EL ALTO QUE SE PIDE AQUÍ NO ES EL QUE SE VE. Los dos PNG miden 169 px
             de alto y su píldora sólida sólo 87: el resto es margen transparente
             y resplandor. O sea que la mitad de esta caja es aire, y hay que
@@ -109,31 +109,44 @@ export function Hero() {
 
             El hueco entre los dos sellos también es más ancho que el gap por lo
             mismo: la mayor parte son sus márgenes vacíos laterales. */}
-        <div className="flex items-center gap-[2vw] md:gap-[0.5vw]">
+        {/* LOS MÁRGENES NEGATIVOS CANCELAN EL AIRE TRANSPARENTE DEL PNG: 41 px por lado
+              sobre un archivo de 491x169, que a la escala servida son 20,5 px a la
+              izquierda y 20,7 abajo. Sin compensarlos, el sello se ve metido hacia
+              dentro respecto del texto y separado del titular casi el doble de lo
+              que dice el margen. En móvil se juntan además entre sí. */}
+          <div className="flex items-center gap-0 -ml-[3.2vw] -mb-[3.2vw] md:-mb-[1.08vw] md:-ml-[1.066vw] md:gap-0">
           <Image
             src={selloLista}
             alt={HERO.eyebrow}
             quality={90}
             sizes="220px"
-            className="h-[11vw] w-auto md:h-[clamp(2.11rem,4.45vw,5.62rem)]"
+            className="h-[14vw] w-auto md:h-[clamp(2.11rem,4.45vw,5.62rem)]"
           />
           <Image
             src={selloEdicion}
             alt="3.ª edición"
             quality={90}
             sizes="190px"
-            className="h-[11vw] w-auto md:h-[clamp(2.11rem,4.45vw,5.62rem)]"
+            className="h-[14vw] w-auto md:h-[clamp(2.11rem,4.45vw,5.62rem)]"
           />
         </div>
 
         <h1
           id="hero-title"
-          className="mt-[4.5vw] font-display text-[5.4vw] leading-[1.3] text-balance text-[#f4f1e4] md:mt-[0.8vw] md:text-[clamp(0.82rem,1.3542vw,1.73rem)] md:leading-[1.34]"
+          className="mt-[3.5vw] font-display text-[5.4vw] leading-[1.3] text-balance text-[#f4f1e4] md:mt-[15px] md:text-[clamp(1rem,1.5625vw,2rem)] md:leading-[1.3]"
         >
-          {HERO.claim}
+          {HERO.claim.map((parte) =>
+            parte.strong ? (
+              <strong key={parte.text} className="font-bold text-white">
+                {parte.text}
+              </strong>
+            ) : (
+              <span key={parte.text}>{parte.text}</span>
+            ),
+          )}
         </h1>
 
-        <p className="mt-[4.5vw] font-sans text-[3.75vw] leading-[1.6] text-[#d5d2c6] md:mt-[1.1vw] md:text-[clamp(0.6rem,0.8333vw,1.05rem)] md:leading-[1.6]">
+        <p className="mt-[4vw] font-sans text-[3.75vw] leading-[1.6] text-[#d5d2c6] md:mt-[15px] md:text-[clamp(0.8rem,0.9375vw,1.15rem)] md:leading-[1.6] md:font-medium">
           {HERO.intro.map((parte) =>
             parte.strong ? (
               <strong key={parte.text} className="font-bold text-white">
@@ -145,7 +158,7 @@ export function Hero() {
           )}
         </p>
 
-        <p className="mt-[3vw] font-sans text-[3.75vw] leading-[1.6] text-[#d5d2c6] md:mt-[0.7vw] md:text-[clamp(0.6rem,0.8333vw,1.05rem)] md:leading-[1.6]">
+        <p className="mt-[3vw] font-sans text-[3.75vw] leading-[1.6] text-[#d5d2c6] md:mt-[15px] md:text-[clamp(0.8rem,0.9375vw,1.15rem)] md:leading-[1.6] md:font-medium">
           {HERO.duracionLead}
           <strong className="font-bold text-white">{HERO.duracion}</strong>
         </p>
@@ -153,7 +166,7 @@ export function Hero() {
         {/* El botón se dimensiona por su font-size: dentro usa em para relleno,
             radio y flecha, así que escalar el texto escala la pieza entera y sus
             proporciones internas no se descuadran nunca. */}
-        <div className="mt-[7vw] text-[3.35vw] md:mt-[2.4vw] md:text-[clamp(0.55rem,0.95vw,1.2rem)]">
+        <div className="mt-[5vw] md:mt-[15px]">
           <CtaLista>{HERO.cta}</CtaLista>
         </div>
       </div>

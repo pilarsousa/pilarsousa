@@ -40,7 +40,12 @@ export function Resenas() {
             id="resenas-titulo"
             className="font-display text-[clamp(1rem,5vw,1.35rem)] leading-[1.25] text-[#141b0a] sm:text-[clamp(0.8rem,1.35vw,1.75rem)] sm:leading-[1.3]"
           >
-            {TESTIMONIOS.title} {TESTIMONIOS.titleAccent}
+            {TESTIMONIOS.title}
+            {/* Dos líneas siempre: la frase tiene una junta natural entre lo que
+                se dice y quién lo dice, y dejarla partir sola la corta por donde
+                caiga. */}
+            <br />
+            {TESTIMONIOS.titleAccent}
           </h2>
 
           <Image
@@ -48,7 +53,7 @@ export function Resenas() {
             alt="Pilar Sousa — Volver al Origen en Trustpilot: 4,8 sobre 5 con 74 opiniones"
             quality={90}
             sizes="280px"
-            className="h-auto w-full max-w-[280px] shrink-0 sm:w-[13.75vw] sm:min-w-[180px]"
+            className="h-auto w-full max-w-[200px] shrink-0 sm:w-[13.75vw] sm:max-w-[280px] sm:min-w-[180px]"
           />
         </div>
 

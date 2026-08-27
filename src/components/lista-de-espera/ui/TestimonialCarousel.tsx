@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { Plus } from "lucide-react";
 import { StarTiles } from "@/components/lista-de-espera/ui/StarTiles";
 import type { Testimonial } from "@/components/mision-origen/ui/testimonials";
 
@@ -101,7 +102,7 @@ export function TestimonialCarousel({ items }: TestimonialCarouselProps) {
               <li
                 key={`${t.name}-${i}`}
                 aria-hidden={isClone || undefined}
-                className="mr-4 flex h-[17rem] w-[58vw] max-w-[305px] shrink-0 flex-col sm:mr-8 sm:h-[19rem] sm:w-[74vw] rounded-xl border border-accent/25 bg-[radial-gradient(90%_70%_at_20%_0%,rgba(180,226,54,0.12),transparent_60%),linear-gradient(180deg,#1a2b07,#0b1502)] p-5 text-left shadow-[0_18px_46px_-26px_rgba(180,226,54,0.5),inset_0_1px_0_rgba(255,255,255,0.06)] sm:mr-10 sm:w-[305px]"
+                className="mr-4 flex h-[18.5rem] w-[62vw] max-w-[340px] shrink-0 flex-col sm:mr-8 sm:h-[21rem] sm:w-[74vw] rounded-xl border border-accent/25 bg-[radial-gradient(90%_70%_at_20%_0%,rgba(180,226,54,0.12),transparent_60%),linear-gradient(180deg,#1a2b07,#0b1502)] p-5 text-left shadow-[0_18px_46px_-26px_rgba(180,226,54,0.5),inset_0_1px_0_rgba(255,255,255,0.06)] sm:mr-10 sm:w-[305px]"
               >
                 <div className="flex items-center gap-3">
                   <Avatar t={t} size={42} />
@@ -134,6 +135,10 @@ export function TestimonialCarousel({ items }: TestimonialCarouselProps) {
                   tabIndex={isClone ? -1 : undefined}
                   className="mt-3 cursor-pointer self-start font-sans text-sm font-medium text-accent transition-colors duration-300 hover:text-vo-bone focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
+                  {/* El + delante anuncia que hay más texto detrás, no que se
+                      navegue a otra parte: es el mismo signo del acordeón de
+                      preguntas frecuentes, y las dos cosas hacen lo mismo. */}
+                  <Plus size={15} strokeWidth={2.5} aria-hidden />
                   Ver más
                 </button>
               </li>

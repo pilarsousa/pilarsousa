@@ -43,7 +43,7 @@ export function Pilar() {
         <div className="absolute left-[20.45%] top-[19.5%] w-[22.5%] text-[#060704]">
           <h2
             id="pilar-titulo"
-            className="whitespace-nowrap font-display text-[clamp(0.95rem,1.5vw,1.9rem)] leading-[1.05] tracking-normal uppercase"
+            className="whitespace-nowrap font-display text-[clamp(0.95rem,1.4583vw,1.9rem)] leading-[1.05] font-bold tracking-normal uppercase"
           >
             {PILAR.title} {PILAR.titleAccent}?
           </h2>
@@ -61,7 +61,18 @@ export function Pilar() {
         </div>
       </div>
 
-      <div className="relative min-h-[clamp(660px,178vw,780px)] w-full md:hidden">
+      {/* EN MÓVIL LA SECCIÓN MIDE LO QUE MIDE SU TEXTO, no una altura fija.
+
+          Llevaba un `min-h` y el texto colocado en absoluto al 38%: eso obliga a
+          adivinar cuánto va a ocupar la bio, y lo que sobre queda como vacío al
+          pie —eran más de 200 px—. Al revés no puede pasar: el bloque de texto va
+          en flujo y es él quien fija el alto, así que debajo sólo queda el
+          `pb` que se pida.
+
+          El `pt` en vw es lo que reserva la franja de foto de arriba, y la
+          imagen sigue con `fill` porque ese padding ya le da altura al
+          contenedor: cubre desde el canto superior hasta detrás del texto. */}
+      <div className="relative w-full md:hidden">
         <Image
           src={pilarMobile}
           alt=""
@@ -72,7 +83,7 @@ export function Pilar() {
           className="object-cover object-top"
         />
 
-        <div className="absolute inset-x-0 top-[38%] px-6 pb-8 text-vo-bone">
+        <div className="relative px-6 pt-[68vw] pb-[13vw] text-vo-bone">
           <h2
             id="pilar-titulo-mobile"
             className="font-display text-2xl leading-tight tracking-normal uppercase"

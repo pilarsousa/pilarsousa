@@ -110,11 +110,11 @@ export function Experiencia() {
           deja que se aplique contra lo que haya debajo en la página. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute top-[12.4%] left-0 hidden h-[38.5%] w-[17%] md:block -translate-x-1/2 bg-[radial-gradient(50%_50%_at_50%_50%,rgba(150,228,72,0.55)_0%,rgba(126,198,52,0.24)_42%,transparent_74%)] mix-blend-screen blur-[1.4vw]"
+        className="pointer-events-none absolute top-[12.4%] left-0 hidden h-[38.5%] w-[17%] md:block le-halo-a -translate-x-1/2 bg-[radial-gradient(50%_50%_at_50%_50%,rgba(150,228,72,0.55)_0%,rgba(126,198,52,0.24)_42%,transparent_74%)] mix-blend-screen blur-[1.4vw]"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute top-[10%] right-0 hidden h-[37.3%] w-[18%] md:block translate-x-1/2 bg-[radial-gradient(50%_50%_at_50%_50%,rgba(150,228,72,0.5)_0%,rgba(126,198,52,0.22)_42%,transparent_74%)] mix-blend-screen blur-[1.4vw]"
+        className="pointer-events-none absolute top-[10%] right-0 hidden h-[37.3%] w-[18%] md:block le-halo-b translate-x-1/2 bg-[radial-gradient(50%_50%_at_50%_50%,rgba(150,228,72,0.5)_0%,rgba(126,198,52,0.22)_42%,transparent_74%)] mix-blend-screen blur-[1.4vw]"
       />
       {/* Sin banner en móvil el fondo negro se queda liso, así que la lluvia
           pasa a ser el fondo. En escritorio no hace falta: viene dibujada. */}
@@ -134,7 +134,11 @@ export function Experiencia() {
           className="font-display text-[6.4vw] leading-[1.22] text-[#f4f1e4] md:text-[clamp(0.9rem,1.55vw,2rem)] md:leading-[1.3]"
         >
           {EXPERIENCIA.title}{" "}
-          <span className="text-[#e3e63a]">{EXPERIENCIA.titleAccent}</span>
+          {/* El acento va además en bold: es la promesa concreta —"lo lleves a tu
+              vida real"— frente al enunciado general que la precede. */}
+          <span className="font-bold text-[#e3e63a]">
+            {EXPERIENCIA.titleAccent}
+          </span>
         </h2>
 
         <p className="mt-[5vw] font-sans text-[3.9vw] leading-[1.5] text-[#cfd3c6] md:mt-[1.1vw] md:text-[clamp(0.5rem,0.88vw,1.1rem)] md:leading-[1.45]">
@@ -150,7 +154,10 @@ export function Experiencia() {
             <li
               key={item.text}
               className={cn(
-                "border-t border-[#a3ca23] py-[3.4vw] pl-[3.5vw] md:border-t-[max(0.05vw,1px)] md:py-[0.6vw] md:pl-[1.1vw]",
+                      /* El filete va como borde SUPERIOR de cada punto, y el ÚLTIMO añade
+         además el suyo inferior. Así el bloque queda cerrado por arriba y por
+         abajo sin meter un elemento suelto que no dice nada. */
+      "border-t border-[#a3ca23] py-[3.4vw] pl-[3.5vw] last:border-b last:border-b-[#a3ca23] md:border-t-[max(0.05vw,1px)] md:py-[0.6vw] md:pl-[1.1vw] md:last:border-b-[max(0.05vw,1px)]",
                 i >= PRIMER_ITEM_CON_AIRE_EXTRA &&
                   "py-[calc(3.4vw+5px)] md:py-[calc(0.6vw+5px)]",
               )}
@@ -179,6 +186,11 @@ export function Experiencia() {
 
       {/* ── Derecha: los mockups del programa ── */}
       <div className="relative mt-[9vw] space-y-[4vw] md:absolute md:top-[11.6%] md:left-[54.3%] md:mt-0 md:w-[25.3%] md:space-y-[1.5vw]">
+        {/* SIN SOMBRA EN REPOSO. Los mockups son PNG con fondo transparente: una
+            sombra de caja dibuja el rectángulo del ARCHIVO, no la silueta del
+            aparato, así que se veía un halo rectangular alrededor de algo que no
+            lo es. Al pasar el ratón sí se enciende, porque ahí la sombra ya no
+            describe una forma: responde a una acción. */}
         {MOCKUPS.map((src) => (
           <Image
             key={src.src}
@@ -187,12 +199,15 @@ export function Experiencia() {
             aria-hidden
             quality={90}
             sizes="(min-width: 768px) 26vw, 87vw"
-            className="h-auto w-full rounded-[2.1vw] shadow-[0_0_18px_rgba(163,202,35,0.22),0_18px_45px_rgba(0,0,0,0.65)] transition-all duration-500 ease-out md:rounded-[0.78vw] md:hover:-translate-y-[0.28vw] md:hover:scale-[1.015] md:hover:brightness-110 md:hover:saturate-[1.08] md:hover:shadow-[0_0_32px_rgba(163,202,35,0.4),0_24px_58px_rgba(0,0,0,0.8)]"
+            className="h-auto w-full rounded-[2.1vw] transition-all duration-500 ease-out md:rounded-[0.78vw] md:hover:-translate-y-[0.28vw] md:hover:scale-[1.015] md:hover:brightness-110 md:hover:saturate-[1.08] md:hover:shadow-[0_0_32px_rgba(163,202,35,0.4),0_24px_58px_rgba(0,0,0,0.8)]"
           />
         ))}
       </div>
       {/* ── Abajo: las tres áreas ── */}
-      <div className="relative mt-[13vw] md:absolute md:top-[63.5%] md:left-[20.5%] md:mt-0 md:w-[59%]">
+      {/* En escritorio la separación la da el 63,5% del alto del banner; en móvil,
+          donde no hay banner, hacen falta los 75-100 px a mano. 22vw a 390 son
+          86, dentro de ese rango. */}
+      <div className="relative mt-[22vw] md:absolute md:top-[63.5%] md:left-[20.5%] md:mt-0 md:w-[59%]">
         <h3 className="text-center font-display text-[5.6vw] leading-[1.3] text-[#f4f1e4] md:text-[clamp(0.8rem,1.35vw,1.75rem)] md:leading-[1.35]">
           {EXPERIENCIA.areasTitle.lead}{" "}
           <span className="text-[#a3ca23]">{EXPERIENCIA.areasTitle.acento}</span>{" "}
@@ -232,13 +247,13 @@ export function Experiencia() {
               )}
 
               <div className="absolute top-[9%] left-[7%] w-[86%] text-center md:top-[11.5%]">
-                <p className="font-display text-[5vw] leading-[1.2] text-[#e3e63a] md:text-[clamp(0.55rem,1vw,1.3rem)]">
+                <p className="font-display text-[5vw] leading-[1.2] text-[#e3e63a] md:text-[clamp(0.85rem,1.25vw,1.6rem)]">
                   {area.nombre}
                 </p>
-                <p className="font-display text-[5.2vw] leading-[1.25] text-[#f4f1e4] md:text-[clamp(0.58rem,1.05vw,1.35rem)]">
+                <p className="font-display text-[5.2vw] leading-[1.25] text-[#f4f1e4] md:text-[clamp(0.9rem,1.25vw,1.6rem)] md:font-bold">
                   {area.lema}
                 </p>
-                <p className="mt-[3.5vw] font-sans text-[3.5vw] leading-[1.45] text-[#dfe3d6] md:mt-[0.75vw] md:text-[clamp(0.4rem,0.7vw,0.9rem)]">
+                <p className="mt-[3.5vw] font-sans text-[3.5vw] leading-[1.45] text-[#dfe3d6] md:mt-[0.75vw] md:text-[clamp(0.75rem,0.9375vw,1.15rem)] md:font-medium">
                   {area.text}
                 </p>
               </div>
@@ -246,7 +261,7 @@ export function Experiencia() {
           ))}
         </ul>
 
-        <div className="mx-auto mt-[9vw] w-full text-[3.35vw] md:mt-[1.7vw] md:w-fit md:text-[clamp(0.45rem,0.78vw,0.98rem)]">
+        <div className="mx-auto mt-[9vw] w-full md:mt-[1.7vw] md:w-fit">
           <CtaLista>{EXPERIENCIA.cta}</CtaLista>
         </div>
       </div>

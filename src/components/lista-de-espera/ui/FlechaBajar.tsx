@@ -48,7 +48,7 @@ export function FlechaBajar({
         src={separador}
         alt=""
         aria-hidden
-        className="w-full transition-transform duration-200 hover:translate-y-[0.1em]"
+        className="le-baja w-full transition-transform duration-200"
       />
     </button>
   );

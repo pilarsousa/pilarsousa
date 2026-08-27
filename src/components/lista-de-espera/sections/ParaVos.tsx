@@ -40,7 +40,11 @@ export function ParaVos() {
         id="para-vos-titulo"
         className="relative text-center font-display text-[6vw] leading-[1.25] text-[#f4f1e4] md:text-[clamp(0.8rem,1.32vw,1.7rem)] md:leading-[1.3]"
       >
-        {PARA_VOS.title}{" "}
+        {PARA_VOS.title}
+        {/* En móvil la frase entra justa en el ancho y parte por donde cae; el
+            salto forzado la corta por su junta natural, entre el nombre del
+            programa y lo que se afirma de él. */}
+        <br className="md:hidden" />
         <span className="text-[#b8ea3c]">{PARA_VOS.titleAccent}</span>
       </h2>
 

@@ -79,7 +79,9 @@ const tilde: Variants = {
   },
 };
 
-export function ListaParaVos({ items }: { items: readonly string[] }) {
+type Tramo = { text: string; clave?: boolean };
+
+export function ListaParaVos({ items }: { items: readonly Tramo[][] }) {
   const sinMovimiento = useReducedMotion();
 
   return (
@@ -92,7 +94,7 @@ export function ListaParaVos({ items }: { items: readonly string[] }) {
     >
       {items.map((item, i) => (
         <motion.li
-          key={item}
+          key={item[0].text}
           variants={sinMovimiento ? undefined : pildora}
           className={[
             "group relative flex items-start gap-[2.6vw] overflow-hidden md:gap-[0.6vw]",
@@ -164,7 +166,24 @@ export function ListaParaVos({ items }: { items: readonly string[] }) {
             </svg>
           </motion.span>
 
-          <span className="relative z-10">{item}</span>
+          {/* El concepto clave va subrayado con un trazo apartado del texto
+              —underline-offset— y no en negrita: sobre el verde de la píldora,
+              la negrita apenas cambia el peso visual, mientras que el subrayado
+              se ve de un vistazo sin ensuciar la lectura. */}
+          <span className="relative z-10">
+            {item.map((t) =>
+              t.clave ? (
+                <strong
+                  key={t.text}
+                  className="font-bold underline decoration-[#16210a]/45 decoration-[0.09em] underline-offset-[0.22em]"
+                >
+                  {t.text}
+                </strong>
+              ) : (
+                <span key={t.text}>{t.text}</span>
+              ),
+            )}
+          </span>
         </motion.li>
       ))}
     </motion.ul>
