@@ -345,8 +345,10 @@ export const NUBE = [
 /* ─── 06. Testimonios ──────────────────────────────────────────────────── */
 
 export const TESTIMONIOS = {
-  title: "Lo que dicen quienes",
-  titleAccent: "ya volvieron al origen",
+  /* Las dos mitades son las DOS LÍNEAS del titular, no una frase partida por
+     conveniencia: el <br> de la sección se limita a respetar este corte. */
+  title: "Lo que dicen quienes ya",
+  titleAccent: "volvieron al origen",
   subtitle: "Validado por quienes ya lo vivieron.",
   intro: [
     "No queremos que simplemente nos creas.",

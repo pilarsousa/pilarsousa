@@ -128,7 +128,16 @@ export function Experiencia() {
       />
 
       {/* ── Izquierda: el titular y el listado ── */}
-      <div className="relative md:absolute md:top-[11.6%] md:left-[20.1%] md:w-[25.2%]">
+      {/* LA COLUMNA SE ESTRECHA AL 22,5%. A 1920 pasa de 484 a 432 px.
+
+          El montaje marca 483 en su selección, pero ahí el titular ocupa TRES
+          líneas y en 484 px entra en dos: la caja del diseño mide más que el
+          texto que contiene. Se ajusta al texto, que es lo que se ve.
+
+          Hay sitio de sobra: la columna arranca al 11,6% del alto del banner y
+          la banda de las tres áreas no empieza hasta el 63,5%, así que las
+          líneas de más que añade el estrechamiento caben sin acercarse. */}
+      <div className="relative md:absolute md:top-[11.6%] md:left-[20.1%] md:w-[22.5%]">
         <h2
           id="experiencia-titulo"
           className="font-display text-[6.4vw] leading-[1.22] text-[#f4f1e4] md:text-[clamp(0.9rem,1.55vw,2rem)] md:leading-[1.3]"

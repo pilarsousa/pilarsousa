@@ -67,12 +67,12 @@ export function ListaEspera() {
             <span className="text-vo-bone">abrirá sus puertas próximamente.</span>
           </h2>
 
-          <p className="mt-4 max-w-[26rem] font-sans text-[3.9vw] leading-[1.5] font-medium tracking-normal text-white md:mt-[15px] md:max-w-[34em] md:text-[clamp(0.8rem,0.9375vw,1.15rem)]">
+          <p className="mt-4 max-w-[26rem] font-sans text-[3.9vw] leading-[1.5] font-medium tracking-normal text-white md:mt-[15px] md:max-w-[34em] md:text-[clamp(0.9rem,1.0417vw,1.3rem)]">
             {LISTA.intro[1]}
           </p>
         </div>
 
-        {/* ⚠️ LA POSICIÓN DE ESCRITORIO (md:top-[30.45%]) ESTÁ APROBADA — NO
+        {/* ⚠️ LA POSICIÓN DE ESCRITORIO (md:top-[38%]) ESTÁ APROBADA — NO
             "ARREGLAR". La de móvil es otra historia y costó dos pasadas.
 
             EN MÓVIL LA PALABRA NO PUEDE IR ARRIBA. Se probó subiéndola al 24,6%
@@ -126,7 +126,7 @@ export function ListaEspera() {
 
         <div
           aria-hidden
-          className="relative z-0 mt-8 -mb-[0.78em] font-display text-[clamp(4.9rem,17vw,7rem)] leading-none tracking-normal text-[#6f990c]/70 md:absolute md:left-1/2 md:top-[30.45%] md:mt-0 md:-translate-x-1/2 md:text-[clamp(3.2rem,6.15vw,7.5rem)]"
+          className="relative z-0 mt-8 -mb-[0.78em] font-display text-[clamp(4.9rem,17vw,7rem)] leading-none tracking-normal text-[#6f990c]/70 md:absolute md:left-1/2 md:top-[38%] md:mt-0 md:-translate-x-1/2 md:text-[clamp(3.2rem,6.15vw,7.5rem)]"
         >
           BONUS
         </div>

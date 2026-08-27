@@ -38,12 +38,12 @@ export function Resenas() {
         <div className="flex flex-col items-start gap-4 py-5 sm:flex-row sm:items-end sm:justify-between sm:gap-[2vw] sm:py-[1.4vw]">
           <h2
             id="resenas-titulo"
-            className="font-display text-[clamp(1rem,5vw,1.35rem)] leading-[1.25] text-[#141b0a] sm:text-[clamp(0.8rem,1.35vw,1.75rem)] sm:leading-[1.3]"
+            className="font-display text-[clamp(1rem,5vw,1.35rem)] leading-[1.25] text-[#141b0a] sm:text-[clamp(0.95rem,1.4583vw,1.9rem)] sm:leading-[1.3]"
           >
             {TESTIMONIOS.title}
-            {/* Dos líneas siempre: la frase tiene una junta natural entre lo que
-                se dice y quién lo dice, y dejarla partir sola la corta por donde
-                caiga. */}
+            {/* Dos líneas siempre. El punto de corte vive en el copy —ver
+                TESTIMONIOS— así que aquí sólo se respeta. Dejarlo partir solo lo
+                cortaba por donde cayera según el ancho. */}
             <br />
             {TESTIMONIOS.titleAccent}
           </h2>
