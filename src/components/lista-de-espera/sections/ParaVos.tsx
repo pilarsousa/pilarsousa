@@ -38,7 +38,7 @@ export function ParaVos() {
 
       <h2
         id="para-vos-titulo"
-        className="relative text-center font-display text-[6vw] leading-[1.25] text-[#f4f1e4] md:text-[clamp(0.8rem,1.32vw,1.7rem)] md:leading-[1.3]"
+        className="aparece-abajo relative text-center font-display text-[6vw] leading-[1.25] text-[#f4f1e4] md:text-[clamp(0.8rem,1.32vw,1.7rem)] md:leading-[1.3]"
       >
         {PARA_VOS.title}
         {/* EL ESPACIO ES IMPRESCINDIBLE Y FALTABA. Las dos mitades del titular

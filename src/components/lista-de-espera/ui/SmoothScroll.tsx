@@ -42,9 +42,23 @@ export function SmoothScroll() {
 
     const lenis = new Lenis({ duration: 2, anchors: true });
 
+    /* SE AVISA EN CADA FRAME PARA QUE ScrollTrigger PUEDA SEGUIR EL RITMO.
+
+       Lenis desplaza la página desde este bucle, y ScrollTrigger —que escucha el
+       evento `scroll` del navegador— se entera tarde: sus disparos quedan
+       desfasados respecto de lo que se ve en pantalla. Con este aviso los dos
+       van al mismo reloj.
+
+       Va por un evento del documento y no pasando la instancia a nadie porque
+       quien la necesita (EntradaScroll) es un componente HERMANO montado en el
+       mismo layout, no un descendiente: no hay forma de pasársela por props sin
+       inventar un contexto para un solo dato. Y si algún día se retira el
+       suavizado, quien escucha simplemente deja de recibir avisos y sigue
+       funcionando con el scroll nativo. */
     let frame = 0;
     const loop = (time: number) => {
       lenis.raf(time);
+      document.dispatchEvent(new CustomEvent("le:lenis-frame"));
       frame = requestAnimationFrame(loop);
     };
     frame = requestAnimationFrame(loop);

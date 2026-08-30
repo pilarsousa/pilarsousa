@@ -58,7 +58,7 @@ export function QueEntrenas() {
     >
       <h2
         id="que-entrenas-titulo"
-        className="px-[6.5vw] text-center font-display text-[6.4vw] leading-[1.2] text-[#141b0a] md:px-0 md:text-[clamp(0.85rem,1.45vw,1.9rem)] md:leading-[1.25]"
+        className="aparece-abajo px-[6.5vw] text-center font-display text-[6.4vw] leading-[1.2] text-[#141b0a] md:px-0 md:text-[clamp(0.85rem,1.45vw,1.9rem)] md:leading-[1.25]"
       >
         {QUE_ENTRENAS.title}
         <br />
@@ -81,7 +81,7 @@ export function QueEntrenas() {
 
           El acento se queda en negrita —es la promesa de la frase— pero ya no
           necesita gritar desde el fondo. */}
-      <p className="mx-auto mt-[6vw] w-fit max-w-[86%] rounded-full border border-[#7cae1f]/35 bg-[#a3ca23]/10 px-[5vw] py-[2.6vw] text-center font-sans text-[3.6vw] leading-[1.4] text-[#3d5410] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.6),0_1px_3px_-1px_rgba(124,181,24,0.25)] md:mt-[1.65vw] md:max-w-none md:px-[1.4vw] md:py-[0.55vw] md:text-[clamp(0.5rem,0.82vw,1.05rem)] md:leading-normal">
+      <p className="aparece-abajo aparece-1 mx-auto mt-[6vw] w-fit max-w-[86%] rounded-full border border-[#7cae1f]/35 bg-[#a3ca23]/10 px-[5vw] py-[2.6vw] text-center font-sans text-[3.6vw] leading-[1.4] text-[#3d5410] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.6),0_1px_3px_-1px_rgba(124,181,24,0.25)] md:mt-[1.65vw] md:max-w-none md:px-[1.4vw] md:py-[0.55vw] md:text-[clamp(0.5rem,0.82vw,1.05rem)] md:leading-normal">
         <strong className="font-bold text-[#2a3d06]">Una nueva forma</strong>
         {QUE_ENTRENAS.subtitle.replace("Una nueva forma", "")}
       </p>

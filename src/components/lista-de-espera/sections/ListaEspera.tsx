@@ -36,13 +36,19 @@ const BONUS_ICONOS = [Clock, Tag, Gift] as const;
 */
 export function ListaEspera() {
   return (
-    /* #252525 EN MÓVIL Y NO NEGRO PURO: ahí no se carga el banner, y sobre negro
-       absoluto la lluvia de código y los filetes de las cards pierden el poco
-       contraste que tienen. Un gris muy oscuro les devuelve un fondo contra el
-       que recortarse. En escritorio manda el banner, así que se queda. */
+    /* #222220 EN LOS DOS TAMAÑOS Y NO NEGRO PURO. En móvil no se carga el
+       banner, y sobre negro absoluto la lluvia de código y los filetes de las
+       cards pierden el poco contraste que tienen; un gris muy oscuro les
+       devuelve un fondo contra el que recortarse.
+
+       Y ES EL MISMO GRIS QUE LA SECCIÓN DE PILAR, que es la de arriba: antes
+       eran dos —#252525 en móvil y #111111 en escritorio— y ninguno coincidía
+       con ella, así que la junta entre las dos secciones se leía como un
+       escalón de color. Con el tinte compartido el paso es continuo, y el velo
+       superior usa este mismo valor para rematarlo. */
     <section
       aria-labelledby="lista-espera-titulo"
-      className="relative isolate -mt-px overflow-hidden bg-[#252525] text-center text-vo-bone md:bg-[#111111]"
+      className="relative isolate -mt-px overflow-hidden bg-[#222220] text-center text-vo-bone"
     >
       <Image
         src={bonusBg}
@@ -61,11 +67,28 @@ export function ListaEspera() {
           página. */}
       <LluviaCodigo />
 
-      <div className="relative mx-auto flex min-h-[43.5rem] w-full flex-col items-center px-6 pt-10 pb-16 md:aspect-[1920/808] md:min-h-0 md:px-0 md:pb-[4vw] md:pt-[4.55vw]">
+      {/* ⚠️ EL ALTO SALE DEL CONTENIDO, NO DE UNA PROPORCIÓN FIJA.
+
+          Tenía `md:aspect-[1920/808]` —la del banner— y `md:min-h-0`, y eso
+          explicaba por qué el margen inferior del botón no abría nada: con una
+          proporción fija, el alto de esta caja lo decide el ANCHO de la ventana
+          y no lo que hay dentro. Todo lo que se añadiera empujaba contra un
+          techo rígido, así que los 75 px de separación con la sección siguiente
+          simplemente no existían.
+
+          Ahora la proporción pasa a ser un MÍNIMO. En la práctica el resultado
+          es idéntico mientras el contenido quepa —que es el caso a cualquier
+          ancho normal— y en cuanto no quepa, la sección crece en vez de
+          recortar. El fondo lo acompaña porque va con `fill` + `object-cover`:
+          se estira a lo que mida el contenedor.
+
+          `aspect-ratio` con `min-height` es exactamente esto: la proporción
+          marca el suelo y el contenido puede superarlo. */}
+      <div className="relative mx-auto flex min-h-[43.5rem] w-full flex-col items-center px-6 pt-10 pb-16 md:min-h-[42.08vw] md:px-0 md:pb-[4vw] md:pt-[4.55vw]">
         <div className="relative z-10 flex flex-col items-center">
           <h2
             id="lista-espera-titulo"
-            className="max-w-[32rem] font-display text-[6.4vw] leading-[1.28] font-bold tracking-normal uppercase md:max-w-[20.7em] md:text-[clamp(0.95rem,1.4583vw,1.9rem)] md:leading-[1.32]"
+            className="aparece-abajo max-w-[32rem] font-display text-[6.4vw] leading-[1.28] font-bold tracking-normal uppercase md:max-w-[20.7em] md:text-[clamp(0.95rem,1.4583vw,1.9rem)] md:leading-[1.32]"
           >
             <span className="text-vo-lumen">Volver al Origen 3.0</span>{" "}
             <span className="text-vo-bone">abrirá sus puertas próximamente.</span>
@@ -132,10 +155,21 @@ export function ListaEspera() {
             parejo del que la palabra BONUS y los filetes salen encendidos.
 
             Se va con el mix-blend-screen: un velo que oscurece con "screen" es
-            una contradicción —ese modo no puede oscurecer— y no haría nada. */}
+            una contradicción —ese modo no puede oscurecer— y no haría nada.
+
+            EL COLOR ES #222220, EL DE LA SECCIÓN DE PILAR. Antes era un verde
+            muy oscuro (#060a04) que no era el de nadie: aquí arriba el velo se
+            encuentra con la sombra interior inferior de la sección anterior, y
+            con dos grises distintos la junta entre ambas se veía como un
+            escalón. Compartiendo tinte, el paso de una a otra es continuo.
+
+            ARRANCA OPACO Y SE APAGA. La opacidad de salida sube a 0,82 —desde
+            0,55— porque ahora tiene que EMPAREJAR con el color macizo de la
+            sección de arriba, no sólo teñir: a media opacidad el banner asomaba
+            por debajo y el empalme volvía a notarse. */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[62%] bg-[linear-gradient(180deg,rgba(6,10,4,0.55)_0%,rgba(6,10,4,0.35)_38%,rgba(6,10,4,0.14)_70%,transparent_100%)]"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[62%] bg-[linear-gradient(180deg,rgba(34,34,32,0.82)_0%,rgba(34,34,32,0.55)_32%,rgba(34,34,32,0.22)_66%,transparent_100%)]"
         />
 
         {/* LA PALABRA SE APAGA HACIA ABAJO.
@@ -200,7 +234,10 @@ export function ListaEspera() {
             return (
               <CardBonus
                 key={bonus.title}
-                className="le-borde-giro h-full rounded-[1.05rem] p-px md:rounded-[0.78vw]"
+                /* Las tres entran en cascada, no de golpe: el retardo lo pone el
+                   índice, así que se leen por orden como se leerían con la
+                   vista. `aparece-${n}` sólo llega hasta 5 y aquí son tres. */
+                className={`aparece-abajo aparece-${index + 1} le-borde-giro h-full rounded-[1.05rem] p-px md:rounded-[0.78vw]`}
               >
                 <article className="le-bento-card flex h-full min-h-[7.8rem] flex-col items-center justify-center rounded-[calc(1.05rem-1px)] bg-[radial-gradient(120%_85%_at_50%_112%,#16250a_0%,#080d04_48%,#030502_100%)] px-7 py-7 md:min-h-[12.75vw] md:rounded-[calc(0.78vw-1px)] md:px-[1.8vw] md:py-[1.25vw]">
                   {/* Disco oscuro con el icono en lima: los mismos papeles

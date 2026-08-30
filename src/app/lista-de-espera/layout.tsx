@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { EntradaScroll } from "@/components/lista-de-espera/ui/EntradaScroll";
 import { SmoothScroll } from "@/components/lista-de-espera/ui/SmoothScroll";
 import { WaitlistModalProvider } from "@/components/lista-de-espera/ui/WaitlistModal";
 
@@ -86,6 +87,11 @@ export default function ListaDeEsperaLayout({
        paleta cruda, que viven en @theme y resuelven en cualquier punto. */
     <WaitlistModalProvider>
       <SmoothScroll />
+      {/* Registra las entradas de scroll de TODA la landing: busca los elementos
+          marcados con .aparece-* y los revela al entrar en pantalla. Va después
+          de SmoothScroll porque se engancha a los avisos que éste emite en cada
+          frame, aunque el orden no es crítico — el enganche es por evento. */}
+      <EntradaScroll />
       <div className="vo-scope le-scope relative min-h-full text-foreground">
         {children}
       </div>

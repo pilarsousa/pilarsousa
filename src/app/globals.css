@@ -2894,3 +2894,123 @@ body {
     transform: translateX(2px);
   }
 }
+
+/*
+  ENTRADAS VINCULADAS AL SCROLL.
+
+  Un elemento marcado con una de estas clases arranca invisible, desplazado y
+  desenfocado, y se revela cuando entra en pantalla (ver EntradaScroll.tsx, que
+  es quien pone .visible al pasar el disparador).
+
+  ── POR QUÉ HAY DESENFOQUE Y BRILLO, Y NO SÓLO UN DESVANECIDO ──
+
+  Un `opacity` de 0 a 1 se lee como algo que APARECE. El desenfoque que se
+  resuelve, en cambio, se lee como algo que YA ESTABA y se pone a foco — y esa
+  diferencia es exactamente la autoridad que se busca: la landing no te muestra
+  cosas nuevas, te enfoca lo que ya afirmaba.
+
+  El brillo al 160% es lo que hace que la pieza parezca llegar desde la luz en
+  vez de desde el gris. Sobre los fondos negros de esta landing, un elemento que
+  entra apagado se lee como un fallo de carga.
+
+  ── LOS TRES VALORES ESTÁN LIMITADOS A PROPÓSITO ──
+
+  · 24px de recorrido, no 30: con Lenis el scroll ya es suave, y un recorrido
+    largo encima del suavizado se percibe como lentitud.
+  · 8px de desenfoque, no 10: por encima de eso el texto pequeño —las notas al
+    pie de los puntos, el copyright— es ilegible durante casi toda la entrada.
+  · 0,75s: lo justo para que se note sin que haya que esperarla.
+
+  ── QUÉ SE ANIMA Y QUÉ NO ──
+
+  `transform`, `opacity` y `filter` se resuelven en el compositor sin rehacer la
+  maquetación. Y NO se anima el desplazamiento con `top` ni con márgenes: eso
+  movería de sitio a los vecinos en cada frame, y en una página con `sticky` en
+  la sección 4 recalcularía el apilado entero.
+
+  `will-change` se declara sólo mientras la entrada está pendiente y se retira al
+  completarse: mantenerlo puesto para siempre reserva memoria de composición por
+  cada elemento marcado, y son varias decenas.
+*/
+.aparece-abajo,
+.aparece-arriba,
+.aparece-izquierda,
+.aparece-derecha {
+  opacity: 0;
+  filter: blur(8px) brightness(160%);
+  -webkit-filter: blur(8px) brightness(160%);
+  transition:
+    opacity 0.75s ease,
+    transform 0.75s ease,
+    filter 0.75s ease;
+  will-change: transform, opacity, filter;
+}
+
+.aparece-abajo {
+  transform: translateY(24px);
+}
+.aparece-arriba {
+  transform: translateY(-24px);
+}
+.aparece-izquierda {
+  transform: translateX(-24px);
+}
+.aparece-derecha {
+  transform: translateX(24px);
+}
+
+/* El retardo escalonado, para grupos de piezas hermanas. Se pone a mano donde
+   hace falta —las cards de una rejilla, los puntos de una lista— y en cascada
+   se lee como que el bloque entra por orden en vez de de golpe. Se para en 5
+   porque más allá la última tarda tanto que el visitante ya scrolleó. */
+.aparece-1 {
+  transition-delay: 0.08s;
+}
+.aparece-2 {
+  transition-delay: 0.16s;
+}
+.aparece-3 {
+  transition-delay: 0.24s;
+}
+.aparece-4 {
+  transition-delay: 0.32s;
+}
+.aparece-5 {
+  transition-delay: 0.4s;
+}
+
+.aparece-abajo.visible,
+.aparece-arriba.visible,
+.aparece-izquierda.visible,
+.aparece-derecha.visible {
+  opacity: 1;
+  transform: translate(0, 0);
+  filter: blur(0) brightness(100%);
+  -webkit-filter: blur(0) brightness(100%);
+  will-change: auto;
+}
+
+/*
+  ⚠️ SIN MOVIMIENTO, TODO SE VE DESDE EL PRIMER FRAME.
+
+  Es la regla más importante del bloque. Estas clases esconden contenido de
+  verdad —titulares, listas, el precio— y sin esto, quien pidió no ver
+  animaciones se quedaría con una página en blanco: EntradaScroll no registra
+  nada bajo esa preferencia, así que .visible no llegaría nunca.
+
+  Un efecto de entrada que se puede no ver es aceptable. Un contenido que se
+  puede no ver, no.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .aparece-abajo,
+  .aparece-arriba,
+  .aparece-izquierda,
+  .aparece-derecha {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    -webkit-filter: none;
+    transition: none;
+    will-change: auto;
+  }
+}

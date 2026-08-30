@@ -121,11 +121,16 @@ export function CtaLista({
       >
         {/* EL TRACKING ES NEGATIVO Y ANTES ERA POSITIVO. Con 0,06em las
             versalitas quedaban tan abiertas que el rótulo se leía como letras
-            sueltas en vez de como una frase; a -1px se juntan y vuelve a leerse
-            de un golpe. El margen negativo de la derecha se va con él: sólo
-            existía para cancelar el espacio que el tracking positivo añadía
-            después de la última letra. */}
-        <span className="font-sans text-[1em] leading-none font-extrabold tracking-[-1px] whitespace-nowrap text-white uppercase">
+            sueltas en vez de como una frase.
+
+            -0,7px y no -1: a -1 las mayúsculas empezaban a rozarse entre sí,
+            que es el defecto contrario y en un rótulo en caja alta se nota
+            antes. -0,7 junta lo justo.
+
+            El margen negativo de la derecha se fue con el cambio de signo:
+            sólo existía para cancelar el espacio que el tracking positivo
+            añadía después de la última letra. */}
+        <span className="font-sans text-[1em] leading-none font-extrabold tracking-[-0.7px] whitespace-nowrap text-white uppercase">
           {children}
         </span>
 

@@ -194,7 +194,7 @@ export function Experiencia() {
       <div className="relative md:absolute md:top-[11.6%] md:left-[20.1%] md:w-[22.5%]">
         <h2
           id="experiencia-titulo"
-          className="font-display text-[6.4vw] leading-[1.22] text-[#f4f1e4] md:text-[clamp(0.9rem,1.55vw,2rem)] md:leading-[1.3]"
+          className="aparece-abajo font-display text-[6.4vw] leading-[1.22] text-[#f4f1e4] md:text-[clamp(0.9rem,1.55vw,2rem)] md:leading-[1.3]"
         >
           {EXPERIENCIA.title}{" "}
           {/* El acento va además en bold: es la promesa concreta —"lo lleves a tu
@@ -283,7 +283,11 @@ export function Experiencia() {
       </div>
 
       {/* ── Derecha: los mockups del programa ── */}
-      <div className="relative mt-[9vw] space-y-[4vw] md:absolute md:top-[11.6%] md:left-[54.3%] md:mt-0 md:w-[25.3%] md:space-y-[1.5vw]">
+      {/* Los mockups entran DESDE LA DERECHA y el listado de la izquierda desde
+          abajo: son las dos columnas de la misma sección, y darles direcciones
+          distintas hace que se lean como dos bloques que se encuentran en vez de
+          como una sola cosa subiendo. */}
+      <div className="aparece-derecha relative mt-[9vw] space-y-[4vw] md:absolute md:top-[11.6%] md:left-[54.3%] md:mt-0 md:w-[25.3%] md:space-y-[1.5vw]">
         {/* SIN SOMBRA Y SIN REACCIÓN AL RATÓN. Los mockups son PNG con fondo
             transparente, así que una sombra de caja dibuja el rectángulo del
             ARCHIVO y no la silueta del aparato: se veía un halo rectangular
@@ -311,18 +315,25 @@ export function Experiencia() {
           donde no hay banner, hacen falta los 75-100 px a mano. 22vw a 390 son
           86, dentro de ese rango. */}
       <div className="relative mt-[22vw] md:absolute md:top-[63.5%] md:left-[20.5%] md:mt-0 md:w-[59%]">
-        {/* EL AIRE VA EN EL TITULAR Y NO EN EL BLOQUE QUE LO CONTIENE. El bloque
-            está en absoluto contra el banner (top-[63.5%]) y un margen ahí
-            desplazaría también las tres cards y el botón, que ya están
-            colocados. Bajando sólo el h3 se abre la separación contra el
-            listado de arriba y lo demás se queda donde estaba.
+        {/* ⚠️ EL AIRE VA EN PADDING Y NO EN MARGEN, y el motivo es un COLAPSO DE
+            MÁRGENES.
 
-            Sube de 30 a 60px: con 30 la banda de las tres áreas seguía leyéndose
-            como una continuación del listado en vez de como lo que es, un
-            apartado propio dentro de la misma sección. Al doble, la junta se ve.
+            Estuvo como `mt-[60px]` y no se aplicaba nada. El h3 es el PRIMER
+            hijo de este contenedor, que no tiene borde, ni relleno, ni nada que
+            abra un contexto de formato propio: en esas condiciones su margen
+            superior no separa por dentro, sino que SE ESCAPA hacia fuera y pasa
+            a ser el margen del contenedor. Y como el contenedor está en
+            `absolute` contra el banner, ese margen fugado no mueve nada.
 
-            En píxeles y no en vw porque es separación, no medida del diseño. */}
-        <h3 className="mt-[60px] text-center font-display text-[5.6vw] leading-[1.3] text-[#f4f1e4] md:text-[clamp(0.8rem,1.35vw,1.75rem)] md:leading-[1.35]">
+            El padding no colapsa nunca. Por eso aquí funciona y el margen no.
+
+            La otra salida habría sido abrir contexto en el padre —un
+            `overflow` distinto de visible, por ejemplo— y eso está prohibido en
+            esta landing: rompería el `position: sticky` de la sección anterior.
+
+            50px, que es lo que pide el diseño: con 30 la banda seguía leyéndose
+            como continuación del listado; con 60 se despegaba de más. */}
+        <h3 className="aparece-abajo pt-[50px] text-center font-display text-[5.6vw] leading-[1.3] text-[#f4f1e4] md:text-[clamp(0.8rem,1.35vw,1.75rem)] md:leading-[1.35]">
           {EXPERIENCIA.areasTitle.lead}{" "}
           <span className="text-[#a3ca23]">{EXPERIENCIA.areasTitle.acento}</span>{" "}
           {EXPERIENCIA.areasTitle.resto}
@@ -345,7 +356,7 @@ export function Experiencia() {
             <CardBonus
               key={area.nombre}
               etiqueta="li"
-              className="le-bento-card relative rounded-[2vw] md:rounded-[0.61vw]"
+              className={`aparece-abajo aparece-${i + 1} le-bento-card relative rounded-[2vw] md:rounded-[0.61vw]`}
             >
               {/* Los archivos reservan oscura la franja de arriba, así que el
                   texto va encima sin necesidad de velo. */}
