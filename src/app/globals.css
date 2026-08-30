@@ -2723,3 +2723,105 @@ body {
     box-shadow: 0 0 1.8em -0.5em rgba(163, 202, 35, 0.6);
   }
 }
+
+/*
+  BORDE ENCENDIDO DE LAS CARDS DE BONUS (efecto bento).
+
+  Enciende SÓLO EL REBORDE de la card siguiendo al cursor, sin tapar su
+  contenido. El JS (BentoMagico.tsx) le pasa dónde está el cursor y cuánta luz
+  le toca según la distancia; el reparto de esa luz lo hace él porque el CSS no
+  puede leer la posición del ratón.
+
+  ── CÓMO SE PINTA SÓLO EL REBORDE ──
+
+  Con dos máscaras superpuestas y `mask-composite: exclude`. La primera cubre la
+  caja de contenido —o sea, todo menos el padding— y la segunda la caja entera;
+  al excluir una de la otra queda exactamente el anillo del padding. Es la única
+  forma de tener un borde en degradado que respete el border-radius:
+  `border-image` degrada pero ignora el redondeo, y un `border` no degrada.
+
+  Los 6px de padding son el GROSOR del anillo, no separación: no desplazan nada
+  porque el pseudo-elemento está en position:absolute.
+
+  ── CONVIVE CON .le-borde-giro Y NO LO PISA ──
+
+  Las cards ya llevan un filete que gira en bucle, y ése es su estado de reposo:
+  la card está viva mire quien mire. Esto es otra cosa —una respuesta al cursor—
+  y se suma por encima. Van en elementos distintos: el giratorio en el envoltorio
+  y éste en la card, así que ninguno tiene que ceder su ::after.
+
+  ── LAS VARIABLES TIENEN VALOR POR DEFECTO ──
+
+  Con --brillo-fuerza en 0 el degradado sale transparente, así que la card se
+  pinta igual aunque el JS no llegue a montarse: sin ratón, en móvil, o antes de
+  la hidratación. Es lo que evita el destello de una card mal pintada al cargar.
+*/
+.le-bento-card {
+  position: relative;
+  overflow: hidden;
+
+  --brillo-x: 50%;
+  --brillo-y: 50%;
+  --brillo-fuerza: 0;
+  --brillo-radio: 300px;
+}
+
+.le-bento-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 6px;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 30;
+  background: radial-gradient(
+    var(--brillo-radio) circle at var(--brillo-x) var(--brillo-y),
+    rgba(163, 202, 35, calc(var(--brillo-fuerza) * 0.85)) 0%,
+    rgba(163, 202, 35, calc(var(--brillo-fuerza) * 0.4)) 30%,
+    transparent 60%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  transition: opacity 0.3s ease;
+}
+
+/* La sombra acompaña al borde, pero SÓLO con el cursor encima: ligada a
+   --brillo-fuerza se encendería también con el cursor en la card de al lado, y
+   entonces las tres tendrían sombra a la vez y el efecto de proximidad se
+   perdería. */
+.le-bento-card:hover {
+  box-shadow:
+    0 4px 20px rgba(20, 40, 4, 0.45),
+    0 0 34px rgba(163, 202, 35, 0.22);
+}
+
+/* La zona del grupo no debe poder seleccionarse: con el imantado y la
+   inclinación activos, arrastrar el cursor sobre las cards seleccionaba su
+   texto y el gesto se convertía en un manchón azul. */
+.le-bento-zona {
+  user-select: none;
+}
+
+/*
+  Sin movimiento no hay nada de esto. Los efectos de cursor de las cards
+  —partículas, inclinación, imantado, onda— ya se apagan desde JS, pero el borde
+  y la sombra son CSS y hay que apagarlos aquí.
+
+  El resto de la card no cambia: su fondo, su filete y su contenido siguen
+  exactamente igual. Lo que se retira es la respuesta al cursor, no el diseño.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .le-bento-card::after {
+    display: none;
+  }
+
+  .le-bento-card:hover {
+    box-shadow: none;
+  }
+}
