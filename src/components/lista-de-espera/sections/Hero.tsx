@@ -41,7 +41,21 @@ export function Hero() {
   return (
     <section
       aria-labelledby="hero-title"
-      className="relative isolate overflow-x-clip bg-black md:bg-white"
+      /* ── EN MÓVIL EL HERO OCUPA LA PANTALLA ENTERA ──
+
+         `min-h-svh` y no `100vh`: la unidad `svh` mide el viewport PEQUEÑO, o
+         sea el alto que queda con la barra del navegador visible. Con `vh` el
+         hero mediría el viewport grande —el de la barra oculta— y en cuanto el
+         navegador la muestra, el botón queda por debajo del corte: justo lo que
+         se quiere evitar.
+
+         El `flex-col justify-end` reparte el sobrante ARRIBA y no abajo. Suena
+         al revés, pero es lo correcto: el bloque de texto tiene que quedar
+         pegado al pie de la pantalla con su margen, y lo que sobra se lo come el
+         hueco entre la foto y el texto — que es aire sobre la imagen y no
+         estorba. Con `justify-start` el sobrante caería debajo del botón y el
+         hero terminaría en un vacío. */
+      className="relative isolate flex min-h-svh flex-col justify-end overflow-x-clip bg-black md:block md:min-h-0 md:bg-white"
     >
       {/* DOS ARCHIVOS, NO UNO REENCUADRADO. El de escritorio mide 1924x800 —una
           panorámica— y el de móvil 960x1500. Recortar el ancho con object-cover
@@ -132,7 +146,11 @@ export function Hero() {
           terminar de fundir en negro justo donde arranca el primer elemento—,
           porque si el fundido durase más que el relleno, los sellos empezarían
           dentro de la zona todavía translúcida y se verían sobre la foto. */}
-      <div className="relative -mt-[25vw] bg-[linear-gradient(180deg,transparent_0%,#000_3vw)] px-[6.5vw] pt-[3vw] pb-[9vw] md:absolute md:top-[15%] md:left-[20.3%] md:-mt-[25px] md:w-[25.5%] md:bg-none md:p-0">
+      {/* EL PIE SON 50px FIJOS y no 9vw. En vw la separación cambiaba con el
+          ancho del teléfono —35 px en uno de 390, 44 en uno de 480— cuando lo
+          que hace falta es lo contrario: un remate constante entre el botón y el
+          corte de la sección, que es donde arranca la siguiente. */}
+      <div className="relative -mt-[25vw] bg-[linear-gradient(180deg,transparent_0%,#000_3vw)] px-[6.5vw] pt-[3vw] pb-[50px] md:absolute md:top-[15%] md:left-[20.3%] md:-mt-[25px] md:w-[25.5%] md:bg-none md:p-0">
         {/* LOS DOS SELLOS SON CÓDIGO Y NO IMÁGENES. Eran lista-de-espera.png y
             3era-edicion.png, 80 KB para dibujar dos píldoras con texto que no se
             podía seleccionar ni leer con un lector de pantalla.
@@ -146,7 +164,7 @@ export function Hero() {
 
         <h1
           id="hero-title"
-          className="mt-[10px] font-display text-[5.4vw] leading-[1.3] text-balance text-[#f4f1e4] md:mt-[15px] md:text-[clamp(1rem,1.5625vw,2rem)] md:leading-[1.3]"
+          className="mt-[22px] font-display text-[5.4vw] leading-[1.3] text-balance text-[#f4f1e4] md:mt-[15px] md:text-[clamp(1rem,1.5625vw,2rem)] md:leading-[1.3]"
         >
           {HERO.claim.map((parte) =>
             parte.strong ? (
@@ -159,7 +177,7 @@ export function Hero() {
           )}
         </h1>
 
-        <p className="mt-[10px] font-sans text-[3.75vw] leading-[1.6] text-[#d5d2c6] md:mt-[15px] md:text-[clamp(0.8rem,0.9375vw,1.15rem)] md:leading-[1.6] md:font-medium">
+        <p className="mt-[18px] font-sans text-[3.75vw] leading-[1.6] text-[#d5d2c6] md:mt-[15px] md:text-[clamp(0.8rem,0.9375vw,1.15rem)] md:leading-[1.6] md:font-medium">
           {HERO.intro.map((parte) =>
             parte.strong ? (
               <strong key={parte.text} className="font-bold text-white">
@@ -171,7 +189,7 @@ export function Hero() {
           )}
         </p>
 
-        <p className="mt-[10px] font-sans text-[3.75vw] leading-[1.6] text-[#d5d2c6] md:mt-[15px] md:text-[clamp(0.8rem,0.9375vw,1.15rem)] md:leading-[1.6] md:font-medium">
+        <p className="mt-[18px] font-sans text-[3.75vw] leading-[1.6] text-[#d5d2c6] md:mt-[15px] md:text-[clamp(0.8rem,0.9375vw,1.15rem)] md:leading-[1.6] md:font-medium">
           {HERO.duracionLead}
           <strong className="font-bold text-white">{HERO.duracion}</strong>
         </p>
@@ -179,7 +197,7 @@ export function Hero() {
         {/* El botón se dimensiona por su font-size: dentro usa em para relleno,
             radio y flecha, así que escalar el texto escala la pieza entera y sus
             proporciones internas no se descuadran nunca. */}
-        <div className="mt-[10px] md:mt-[15px]">
+        <div className="mt-[26px] md:mt-[15px]">
           <CtaLista>{HERO.cta}</CtaLista>
         </div>
       </div>
