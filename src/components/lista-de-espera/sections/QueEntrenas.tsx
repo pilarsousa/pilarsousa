@@ -84,8 +84,17 @@ export function QueEntrenas() {
       {/* El CTA tiene su propia pista sticky en escritorio. Como es el último
           elemento de la sección, pegarlo directamente no le daba recorrido real:
           al scrollear seguía subiendo sobre la pila. Esta pista lo mantiene
-          abajo, separado de las cards, hasta que la sección siguiente entra. */}
-      <div className="mt-[7vw] md:mt-[2vw] md:h-[28vw]">
+          abajo, separado de las cards, hasta que la sección siguiente entra.
+
+          SE ACERCA A LA ÚLTIMA CARD: el margen baja de 2 a 0,9vw en escritorio y
+          de 7 a 4,5 en móvil. Quedaba demasiado suelto del bloque al que
+          pertenece — un botón que cierra una lista tiene que leerse como parte
+          de ella, no como el arranque de lo que viene después.
+
+          EL ALTO DE LA PISTA NO SE TOCA. Es el recorrido del sticky, no aire: si
+          se recorta, el botón se despega antes y vuelve a subir sobre la pila,
+          que es justo lo que esta pista vino a resolver. */}
+      <div className="mt-[4.5vw] md:mt-[0.9vw] md:h-[28vw]">
         <div
           /* EL DESPLAZAMIENTO VIAJA COMO VARIABLE Y SÓLO SE APLICA DE md: HACIA
              ARRIBA. Iba como `top` en estilo en línea, y un estilo en línea no

@@ -91,7 +91,18 @@ export function Hero() {
           Y se recorta a 74vw de los 156 que mide el archivo: por debajo de su
           45% de alto es negro liso —luminancia 2 sobre 255— así que mostrarlo
           entero sólo añadía media pantalla de vacío entre la foto y el texto. */}
-      <div className="relative -mt-[20vw] bg-[linear-gradient(180deg,transparent_0%,#000_14vw)] px-[6.5vw] pt-[14vw] pb-[12vw] md:absolute md:top-[15%] md:left-[20.3%] md:mt-0 md:w-[25.5%] md:bg-none md:p-0">
+      {/* EL -25px DE ESCRITORIO VA EN margin-top Y NO EN `top`, aunque el
+          desplazamiento de la columna sí vaya en `top`. No es una incoherencia:
+          el `top-[15%]` es la POSICIÓN de diseño, medida contra el alto del
+          banner y por tanto proporcional a él; estos 25 px son una CORRECCIÓN
+          fija sobre esa posición. Sumarlos dentro del porcentaje obligaría a un
+          calc que cambia de resultado en cada ancho de ventana; como margen son
+          25 px a 1280 y a 1920, que es lo que se pidió.
+
+          Va con el prefijo md: porque en móvil el bloque no está en absoluto
+          sino en el flujo, con su propio -mt-[20vw] montándolo sobre la foto:
+          ahí un margen negativo extra lo empujaría contra la imagen. */}
+      <div className="relative -mt-[20vw] bg-[linear-gradient(180deg,transparent_0%,#000_14vw)] px-[6.5vw] pt-[14vw] pb-[12vw] md:absolute md:top-[15%] md:left-[20.3%] md:-mt-[25px] md:w-[25.5%] md:bg-none md:p-0">
         {/* EL ALTO QUE SE PIDE AQUÍ NO ES EL QUE SE VE. Los dos PNG miden 169 px
             de alto y su píldora sólida sólo 87: el resto es margen transparente
             y resplandor. O sea que la mitad de esta caja es aire, y hay que

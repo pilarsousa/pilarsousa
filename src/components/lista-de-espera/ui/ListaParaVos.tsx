@@ -166,17 +166,14 @@ export function ListaParaVos({ items }: { items: readonly Tramo[][] }) {
             </svg>
           </motion.span>
 
-          {/* El concepto clave va subrayado con un trazo apartado del texto
-              —underline-offset— y no en negrita: sobre el verde de la píldora,
-              la negrita apenas cambia el peso visual, mientras que el subrayado
-              se ve de un vistazo sin ensuciar la lectura. */}
+          {/* El concepto clave va SÓLO EN NEGRITA. Llevó subrayado y se retiró:
+              seis píldoras con un trazo bajo cada frase clave llenaban el bloque
+              de rayas y competían con los filetes de las propias cards. El peso
+              basta para marcar el concepto sin ensuciar la lectura. */}
           <span className="relative z-10">
             {item.map((t) =>
               t.clave ? (
-                <strong
-                  key={t.text}
-                  className="font-bold underline decoration-[#16210a]/45 decoration-[0.09em] underline-offset-[0.22em]"
-                >
+                <strong key={t.text} className="font-bold">
                   {t.text}
                 </strong>
               ) : (

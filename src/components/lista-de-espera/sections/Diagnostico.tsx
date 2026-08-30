@@ -73,7 +73,7 @@ export function Diagnostico() {
                   destaca por peso y tinta plena. */}
               <Tramos
                 partes={partes}
-                acento="font-bold italic text-[#141b0a]"
+                acento="font-bold text-[#141b0a]"
                 fuerte="font-bold text-[#141b0a]"
               />
             </p>
@@ -99,7 +99,7 @@ export function Diagnostico() {
             >
               <Tramos
                 partes={partes}
-                acento="font-bold italic text-white"
+                acento="font-bold text-white"
                 fuerte="font-bold text-white"
               />
             </p>

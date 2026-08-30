@@ -228,28 +228,50 @@ export function PilaCards({
 
               <LineaGlow className="absolute top-0 left-1/2 -translate-x-1/2" />
 
-              {/* md:contents hace desaparecer este envoltorio en escritorio, y
-                  entonces los dos textos vuelven a colocarse en absoluto contra
-                  la card. En móvil, en cambio, se apoyan en el pie de la tarjeta
-                  vertical, que es donde la ilustración deja sitio. */}
-              <div className="absolute inset-x-0 bottom-0 px-[7%] pb-[7%] md:contents">
-              <h3
+              {/* ── EL BLOQUE DE TEXTO ──
+
+                  EN ESCRITORIO VA CENTRADO VERTICALMENTE EN EL PANEL, con el
+                  título y el cuerpo fluyendo uno tras otro dentro de él.
+
+                  ANTES ERAN DOS CAJAS ABSOLUTAS INDEPENDIENTES —el título en
+                  top-[14%] y el cuerpo en top-[calc(14%+2.1em)]— y de ahí venía
+                  el descuadre: esos 2,1em son el alto de un título de UN
+                  renglón, así que en las cards cuyo título ocupa dos, el
+                  segundo renglón caía justo encima del párrafo. Se veían
+                  colapsados uno sobre otro, y no era el sticky ni el
+                  IntersectionObserver: era la maquetación.
+
+                  Ahora son una sola caja y el cuerpo fluye tras el título con
+                  su propio margen, así que da igual cuántos renglones ocupe:
+                  el hueco es siempre el mismo y el conjunto se mantiene
+                  centrado respecto del panel.
+
+                  EL TEXTO SIGUE ALINEADO A LA IZQUIERDA. Centrado es el bloque
+                  —su posición en el eje vertical—, no la letra.
+
+                  md:inset-y-0 + flex + justify-center es lo que lo centra: la
+                  caja ocupa todo el alto de la card y su contenido se agrupa en
+                  el medio. Con un top en porcentaje habría que recalcularlo
+                  cada vez que cambia la longitud de un texto. */}
+              <div
                 className={cn(
-                  "font-display text-[6vw] leading-[1.15] text-[#f4f1e4]",
-                  "md:absolute md:top-[14%] md:left-[10%] md:w-[36%] md:text-[clamp(0.7rem,1.2vw,1.55rem)] md:leading-[1.2]",
-                  tapadas[i] && "line-clamp-1",
+                  "absolute inset-x-0 bottom-0 px-[7%] pb-[7%]",
+                  "md:inset-y-0 md:right-auto md:bottom-auto md:left-[10%] md:flex md:w-[36%] md:flex-col md:justify-center md:p-0",
                 )}
               >
-                {item.title}
-              </h3>
+                <h3
+                  className={cn(
+                    "font-display text-[6vw] leading-[1.15] text-[#f4f1e4]",
+                    "md:text-[clamp(0.7rem,1.2vw,1.55rem)] md:leading-[1.2]",
+                    tapadas[i] && "line-clamp-1",
+                  )}
+                >
+                  {item.title}
+                </h3>
 
-              {/* El cuerpo va anclado a su propia profundidad y no fluyendo tras
-                  el título: si fluyera, su arranque dependería de si el título
-                  ocupó uno o dos renglones y en unas cards asomaría por debajo
-                  del recorte y en otras no. */}
-              <p className="mt-[2.5vw] font-sans text-[4vw] leading-[1.45] text-[#c9cec0] md:absolute md:top-[calc(14%+2.1em)] md:left-[10%] md:mt-0 md:w-[36%] md:text-[clamp(0.45rem,0.8vw,1rem)] md:leading-[1.5]">
-                {item.text}
-              </p>
+                <p className="mt-[2.5vw] font-sans text-[4vw] leading-[1.45] text-[#c9cec0] md:mt-[0.55vw] md:text-[clamp(0.45rem,0.8vw,1rem)] md:leading-[1.5]">
+                  {item.text}
+                </p>
               </div>
             </article>
           </li>
