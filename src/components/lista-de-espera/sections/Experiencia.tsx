@@ -219,7 +219,16 @@ export function Experiencia() {
             return (
             <li
               key={item.text}
+              /* CADA PUNTO ENTRA POR SU TURNO, DESDE LA IZQUIERDA. Son nueve, y
+                 revelados a la vez se leen como un muro; en cascada, como una
+                 enumeración que se va desplegando — que es lo que son.
+
+                 El retardo se reparte en cinco escalones (aparece-1..5) y luego
+                 se repite: con nueve retardos distintos el último tardaría casi
+                 un segundo en aparecer y el lector ya habría scrolleado. El
+                 módulo mantiene la sensación de cascada sin alargarla. */
               className={cn(
+                `aparece-izquierda aparece-${(i % 5) + 1}`,
                       /* El filete va como borde SUPERIOR de cada punto, y el ÚLTIMO añade
          además el suyo inferior. Así el bloque queda cerrado por arriba y por
          abajo sin meter un elemento suelto que no dice nada. */
@@ -312,19 +321,32 @@ export function Experiencia() {
 
             El envoltorio existe para recortar el destello: sin él la banda de
             luz se saldría de la lámina. */}
-        {MOCKUPS.map((src) => (
+        {MOCKUPS.map((src, i) => (
+          /* ⚠️ SON DOS ENVOLTORIOS Y NO UNO, y la separación es obligatoria: la
+             entrada al scroll (.aparece-*) y la inclinación al pasar el ratón
+             (.le-mockup) animan las dos la propiedad `transform`, que es una
+             sola. En el mismo elemento, la que se aplique después pisa a la
+             otra — el mockup entraría sin desplazarse, o se quedaría clavado en
+             su posición de entrada al hacer hover.
+
+             El de fuera se encarga de entrar; el de dentro, de reaccionar. */
           <div
             key={src.src}
-            className="le-mockup group/mock relative overflow-hidden rounded-[2.1vw] md:rounded-[0.78vw]"
+            /* Los tres entran por turno y desde la derecha, igual que la columna
+               que los contiene: así el bloque se lee como una baraja que se
+               reparte y no como tres imágenes que aparecen juntas. */
+            className={`aparece-derecha aparece-${i + 1}`}
           >
-            <Image
-              src={src}
-              alt=""
-              aria-hidden
-              quality={90}
-              sizes="(min-width: 768px) 26vw, 87vw"
-              className="h-auto w-full transition-transform duration-500 ease-out md:group-hover/mock:scale-[1.03]"
-            />
+            <div className="le-mockup group/mock relative overflow-hidden rounded-[2.1vw] md:rounded-[0.78vw]">
+              <Image
+                src={src}
+                alt=""
+                aria-hidden
+                quality={90}
+                sizes="(min-width: 768px) 26vw, 87vw"
+                className="h-auto w-full transition-transform duration-500 ease-out md:group-hover/mock:scale-[1.03]"
+              />
+            </div>
           </div>
         ))}
       </div>
@@ -384,7 +406,12 @@ export function Experiencia() {
             <CardBonus
               key={area.nombre}
               etiqueta="li"
-              className={`aparece-abajo aparece-${i + 1} le-bento-card relative rounded-[2vw] md:rounded-[0.61vw]`}
+              /* La entrada va aparte del className porque anima `transform`,
+                 igual que los efectos de cursor: en el mismo elemento se pisan
+                 y la card se queda a medio revelar. CardBonus las reparte en
+                 dos nodos. */
+              entrada={`aparece-abajo aparece-${i + 1}`}
+              className="le-bento-card relative rounded-[2vw] md:rounded-[0.61vw]"
             >
               {/* Los archivos reservan oscura la franja de arriba, así que el
                   texto va encima sin necesidad de velo. */}

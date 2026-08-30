@@ -107,7 +107,26 @@ export function Hero() {
           Va con el prefijo md: porque en móvil el bloque no está en absoluto
           sino en el flujo, con su propio -mt-[20vw] montándolo sobre la foto:
           ahí un margen negativo extra lo empujaría contra la imagen. */}
-      <div className="relative -mt-[20vw] bg-[linear-gradient(180deg,transparent_0%,#000_14vw)] px-[6.5vw] pt-[14vw] pb-[12vw] md:absolute md:top-[15%] md:left-[20.3%] md:-mt-[25px] md:w-[25.5%] md:bg-none md:p-0">
+      {/* ── EN MÓVIL EL BLOQUE SUBE PARA QUE EL BOTÓN ENTRE EN LA PRIMERA
+             PANTALLA ──
+
+          La cuenta en un teléfono de 390x844: la foto ocupa 74vw (289 px) y el
+          bloque montaba sobre ella -20vw, así que arrancaba en 211. Sumando su
+          relleno superior de 14vw, los dos sellos, el titular, dos párrafos y
+          sus márgenes, el botón caía alrededor de los 800 px — al filo del alto
+          útil, y por debajo en cuanto el navegador enseña su barra.
+
+          Se recupera altura por tres sitios a la vez, porque ninguno bastaba
+          solo: el bloque monta 5vw más sobre la foto (-25 en vez de -20), su
+          relleno superior baja de 14 a 9vw, y el inferior de 12 a 9. En total
+          unos 47 px a 390, que es lo que faltaba para que el botón quede dentro
+          con margen.
+
+          EL DEGRADADO SE ACORTA CON EL RELLENO. Es el fundido que lleva la foto
+          hasta el negro del bloque, y su altura tiene que coincidir con el aire
+          que hay antes del primer elemento: con 14vw de fundido sobre 9 de
+          relleno, el texto empezaría dentro de la zona todavía translúcida. */}
+      <div className="relative -mt-[25vw] bg-[linear-gradient(180deg,transparent_0%,#000_9vw)] px-[6.5vw] pt-[9vw] pb-[9vw] md:absolute md:top-[15%] md:left-[20.3%] md:-mt-[25px] md:w-[25.5%] md:bg-none md:p-0">
         {/* LOS DOS SELLOS SON CÓDIGO Y NO IMÁGENES. Eran lista-de-espera.png y
             3era-edicion.png, 80 KB para dibujar dos píldoras con texto que no se
             podía seleccionar ni leer con un lector de pantalla.
@@ -121,7 +140,7 @@ export function Hero() {
 
         <h1
           id="hero-title"
-          className="mt-[3.5vw] font-display text-[5.4vw] leading-[1.3] text-balance text-[#f4f1e4] md:mt-[15px] md:text-[clamp(1rem,1.5625vw,2rem)] md:leading-[1.3]"
+          className="mt-[2.5vw] font-display text-[5.4vw] leading-[1.3] text-balance text-[#f4f1e4] md:mt-[15px] md:text-[clamp(1rem,1.5625vw,2rem)] md:leading-[1.3]"
         >
           {HERO.claim.map((parte) =>
             parte.strong ? (
@@ -134,7 +153,7 @@ export function Hero() {
           )}
         </h1>
 
-        <p className="mt-[4vw] font-sans text-[3.75vw] leading-[1.6] text-[#d5d2c6] md:mt-[15px] md:text-[clamp(0.8rem,0.9375vw,1.15rem)] md:leading-[1.6] md:font-medium">
+        <p className="mt-[2.8vw] font-sans text-[3.75vw] leading-[1.6] text-[#d5d2c6] md:mt-[15px] md:text-[clamp(0.8rem,0.9375vw,1.15rem)] md:leading-[1.6] md:font-medium">
           {HERO.intro.map((parte) =>
             parte.strong ? (
               <strong key={parte.text} className="font-bold text-white">
@@ -146,7 +165,7 @@ export function Hero() {
           )}
         </p>
 
-        <p className="mt-[3vw] font-sans text-[3.75vw] leading-[1.6] text-[#d5d2c6] md:mt-[15px] md:text-[clamp(0.8rem,0.9375vw,1.15rem)] md:leading-[1.6] md:font-medium">
+        <p className="mt-[2.2vw] font-sans text-[3.75vw] leading-[1.6] text-[#d5d2c6] md:mt-[15px] md:text-[clamp(0.8rem,0.9375vw,1.15rem)] md:leading-[1.6] md:font-medium">
           {HERO.duracionLead}
           <strong className="font-bold text-white">{HERO.duracion}</strong>
         </p>
@@ -154,7 +173,7 @@ export function Hero() {
         {/* El botón se dimensiona por su font-size: dentro usa em para relleno,
             radio y flecha, así que escalar el texto escala la pieza entera y sus
             proporciones internas no se descuadran nunca. */}
-        <div className="mt-[5vw] md:mt-[15px]">
+        <div className="mt-[4vw] md:mt-[15px]">
           <CtaLista>{HERO.cta}</CtaLista>
         </div>
       </div>

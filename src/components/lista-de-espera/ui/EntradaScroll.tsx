@@ -58,22 +58,75 @@ export function EntradaScroll() {
 
     gsap.registerPlugin(ScrollTrigger);
 
-    const elementos = Array.from(
-      document.querySelectorAll<HTMLElement>(MARCADOS),
-    );
+    let disparadores: ScrollTrigger[] = [];
 
-    const disparadores = elementos.map((el) =>
-      ScrollTrigger.create({
-        trigger: el,
-        /* El 88% de la ventana: el elemento se revela justo antes de estar del
-           todo a la vista, así que quien scrollea a ritmo normal lo encuentra ya
-           enfocado. Con el 80% original la animación terminaba demasiado abajo y
-           en secciones cortas ni se llegaba a ver. */
-        start: "top 88%",
-        once: true,
-        onEnter: () => el.classList.add("visible"),
-      }),
-    );
+    const registrar = () => {
+      const elementos = Array.from(
+        document.querySelectorAll<HTMLElement>(MARCADOS),
+      ).filter((el) => !el.dataset.leEntrada);
+
+      elementos.forEach((el) => {
+        /* La marca evita registrar dos veces el mismo nodo cuando el observador
+           vuelve a pasar: un segundo disparador sobre el mismo elemento no rompe
+           nada, pero se acumulan sin límite. */
+        el.dataset.leEntrada = "1";
+
+        disparadores.push(
+          ScrollTrigger.create({
+            trigger: el,
+            /* El 88% de la ventana: el elemento se revela justo antes de estar
+               del todo a la vista, así que quien scrollea a ritmo normal lo
+               encuentra ya enfocado. Con el 80% original la animación terminaba
+               demasiado abajo y en secciones cortas ni se llegaba a ver. */
+            start: "top 88%",
+            once: true,
+            onEnter: () => el.classList.add("visible"),
+          }),
+        );
+
+        /* ⚠️ RED DE SEGURIDAD: lo que YA ESTÁ en pantalla al registrarse se
+           revela en el acto, sin esperar a que el disparador entre.
+
+           Hace falta porque un ScrollTrigger creado sobre un elemento que ya
+           pasó su punto de disparo no se activa solo, y eso ocurre de verdad
+           aquí: si el visitante recarga a media página, todo lo de arriba queda
+           invisible para siempre. */
+        const caja = el.getBoundingClientRect();
+        if (caja.top < window.innerHeight * 0.88) el.classList.add("visible");
+      });
+    };
+
+    registrar();
+
+    /* ⚠️ SE VUELVE A BUSCAR CUANDO EL ÁRBOL CAMBIA, y no es una precaución
+       teórica: es el bug por el que las tres cards de "vas a trabajar tres
+       áreas" no se veían en móvil.
+
+       Varias piezas de la landing deciden qué renderizar según el ancho de la
+       ventana (useEsMovil), que arranca en `false` y se corrige DESPUÉS del
+       primer render — en el servidor no hay window que medir. React reemplaza
+       entonces esos nodos por otros nuevos, y los nuevos nunca pasaron por el
+       querySelectorAll de arriba: se quedaban con la clase de entrada puesta,
+       o sea con opacity 0, para siempre.
+
+       Un MutationObserver los recoge en cuanto aparecen. Mira sólo altas y bajas
+       de nodos, no atributos, así que añadir la clase `visible` desde aquí no lo
+       vuelve a disparar.
+
+       VA CON ESPERA, y es imprescindible: en esta página el DOM muta sin parar
+       —la lluvia de código añade y quita glifos, el bento clona partículas en
+       cada hover— y volver a recorrer el documento en cada mutación sería un
+       querySelectorAll continuo sobre el árbol entero. Con la espera, una
+       ráfaga de mutaciones se resuelve en un solo repaso.
+
+       El repaso en sí es barato porque `registrar` descarta lo ya marcado con
+       el data-attribute; lo caro sería repetirlo cien veces por segundo. */
+    let espera: ReturnType<typeof setTimeout> | null = null;
+    const observador = new MutationObserver(() => {
+      if (espera !== null) clearTimeout(espera);
+      espera = setTimeout(registrar, 200);
+    });
+    observador.observe(document.body, { childList: true, subtree: true });
 
     /* ── EL PUENTE CON LENIS ──
 
@@ -90,7 +143,10 @@ export function EntradaScroll() {
     window.addEventListener("load", refrescar);
 
     return () => {
+      observador.disconnect();
+      if (espera !== null) clearTimeout(espera);
       disparadores.forEach((d) => d.kill());
+      disparadores = [];
       document.removeEventListener("le:lenis-frame", alFrame);
       window.removeEventListener("load", refrescar);
     };

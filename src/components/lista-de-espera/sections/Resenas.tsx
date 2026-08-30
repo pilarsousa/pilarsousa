@@ -5,6 +5,7 @@ import {
   FEATURED_TESTIMONIALS,
 } from "@/components/lista-de-espera/content";
 import trustpilot from "@/../public/volver-origen/public/Recursos/generales/trutspilot.png";
+import trustpilotMovil from "@/../public/volver-origen/public/Recursos/mobile/testimonio-mobile.jpeg";
 
 /*
   Sección 6 — Lo que dicen quienes ya volvieron al origen.
@@ -36,9 +37,14 @@ export function Resenas() {
         <div className="border-t-[max(0.05vw,1px)] border-[#d9d9d9]" />
 
         <div className="flex flex-col items-start gap-4 py-5 sm:flex-row sm:items-end sm:justify-between sm:gap-[2vw] sm:py-[1.4vw]">
+          {/* EL TITULAR VA EN NEGRITA. Trajan sólo tiene dos pesos —regular y
+              bold—, así que el salto es notable: sobre el blanco de esta sección
+              el regular se leía liviano al lado de la cabecera de Trustpilot,
+              que trae su propia tipografía en negro. Con el bold, el titular
+              recupera la jerarquía frente a un sello que no controlamos. */}
           <h2
             id="resenas-titulo"
-            className="font-display text-[clamp(1rem,5vw,1.35rem)] leading-[1.25] text-[#141b0a] sm:text-[clamp(0.95rem,1.4583vw,1.9rem)] sm:leading-[1.3]"
+            className="font-display text-[clamp(1rem,5vw,1.35rem)] leading-[1.25] font-bold text-[#141b0a] sm:text-[clamp(0.95rem,1.4583vw,1.9rem)] sm:leading-[1.3]"
           >
             {TESTIMONIOS.title}
             {/* Dos líneas siempre. El punto de corte vive en el copy —ver
@@ -48,12 +54,34 @@ export function Resenas() {
             {TESTIMONIOS.titleAccent}
           </h2>
 
+          {/* ── DOS SELLOS DE TRUSTPILOT, UNO POR TAMAÑO ──
+
+              No es el mismo archivo reencuadrado. El de escritorio es la
+              insignia compacta —logo, estrellas y nota—, y el de móvil es la
+              cabecera completa del perfil, que además trae el nombre "Pilar
+              Sousa - Volver al Origen" y el número de opiniones en grande.
+
+              En móvil hace falta esa versión: la insignia compacta se queda en
+              200 px de ancho junto a un titular que ocupa toda la columna, y a
+              ese tamaño las estrellas y el 4,8 son ilegibles. La cabecera es
+              apaisada, llena el ancho disponible y se lee de un vistazo.
+
+              El alt es el mismo en los dos porque dicen lo mismo: quien no ve
+              las imágenes recibe la valoración una sola vez, no dos. */}
           <Image
-            src={trustpilot}
+            src={trustpilotMovil}
             alt="Pilar Sousa — Volver al Origen en Trustpilot: 4,8 sobre 5 con 74 opiniones"
             quality={90}
+            sizes="100vw"
+            className="h-auto w-full sm:hidden"
+          />
+          <Image
+            src={trustpilot}
+            alt=""
+            aria-hidden
+            quality={90}
             sizes="280px"
-            className="h-auto w-full max-w-[200px] shrink-0 sm:w-[13.75vw] sm:max-w-[280px] sm:min-w-[180px]"
+            className="hidden h-auto w-full shrink-0 sm:block sm:w-[13.75vw] sm:max-w-[280px] sm:min-w-[180px]"
           />
         </div>
 

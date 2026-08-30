@@ -48,7 +48,14 @@ export function ListaEspera() {
        superior usa este mismo valor para rematarlo. */
     <section
       aria-labelledby="lista-espera-titulo"
-      className="relative isolate -mt-px overflow-hidden bg-[#222220] text-center text-vo-bone"
+      /* EL FONDO DE MÓVIL ES #161917 Y EL DE ESCRITORIO #222220. Son dos grises
+         casi iguales, y la diferencia tiene motivo: en escritorio manda el
+         banner y este color sólo asoma por los cantos, donde tiene que empalmar
+         con la sección de Pilar; en móvil el banner no se carga y este gris ES
+         el fondo, sobre el que se leen la lluvia de código y los filetes de las
+         cards. El tono más oscuro les devuelve el contraste que el #222220 —más
+         claro— les quitaba. */
+      className="relative isolate -mt-px overflow-hidden bg-[#161917] text-center text-vo-bone md:bg-[#222220]"
     >
       <Image
         src={bonusBg}
@@ -84,11 +91,19 @@ export function ListaEspera() {
 
           `aspect-ratio` con `min-height` es exactamente esto: la proporción
           marca el suelo y el contenido puede superarlo. */}
-      <div className="relative mx-auto flex min-h-[43.5rem] w-full flex-col items-center px-6 pt-10 pb-16 md:min-h-[42.08vw] md:px-0 md:pb-[4vw] md:pt-[4.55vw]">
+      {/* En móvil el bloque arranca más abajo —pt-16 en vez de pt-10— porque el
+          titular necesita aire por encima para leerse como la apertura de una
+          sección nueva y no como la continuación de la anterior. */}
+      <div className="relative mx-auto flex min-h-[43.5rem] w-full flex-col items-center px-6 pt-16 pb-16 md:min-h-[42.08vw] md:px-0 md:pb-[4vw] md:pt-[4.55vw]">
         <div className="relative z-10 flex flex-col items-center">
           <h2
             id="lista-espera-titulo"
-            className="aparece-abajo max-w-[32rem] font-display text-[6.4vw] leading-[1.28] font-bold tracking-normal uppercase md:max-w-[20.7em] md:text-[clamp(0.95rem,1.4583vw,1.9rem)] md:leading-[1.32]"
+            /* MÁS INTERLÍNEA EN MÓVIL: 1,45 contra 1,28. El titular ocupa tres
+               renglones en un teléfono —en escritorio son dos— y en versalitas
+               apretadas esos tres renglones se leen como un bloque macizo. Con
+               más aire entre líneas el titular respira y gana el peso de
+               apertura que le corresponde, que es lo que pedía el encargo. */
+            className="aparece-abajo max-w-[32rem] font-display text-[6.4vw] leading-[1.45] font-bold tracking-normal uppercase md:max-w-[20.7em] md:text-[clamp(0.95rem,1.4583vw,1.9rem)] md:leading-[1.32]"
           >
             <span className="text-vo-lumen">Volver al Origen 3.0</span>{" "}
             <span className="text-vo-bone">abrirá sus puertas próximamente.</span>
@@ -236,8 +251,13 @@ export function ListaEspera() {
                 key={bonus.title}
                 /* Las tres entran en cascada, no de golpe: el retardo lo pone el
                    índice, así que se leen por orden como se leerían con la
-                   vista. `aparece-${n}` sólo llega hasta 5 y aquí son tres. */
-                className={`aparece-abajo aparece-${index + 1} le-borde-giro h-full rounded-[1.05rem] p-px md:rounded-[0.78vw]`}
+                   vista. `aparece-${n}` sólo llega hasta 5 y aquí son tres.
+
+                   VA EN `entrada` Y NO EN `className`: la entrada anima
+                   `transform` y los efectos de cursor también, así que tienen
+                   que caer en elementos distintos o se pisan (ver CardBonus). */
+                entrada={`aparece-abajo aparece-${index + 1}`}
+                className="le-borde-giro h-full rounded-[1.05rem] p-px md:rounded-[0.78vw]"
               >
                 {/* ── LA CARD ES DE CRISTAL ──
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 
 /*
@@ -41,12 +42,29 @@ import { motion, useReducedMotion, type Variants } from "framer-motion";
   ningún hueco que rellenar.
 */
 
-const PASO = 0.09;
+/*
+  EL ESCALONADO ES MÁS LENTO EN MÓVIL, y no es una preferencia estética.
 
-const grupo: Variants = {
+  En escritorio las seis píldoras van en dos columnas y se ven de un golpe, así
+  que un paso corto basta para que se lean en cascada. En móvil van en UNA
+  columna: apenas caben dos o tres en pantalla, y con 0,09 s las seis terminaban
+  de entrar en medio segundo — o sea que las que están fuera de la vista ya se
+  revelaron cuando el lector llega a ellas, y lo que se ve es una lista que
+  aparece de golpe.
+
+  A 0,22 s cada afirmación entra por su turno y da tiempo a leerla antes de que
+  llegue la siguiente, que es lo que pedía el encargo: que carguen de a una.
+
+  El breakpoint se mide con matchMedia y no con el ancho a secas porque es el
+  mismo valor que usa `md:` en toda la landing: 768.
+*/
+const PASO_ESC = 0.09;
+const PASO_MOV = 0.22;
+
+const grupoCon = (paso: number): Variants => ({
   oculta: {},
-  visible: { transition: { staggerChildren: PASO } },
-};
+  visible: { transition: { staggerChildren: paso } },
+});
 
 const pildora: Variants = {
   oculta: { opacity: 0, clipPath: "inset(0 100% 0 0)" },
@@ -83,11 +101,23 @@ type Tramo = { text: string; clave?: boolean };
 
 export function ListaParaVos({ items }: { items: readonly Tramo[][] }) {
   const sinMovimiento = useReducedMotion();
+  const [enMovil, setEnMovil] = useState(false);
+
+  /* Se mide tras el primer render: en el servidor no hay ventana. Arrancar en
+     `false` y corregir es lo que evita el desajuste de hidratación, y como el
+     valor sólo cambia el RITMO de una animación, el frame de diferencia no se
+     percibe. */
+  useEffect(() => {
+    const mirar = () => setEnMovil(window.innerWidth < 768);
+    mirar();
+    window.addEventListener("resize", mirar);
+    return () => window.removeEventListener("resize", mirar);
+  }, []);
 
   return (
     <motion.ul
       className="relative mt-[7vw] grid grid-cols-1 gap-[3.2vw] md:mt-[1.5vw] md:grid-cols-2 md:gap-[0.78vw]"
-      variants={grupo}
+      variants={grupoCon(enMovil ? PASO_MOV : PASO_ESC)}
       initial={sinMovimiento ? false : "oculta"}
       whileInView="visible"
       viewport={{ once: true, margin: "0px 0px -12% 0px" }}

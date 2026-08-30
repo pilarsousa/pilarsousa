@@ -34,7 +34,13 @@ export function LineaGlow({ className }: { className?: string }) {
     <div
       ref={ref}
       className={cn(
-        "h-[max(0.15vw,2px)] rounded-full bg-[#b8ea3c]",
+        /* MÁS GRUESA EN MÓVIL: 4 px contra los 2 de escritorio.
+           `max(0.15vw, 2px)` da siempre 2 px por debajo de 1333 de ancho, o sea
+           en cualquier teléfono — y a esa medida, sobre una card vertical que
+           ocupa el 87% de la pantalla, la línea se leía como un pelo. En
+           escritorio la card es apaisada y mucho más ancha, así que ahí 2 px
+           bastan y engrosarla la volvería un subrayado. */
+        "h-[4px] rounded-full bg-[#b8ea3c] md:h-[max(0.15vw,2px)]",
               /* TRES SOMBRAS Y NO DOS. El filamento corto y saturado da el borde, la
          media da cuerpo y la ancha derrama la luz sobre el fondo. Con dos había
          que elegir entre canto duro o mancha sin centro, y la barra se leía

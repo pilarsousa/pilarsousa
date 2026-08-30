@@ -35,8 +35,26 @@ const PASO_MOV = 3;
 const HUECO = "30px";
 
 /* Aire entre la última card y el botón, en vw. Entra en la cuenta del calzo
-   final, así que se cambia aquí y no con un margen suelto. */
-const AIRE = 1.5;
+   final, así que se cambia aquí y no con un margen suelto.
+
+   ⚠️ HAY DOS, Y EN MÓVIL ES MUCHO MAYOR. No es una preferencia: con el valor de
+   escritorio, en móvil el botón SE PEGABA a la última card al terminar de
+   scrollear la pila.
+
+   La cuenta lo explica. El calzo mide n·paso + aire − hueco, y en móvil el paso
+   es 3: 5·3 + 1,5 − 30px = 16,5vw − 30px, que en un teléfono de 390 son 64 − 30
+   = 34 px de separación REAL bajo la última card. Y las cards están clavadas con
+   `sticky top-[12vh]`, así que al completarse la pila el botón sube hasta
+   quedarse a esos 34 px — que a esa distancia se leen como pegado.
+
+   En escritorio el problema no existe porque el botón tiene su propia pista
+   sticky de 28vw que lo retiene abajo; en móvil no hay pista, el botón va en el
+   flujo y lo único que lo separa es este número.
+
+   Con 14 la cuenta da 29vw − 30px, unos 83 px a 390: el botón se lee como una
+   pieza aparte y no como el pie de la última card. */
+const AIRE_ESC = 1.5;
+const AIRE_MOV = 14;
 const FIN_TITULO = 5.07; // dónde acaba un título de dos renglones, desde el canto
 
 type Item = { title: string; text: string };
@@ -308,7 +326,7 @@ export function PilaCards({
           aria-hidden
           className="md:hidden"
           style={{
-            height: `max(1px, calc(${items.length * PASO_MOV + AIRE}vw - ${HUECO}))`,
+            height: `max(1px, calc(${items.length * PASO_MOV + AIRE_MOV}vw - ${HUECO}))`,
           }}
         />
         {/* DOS CALZOS Y NO UNO CON CLASES POR PUNTO DE RUPTURA: su alto depende
@@ -321,7 +339,7 @@ export function PilaCards({
           aria-hidden
           className="hidden md:block"
           style={{
-            height: `max(1px, calc(${items.length * PASO_ESC + AIRE}vw - ${HUECO}))`,
+            height: `max(1px, calc(${items.length * PASO_ESC + AIRE_ESC}vw - ${HUECO}))`,
           }}
         />
       </ol>

@@ -83,20 +83,50 @@ export function CardBonus({
   children,
   className,
   etiqueta = "div",
+  entrada,
 }: {
   children: ReactNode;
   className?: string;
   etiqueta?: "div" | "li";
+  /* Clases de entrada al scroll (.aparece-*). Se reciben APARTE del className
+     porque tienen que ir en un elemento distinto — ver abajo. */
+  entrada?: string;
 }) {
   const esMovil = useEsMovil();
   const Etiqueta = etiqueta;
 
-  if (esMovil) return <Etiqueta className={className}>{children}</Etiqueta>;
+  /* ⚠️ LA ENTRADA Y LOS EFECTOS DE CURSOR VIVEN EN ELEMENTOS DISTINTOS, y no es
+     una preferencia de estructura: los dos animan `transform`, que es una sola
+     propiedad. En el mismo nodo se pisan — GSAP escribe el transform de la
+     inclinación y borra el desplazamiento de la entrada, o al revés, y la card
+     se queda a medio revelar o clavada donde entró.
 
-  return (
+     El de fuera se encarga de aparecer; el de dentro, de reaccionar al cursor. */
+  const cuerpo = esMovil ? (
+    <Etiqueta className={className}>{children}</Etiqueta>
+  ) : (
     <CardMagica className={className} etiqueta={etiqueta} desactivar={esMovil}>
       {children}
     </CardMagica>
+  );
+
+  if (!entrada) return cuerpo;
+
+  /* El envoltorio hereda la etiqueta para no romper la semántica: dentro de un
+     <ul>, el hijo directo tiene que seguir siendo <li>. Y entonces el de dentro
+     pasa a <div>, porque un <li> anidado en otro <li> no es válido. */
+  return etiqueta === "li" ? (
+    <li className={entrada}>
+      {esMovil ? (
+        <div className={className}>{children}</div>
+      ) : (
+        <CardMagica className={className} desactivar={esMovil}>
+          {children}
+        </CardMagica>
+      )}
+    </li>
+  ) : (
+    <div className={entrada}>{cuerpo}</div>
   );
 }
 
