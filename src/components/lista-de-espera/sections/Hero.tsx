@@ -73,13 +73,19 @@ export function Hero() {
 
           max-w-none es imprescindible: el preflight de Tailwind pone un
           max-width del 100% a las imágenes y anularía el ensanche sin avisar. */}
+      {/* EL PARPADEO DE LUZ va sobre el banner de escritorio y no sobre el de
+          móvil: en móvil el texto se apoya DEBAJO de la foto, así que el
+          destello no le quita legibilidad a nada — pero ahí la foto ocupa media
+          pantalla y un brillo que late a pantalla completa en un teléfono pasa
+          de ambiente a molestia. En escritorio es una banda apaisada y el efecto
+          se lee como luz de tormenta. Los detalles, en .le-rayo (globals.css). */}
       <Image
         src={banner}
         alt=""
         quality={90}
         sizes="100vw"
         placeholder="blur"
-        className="hidden h-auto w-full max-w-none md:block md:w-[100.3%]"
+        className="le-rayo hidden h-auto w-full max-w-none md:block md:w-[100.3%]"
       />
 
       {/* EN MÓVIL EL TEXTO NO VA SOBRE LA FOTO SINO DEBAJO, y no es pereza: el

@@ -239,7 +239,34 @@ export function ListaEspera() {
                    vista. `aparece-${n}` sólo llega hasta 5 y aquí son tres. */
                 className={`aparece-abajo aparece-${index + 1} le-borde-giro h-full rounded-[1.05rem] p-px md:rounded-[0.78vw]`}
               >
-                <article className="le-bento-card flex h-full min-h-[7.8rem] flex-col items-center justify-center rounded-[calc(1.05rem-1px)] bg-[radial-gradient(120%_85%_at_50%_112%,#16250a_0%,#080d04_48%,#030502_100%)] px-7 py-7 md:min-h-[12.75vw] md:rounded-[calc(0.78vw-1px)] md:px-[1.8vw] md:py-[1.25vw]">
+                {/* ── LA CARD ES DE CRISTAL ──
+
+                    Tenía un fondo radial macizo —de #16250a a #030502— que la
+                    dejaba opaca sobre el banner: se leía como un recorte pegado
+                    encima, y detrás pasan la lluvia de código y el propio
+                    banner, que es justo lo que da profundidad a esta sección.
+
+                    Ahora el fondo se desenfoca a través de ella. El cristal son
+                    cuatro capas y ninguna sobra:
+
+                    1. backdrop-blur-xl — desenfoca lo que se ve por detrás. Es
+                       lo que la convierte en vidrio y no en un rectángulo
+                       translúcido.
+                    2. backdrop-saturate-150 — el verde de la lluvia se apaga al
+                       desenfocarse; esto le devuelve el color.
+                    3. un tinte verde muy oscuro en degradado, que le da cuerpo
+                       al vidrio. Sin él, el desenfoque parece un fallo.
+                    4. dos sombras internas —clara arriba, oscura abajo— que son
+                       las que simulan el canto de una lámina.
+
+                    EL TINTE NO PUEDE SER MUY OPACO. A partir de un 60% deja de
+                    verse lo de detrás y volvemos al panel macizo; a este alfa la
+                    lluvia se adivina en movimiento, que es el punto.
+
+                    Es el mismo recurso que el diálogo de las reseñas y que los
+                    sellos del hero: tres piezas de cristal en la misma landing,
+                    lo que las emparenta. */}
+                <article className="le-bento-card flex h-full min-h-[7.8rem] flex-col items-center justify-center rounded-[calc(1.05rem-1px)] bg-[linear-gradient(160deg,rgba(38,62,14,0.5)_0%,rgba(12,22,5,0.42)_52%,rgba(4,8,2,0.5)_100%)] px-7 py-7 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.16),inset_0_-1px_0_0_rgba(0,0,0,0.5)] backdrop-blur-xl backdrop-saturate-150 md:min-h-[12.75vw] md:rounded-[calc(0.78vw-1px)] md:px-[1.8vw] md:py-[1.25vw]">
                   {/* Disco oscuro con el icono en lima: los mismos papeles
                       invertidos que los tildes de "es para vos si…". */}
                   {Icono && (

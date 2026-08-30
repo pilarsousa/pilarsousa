@@ -288,52 +288,80 @@ export function Experiencia() {
           distintas hace que se lean como dos bloques que se encuentran en vez de
           como una sola cosa subiendo. */}
       <div className="aparece-derecha relative mt-[9vw] space-y-[4vw] md:absolute md:top-[11.6%] md:left-[54.3%] md:mt-0 md:w-[25.3%] md:space-y-[1.5vw]">
-        {/* SIN SOMBRA Y SIN REACCIÓN AL RATÓN. Los mockups son PNG con fondo
-            transparente, así que una sombra de caja dibuja el rectángulo del
-            ARCHIVO y no la silueta del aparato: se veía un halo rectangular
-            alrededor de algo que no lo es.
+        {/* ── LOS MOCKUPS RESPONDEN AL CURSOR, PERO COMO LÁMINAS ──
 
-            Llegaron a encenderse y crecer al pasar el ratón, y se retiró: son
-            ILUSTRACIÓN, no controles. No llevan a ninguna parte ni abren nada
-            —de hecho van con aria-hidden—, así que responder al cursor prometía
-            una interacción que no existe, y el halo rectangular reaparecía justo
-            en el momento de mirarlos de cerca. */}
+            Son lo único que ENSEÑA el producto por dentro, así que merecen que
+            se los mire de cerca. Ahora al pasar el ratón la lámina se inclina
+            hacia el cursor, se acerca un punto y un destello la cruza en
+            diagonal, como la luz sobre una pantalla real.
+
+            NO VUELVE LA SOMBRA DE CAJA, que es el motivo por el que se retiró el
+            efecto anterior: estos archivos tienen fondo transparente, así que
+            una `box-shadow` dibuja el rectángulo del ARCHIVO y no la silueta del
+            aparato — se veía un halo rectangular alrededor de algo que no lo es.
+            La sensación de relieve la da aquí la inclinación, que no dibuja
+            ninguna forma.
+
+            EL GIRO ES MÍNIMO —2 grados— Y SIEMPRE EL MISMO. No sigue al cursor:
+            estas piezas van con aria-hidden y no son controles, así que un
+            seguimiento fino prometería una interacción que no existe. Dos grados
+            bastan para que la lámina se sienta física.
+
+            El destello vive en .le-mockup (globals.css) porque necesita un
+            pseudo-elemento con máscara, y eso no se declara desde una utilidad.
+
+            El envoltorio existe para recortar el destello: sin él la banda de
+            luz se saldría de la lámina. */}
         {MOCKUPS.map((src) => (
-          <Image
+          <div
             key={src.src}
-            src={src}
-            alt=""
-            aria-hidden
-            quality={90}
-            sizes="(min-width: 768px) 26vw, 87vw"
-            className="h-auto w-full rounded-[2.1vw] md:rounded-[0.78vw]"
-          />
+            className="le-mockup group/mock relative overflow-hidden rounded-[2.1vw] md:rounded-[0.78vw]"
+          >
+            <Image
+              src={src}
+              alt=""
+              aria-hidden
+              quality={90}
+              sizes="(min-width: 768px) 26vw, 87vw"
+              className="h-auto w-full transition-transform duration-500 ease-out md:group-hover/mock:scale-[1.03]"
+            />
+          </div>
         ))}
       </div>
       {/* ── Abajo: las tres áreas ── */}
-      {/* En escritorio la separación la da el 63,5% del alto del banner; en móvil,
-          donde no hay banner, hacen falta los 75-100 px a mano. 22vw a 390 son
-          86, dentro de ese rango. */}
-      <div className="relative mt-[22vw] md:absolute md:top-[63.5%] md:left-[20.5%] md:mt-0 md:w-[59%]">
-        {/* ⚠️ EL AIRE VA EN PADDING Y NO EN MARGEN, y el motivo es un COLAPSO DE
-            MÁRGENES.
+      {/* En escritorio la separación la da el `top` contra el alto del banner; en
+          móvil, donde no hay banner, hacen falta los 75-100 px a mano. 22vw a
+          390 son 86, dentro de ese rango.
 
-            Estuvo como `mt-[60px]` y no se aplicaba nada. El h3 es el PRIMER
-            hijo de este contenedor, que no tiene borde, ni relleno, ni nada que
-            abra un contexto de formato propio: en esas condiciones su margen
-            superior no separa por dentro, sino que SE ESCAPA hacia fuera y pasa
-            a ser el margen del contenedor. Y como el contenedor está en
-            `absolute` contra el banner, ese margen fugado no mueve nada.
+          ⚠️ EL AIRE CONTRA EL LISTADO DE ARRIBA SE REGULA AQUÍ, EN EL `top`, y no
+          con margen ni padding en el titular: los dos se intentaron y ninguno
+          separa un bloque anclado en absoluto (ver el comentario del h3).
 
-            El padding no colapsa nunca. Por eso aquí funciona y el margen no.
+          Sube de 63,5 a 65,8%: son 2,3 puntos del alto del banner, unos 50 px a
+          1920, que es la separación que pide el diseño. */}
+      <div className="relative mt-[22vw] md:absolute md:top-[65.8%] md:left-[20.5%] md:mt-0 md:w-[59%]">
+        {/* ⚠️ EN ESCRITORIO ESTE TITULAR NO SE SEPARA CON MARGEN NI CON PADDING.
+            NINGUNO DE LOS DOS FUNCIONA, y conviene entender por qué antes de
+            volver a intentarlo:
 
-            La otra salida habría sido abrir contexto en el padre —un
-            `overflow` distinto de visible, por ejemplo— y eso está prohibido en
-            esta landing: rompería el `position: sticky` de la sección anterior.
+            · CON MARGEN se produce un colapso: el h3 es el primer hijo de un
+              contenedor sin borde ni relleno, así que su margen superior no
+              separa por dentro — se escapa y pasa a ser margen del contenedor.
+            · CON PADDING sí se aplica, pero tampoco separa: el contenedor está
+              anclado por `md:top-[63.5%]`, que fija su BORDE SUPERIOR. El
+              padding empuja al h3 hacia abajo DENTRO de una caja que no se
+              mueve, así que el titular se acerca a las cards en vez de alejarse
+              del listado. El hueco se abre por encima, donde no se ve.
 
-            50px, que es lo que pide el diseño: con 30 la banda seguía leyéndose
-            como continuación del listado; con 60 se despegaba de más. */}
-        <h3 className="aparece-abajo pt-[50px] text-center font-display text-[5.6vw] leading-[1.3] text-[#f4f1e4] md:text-[clamp(0.8rem,1.35vw,1.75rem)] md:leading-[1.35]">
+            La separación real de un bloque en `absolute` se cambia moviendo su
+            ancla, y por eso el aire vive ahora en el `top` del contenedor
+            —65,8% en vez de 63,5%—: 2,3 puntos porcentuales del alto del banner,
+            que a 1920 son unos 50 px.
+
+            EN MÓVIL SÍ VALE EL PADDING, porque allí el contenedor está en el
+            flujo y no anclado. De ahí que el pt- siga puesto sin prefijo y se
+            anule con md:pt-0. */}
+        <h3 className="aparece-abajo pt-[50px] text-center font-display text-[5.6vw] leading-[1.3] text-[#f4f1e4] md:pt-0 md:text-[clamp(0.8rem,1.35vw,1.75rem)] md:leading-[1.35]">
           {EXPERIENCIA.areasTitle.lead}{" "}
           <span className="text-[#a3ca23]">{EXPERIENCIA.areasTitle.acento}</span>{" "}
           {EXPERIENCIA.areasTitle.resto}

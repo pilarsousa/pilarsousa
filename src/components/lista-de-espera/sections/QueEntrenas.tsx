@@ -54,8 +54,22 @@ export function QueEntrenas() {
   return (
     <section
       aria-labelledby="que-entrenas-titulo"
-      className="relative bg-white pt-[14vw] pb-[16vw] md:pt-[6vw] md:pb-[10vw]"
+      /* ⚠️ overflow-x-clip Y NO overflow-hidden. El resplandor de abajo sangra
+         fuera del ancho de la ventana y hay que recortarlo, pero `hidden`
+         recortaría los DOS ejes — y esta sección es ancestro del apilado
+         `sticky` de las cards, que deja de funcionar en silencio en cuanto un
+         ancestro recorta el eje vertical. `x-clip` sólo toca el horizontal. */
+      className="relative overflow-x-clip bg-white pt-[14vw] pb-[16vw] md:pt-[6vw] md:pb-[10vw]"
     >
+      {/* EL RESPLANDOR QUE LATE, a la derecha. Sobre el blanco liso de esta
+          sección da un tinte de vida sin dibujar nada reconocible: aparece y se
+          apaga cada 6 s, tan desenfocado que se lee como atmósfera y no como una
+          mancha. Los detalles y el porqué del color, en .le-luz-lateral
+          (globals.css). */}
+      <div
+        aria-hidden
+        className="le-luz-lateral top-[8%] left-[calc(50%+380px)] max-md:left-[calc(50%+40px)]"
+      />
       <h2
         id="que-entrenas-titulo"
         className="aparece-abajo px-[6.5vw] text-center font-display text-[6.4vw] leading-[1.2] text-[#141b0a] md:px-0 md:text-[clamp(0.85rem,1.45vw,1.9rem)] md:leading-[1.25]"

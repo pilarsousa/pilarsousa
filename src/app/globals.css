@@ -3014,3 +3014,293 @@ body {
     will-change: auto;
   }
 }
+
+/*
+  LOS MOCKUPS DE LA SECCIÓN 5, COMO LÁMINAS.
+
+  Son lo único de la landing que enseña el producto por dentro, así que al pasar
+  el ratón se comportan como una pantalla física: la lámina se inclina, se
+  acerca un punto y un destello la cruza en diagonal.
+
+  LA INCLINACIÓN ES FIJA Y MÍNIMA —2 grados—, no sigue al cursor. Estas piezas
+  van con aria-hidden y no son controles: un seguimiento fino prometería una
+  interacción que no existe. Dos grados bastan para que se sienta material.
+
+  EL DESTELLO ES UNA BANDA QUE ATRAVIESA, no un brillo que se enciende. Va como
+  pseudo-elemento con una anchura mayor que la lámina para entrar y salir por
+  fuera; lo recorta el overflow del envoltorio. Se mueve con `transform` y no
+  con `left`, que obligaría a rehacer la maquetación en cada frame.
+
+  NO HAY box-shadow, y es deliberado: estos archivos tienen fondo transparente,
+  así que una sombra de caja dibujaría el rectángulo del ARCHIVO en vez de la
+  silueta del aparato. Ese halo rectangular fue el motivo de retirar el efecto
+  anterior. El relieve lo da aquí la inclinación, que no dibuja ninguna forma.
+*/
+.le-mockup {
+  transform: perspective(900px) rotateY(0deg) translateZ(0);
+  transition:
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.5s ease;
+}
+
+.le-mockup::after {
+  content: "";
+  position: absolute;
+  inset-block: -20%;
+  left: -60%;
+  width: 45%;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(220, 255, 150, 0.16) 45%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(220, 255, 150, 0.16) 55%,
+    transparent 100%
+  );
+  transform: translateX(0) skewX(-14deg);
+  transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (min-width: 768px) {
+  .le-mockup:hover {
+    transform: perspective(900px) rotateY(-2deg) translateZ(0);
+    filter: brightness(1.06);
+  }
+
+  .le-mockup:hover::after {
+    transform: translateX(400%) skewX(-14deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .le-mockup,
+  .le-mockup:hover {
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+
+  .le-mockup::after {
+    display: none;
+  }
+}
+
+/*
+  EL RESPLANDOR QUE LATE DE LA SECCIÓN 4.
+
+  Una mancha de color muy desenfocada que aparece y se apaga cada 6 s. Sobre el
+  blanco liso de esa sección da un tinte de vida sin dibujar nada reconocible.
+
+  ── VA EN VERDE Y NO EN VIOLETA ──
+
+  El encargo traía #6600ff, que es el color del efecto original. Aquí desentona:
+  la landing entera se sostiene sobre un solo verde, y una mancha violeta —por
+  difusa que sea— mete una segunda familia de color que no aparece en ninguna
+  otra parte. En el verde de marca el efecto es el mismo y la página sigue
+  leyéndose de una pieza.
+
+  ── mix-blend-mode ES `multiply` Y NO `plus-lighter` ──
+
+  `plus-lighter` SUMA luz, así que sobre un fondo blanco no puede hacer nada: el
+  blanco ya está al máximo y el resplandor sería literalmente invisible. Esta
+  sección es la única blanca de la landing. `multiply` resta, que es lo que tiñe
+  sobre claro.
+
+  ── Y NO LLEVA z-index ALTO ──
+
+  El original pedía 99999. Aquí eso lo pondría por delante del contenido y
+  teñiría el texto y las cards; con z-0 se queda en el fondo, que es su sitio.
+  Tampoco necesita competir: es lo único que hay en esa capa.
+
+  El desenfoque de 200px es lo que lo convierte en atmósfera. Por debajo de 120
+  se empieza a distinguir el borde del círculo y deja de leerse como luz.
+*/
+@keyframes le-latido-luz {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.le-luz-lateral {
+  position: absolute;
+  z-index: 0;
+  width: 800px;
+  height: 800px;
+  border-radius: 9999px;
+  background-color: #a3ca23;
+  filter: blur(200px);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  opacity: 0;
+  animation: le-latido-luz 6s infinite ease-in-out;
+}
+
+@media (max-width: 767px) {
+  .le-luz-lateral {
+    width: 380px;
+    height: 380px;
+    filter: blur(90px);
+  }
+}
+
+/* Quien pidió menos movimiento la recibe quieta y a media intensidad: el tinte
+   se mantiene, el parpadeo no. */
+@media (prefers-reduced-motion: reduce) {
+  .le-luz-lateral {
+    animation: none;
+    opacity: 0.55;
+  }
+}
+
+/*
+  EL PARPADEO DE LUZ DEL HERO.
+
+  Ilumina el retrato con destellos irregulares, como una tormenta lejana. Los
+  fotogramas están repartidos de forma desigual a propósito: un parpadeo
+  regular se lee como un fallo de la pantalla, y uno irregular como luz real.
+
+  EL BRILLO MÁXIMO ES 130% Y NO 250%. A 250 el retrato se quema —las zonas
+  claras de la cara pierden todo el detalle y la foto se ve sobreexpuesta— y el
+  texto que va encima queda ilegible durante el destello. A 130 la luz se
+  percibe sin destruir la imagen.
+
+  Se anima `filter`, que el compositor resuelve sin tocar la maquetación.
+*/
+@keyframes le-rayo {
+  0%,
+  5%,
+  7%,
+  9%,
+  50%,
+  52%,
+  54%,
+  56%,
+  74%,
+  100% {
+    filter: brightness(130%);
+  }
+  6%,
+  8%,
+  10%,
+  25%,
+  49%,
+  51%,
+  53%,
+  55%,
+  57%,
+  73%,
+  76%,
+  99% {
+    filter: brightness(100%);
+  }
+}
+
+.le-rayo {
+  animation: le-rayo 5s infinite linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .le-rayo {
+    animation: none;
+  }
+}
+
+/*
+  CURSOR PERSONALIZADO.
+
+  Un disco que sustituye al puntero y se contrae a un punto luminoso sobre todo
+  lo que se puede pulsar. La sensación es la de una interfaz que sabe dónde
+  estás mirando.
+
+  ── SÓLO EN ESCRITORIO ──
+
+  Por encima de 1024px. Un cursor personalizado en táctil no tiene sentido —no
+  hay puntero que sustituir— y `cursor: none` en un dispositivo con ratón
+  conectado a una pantalla pequeña dejaría al visitante sin puntero de ningún
+  tipo. El componente además no se monta por debajo de ese ancho.
+
+  ── EL ÁMBITO ES .le-scope, NO body ──
+
+  Igual que la malla y por el mismo motivo: este documento lo comparten seis
+  landings y `cursor: none` en body dejaría a las otras cinco sin puntero. Aquí
+  el efecto vive y muere con esta ruta.
+
+  ── EL MODO DE MEZCLA ES `exclusion` Y NO `difference` ──
+
+  El encargo traía `difference`, y sobre esta landing falla justo en el sitio
+  más visible: difference invierte el color de debajo, así que sobre un gris
+  medio —el #222220 de la sección de bonus, el fondo de las cards— el resultado
+  es otro gris medio y el disco DESAPARECE. `exclusion` mantiene contraste en
+  los tonos intermedios, que es donde vive la mitad de esta página.
+
+  ── SIN TRANSICIÓN EN LA POSICIÓN ──
+
+  La posición la escribe el componente en cada frame; una transición sobre
+  `transform` añadiría un retardo entre el ratón real y el dibujado, y eso se
+  siente como lag aunque sea intencionado. Sólo transicionan el tamaño y el
+  color, que son los que cambian al entrar en algo pulsable.
+*/
+@media (min-width: 1025px) {
+  .le-scope,
+  .le-scope * {
+    cursor: none !important;
+  }
+
+  .le-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 400;
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  .le-cursor__disco {
+    width: 24px;
+    height: 24px;
+    margin-top: -12px;
+    margin-left: -12px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.19);
+    border: 1px solid rgba(227, 222, 193, 0.64);
+    mix-blend-mode: exclusion;
+    transition:
+      width 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+      height 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+      margin 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+      background-color 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+      border-color 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+      box-shadow 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  /* Sobre algo pulsable se contrae a un punto encendido. Se va la mezcla: aquí
+     el disco tiene que verse macizo, y el verde de marca lo ata a la landing en
+     vez de dejarlo como un puntero genérico. */
+  .le-cursor__disco.activo {
+    width: 12px;
+    height: 12px;
+    margin-top: -6px;
+    margin-left: -6px;
+    background-color: #b8ea3c;
+    border-color: transparent;
+    box-shadow:
+      0 0 4px rgba(184, 234, 60, 0.9),
+      0 0 12px rgba(184, 234, 60, 0.55);
+    mix-blend-mode: normal;
+  }
+}
+
+/* El z-index es 400 —por encima de los dos diálogos (200 y 300)— porque el
+   cursor tiene que seguir viéndose con un modal abierto. Es la única capa que
+   va por delante de todo. */
+
+@media (prefers-reduced-motion: reduce) {
+  .le-cursor__disco {
+    transition: none;
+  }
+}

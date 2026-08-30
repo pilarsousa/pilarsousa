@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { CursorPropio } from "@/components/lista-de-espera/ui/CursorPropio";
 import { EntradaScroll } from "@/components/lista-de-espera/ui/EntradaScroll";
 import { SmoothScroll } from "@/components/lista-de-espera/ui/SmoothScroll";
 import { WaitlistModalProvider } from "@/components/lista-de-espera/ui/WaitlistModal";
@@ -93,6 +94,14 @@ export default function ListaDeEsperaLayout({
           frame, aunque el orden no es crítico — el enganche es por evento. */}
       <EntradaScroll />
       <div className="vo-scope le-scope relative min-h-full text-foreground">
+        {/* VA DENTRO DEL SCOPE Y NO FUERA: el `cursor: none` que oculta el
+            puntero del sistema está declarado sobre .le-scope, así que el disco
+            que lo sustituye tiene que vivir en el mismo subárbol. Fuera, se
+            vería el disco y ADEMÁS la flecha del sistema.
+
+            Es `position: fixed`, así que su sitio en el árbol no afecta a dónde
+            se dibuja: se coloca contra la ventana. */}
+        <CursorPropio />
         {children}
       </div>
     </WaitlistModalProvider>
