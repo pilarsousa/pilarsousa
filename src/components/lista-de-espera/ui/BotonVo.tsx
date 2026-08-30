@@ -53,6 +53,7 @@ export function BotonVo({
   onClick,
   disabled,
   flecha = true,
+  href,
 }: {
   children: React.ReactNode;
   className?: string;
@@ -60,13 +61,20 @@ export function BotonVo({
   onClick?: () => void;
   disabled?: boolean;
   flecha?: boolean;
+  /* Presente → sale como <a>. Ausente → <button>.
+
+     No es un detalle de implementación: el botón de la página de gracias lleva
+     al grupo de WhatsApp, o sea que NAVEGA — y eso tiene que ser un enlace. Un
+     <button> con un onClick que cambia location miente sobre lo que hace: el
+     navegador no ofrece "abrir en pestaña nueva", no se puede copiar el destino,
+     y el lector de pantalla lo anuncia como botón cuando es un enlace. Es la
+     misma distinción, en sentido inverso, que hace CtaLista al ser <button>
+     porque abre un diálogo y no navega. */
+  href?: string;
 }) {
-  return (
-    <button
-      type={type}
-      onClick={onClick}
-      disabled={disabled}
-      className={cn(
+  /* Las clases son idénticas en las dos variantes: lo único que cambia es la
+     etiqueta y lo que la etiqueta implica. Por eso se arman una vez. */
+  const clases = cn(
         "group inline-flex w-full max-w-[470px] cursor-pointer rounded-[0.9em]",
         /* DOS TAMAÑOS FIJOS: 16px en móvil y 18 de md en adelante.
            Antes era un clamp(14, 0.9375vw, 18) que sólo alcanzaba los 18 a
@@ -86,8 +94,9 @@ export function BotonVo({
            girando: el botón está inactivo, no roto. */
         "disabled:cursor-default disabled:opacity-60 disabled:hover:brightness-100 disabled:active:scale-100",
         className,
-      )}
-    >
+  );
+
+  const cara = (
       <span
         className={cn(
           "inline-flex w-full items-center justify-center gap-[0.7em]",
@@ -121,6 +130,36 @@ export function BotonVo({
           />
         )}
       </span>
+  );
+
+  /* CON href SALE COMO ENLACE. `noopener` no es opcional al abrir en pestaña
+     nueva: sin él, la página destino recibe una referencia a esta ventana por
+     `window.opener` y puede redirigirla. `noreferrer` lo acompaña porque hay
+     navegadores antiguos que sólo entienden el segundo.
+
+     Un enlace no puede deshabilitarse —no existe el atributo— así que cuando no
+     hay URL la página usa la variante <button>, que sí. */
+  if (href) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={clases}
+      >
+        {cara}
+      </a>
+    );
+  }
+
+  return (
+    <button
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+      className={clases}
+    >
+      {cara}
     </button>
   );
 }
