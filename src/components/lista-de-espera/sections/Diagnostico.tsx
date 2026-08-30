@@ -53,7 +53,12 @@ export function Diagnostico() {
       className="relative md:pointer-events-none md:absolute md:inset-0"
     >
       {/* ── Izquierda: el diagnóstico, sobre blanco ── */}
-      <div className="bg-white px-[6.5vw] py-[13vw] md:pointer-events-auto md:absolute md:top-[13.5%] md:left-[20.4%] md:w-[22.8%] md:bg-transparent md:p-0">
+      {/* MÁS AIRE ARRIBA Y ABAJO EN MÓVIL: de 13 a 18vw. El bloque son siete
+          frases seguidas, y sin margen contra las secciones vecinas se leía como
+          un muro de texto que empieza en cuanto termina lo anterior. El aire no
+          acorta el texto, pero le da principio y final — y eso ya cambia cómo se
+          aborda: se ve dónde termina antes de empezar a leerlo. */}
+      <div className="bg-white px-[6.5vw] py-[18vw] md:pointer-events-auto md:absolute md:top-[13.5%] md:left-[20.4%] md:w-[22.8%] md:bg-transparent md:p-0">
         {/* El titular de esta sección es MÁS GRANDE que el del hero —1,25vw
             frente a 1,15— y no es un descuido del montaje: el hero se apoya en
             la foto para captar, y aquí el titular carga solo con el peso de la
@@ -62,7 +67,7 @@ export function Diagnostico() {
           {ENTRENAR.izquierda.titulo}
         </h2>
 
-        <div className="mt-[4.5vw] space-y-[3.2vw] md:mt-[1.3vw] md:space-y-[0.8vw]">
+        <div className="mt-[4.5vw] space-y-[5vw] md:mt-[1.3vw] md:space-y-[0.8vw]">
           {ENTRENAR.izquierda.parrafos.map((partes) => (
             <p
               key={partes[0].text}
@@ -82,7 +87,10 @@ export function Diagnostico() {
       </div>
 
       {/* ── Derecha: la respuesta, sobre la lluvia de código ── */}
-      <div className="relative isolate overflow-hidden bg-black px-[6.5vw] py-[13vw] md:pointer-events-auto md:absolute md:top-[13.5%] md:left-[55.6%] md:mt-0 md:w-[23.9%] md:overflow-visible md:bg-transparent md:p-0">
+      {/* El mismo aire que el panel de la izquierda: los dos son bloques de
+          texto seguido y en móvil van apilados, así que necesitan la misma
+          separación para leerse como dos piezas y no como una tirada. */}
+      <div className="relative isolate overflow-hidden bg-black px-[6.5vw] py-[18vw] md:pointer-events-auto md:absolute md:top-[13.5%] md:left-[55.6%] md:mt-0 md:w-[23.9%] md:overflow-visible md:bg-transparent md:p-0">
         <div aria-hidden className="absolute inset-0 md:hidden">
           <LluviaCodigo opacidad={0.38} />
         </div>
@@ -91,7 +99,7 @@ export function Diagnostico() {
           {ENTRENAR.derecha.titulo}
         </h2>
 
-        <div className="relative mt-[4.5vw] space-y-[3.2vw] md:mt-[1.3vw] md:space-y-[0.8vw]">
+        <div className="relative mt-[4.5vw] space-y-[5vw] md:mt-[1.3vw] md:space-y-[0.8vw]">
           {ENTRENAR.derecha.parrafos.map((partes) => (
             <p
               key={partes[0].text}

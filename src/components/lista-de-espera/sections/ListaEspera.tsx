@@ -36,26 +36,24 @@ const BONUS_ICONOS = [Clock, Tag, Gift] as const;
 */
 export function ListaEspera() {
   return (
-    /* #222220 EN LOS DOS TAMAÑOS Y NO NEGRO PURO. En móvil no se carga el
-       banner, y sobre negro absoluto la lluvia de código y los filetes de las
-       cards pierden el poco contraste que tienen; un gris muy oscuro les
-       devuelve un fondo contra el que recortarse.
-
-       Y ES EL MISMO GRIS QUE LA SECCIÓN DE PILAR, que es la de arriba: antes
-       eran dos —#252525 en móvil y #111111 en escritorio— y ninguno coincidía
-       con ella, así que la junta entre las dos secciones se leía como un
-       escalón de color. Con el tinte compartido el paso es continuo, y el velo
-       superior usa este mismo valor para rematarlo. */
     <section
       aria-labelledby="lista-espera-titulo"
-      /* EL FONDO DE MÓVIL ES #161917 Y EL DE ESCRITORIO #222220. Son dos grises
-         casi iguales, y la diferencia tiene motivo: en escritorio manda el
-         banner y este color sólo asoma por los cantos, donde tiene que empalmar
-         con la sección de Pilar; en móvil el banner no se carga y este gris ES
-         el fondo, sobre el que se leen la lluvia de código y los filetes de las
-         cards. El tono más oscuro les devuelve el contraste que el #222220 —más
-         claro— les quitaba. */
-      className="relative isolate -mt-px overflow-hidden bg-[#161917] text-center text-vo-bone md:bg-[#222220]"
+      /* ⚠️ SON DOS COLORES DISTINTOS Y NO PUEDEN UNIFICARSE, porque en cada
+         tamaño este valor hace un trabajo diferente:
+
+         · EN ESCRITORIO manda el banner y el color sólo asoma por los cantos.
+           Ahí tiene que EMPALMAR con la sección de Pilar, que es la de arriba,
+           y por eso es su mismo gris (#222220): con dos grises distintos la
+           junta entre secciones se leía como un escalón.
+         · EN MÓVIL el banner no se carga y este color ES el fondo, a pantalla
+           completa. El #222220 resultaba demasiado claro para eso — la banda
+           superior se veía gris antes de que entrara el velo— así que aquí va
+           #090B0A, casi negro, contra el que la lluvia de código y los filetes
+           de las cards se recortan de verdad.
+
+         El velo superior acompaña al de móvil, no al de escritorio: es el que
+         cubre la banda donde se notaba el gris. */
+      className="relative isolate -mt-px overflow-hidden bg-[#090B0A] text-center text-vo-bone md:bg-[#222220]"
     >
       <Image
         src={bonusBg}
@@ -109,7 +107,22 @@ export function ListaEspera() {
             <span className="text-vo-bone">abrirá sus puertas próximamente.</span>
           </h2>
 
-          <p className="mt-4 max-w-[26rem] font-sans text-[3.9vw] leading-[1.5] font-medium tracking-normal text-white md:mt-[15px] md:max-w-[34em] md:text-[clamp(0.9rem,1.0417vw,1.3rem)]">
+          {/* ⚠️ SE OCULTA EN MÓVIL, no se borra.
+
+              El párrafo dice tres cosas —que quien esté en la lista se entera
+              primero, que por eso conviene registrarse, y que a continuación
+              vienen los beneficios—, y las tres ya están dichas alrededor: la
+              primera en el titular de arriba, la tercera en la palabra BONUS que
+              va justo debajo, y la segunda es el botón.
+
+              En escritorio no estorba: hay ancho para que entre en dos renglones
+              y hace de puente entre el titular y las cards. En un teléfono ocupa
+              cinco o seis, empuja las cards fuera de la primera pantalla y
+              retrasa lo único que hay que ver.
+
+              `hidden md:block` y no un recorte del copy: el texto sigue en el
+              HTML para el lector de pantalla y para el buscador. */}
+          <p className="mt-4 hidden max-w-[26rem] font-sans text-[3.9vw] leading-[1.5] font-medium tracking-normal text-white md:mt-[15px] md:block md:max-w-[34em] md:text-[clamp(0.9rem,1.0417vw,1.3rem)]">
             {LISTA.intro[1]}
           </p>
         </div>
@@ -184,7 +197,7 @@ export function ListaEspera() {
             por debajo y el empalme volvía a notarse. */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[62%] bg-[linear-gradient(180deg,rgba(34,34,32,0.82)_0%,rgba(34,34,32,0.55)_32%,rgba(34,34,32,0.22)_66%,transparent_100%)]"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[62%] bg-[linear-gradient(180deg,rgba(9,11,10,0.9)_0%,rgba(9,11,10,0.6)_32%,rgba(9,11,10,0.24)_66%,transparent_100%)]"
         />
 
         {/* LA PALABRA SE APAGA HACIA ABAJO.
@@ -301,14 +314,20 @@ export function ListaEspera() {
                     </span>
                   )}
 
-                  {/* EL TITULAR CRECE UN PUNTO EN MÓVIL: de 3,6 a 4,3vw, con el
-                      techo del clamp subiendo de 1,1 a 1,3rem. En un teléfono la
-                      card ocupa todo el ancho y el título quedaba pequeño
-                      respecto de su caja — se leía como una etiqueta y no como
-                      el nombre del bono. La interlínea sube a la par (1,04 →
-                      1,12) porque son dos renglones y a más cuerpo necesitan más
-                      aire para no tocarse. En escritorio no cambia nada. */}
-                  <h3 className="font-display text-[clamp(1rem,4.3vw,1.3rem)] leading-[1.12] tracking-normal text-vo-lumen uppercase md:text-[clamp(0.9rem,1.25vw,1.6rem)] md:leading-[1.04]">
+                  {/* 18px FIJOS EN MÓVIL. Venía de un clamp que a 390 de ancho
+                      daba unos 16,8 y en pantallas menores encogía más: en un
+                      teléfono la card ocupa todo el ancho y el título quedaba
+                      pequeño respecto de su caja, leyéndose como una etiqueta y
+                      no como el nombre del bono.
+
+                      Fijo y no clamp porque estos títulos van en dos renglones
+                      cortos —"Acceso / anticipado"— y no corren riesgo de
+                      desbordar: lo que necesitaban era un tamaño estable.
+
+                      La interlínea sube a 1,12 desde 1,04 porque a más cuerpo,
+                      dos renglones en versalitas se tocan. En escritorio no
+                      cambia nada. */}
+                  <h3 className="font-display text-[18px] leading-[1.12] tracking-normal text-vo-lumen uppercase md:text-[clamp(0.9rem,1.25vw,1.6rem)] md:leading-[1.04]">
                     {BONUS_TITLE_LINES[index]?.map((line) => (
                       <span key={line} className="block">
                         {line}

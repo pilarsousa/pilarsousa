@@ -126,7 +126,13 @@ export function Hero() {
           hasta el negro del bloque, y su altura tiene que coincidir con el aire
           que hay antes del primer elemento: con 14vw de fundido sobre 9 de
           relleno, el texto empezaría dentro de la zona todavía translúcida. */}
-      <div className="relative -mt-[25vw] bg-[linear-gradient(180deg,transparent_0%,#000_9vw)] px-[6.5vw] pt-[9vw] pb-[9vw] md:absolute md:top-[15%] md:left-[20.3%] md:-mt-[25px] md:w-[25.5%] md:bg-none md:p-0">
+      {/* EL RELLENO SUPERIOR BAJA DE 9 A 3vw en móvil: los sellos suben y con
+          ellos todo el bloque, que es lo que hace que el botón entre con holgura
+          en la primera pantalla. El degradado se acorta a la par —tiene que
+          terminar de fundir en negro justo donde arranca el primer elemento—,
+          porque si el fundido durase más que el relleno, los sellos empezarían
+          dentro de la zona todavía translúcida y se verían sobre la foto. */}
+      <div className="relative -mt-[25vw] bg-[linear-gradient(180deg,transparent_0%,#000_3vw)] px-[6.5vw] pt-[3vw] pb-[9vw] md:absolute md:top-[15%] md:left-[20.3%] md:-mt-[25px] md:w-[25.5%] md:bg-none md:p-0">
         {/* LOS DOS SELLOS SON CÓDIGO Y NO IMÁGENES. Eran lista-de-espera.png y
             3era-edicion.png, 80 KB para dibujar dos píldoras con texto que no se
             podía seleccionar ni leer con un lector de pantalla.
@@ -140,7 +146,7 @@ export function Hero() {
 
         <h1
           id="hero-title"
-          className="mt-[2.5vw] font-display text-[5.4vw] leading-[1.3] text-balance text-[#f4f1e4] md:mt-[15px] md:text-[clamp(1rem,1.5625vw,2rem)] md:leading-[1.3]"
+          className="mt-[10px] font-display text-[5.4vw] leading-[1.3] text-balance text-[#f4f1e4] md:mt-[15px] md:text-[clamp(1rem,1.5625vw,2rem)] md:leading-[1.3]"
         >
           {HERO.claim.map((parte) =>
             parte.strong ? (
@@ -153,7 +159,7 @@ export function Hero() {
           )}
         </h1>
 
-        <p className="mt-[2.8vw] font-sans text-[3.75vw] leading-[1.6] text-[#d5d2c6] md:mt-[15px] md:text-[clamp(0.8rem,0.9375vw,1.15rem)] md:leading-[1.6] md:font-medium">
+        <p className="mt-[10px] font-sans text-[3.75vw] leading-[1.6] text-[#d5d2c6] md:mt-[15px] md:text-[clamp(0.8rem,0.9375vw,1.15rem)] md:leading-[1.6] md:font-medium">
           {HERO.intro.map((parte) =>
             parte.strong ? (
               <strong key={parte.text} className="font-bold text-white">
@@ -165,7 +171,7 @@ export function Hero() {
           )}
         </p>
 
-        <p className="mt-[2.2vw] font-sans text-[3.75vw] leading-[1.6] text-[#d5d2c6] md:mt-[15px] md:text-[clamp(0.8rem,0.9375vw,1.15rem)] md:leading-[1.6] md:font-medium">
+        <p className="mt-[10px] font-sans text-[3.75vw] leading-[1.6] text-[#d5d2c6] md:mt-[15px] md:text-[clamp(0.8rem,0.9375vw,1.15rem)] md:leading-[1.6] md:font-medium">
           {HERO.duracionLead}
           <strong className="font-bold text-white">{HERO.duracion}</strong>
         </p>
@@ -173,7 +179,7 @@ export function Hero() {
         {/* El botón se dimensiona por su font-size: dentro usa em para relleno,
             radio y flecha, así que escalar el texto escala la pieza entera y sus
             proporciones internas no se descuadran nunca. */}
-        <div className="mt-[4vw] md:mt-[15px]">
+        <div className="mt-[10px] md:mt-[15px]">
           <CtaLista>{HERO.cta}</CtaLista>
         </div>
       </div>

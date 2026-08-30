@@ -278,8 +278,24 @@ export function Experiencia() {
                   <p className="font-sans text-[3.9vw] leading-[1.35] font-semibold text-[#f4f1e4] md:text-[clamp(0.48rem,0.86vw,1.05rem)]">
                     {item.text}
                   </p>
+                  {/* ⚠️ EL DETALLE SE OCULTA EN MÓVIL, no se borra.
+
+                      Son nueve puntos, y cuatro de ellos traen una aclaración de
+                      dos renglones: en una columna de teléfono eso convierte una
+                      lista escaneable en un bloque de texto de veinte líneas. El
+                      lector recorre esta sección con la vista buscando QUÉ
+                      incluye, no leyéndola — y los titulares solos ya lo dicen.
+
+                      En escritorio se queda: allí la lista va en una columna
+                      estrecha junto a los mockups, hay sitio de sobra en
+                      vertical, y la aclaración añade valor sin estorbar.
+
+                      Va con `hidden md:block` y no retirándolo del content:
+                      el texto sigue en el HTML para quien use un lector de
+                      pantalla y para el buscador, que es lo que se perdería
+                      borrándolo del copy. */}
                   {item.detalle && (
-                    <p className="mt-[1.4vw] font-sans text-[3.6vw] leading-[1.45] text-[#a9b09b] md:mt-[0.2vw] md:text-[clamp(0.45rem,0.82vw,1rem)] md:leading-[1.4]">
+                    <p className="mt-[1.4vw] hidden font-sans text-[3.6vw] leading-[1.45] text-[#a9b09b] md:mt-[0.2vw] md:block md:text-[clamp(0.45rem,0.82vw,1rem)] md:leading-[1.4]">
                       {item.detalle}
                     </p>
                   )}

@@ -1,4 +1,4 @@
-import { Info, Target } from "lucide-react";
+import { ClockAlert, Video } from "lucide-react";
 
 /*
   Los dos distintivos del hero: "LISTA DE ESPERA" y "3.ª EDICIÓN".
@@ -50,9 +50,21 @@ import { Info, Target } from "lucide-react";
   frente a las imágenes que sustituye.
 */
 
+/*
+  ⚠️ NINGUNO DE LOS DOS ICONOS PUEDE SER REDONDO, y ese fue el problema de los
+  anteriores: eran Info y Target —los dos, círculos— y el sello los envolvía en
+  otro disco. El resultado eran dos anillos concéntricos, que se leen como un
+  error de maquetación antes que como un icono.
+
+  Ahora el disco desapareció y los dibujos tienen silueta propia:
+
+  · reloj con aviso — la lista de espera: algo que ocurrirá y hay que esperar.
+  · cámara de vídeo — la 3.ª edición, que es un programa en directo. Dice qué
+    tipo de cosa es antes de leer el rótulo.
+*/
 const SELLOS = [
-  { icono: Info, texto: "Lista de espera" },
-  { icono: Target, texto: "3.ª edición" },
+  { icono: ClockAlert, texto: "Lista de espera" },
+  { icono: Video, texto: "3.ª edición" },
 ] as const;
 
 export function SellosHero() {
@@ -93,14 +105,22 @@ export function SellosHero() {
             "hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.5),inset_0_-1px_0_0_rgba(10,20,2,0.5),0_0_18px_-2px_rgba(163,202,35,0.55)]",
           ].join(" ")}
         >
-          {/* El icono va en su propio disco, un punto más claro que la píldora:
-              lo separa del rótulo sin necesidad de una línea divisoria. */}
-          <span
+          {/* EL ICONO VA SUELTO, SIN DISCO. Llevaba uno —un círculo oscuro con
+              su propio filete— y dentro iban Info y Target, que son círculos
+              también: dos anillos concéntricos que se leían como un fallo.
+
+              Sin la montura el dibujo se sostiene solo, y de paso el sello se
+              vuelve más ligero: una píldora con un disco dentro son dos formas
+              cerradas en una pieza que mide 30 px de alto.
+
+              Se queda el aclarado al pasar el ratón —de lima a lima brillante—,
+              que es lo que mantiene viva la respuesta al cursor sin necesidad
+              de que gire nada. */}
+          <Icono
             aria-hidden
-            className="flex size-[1.55em] shrink-0 items-center justify-center rounded-full border border-[#a3ca23]/40 bg-[#0d1505]/50 text-[#b8ea3c] transition-[transform,background-color,color] duration-300 group-hover/sello:rotate-[18deg] group-hover/sello:bg-[#b8ea3c] group-hover/sello:text-[#0d1505]"
-          >
-            <Icono className="size-[0.95em]" strokeWidth={2.1} />
-          </span>
+            strokeWidth={2.2}
+            className="size-[1.15em] shrink-0 text-[#b8ea3c] transition-colors duration-300 group-hover/sello:text-[#d8f06a]"
+          />
 
           <span className="font-sans text-[1em] leading-none font-semibold tracking-[0.08em] whitespace-nowrap text-[#f4f1e4] uppercase transition-colors duration-300 group-hover/sello:text-white">
             {texto}
