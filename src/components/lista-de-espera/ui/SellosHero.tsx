@@ -70,10 +70,24 @@ export function SellosHero() {
                se descuadran en ningún ancho. */
             "gap-[0.62em] px-[1.15em] py-[0.6em]",
             "text-[3.1vw] md:text-[clamp(0.5rem,0.72vw,0.95rem)]",
-            /* El cristal: tinte + desenfoque + filete. */
-            "border border-[#a3ca23]/45 bg-[#a3ca23]/12 backdrop-blur-md",
-            /* Y el relieve: clara arriba, oscura abajo. */
-            "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.35),inset_0_-1px_0_0_rgba(10,20,2,0.55),0_2px_10px_-4px_rgba(0,0,0,0.6)]",
+            /* ── EL CRISTAL ──
+
+               El desenfoque es CORTO —6px— a propósito: detrás está la foto del
+               hero, y con un desenfoque alto el sello se convierte en un vidrio
+               esmerilado que tapa la imagen en vez de dejarla adivinar. Una
+               lámina fina deja pasar la forma de lo que hay detrás.
+
+               El tinte va en DEGRADADO y no plano: más claro arriba, apagándose
+               hacia abajo. Un tinte uniforme se lee como un rectángulo de color
+               translúcido; en degradado, como vidrio recibiendo luz. */
+            "border border-[#a3ca23]/45 backdrop-blur-[6px]",
+            "bg-[linear-gradient(180deg,rgba(163,202,35,0.22)_0%,rgba(163,202,35,0.1)_55%,rgba(20,32,6,0.16)_100%)]",
+            /* Y EL RELIEVE: luz arriba, sombra abajo. Es lo que da volumen —la
+               luz entra desde arriba, así que el canto superior brilla y el
+               inferior queda oscuro—. Sin ese par la píldora es plana por muy
+               translúcida que sea. La tercera es la sombra proyectada, que la
+               separa de la foto. */
+            "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.38),inset_0_-1px_0_0_rgba(8,16,2,0.6),0_2px_10px_-4px_rgba(0,0,0,0.7)]",
             "transition-[background-color,border-color,box-shadow,transform] duration-300 ease-out",
             "hover:-translate-y-[1px] hover:border-[#b8ea3c]/80 hover:bg-[#a3ca23]/22",
             "hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.5),inset_0_-1px_0_0_rgba(10,20,2,0.5),0_0_18px_-2px_rgba(163,202,35,0.55)]",

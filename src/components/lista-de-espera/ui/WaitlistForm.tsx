@@ -11,7 +11,7 @@ import flags from "react-phone-number-input/flags";
 import "react-phone-number-input/style.css";
 import { cn } from "@/lib/cn";
 import { useVisitorCountry } from "@/lib/useVisitorCountry";
-import { VoCta } from "@/components/lista-de-espera/ui/VoCta";
+import { BotonVo } from "@/components/lista-de-espera/ui/BotonVo";
 import { FORM, GRACIAS_PATH } from "@/components/lista-de-espera/content";
 
 /*
@@ -192,12 +192,12 @@ export function WaitlistForm({ onSuccess }: WaitlistFormProps) {
         icon={
           <User
             size={19}
-            strokeWidth={2}
+            strokeWidth={2.2}
             /* El color se fija en el propio SVG y no sólo en el span que lo
                envuelve: lucide pinta con stroke="currentColor", y así el valor
                llega del elemento más cercano posible sin depender de qué herede
                el contenedor. */
-            color="var(--color-vo-lumen)"
+            color="currentColor"
             aria-hidden
           />
         }
@@ -259,8 +259,8 @@ export function WaitlistForm({ onSuccess }: WaitlistFormProps) {
         icon={
           <Mail
             size={19}
-            strokeWidth={2}
-            color="var(--color-vo-lumen)"
+            strokeWidth={2.2}
+            color="currentColor"
             aria-hidden
           />
         }
@@ -292,11 +292,21 @@ export function WaitlistForm({ onSuccess }: WaitlistFormProps) {
         </p>
       )}
 
-      <div className="mt-2">
+      {/* EL BOTÓN ES EL MISMO QUE EL DE LA LANDING. Usaba VoCta —el del diseño
+          anterior, con su luz girando por el borde— y eso dejaba dos botones
+          distintos en el mismo recorrido: el visitante pulsa uno para abrir el
+          formulario y se encuentra otro para enviarlo. La coherencia importa
+          justo aquí, que es el paso que cuenta.
+
+          SIN FLECHA: en la landing anuncia que el botón lleva a alguna parte;
+          aquí el botón envía, y el estado de la petición ocupa ese sitio con su
+          propio icono. */}
+      <div className="mt-2 flex justify-center">
         {/* Sólo se bloquea mientras la petición está en vuelo o ya salió bien.
             En "error" vuelve a estar activo para poder reintentar. */}
-        <VoCta
+        <BotonVo
           type="submit"
+          flecha={false}
           disabled={status === "submitting" || status === "success"}
         >
           {status === "success" ? (
@@ -309,7 +319,7 @@ export function WaitlistForm({ onSuccess }: WaitlistFormProps) {
           ) : (
             FORM.submit
           )}
-        </VoCta>
+        </BotonVo>
       </div>
     </form>
   );
@@ -365,14 +375,28 @@ function Field({
   return (
     <div className="flex flex-col gap-1">
       <div className="relative">
-        {/* Verde lumen explícito y con halo.
+        {/* ⚠️ SE FUE EL drop-shadow, QUE ERA EL PROBLEMA Y NO LA SOLUCIÓN.
 
-            Ya estaba en text-accent, que resuelve a ese mismo verde, y aun así
-            no se notaban: el problema no era el tono sino el PESO. Un trazo de
-            1,4 px a 18 px sobre un campo oscuro casi no tiene superficie que
-            colorear. El drop-shadow le da el encendido que el color solo no
-            conseguía; el grosor lo aporta el strokeWidth de cada icono. */}
-        <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-vo-lumen filter-[drop-shadow(0_0_6px_rgba(180,226,54,0.65))]">
+            Estaba puesto para hacer los iconos más visibles y conseguía lo
+            contrario: un halo verde de 6 px alrededor de un trazo verde, sobre
+            un campo oscuro, RELLENA el espacio entre los trazos del dibujo. El
+            icono deja de tener contorno y se convierte en una mancha luminosa
+            de la que no se distingue la forma — que es justamente por lo que no
+            se veía.
+
+            La visibilidad de un trazo fino sobre fondo oscuro se gana con
+            CONTRASTE, no con luz añadida. Así que ahora:
+
+            · el tono sube de #b4e236 (vo-lumen) a #cdf25c, bastante más claro:
+              sobre el negro translúcido del campo, el lumen se acerca demasiado
+              al verde del fondo de la landing que se ve por detrás.
+            · el trazo engorda a 2,2 (lo pone cada icono), que a 19 px de caja da
+              superficie real que colorear.
+            · y en lugar del halo difuso queda una sombra oscura muy corta, que
+              no ilumina: SEPARA el dibujo de lo que tenga detrás, como un
+              contorno. Es lo que hace legible un icono claro sobre un fondo que
+              puede ser cualquier cosa. */}
+        <span className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-[#cdf25c] drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
           {icon}
         </span>
         {children}

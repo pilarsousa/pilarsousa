@@ -2673,7 +2673,11 @@ body {
     linear-gradient(rgba(20, 27, 10, 1) 1px, transparent 1px),
     linear-gradient(to right, rgba(20, 27, 10, 1) 1px, transparent 1px);
   background-size: 8px 8px;
-  opacity: 0.045;
+  /* 0,03 y no 0,045: sobre las secciones blancas la retícula oscura empezaba a
+     dibujarse como rejilla en vez de leerse como grano, y ahí es donde más se
+     nota porque el contraste con el fondo es máximo. La capa clara se queda
+     como está: sobre negro necesita más presencia para verse siquiera. */
+  opacity: 0.03;
 }
 
 /*
@@ -3116,13 +3120,17 @@ body {
   El desenfoque de 200px es lo que lo convierte en atmósfera. Por debajo de 120
   se empieza a distinguir el borde del círculo y deja de leerse como luz.
 */
+/* LA INTENSIDAD MÁXIMA ES 0,3 Y NO 1. A plena opacidad el resplandor dejaba de
+   ser ambiente y pasaba a ser una mancha verde reconocible sobre el blanco: se
+   veía el efecto en vez de sentirse. A 0,3 apenas se percibe que la sección
+   respira, que es exactamente lo que tiene que hacer un fondo. */
 @keyframes le-latido-luz {
   0%,
   100% {
     opacity: 0;
   }
   50% {
-    opacity: 1;
+    opacity: 0.3;
   }
 }
 
@@ -3162,13 +3170,17 @@ body {
   La opacidad máxima baja a 0,55 en el keyframe de móvil: a plena intensidad y
   cubriendo toda la columna, el verde se comía el contraste del texto oscuro.
 */
+/* En móvil la mancha cubre la columna entera —es más ancha que la pantalla— así
+   que su techo baja todavía más que el de escritorio: la misma opacidad
+   repartida sobre toda la superficie visible pesa mucho más que sobre un halo
+   lateral. */
 @keyframes le-latido-luz-mov {
   0%,
   100% {
     opacity: 0;
   }
   50% {
-    opacity: 0.55;
+    opacity: 0.22;
   }
 }
 
@@ -3186,7 +3198,7 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .le-luz-lateral {
     animation: none;
-    opacity: 0.55;
+    opacity: 0.22;
   }
 }
 

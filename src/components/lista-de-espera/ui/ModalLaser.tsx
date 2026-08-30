@@ -43,11 +43,16 @@ export function ModalLaser() {
          mal. */
       /* El haz entra por arriba del panel y baja hasta morir en el CTA.
 
-         Negativo BAJA el punto de impacto. Con -0.62 bajaba tanto que el cono
-         quedaba fuera del canvas y sólo asomaba la línea del centro, cortada
-         contra el borde inferior. Este valor lo devuelve dentro, con el
-         ensanchamiento visible antes de apagarse. */
-      verticalBeamOffset={-0.34}
+         NEGATIVO BAJA EL PUNTO DE IMPACTO, y este número tiene dos límites:
+         con -0.62 bajaba tanto que el cono se salía del canvas y sólo asomaba
+         la línea del centro, cortada contra el borde inferior; con -0.34 el
+         impacto caía a media altura del formulario, sobre los campos, y el
+         botón quedaba fuera del haz.
+
+         -0.46 es el punto en que el cono muere SOBRE EL BOTÓN sin salirse de la
+         caja: el haz señala la acción, que es lo que tiene que hacer un haz de
+         luz en una pantalla de conversión. */
+      verticalBeamOffset={-0.46}
       color="#b4e236"
       /* Más contenido que en el hero: aquí el haz cruza por detrás de los
          campos del formulario, y con la intensidad del hero les restaba

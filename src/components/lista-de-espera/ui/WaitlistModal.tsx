@@ -300,8 +300,43 @@ export function WaitlistModalProvider({
               {/* El badge y el título repiten los del hero: el modal tapa la
                   página, así que tiene que decir por sí solo a qué se está
                   apuntando el visitante. */}
-              <p className="mt-[clamp(0.6rem,2.2vw,1.25rem)] inline-flex items-center rounded-full border border-accent/30 bg-accent/10 px-[clamp(0.7rem,3vw,1rem)] py-[clamp(0.25rem,1.2vw,0.375rem)] font-display text-[clamp(0.6rem,2.4vw,0.75rem)] uppercase tracking-[0.32em] text-accent">
-                <span className="-mr-[0.32em]">{HERO.eyebrow}</span>
+              {/* ── EL DISTINTIVO, EN CRISTAL ──
+
+                  Era un rectángulo redondeado con un borde verde al 30% y un
+                  relleno al 10%: plano, sin volumen, y con las letras tan
+                  separadas (0,32em) que la frase se leía como caracteres
+                  sueltos. A eso se le sumaba que el verde diluido sobre el
+                  fondo oscuro del modal apenas se distinguía.
+
+                  Ahora es la misma pieza que los sellos del hero, y eso es
+                  deliberado: el modal repite el distintivo de la portada, así
+                  que tiene que reconocerse como el mismo objeto.
+
+                  CUATRO CAPAS, Y NINGUNA SOBRA:
+
+                  1. `backdrop-blur-[6px]` — POCO desenfoque a propósito. El
+                     encargo pide que el fondo no se note demasiado, y detrás
+                     hay una lluvia de código en movimiento: a 16 px de
+                     desenfoque el cristal se vuelve un vidrio esmerilado y
+                     pierde la sensación de lámina fina.
+                  2. un tinte en degradado —más claro arriba que abajo—, que le
+                     da cuerpo al vidrio.
+                  3. el filete exterior, que recorta la pieza del fondo.
+                  4. y las dos sombras internas que hacen el volumen: LUZ arriba
+                     y OSCURO abajo. Es como se finge una superficie con
+                     relieve — la luz entra desde arriba, así que el canto
+                     superior brilla y el inferior queda en sombra. Sin ese par
+                     la píldora es un óvalo plano por muy translúcida que sea.
+
+                  EL TRACKING BAJA DE 0,32 A 0,18em. Sigue siendo amplio —es un
+                  rótulo corto en versalitas, y ahí el aire ayuda— pero a 0,32
+                  las palabras dejaban de leerse como palabras.
+
+                  El margen negativo compensa el espacio que el tracking añade
+                  DESPUÉS de la última letra: sin él, el texto queda descentrado
+                  dentro de la píldora. */}
+              <p className="mt-[clamp(0.6rem,2.2vw,1.25rem)] inline-flex items-center rounded-full border border-[#a3ca23]/45 bg-[linear-gradient(180deg,rgba(163,202,35,0.2)_0%,rgba(163,202,35,0.09)_55%,rgba(20,32,6,0.14)_100%)] px-[clamp(0.85rem,3.2vw,1.15rem)] py-[clamp(0.3rem,1.3vw,0.45rem)] font-display text-[clamp(0.6rem,2.4vw,0.75rem)] tracking-[0.18em] text-[#d4ef7a] uppercase shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3),inset_0_-1px_0_0_rgba(8,16,2,0.55),0_2px_10px_-5px_rgba(0,0,0,0.7)] backdrop-blur-[6px]">
+                <span className="-mr-[0.18em]">{HERO.eyebrow}</span>
               </p>
 
               <h2 className="mt-[clamp(0.4rem,1.6vw,0.75rem)] font-display uppercase leading-[1.08]">

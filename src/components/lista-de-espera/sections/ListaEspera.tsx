@@ -301,7 +301,14 @@ export function ListaEspera() {
                     </span>
                   )}
 
-                  <h3 className="font-display text-[clamp(0.86rem,3.6vw,1.1rem)] leading-[1.04] tracking-normal text-vo-lumen uppercase md:text-[clamp(0.9rem,1.25vw,1.6rem)]">
+                  {/* EL TITULAR CRECE UN PUNTO EN MÓVIL: de 3,6 a 4,3vw, con el
+                      techo del clamp subiendo de 1,1 a 1,3rem. En un teléfono la
+                      card ocupa todo el ancho y el título quedaba pequeño
+                      respecto de su caja — se leía como una etiqueta y no como
+                      el nombre del bono. La interlínea sube a la par (1,04 →
+                      1,12) porque son dos renglones y a más cuerpo necesitan más
+                      aire para no tocarse. En escritorio no cambia nada. */}
+                  <h3 className="font-display text-[clamp(1rem,4.3vw,1.3rem)] leading-[1.12] tracking-normal text-vo-lumen uppercase md:text-[clamp(0.9rem,1.25vw,1.6rem)] md:leading-[1.04]">
                     {BONUS_TITLE_LINES[index]?.map((line) => (
                       <span key={line} className="block">
                         {line}
