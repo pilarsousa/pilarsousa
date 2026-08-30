@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SmoothScroll } from "@/components/lista-de-espera/ui/SmoothScroll";
 import { WaitlistModalProvider } from "@/components/lista-de-espera/ui/WaitlistModal";
 
 /*
@@ -9,15 +10,24 @@ import { WaitlistModalProvider } from "@/components/lista-de-espera/ui/WaitlistM
   la landing de VENTA del entrenamiento. Ésta es la de CAPTACIÓN previa a la
   apertura de la tercera edición. Son dos piezas distintas del mismo funnel.
 
-  LAYOUT DESNUDO A PROPÓSITO. Tenía encima el cromo visual del diseño anterior
-  —una textura de fondo fija a la ventana, un desenfoque progresivo en el borde
-  inferior, el scroll suave de Lenis y un sombreado en los costados— y todo eso
-  se retiró con el resto de aquel diseño. El montaje nuevo trae sus propios
-  fondos dentro de cada sección, así que un fondo global estorbaría en vez de
-  ayudar. Si alguna de esas piezas hace falta otra vez, están en el historial.
+  LAYOUT CASI DESNUDO A PROPÓSITO. Tenía encima el cromo visual del diseño
+  anterior —una textura de fondo fija a la ventana, un desenfoque progresivo en
+  el borde inferior, el scroll suave de Lenis y un sombreado en los costados— y
+  todo eso se retiró con el resto de aquel diseño. El montaje nuevo trae sus
+  propios fondos dentro de cada sección, así que un fondo global estorbaría.
 
-  Lo que queda es lo imprescindible: los metadatos, el ámbito de la paleta y el
-  provider del modal.
+  DE AQUELLO VUELVE EL SCROLL SUAVE, y sólo eso: no es cromo del diseño viejo
+  sino cómo se recorre la página, y el montaje nuevo es un recorrido largo de
+  ocho secciones encadenadas donde el salto seco del navegador rompe la
+  continuidad. La textura sí volvió, pero como malla y por CSS (.le-scope::before
+  en globals.css), no como capa en el árbol.
+
+  Se monta AQUÍ y no en el layout raíz porque Lenis toma el scroll de la
+  ventana, que es único para todo el sitio: montarlo arriba se lo impondría a
+  las otras cinco landings del proyecto.
+
+  Lo que queda es lo imprescindible: los metadatos, el ámbito de la paleta, el
+  scroll y el provider del modal.
 
   DOS ÁMBITOS EN EL MISMO DIV, y no es redundancia:
   · .vo-scope trae la paleta y las variables de glow. Lo COMPARTE con la landing
@@ -75,6 +85,7 @@ export default function ListaDeEsperaLayout({
        los tokens de la landing; por eso su panel usa las clases vo-* de la
        paleta cruda, que viven en @theme y resuelven en cualquier punto. */
     <WaitlistModalProvider>
+      <SmoothScroll />
       <div className="vo-scope le-scope relative min-h-full text-foreground">
         {children}
       </div>

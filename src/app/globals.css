@@ -2602,3 +2602,43 @@ body {
 }
 
 
+
+/* =========================================================================
+   Lista de espera (/lista-de-espera) — pasada de acabado
+   ========================================================================= */
+
+/*
+  MALLA DE CUADROS SOBRE TODA LA LANDING.
+
+  Una retícula de 8 px al 2% de opacidad, fija a la ventana. No se ve como
+  dibujo: lo que hace es quitarle lisura a los degradados y a las fotos, igual
+  que un tramado sobre un impreso. A esa opacidad es textura, no rejilla.
+
+  VA EN .le-scope Y NO EN body, y la diferencia importa: este documento lo
+  comparten seis landings —bootcamp, misión origen, ventas, game, volver al
+  origen y ésta— y un pseudo-elemento de body se las aplicaría a todas. Un
+  descendiente no puede apagar el pseudo-elemento de un ancestro, así que
+  ponerlo arriba sería irreversible desde abajo. Es el mismo criterio que ya
+  usa .bc-scope::before con su grano de puntos.
+
+  Z-INDEX 60 Y NO UN NÚMERO ENORME. La tentación es 9999999999999 para
+  asegurarse de que va delante de todo — y funciona demasiado bien: los dos
+  diálogos de la landing viven en z-300 (el formulario) y z-200 (la reseña), así
+  que la malla les caería ENCIMA y se vería la retícula cruzando el pop-up. En
+  60 queda por delante de todo el contenido y por detrás de los diálogos.
+
+  pointer-events:none es imprescindible: sin eso la capa intercepta cada clic de
+  la página y ningún botón responde.
+*/
+.le-scope::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  background-image:
+    linear-gradient(#fff 1px, transparent 1px),
+    linear-gradient(to right, #fff 1px, transparent 1px);
+  background-size: 8px 8px;
+  opacity: 0.02;
+}
