@@ -1,5 +1,16 @@
 import Image from "next/image";
-import { CircleCheck } from "lucide-react";
+import {
+  CalendarDays,
+  CalendarHeart,
+  ClipboardCheck,
+  Globe2,
+  KeyRound,
+  Map,
+  Sparkles,
+  UserRoundCheck,
+  Users,
+  type LucideIcon,
+} from "lucide-react";
 import { CtaLista } from "@/components/lista-de-espera/ui/CtaLista";
 import { LluviaCodigo } from "@/components/lista-de-espera/ui/LluviaCodigo";
 import { FlechaBajar } from "@/components/lista-de-espera/ui/FlechaBajar";
@@ -15,6 +26,45 @@ import cardDinero from "@/../public/volver-origen/public/Recursos/generales/card
 
 const MOCKUPS = [mockup1, mockup2, mockup3];
 const PRIMER_ITEM_CON_AIRE_EXTRA = 4;
+
+/*
+  UN DIBUJO POR PUNTO DEL LISTADO, elegido por lo que promete cada uno.
+
+  Los nueve llevaban el mismo tilde, y un tilde repetido nueve veces sólo dice
+  "incluido" — que es lo que ya anuncia el titular de la sección. Con un icono
+  propio cada línea se reconoce sin leerla: se ve de un vistazo cuál habla de
+  encuentros, cuál de material y cuál de tiempo.
+
+  · calendario ....... las 6 semanas: el bloque de tiempo del programa
+  · personas ......... las mentorías en vivo, que son encuentros de grupo
+  · llave ............ los Códigos Originales; un código abre algo
+  · portapapeles ..... el material de integración y sus checkpoints
+  · persona con tilde. las intervenciones 1 a 1, atención individual
+  · mapa ............. el roadmap de 90 días
+  · calendario-corazón los 90 días de acompañamiento: tiempo sostenido, no un plan
+  · globo ............ los encuentros presenciales por el mundo
+  · destellos ........ la comunidad y el contexto que impulsa
+
+  EL MAPA VIVE AQUÍ Y NO EN content.ts a propósito: aquél es un archivo de datos
+  que no importa nada de React, y meterle componentes lo ataría al framework. Allí
+  viaja sólo la clave; la traducción a dibujo es cosa de quien pinta.
+
+  Satisfies en vez de una anotación de tipo: comprueba que cada clave del content
+  tiene su icono —si mañana se añade un punto con una clave nueva, esto falla al
+  compilar en vez de renderizar un hueco— y a la vez conserva las claves
+  literales para que el acceso siga estando tipado.
+*/
+const ICONOS_ITEM = {
+  semanas: CalendarDays,
+  mentorias: Users,
+  codigos: KeyRound,
+  material: ClipboardCheck,
+  unoAUno: UserRoundCheck,
+  roadmap: Map,
+  acompanamiento: CalendarHeart,
+  presenciales: Globe2,
+  comunidad: Sparkles,
+} satisfies Record<string, LucideIcon>;
 
 /*
   Los tres fondos, y uno no es como los otros dos.
@@ -159,7 +209,10 @@ export function Experiencia() {
             entre ellos: así el primero también lleva raya —que es lo que hace el
             montaje— sin tener que meter un elemento suelto que no dice nada. */}
         <ul className="mt-[7vw] md:mt-[1.5vw]">
-          {EXPERIENCIA.items.map((item, i) => (
+          {EXPERIENCIA.items.map((item, i) => {
+            const Icono = ICONOS_ITEM[item.icono];
+
+            return (
             <li
               key={item.text}
               className={cn(
@@ -171,11 +224,25 @@ export function Experiencia() {
                   "py-[calc(3.4vw+5px)] md:py-[calc(0.6vw+5px)]",
               )}
             >
-              <div className="flex items-start gap-[2.2vw] md:gap-[0.45vw]">
-                <CircleCheck
+              {/* EL ICONO VA CENTRADO CONTRA EL BLOQUE ENTERO, no alineado al
+                  primer renglón.
+
+                  Era `items-start` con un `mt` de compensación, que lo clavaba a
+                  la altura del título: en los cuatro puntos que llevan detalle,
+                  el icono quedaba arriba del todo y el bloque se veía descolgado
+                  hacia abajo. Con `items-center` el dibujo se sitúa en el medio
+                  de lo que acompañe —una línea o tres— y ya no hace falta
+                  compensar nada a mano.
+
+                  Y ES MÁS GRANDE: de 0,72vw a 1,45vw, el doble. A la medida
+                  anterior el dibujo no se distinguía del tilde al que sustituye,
+                  que era justamente el problema; a este tamaño se reconoce sin
+                  esfuerzo y equilibra el peso del bloque de texto. */}
+              <div className="flex items-center gap-[3vw] md:gap-[0.7vw]">
+                <Icono
                   aria-hidden
-                  strokeWidth={1.9}
-                  className="mt-[0.12em] size-[3.7vw] shrink-0 text-[#a3ca23] drop-shadow-[0_0_0.35em_rgba(163,202,35,0.7)] md:size-[clamp(0.55rem,0.72vw,0.95rem)]"
+                  strokeWidth={1.6}
+                  className="size-[6.4vw] shrink-0 text-[#a3ca23] drop-shadow-[0_0_0.35em_rgba(163,202,35,0.7)] md:size-[clamp(1rem,1.45vw,1.9rem)]"
                 />
                 <div className="min-w-0">
                   <p className="font-sans text-[3.9vw] leading-[1.35] font-semibold text-[#f4f1e4] md:text-[clamp(0.48rem,0.86vw,1.05rem)]">
@@ -189,17 +256,23 @@ export function Experiencia() {
                 </div>
               </div>
             </li>
-          ))}
+            );
+          })}
         </ul>
       </div>
 
       {/* ── Derecha: los mockups del programa ── */}
       <div className="relative mt-[9vw] space-y-[4vw] md:absolute md:top-[11.6%] md:left-[54.3%] md:mt-0 md:w-[25.3%] md:space-y-[1.5vw]">
-        {/* SIN SOMBRA EN REPOSO. Los mockups son PNG con fondo transparente: una
-            sombra de caja dibuja el rectángulo del ARCHIVO, no la silueta del
-            aparato, así que se veía un halo rectangular alrededor de algo que no
-            lo es. Al pasar el ratón sí se enciende, porque ahí la sombra ya no
-            describe una forma: responde a una acción. */}
+        {/* SIN SOMBRA Y SIN REACCIÓN AL RATÓN. Los mockups son PNG con fondo
+            transparente, así que una sombra de caja dibuja el rectángulo del
+            ARCHIVO y no la silueta del aparato: se veía un halo rectangular
+            alrededor de algo que no lo es.
+
+            Llegaron a encenderse y crecer al pasar el ratón, y se retiró: son
+            ILUSTRACIÓN, no controles. No llevan a ninguna parte ni abren nada
+            —de hecho van con aria-hidden—, así que responder al cursor prometía
+            una interacción que no existe, y el halo rectangular reaparecía justo
+            en el momento de mirarlos de cerca. */}
         {MOCKUPS.map((src) => (
           <Image
             key={src.src}
@@ -208,7 +281,7 @@ export function Experiencia() {
             aria-hidden
             quality={90}
             sizes="(min-width: 768px) 26vw, 87vw"
-            className="h-auto w-full rounded-[2.1vw] transition-all duration-500 ease-out md:rounded-[0.78vw] md:hover:-translate-y-[0.28vw] md:hover:scale-[1.015] md:hover:brightness-110 md:hover:saturate-[1.08] md:hover:shadow-[0_0_32px_rgba(163,202,35,0.4),0_24px_58px_rgba(0,0,0,0.8)]"
+            className="h-auto w-full rounded-[2.1vw] md:rounded-[0.78vw]"
           />
         ))}
       </div>
@@ -217,7 +290,15 @@ export function Experiencia() {
           donde no hay banner, hacen falta los 75-100 px a mano. 22vw a 390 son
           86, dentro de ese rango. */}
       <div className="relative mt-[22vw] md:absolute md:top-[63.5%] md:left-[20.5%] md:mt-0 md:w-[59%]">
-        <h3 className="text-center font-display text-[5.6vw] leading-[1.3] text-[#f4f1e4] md:text-[clamp(0.8rem,1.35vw,1.75rem)] md:leading-[1.35]">
+        {/* LOS 30px VAN EN EL TITULAR Y NO EN EL BLOQUE QUE LO CONTIENE. El
+            bloque está en absoluto contra el banner (top-[63.5%]) y un margen
+            ahí desplazaría también las tres cards y el botón, que ya están
+            colocados. Bajando sólo el h3 se abre el aire pedido contra el
+            listado de arriba y lo demás se queda donde estaba.
+
+            Van en píxeles y no en vw porque es separación, no medida del
+            diseño: 30 px a 1280 y a 1920. */}
+        <h3 className="mt-[30px] text-center font-display text-[5.6vw] leading-[1.3] text-[#f4f1e4] md:text-[clamp(0.8rem,1.35vw,1.75rem)] md:leading-[1.35]">
           {EXPERIENCIA.areasTitle.lead}{" "}
           <span className="text-[#a3ca23]">{EXPERIENCIA.areasTitle.acento}</span>{" "}
           {EXPERIENCIA.areasTitle.resto}

@@ -267,28 +267,57 @@ export const EXPERIENCIA = {
      EL ORDEN ES EL DEL MONTAJE y no el que tenía antes: la versión anterior
      los colocaba de dos en dos en una rejilla y estaban emparejados por
      longitud para que las filas no quedaran descuadradas. Al pasar a columna
-     única ese criterio dejó de valer, y manda el del diseño. */
+     única ese criterio dejó de valer, y manda el del diseño.
+
+     CADA PUNTO LLEVA SU PROPIO ICONO. Antes los nueve compartían el mismo
+     tilde, que sólo decía "esto está incluido" — algo que el lector ya sabe
+     porque lo dice el titular. Un dibujo distinto por línea sí aporta: se
+     reconoce de un vistazo si el punto habla de encuentros, de material o de
+     tiempo, y la lista se puede recorrer sin leerla entera.
+
+     `icono` es la CLAVE, no el componente: este archivo es de datos y no
+     importa nada de React. El mapa de clave a dibujo vive en la sección, que
+     es quien pinta. */
   items: [
-    { text: "6 semanas de transformación en vivo junto a Pilar Sousa" },
     {
+      icono: "semanas" as const,
+      text: "6 semanas de transformación en vivo junto a Pilar Sousa",
+    },
+    {
+      icono: "mentorias" as const,
       text: "13 mentorías en vivo",
       detalle: "Dos encuentros semanales para avanzar, integrar y profundizar el proceso.",
     },
     {
+      icono: "codigos" as const,
       text: "13 Códigos Originales para la Manifestación",
       detalle: "Principios prácticos para transformar la manera desde la que creás tu realidad.",
     },
     {
+      icono: "material" as const,
       text: "Material de integración y checkpoints",
       detalle: "Para detectar automatismos y llevar cada aprendizaje a situaciones concretas de tu vida.",
     },
-    { text: "Intervenciones personalizadas 1 a 1" },
-    { text: "Roadmap personal con un plan de 90 días" },
-    { text: "90 días de acompañamiento" },
     {
+      icono: "unoAUno" as const,
+      text: "Intervenciones personalizadas 1 a 1",
+    },
+    {
+      icono: "roadmap" as const,
+      text: "Roadmap personal con un plan de 90 días",
+    },
+    {
+      icono: "acompanamiento" as const,
+      text: "90 días de acompañamiento",
+    },
+    {
+      icono: "presenciales" as const,
       text: "Acceso a futuros encuentros y experiencias presenciales en diferentes partes del mundo",
     },
-    { text: "Una comunidad y un contexto diseñado para impulsarte y sostenerte" },
+    {
+      icono: "comunidad" as const,
+      text: "Una comunidad y un contexto diseñado para impulsarte y sostenerte",
+    },
   ],
   /* El titular lleva el acento EN MEDIO, no al final como los demás de la
      página, así que va partido en tres y no en el par title/titleAccent. */

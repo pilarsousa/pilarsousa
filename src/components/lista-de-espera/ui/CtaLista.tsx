@@ -52,6 +52,11 @@ import { cn } from "@/lib/cn";
   no una capa superpuesta: siendo el <button>, ese hueco forma parte del área
   pulsable y el foco del teclado rodea la pieza entera.
 
+  EL ANILLO ESTÁ ANIMADO: un filete de luz le da la vuelta al perímetro sin
+  parar y el halo respira con él. Vive en .le-cta-anillo (globals.css) porque un
+  conic-gradient girando necesita una custom property registrada con @property
+  —si no, el navegador no la interpola— y eso no se declara desde una utilidad.
+
   LOS DOS RADIOS SON IGUALES, NO CONCÉNTRICOS: es lo que pide el diseño, y con
   este hueco lo concéntrico dejaría las esquinas interiores casi en ángulo recto.
 
@@ -73,13 +78,19 @@ export function CtaLista({
       type="button"
       onClick={open}
       className={cn(
-        "group inline-flex w-full max-w-[470px] cursor-pointer rounded-[0.9em] p-[0.3em]",
+        "group inline-flex w-full max-w-[470px] cursor-pointer rounded-[0.9em]",
         "text-[clamp(0.875rem,0.9375vw,1.125rem)]",
-        /* El hueco entre el filete y el cuerpo lleva cristal VERDE OSCURO, no
-           blanco: un blanco diluido sobre fondo oscuro no tiñe, sólo aclara, y
-           la franja se leía como humo gris entre dos piezas verdes. */
-        "border-[0.11em] border-[#a3ca23] bg-[#2b4a0d]/60",
-        "shadow-[0_0_1.8em_-0.5em_rgba(163,202,35,0.6)]",
+        /* EL ANILLO ESTÁ VIVO: un filete de luz recorre el perímetro y el halo
+           respira con él (ver .le-cta-anillo en globals.css).
+
+           Se fue el `border` liso: un borde es de un color plano y no puede
+           degradar, así que el recorrido tuvo que pasar al FONDO del anillo. El
+           cuerpo, que es opaco, lo tapa por dentro y sólo lo deja asomar por el
+           reborde — que es justo el borde exterior al relleno.
+
+           El relleno sube de 0,3 a 0,41em para reponer los 0,11 que aportaba el
+           border: sin eso el anillo adelgazaría y el recorrido casi no se vería. */
+        "le-cta-anillo p-[0.41em]",
         "transition-[filter,transform] duration-200 hover:brightness-110 active:scale-[0.99]",
         className,
       )}

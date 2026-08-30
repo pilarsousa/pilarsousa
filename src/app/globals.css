@@ -2642,3 +2642,84 @@ body {
   background-size: 8px 8px;
   opacity: 0.02;
 }
+
+/*
+  ANILLO ANIMADO DEL BOTÓN DE LLAMADA A LA ACCIÓN.
+
+  El botón son dos piezas encajadas: un anillo exterior de filete lima y dentro
+  el cuerpo con su degradado (ver CtaLista.tsx). Esto anima el ANILLO — el borde
+  que queda por fuera del relleno— y no toca el cuerpo.
+
+  SON DOS EFECTOS SUPERPUESTOS Y CADA UNO HACE UNA COSA:
+
+  · el filete recorre el perímetro. Un conic-gradient girando sobre el fondo del
+    anillo, con dos arcos claros cortos en lados opuestos: se lee como un
+    destello que da la vuelta, no como un marco encendido.
+  · el halo exterior respira, desfasado del giro. Sin él el botón se queda
+    plano sobre fondos oscuros; con él parece que la luz sale de la pieza.
+
+  POR QUÉ EL FILETE VA EN background Y NO EN border-color: un `border` es de un
+  color plano y no admite degradados, y `border-image` sí los admite pero ignora
+  el `border-radius` y dejaría las esquinas en ángulo recto. Aquí el anillo es
+  el fondo del elemento exterior y el cuerpo, opaco, lo tapa por dentro: sólo
+  asoma por el reborde. Es el mismo truco que .le-borde-giro en las cards.
+
+  REUSA --le-giro, que ya está declarado como @property más arriba. Un custom
+  property SÓLO se puede animar si está registrado con su tipo; sin ese
+  @property el navegador lo trata como una cadena y salta de un valor a otro sin
+  interpolar. No se declara otro: los dos giros comparten reloj y así el borde
+  de las cards y el de los botones no van cada uno por su lado.
+*/
+@keyframes le-cta-halo {
+  0%,
+  100% {
+    box-shadow:
+      0 0 1.8em -0.5em rgba(163, 202, 35, 0.55),
+      0 0 0 0 rgba(163, 202, 35, 0);
+  }
+  50% {
+    box-shadow:
+      0 0 2.6em -0.35em rgba(163, 202, 35, 0.85),
+      0 0 0 0.06em rgba(163, 202, 35, 0.22);
+  }
+}
+
+.le-cta-anillo {
+  /* El fondo del anillo. El color base es el mismo cristal verde oscuro que
+     tenía como bg-[#2b4a0d]/60, ahora dentro del degradado para que el arco
+     claro nazca de él en vez de flotar sobre otra tinta. */
+  background-image: conic-gradient(
+    from var(--le-giro),
+    #2b4a0d 0deg,
+    #d8f06a 18deg,
+    #a3ca23 34deg,
+    #2b4a0d 62deg,
+    #2b4a0d 180deg,
+    #d8f06a 198deg,
+    #a3ca23 214deg,
+    #2b4a0d 242deg,
+    #2b4a0d 360deg
+  );
+  animation:
+    le-giro 5s linear infinite,
+    le-cta-halo 3.4s ease-in-out infinite;
+}
+
+/* Al pasar el ratón el recorrido se acelera: la pieza responde al gesto sin
+   moverse de sitio, que es lo que se quiere en un botón con posición calibrada. */
+.le-cta-anillo:hover {
+  animation:
+    le-giro 2.2s linear infinite,
+    le-cta-halo 1.8s ease-in-out infinite;
+}
+
+/* Sin movimiento se queda con el arco claro arriba y el halo en reposo: la
+   misma silueta encendida, quieta. */
+@media (prefers-reduced-motion: reduce) {
+  .le-cta-anillo,
+  .le-cta-anillo:hover {
+    animation: none;
+    --le-giro: 198deg;
+    box-shadow: 0 0 1.8em -0.5em rgba(163, 202, 35, 0.6);
+  }
+}
