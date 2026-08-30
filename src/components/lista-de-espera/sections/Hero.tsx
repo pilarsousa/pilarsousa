@@ -1,10 +1,9 @@
 import Image from "next/image";
 import { CtaLista } from "@/components/lista-de-espera/ui/CtaLista";
+import { SellosHero } from "@/components/lista-de-espera/ui/SellosHero";
 import { HERO } from "@/components/lista-de-espera/content";
 import banner from "@/../public/volver-origen/public/Recursos/generales/banner-1-web.webp";
 import bannerMovil from "@/../public/volver-origen/public/Recursos/mobile/heroseccion-mobile.jpg";
-import selloLista from "@/../public/volver-origen/public/Recursos/generales/lista-de-espera.png";
-import selloEdicion from "@/../public/volver-origen/public/Recursos/generales/3era-edicion.png";
 
 /*
   Sección 1 — Hero.
@@ -103,44 +102,16 @@ export function Hero() {
           sino en el flujo, con su propio -mt-[20vw] montándolo sobre la foto:
           ahí un margen negativo extra lo empujaría contra la imagen. */}
       <div className="relative -mt-[20vw] bg-[linear-gradient(180deg,transparent_0%,#000_14vw)] px-[6.5vw] pt-[14vw] pb-[12vw] md:absolute md:top-[15%] md:left-[20.3%] md:-mt-[25px] md:w-[25.5%] md:bg-none md:p-0">
-        {/* EL ALTO QUE SE PIDE AQUÍ NO ES EL QUE SE VE. Los dos PNG miden 169 px
-            de alto y su píldora sólida sólo 87: el resto es margen transparente
-            y resplandor. O sea que la mitad de esta caja es aire, y hay que
-            multiplicar por 0,515 para saber qué se verá.
+        {/* LOS DOS SELLOS SON CÓDIGO Y NO IMÁGENES. Eran lista-de-espera.png y
+            3era-edicion.png, 80 KB para dibujar dos píldoras con texto que no se
+            podía seleccionar ni leer con un lector de pantalla.
 
-            EL 4,45vw SALE DE AHÍ, no de probar. El montaje pide una píldora de
-            44 px de alto a 1920; 44 x 169/87 da 85,5 px de caja, que es el
-            4,45% de 1920. La comprobación es que el ancho sólido resultante da
-            207 y 166 px contra los 205 y 164 del montaje: un 1% de error.
-
-            OJO CON MEDIR LA PÍLDORA CON UN UMBRAL DE ALFA BAJO. A >24 salen
-            428x108 y una relación de 3,96, que no cuadra con la del montaje
-            (4,66) y lleva a números equivocados; el resplandor cuenta como
-            píldora. A >200 salen 410x87 y relación 4,71, que sí cuadra.
-
-            El hueco entre los dos sellos también es más ancho que el gap por lo
-            mismo: la mayor parte son sus márgenes vacíos laterales. */}
-        {/* LOS MÁRGENES NEGATIVOS CANCELAN EL AIRE TRANSPARENTE DEL PNG: 41 px por lado
-              sobre un archivo de 491x169, que a la escala servida son 20,5 px a la
-              izquierda y 20,7 abajo. Sin compensarlos, el sello se ve metido hacia
-              dentro respecto del texto y separado del titular casi el doble de lo
-              que dice el margen. En móvil se juntan además entre sí. */}
-          <div className="flex items-center gap-0 -ml-[3.2vw] -mb-[3.2vw] md:-mb-[1.08vw] md:-ml-[1.066vw] md:gap-0">
-          <Image
-            src={selloLista}
-            alt={HERO.eyebrow}
-            quality={90}
-            sizes="220px"
-            className="h-[14vw] w-auto md:h-[clamp(2.11rem,4.45vw,5.62rem)]"
-          />
-          <Image
-            src={selloEdicion}
-            alt="3.ª edición"
-            quality={90}
-            sizes="190px"
-            className="h-[14vw] w-auto md:h-[clamp(2.11rem,4.45vw,5.62rem)]"
-          />
-        </div>
+            Con ellos se van también los márgenes negativos que había aquí: los
+            archivos traían 41 px de aire transparente por lado y hacía falta
+            cancelarlo a mano para que el sello no se viera metido hacia dentro
+            respecto del texto. Una caja dibujada por CSS no tiene ese aire, así
+            que la compensación deja de tener sentido. */}
+        <SellosHero />
 
         <h1
           id="hero-title"

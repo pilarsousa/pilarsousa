@@ -110,6 +110,11 @@ export function CardMagica({
   inclinar = true,
   imantar = true,
   onda = true,
+  /* La etiqueta se puede cambiar porque las cards de las tres áreas viven
+     dentro de un <ul> y tienen que ser <li>: un <div> intercalado entre la
+     lista y sus elementos rompe la semántica y el lector de pantalla deja de
+     anunciar cuántos hay. */
+  etiqueta = "div",
 }: {
   children: ReactNode;
   className?: string;
@@ -118,8 +123,9 @@ export function CardMagica({
   inclinar?: boolean;
   imantar?: boolean;
   onda?: boolean;
+  etiqueta?: "div" | "li";
 }) {
-  const caja = useRef<HTMLDivElement>(null);
+  const caja = useRef<HTMLElement>(null);
   const vivas = useRef<HTMLDivElement[]>([]);
   const relojes = useRef<ReturnType<typeof setTimeout>[]>([]);
   const encima = useRef(false);
@@ -312,10 +318,17 @@ export function CardMagica({
     };
   }, [animarParticulas, limpiarParticulas, desactivar, inclinar, imantar, onda]);
 
+  const Etiqueta = etiqueta;
+
   return (
-    <div ref={caja} className={className}>
+    <Etiqueta
+      /* El ref es de HTMLElement porque la etiqueta cambia; React exige que el
+         tipo del ref admita lo que se le monte. */
+      ref={caja as React.Ref<HTMLDivElement & HTMLLIElement>}
+      className={className}
+    >
       {children}
-    </div>
+    </Etiqueta>
   );
 }
 
@@ -325,10 +338,12 @@ export function FocoBento({
   children,
   desactivar = false,
   radio = RADIO_FOCO,
+  className,
 }: {
   children: ReactNode;
   desactivar?: boolean;
   radio?: number;
+  className?: string;
 }) {
   const zona = useRef<HTMLDivElement>(null);
 
@@ -454,7 +469,28 @@ export function FocoBento({
     };
   }, [desactivar, radio]);
 
-  return <div ref={zona}>{children}</div>;
+  /*
+    ⚠️ ESTE DIV NO PUEDE ROMPER LA MAQUETACIÓN DE QUIEN LO USA, y la rompió: al
+    envolver la rejilla de BONUS, el `items-center` del padre pasó a aplicarse a
+    ÉL en vez de a la rejilla. Un div sin ancho se encoge a su contenido, así que
+    quedaba centrado él mientras la rejilla se alineaba dentro sin centrar — y
+    las tres cards se veían corridas hacia un lado.
+
+    Por eso acepta className, y quien lo monta le pasa las clases que hagan que
+    el div se comporte como el hueco que ocupaba la rejilla: normalmente
+    `w-full` más un centrado propio.
+
+    NO SE USA `display: contents` PARA ESTO, que sería la solución elegante: el
+    foco necesita medir la zona con getBoundingClientRect(), y sobre un elemento
+    con `contents` varios navegadores devuelven un rectángulo vacío —no genera
+    caja— así que el foco no se encendería nunca. El div tiene que ocupar
+    espacio real para poder medirse.
+  */
+  return (
+    <div ref={zona} className={className}>
+      {children}
+    </div>
+  );
 }
 
 export { useEsMovil };

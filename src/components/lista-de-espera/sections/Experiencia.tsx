@@ -12,6 +12,10 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { CtaLista } from "@/components/lista-de-espera/ui/CtaLista";
+import {
+  CardBonus,
+  ZonaBento,
+} from "@/components/lista-de-espera/ui/RejillaBonus";
 import { LluviaCodigo } from "@/components/lista-de-espera/ui/LluviaCodigo";
 import { FlechaBajar } from "@/components/lista-de-espera/ui/FlechaBajar";
 import { EXPERIENCIA } from "@/components/lista-de-espera/content";
@@ -234,16 +238,33 @@ export function Experiencia() {
                   de lo que acompañe —una línea o tres— y ya no hace falta
                   compensar nada a mano.
 
-                  Y ES MÁS GRANDE: de 0,72vw a 1,45vw, el doble. A la medida
-                  anterior el dibujo no se distinguía del tilde al que sustituye,
-                  que era justamente el problema; a este tamaño se reconoce sin
-                  esfuerzo y equilibra el peso del bloque de texto. */}
-              <div className="flex items-center gap-[3vw] md:gap-[0.7vw]">
-                <Icono
+                  ── EL ICONO VA DENTRO DE UN DISCO ──
+
+                  Suelto sobre el fondo se veía crudo: un dibujo de trazo fino
+                  flotando contra la lluvia de código, sin nada que lo asiente.
+                  Y en el primer intento se fue de tamaño —1,45vw, el doble que
+                  el tilde— buscando presencia por volumen, que es justo lo que
+                  lo volvía pesado en una lista de nueve.
+
+                  El disco lo resuelve al revés: el DIBUJO se achica (a 0,82vw)
+                  y lo que le da presencia es la montura —fondo oscuro, filete
+                  verde tenue y un halo—. La pieza ocupa más pero pesa menos,
+                  porque el peso lo lleva un contorno y no la tinta.
+
+                  Es además la misma montura que ya usan los tildes de "es para
+                  vos si…" y las cards de BONUS: tres sitios distintos con el
+                  mismo recurso, que es lo que hace que la landing parezca de
+                  una pieza. */}
+              <div className="flex items-center gap-[3vw] md:gap-[0.75vw]">
+                <span
                   aria-hidden
-                  strokeWidth={1.6}
-                  className="size-[6.4vw] shrink-0 text-[#a3ca23] drop-shadow-[0_0_0.35em_rgba(163,202,35,0.7)] md:size-[clamp(1rem,1.45vw,1.9rem)]"
-                />
+                  className="flex size-[9vw] shrink-0 items-center justify-center rounded-full border border-[#a3ca23]/35 bg-[#0d1505]/70 text-[#a3ca23] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.12),0_0_14px_-4px_rgba(163,202,35,0.55)] md:size-[clamp(1.35rem,1.85vw,2.4rem)]"
+                >
+                  <Icono
+                    strokeWidth={1.7}
+                    className="size-[4.6vw] md:size-[clamp(0.62rem,0.82vw,1.05rem)]"
+                  />
+                </span>
                 <div className="min-w-0">
                   <p className="font-sans text-[3.9vw] leading-[1.35] font-semibold text-[#f4f1e4] md:text-[clamp(0.48rem,0.86vw,1.05rem)]">
                     {item.text}
@@ -290,23 +311,42 @@ export function Experiencia() {
           donde no hay banner, hacen falta los 75-100 px a mano. 22vw a 390 son
           86, dentro de ese rango. */}
       <div className="relative mt-[22vw] md:absolute md:top-[63.5%] md:left-[20.5%] md:mt-0 md:w-[59%]">
-        {/* LOS 30px VAN EN EL TITULAR Y NO EN EL BLOQUE QUE LO CONTIENE. El
-            bloque está en absoluto contra el banner (top-[63.5%]) y un margen
-            ahí desplazaría también las tres cards y el botón, que ya están
-            colocados. Bajando sólo el h3 se abre el aire pedido contra el
+        {/* EL AIRE VA EN EL TITULAR Y NO EN EL BLOQUE QUE LO CONTIENE. El bloque
+            está en absoluto contra el banner (top-[63.5%]) y un margen ahí
+            desplazaría también las tres cards y el botón, que ya están
+            colocados. Bajando sólo el h3 se abre la separación contra el
             listado de arriba y lo demás se queda donde estaba.
 
-            Van en píxeles y no en vw porque es separación, no medida del
-            diseño: 30 px a 1280 y a 1920. */}
-        <h3 className="mt-[30px] text-center font-display text-[5.6vw] leading-[1.3] text-[#f4f1e4] md:text-[clamp(0.8rem,1.35vw,1.75rem)] md:leading-[1.35]">
+            Sube de 30 a 60px: con 30 la banda de las tres áreas seguía leyéndose
+            como una continuación del listado en vez de como lo que es, un
+            apartado propio dentro de la misma sección. Al doble, la junta se ve.
+
+            En píxeles y no en vw porque es separación, no medida del diseño. */}
+        <h3 className="mt-[60px] text-center font-display text-[5.6vw] leading-[1.3] text-[#f4f1e4] md:text-[clamp(0.8rem,1.35vw,1.75rem)] md:leading-[1.35]">
           {EXPERIENCIA.areasTitle.lead}{" "}
           <span className="text-[#a3ca23]">{EXPERIENCIA.areasTitle.acento}</span>{" "}
           {EXPERIENCIA.areasTitle.resto}
         </h3>
 
+        {/* LAS TRES ÁREAS LLEVAN LOS MISMOS EFECTOS DE CURSOR QUE LOS BONUS: se
+            inclinan, se imantan, sueltan partículas y devuelven una onda al
+            pulsarlas, y un foco compartido enciende el borde de la más cercana.
+
+            Es el mismo recurso en las dos secciones a propósito. Son las dos
+            rejillas de tres cards de la landing y comparten papel —tres piezas
+            que se miran en paralelo—, así que responder igual las emparenta.
+
+            .le-bento-card va en el <li> y no dentro: necesita ser el elemento
+            que tiene el radio, porque su ::after hereda el border-radius para
+            recortar el borde encendido. */}
+        <ZonaBento>
         <ul className="mt-[7vw] grid grid-cols-1 gap-[4.5vw] md:mt-[1.6vw] md:grid-cols-3 md:gap-[1.55vw]">
           {EXPERIENCIA.areas.map((area, i) => (
-            <li key={area.nombre} className="relative">
+            <CardBonus
+              key={area.nombre}
+              etiqueta="li"
+              className="le-bento-card relative rounded-[2vw] md:rounded-[0.61vw]"
+            >
               {/* Los archivos reservan oscura la franja de arriba, así que el
                   texto va encima sin necesidad de velo. */}
               {/* El filete en degradado se hace con un envoltorio de 1 px: un
@@ -336,20 +376,42 @@ export function Experiencia() {
                 />
               )}
 
-              <div className="absolute top-[9%] left-[7%] w-[86%] text-center md:top-[11.5%]">
-                <p className="font-display text-[5vw] leading-[1.2] text-[#e3e63a] md:text-[clamp(0.85rem,1.25vw,1.6rem)]">
+              {/* EL TEXTO SE ACHICA EN ESCRITORIO, y no es una preferencia de
+                  tamaño: es legibilidad. El bloque se apoya sobre la franja
+                  oscura que la ilustración reserva arriba, y a la medida
+                  anterior —1,25vw el título, 0,94 el cuerpo— desbordaba esa
+                  franja y las últimas líneas caían sobre la parte dibujada, con
+                  destellos verdes y siluetas por detrás. Ahí no se leía.
+
+                  Bajando a 1,05 y 0,8 el bloque entero cabe dentro de la zona
+                  reservada. En móvil se queda como estaba: allí la card es
+                  vertical y hay sitio de sobra.
+
+                  El velo de refuerzo hace el resto: un degradado oscuro que
+                  cubre el tercio superior de la card y se desvanece. Aunque una
+                  línea llegue al borde de la ilustración, sigue teniendo fondo
+                  contra el que recortarse. Va DEBAJO del texto —el texto lleva
+                  `relative`— y por encima de la imagen. */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 top-0 h-[42%] rounded-t-[2vw] bg-[linear-gradient(180deg,rgba(4,8,2,0.72)_0%,rgba(4,8,2,0.45)_55%,transparent_100%)] md:rounded-t-[0.61vw]"
+              />
+
+              <div className="absolute top-[9%] left-[7%] w-[86%] text-center md:top-[10%]">
+                <p className="relative font-display text-[5vw] leading-[1.2] text-[#e3e63a] md:text-[clamp(0.72rem,1.05vw,1.35rem)]">
                   {area.nombre}
                 </p>
-                <p className="font-display text-[5.2vw] leading-[1.25] text-[#f4f1e4] md:text-[clamp(0.9rem,1.25vw,1.6rem)] md:font-bold">
+                <p className="relative font-display text-[5.2vw] leading-[1.25] text-[#f4f1e4] md:text-[clamp(0.75rem,1.05vw,1.35rem)] md:font-bold">
                   {area.lema}
                 </p>
-                <p className="mt-[3.5vw] font-sans text-[3.5vw] leading-[1.45] text-[#dfe3d6] md:mt-[0.75vw] md:text-[clamp(0.75rem,0.9375vw,1.15rem)] md:font-medium">
+                <p className="relative mt-[3.5vw] font-sans text-[3.5vw] leading-[1.45] text-[#dfe3d6] md:mt-[0.6vw] md:text-[clamp(0.6rem,0.8vw,1rem)] md:leading-[1.45] md:font-medium">
                   {area.text}
                 </p>
               </div>
-            </li>
+            </CardBonus>
           ))}
         </ul>
+        </ZonaBento>
 
         <div className="mx-auto mt-[9vw] w-full md:mt-[1.7vw] md:w-fit">
           <CtaLista>{EXPERIENCIA.cta}</CtaLista>

@@ -41,6 +41,15 @@ export function ParaVos() {
         className="relative text-center font-display text-[6vw] leading-[1.25] text-[#f4f1e4] md:text-[clamp(0.8rem,1.32vw,1.7rem)] md:leading-[1.3]"
       >
         {PARA_VOS.title}
+        {/* EL ESPACIO ES IMPRESCINDIBLE Y FALTABA. Las dos mitades del titular
+            son cadenas independientes, así que sin él salían pegadas —"Volver al
+            Origenes para vos si…"— en cuanto el salto de línea de al lado deja
+            de aplicarse. En móvil no se veía porque ahí el <br> las separa; en
+            escritorio, que es donde van seguidas, sí.
+
+            Va como {" "} y no como un espacio suelto en el JSX: JSX come el
+            espacio en blanco que queda al final de una línea, de modo que
+            escribirlo sin llaves no habría cambiado nada. */}{" "}
         {/* En móvil la frase entra justa en el ancho y parte por donde cae; el
             salto forzado la corta por su junta natural, entre el nombre del
             programa y lo que se afirma de él. */}

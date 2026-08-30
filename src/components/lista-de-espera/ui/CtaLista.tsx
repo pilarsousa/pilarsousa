@@ -79,7 +79,16 @@ export function CtaLista({
       onClick={open}
       className={cn(
         "group inline-flex w-full max-w-[470px] cursor-pointer rounded-[0.9em]",
-        "text-[clamp(0.875rem,0.9375vw,1.125rem)]",
+        /* 18px FIJOS, y antes era clamp(14, 0.9375vw, 18). Ese clamp sólo
+           alcanzaba los 18 a partir de 1920: por debajo encogía —15px a 1600,
+           12 a 1280— y el rótulo se leía pequeño en la mayoría de las pantallas.
+
+           Toda la pieza se dimensiona contra este valor, porque lo de dentro va
+           en em: fijarlo fija también el alto y el relleno, que es lo que
+           mantiene el botón igual a sí mismo en cualquier ancho. El ancho sigue
+           siendo elástico —w-full con tope de 470— así que no desborda su
+           columna. */
+        "text-[18px]",
         /* EL ANILLO ESTÁ VIVO: un filete de luz recorre el perímetro y el halo
            respira con él (ver .le-cta-anillo en globals.css).
 
@@ -88,9 +97,12 @@ export function CtaLista({
            cuerpo, que es opaco, lo tapa por dentro y sólo lo deja asomar por el
            reborde — que es justo el borde exterior al relleno.
 
-           El relleno sube de 0,3 a 0,41em para reponer los 0,11 que aportaba el
-           border: sin eso el anillo adelgazaría y el recorrido casi no se vería. */
-        "le-cta-anillo p-[0.41em]",
+           EL ANILLO ES FINO: 0,17em, unos 3 px a 18. Llegó a medir 0,41 —para
+           reponer el grosor del border que sustituía— y a esa medida el filete
+           pasaba de acompañar la pieza a competir con ella: se leía como un
+           marco, no como un canto encendido. Afinado, el recorrido de luz se
+           sigue viendo y el botón recupera su silueta. */
+        "le-cta-anillo p-[0.17em]",
         "transition-[filter,transform] duration-200 hover:brightness-110 active:scale-[0.99]",
         className,
       )}
@@ -107,14 +119,29 @@ export function CtaLista({
           "shadow-[inset_0_0.11em_0_0_rgba(255,255,255,0.34),inset_0_-0.13em_0.45em_0_rgba(18,28,4,0.26),inset_0_0_0_0.06em_rgba(18,28,4,0.28)]",
         )}
       >
-        <span className="-mr-[0.08em] font-sans text-[1em] leading-none font-extrabold tracking-[0.06em] whitespace-nowrap text-white uppercase">
+        {/* EL TRACKING ES NEGATIVO Y ANTES ERA POSITIVO. Con 0,06em las
+            versalitas quedaban tan abiertas que el rótulo se leía como letras
+            sueltas en vez de como una frase; a -1px se juntan y vuelve a leerse
+            de un golpe. El margen negativo de la derecha se va con él: sólo
+            existía para cancelar el espacio que el tracking positivo añadía
+            después de la última letra. */}
+        <span className="font-sans text-[1em] leading-none font-extrabold tracking-[-1px] whitespace-nowrap text-white uppercase">
           {children}
         </span>
 
+        {/* LA FLECHA SE MUEVE SOLA MIENTRAS EL CURSOR ESTÁ ENCIMA: un vaivén
+            corto y continuo, no un único desplazamiento. Un empujón que ocurre
+            una vez y se queda quieto no invita a nada; el ciclo repetido sí, y
+            es lo que convierte el hover en "dale, entrá".
+
+            El recorrido es de 3 px en 1,1s, con la ida más rápida que la vuelta:
+            así el gesto empuja hacia delante en vez de oscilar como un péndulo.
+            Vive en .le-cta-flecha (globals.css) porque una animación con
+            keyframes no se declara desde una utilidad. */}
         <ArrowRight
           aria-hidden
           strokeWidth={2.5}
-          className="size-[1.15em] shrink-0 text-white transition-transform duration-200 group-hover:translate-x-[0.15em]"
+          className="le-cta-flecha size-[1.15em] shrink-0 text-white"
         />
       </span>
     </button>

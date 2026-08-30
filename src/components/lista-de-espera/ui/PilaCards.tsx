@@ -252,11 +252,19 @@ export function PilaCards({
                   md:inset-y-0 + flex + justify-center es lo que lo centra: la
                   caja ocupa todo el alto de la card y su contenido se agrupa en
                   el medio. Con un top en porcentaje habría que recalcularlo
-                  cada vez que cambia la longitud de un texto. */}
+                  cada vez que cambia la longitud de un texto.
+
+                  ⚠️ NO AÑADIR md:bottom-auto NI md:top-auto. Estuvieron aquí y
+                  el texto se iba TODO ARRIBA: `inset-y-0` no es más que
+                  `top:0; bottom:0`, así que una utilidad de `bottom` posterior
+                  lo pisa, la caja se queda sin borde inferior y colapsa al alto
+                  de su contenido. Sin alto que repartir, `justify-center` no
+                  centra nada. Para anular el `bottom-0` del móvil ya basta con
+                  `inset-y-0`; añadir un `auto` encima lo deshace. */}
               <div
                 className={cn(
                   "absolute inset-x-0 bottom-0 px-[7%] pb-[7%]",
-                  "md:inset-y-0 md:right-auto md:bottom-auto md:left-[10%] md:flex md:w-[36%] md:flex-col md:justify-center md:p-0",
+                  "md:inset-y-0 md:right-auto md:left-[10%] md:flex md:w-[36%] md:flex-col md:justify-center md:p-0",
                 )}
               >
                 <h3

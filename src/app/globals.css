@@ -2640,7 +2640,40 @@ body {
     linear-gradient(#fff 1px, transparent 1px),
     linear-gradient(to right, #fff 1px, transparent 1px);
   background-size: 8px 8px;
-  opacity: 0.02;
+  opacity: 0.055;
+  /*
+    ── POR QUÉ HACEN FALTA DOS CAPAS Y NO BASTA CON SUBIR LA OPACIDAD ──
+
+    Esta landing alterna secciones NEGRAS y secciones BLANCAS, y una retícula
+    blanca sólo se ve sobre las oscuras: sobre el blanco de las secciones 4 y 5
+    es blanco sobre blanco, invisible a cualquier opacidad. Subir el número no
+    lo arregla — dispara la malla sobre los fondos oscuros mucho antes de que
+    asome nada sobre los claros.
+
+    La de abajo (::after) es la misma retícula en NEGRO, que hace el trabajo
+    complementario: se ve sobre los fondos claros y desaparece sobre los
+    oscuros. Entre las dos, la textura está presente en toda la página con una
+    intensidad pareja.
+
+    De 0,02 a 0,055: a 0,02 era una corazonada más que una textura. Sigue
+    estando muy por debajo de lo que se percibe como rejilla — quita lisura a
+    los degradados, que es su trabajo.
+  */
+}
+
+/* La capa oscura, para las secciones de fondo claro. Va en el MISMO z-index y
+   justo debajo: son dos mitades de un mismo efecto, no dos texturas. */
+.le-scope::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(20, 27, 10, 1) 1px, transparent 1px),
+    linear-gradient(to right, rgba(20, 27, 10, 1) 1px, transparent 1px);
+  background-size: 8px 8px;
+  opacity: 0.045;
 }
 
 /*
@@ -2823,5 +2856,41 @@ body {
 
   .le-bento-card:hover {
     box-shadow: none;
+  }
+}
+
+/*
+  LA FLECHA DEL BOTÓN, MIENTRAS EL CURSOR ESTÁ ENCIMA.
+
+  Un vaivén corto y continuo en lugar de un único empujón. La diferencia importa:
+  un desplazamiento que ocurre una vez y se queda quieto no invita a nada,
+  mientras que el ciclo repetido lee como "dale, entrá" — que es el trabajo del
+  botón.
+
+  EL RECORRIDO ES CORTO Y LA IDA MÁS RÁPIDA QUE LA VUELTA: llega al extremo en el
+  40% del ciclo y tarda el 60% restante en volver. Repartido a partes iguales
+  oscilaría como un péndulo, que se lee como algo que duda; así empuja.
+
+  Sólo se anima con el cursor encima. En reposo la flecha está quieta: seis
+  botones moviéndose a la vez por toda la landing serían un tic.
+*/
+@keyframes le-cta-flecha {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  40% {
+    transform: translateX(3px);
+  }
+}
+
+.group:hover .le-cta-flecha {
+  animation: le-cta-flecha 1.1s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .group:hover .le-cta-flecha {
+    animation: none;
+    transform: translateX(2px);
   }
 }

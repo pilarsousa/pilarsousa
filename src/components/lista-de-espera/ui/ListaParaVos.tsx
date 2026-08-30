@@ -102,8 +102,27 @@ export function ListaParaVos({ items }: { items: readonly Tramo[][] }) {
             "transition-[transform,box-shadow] duration-300 md:hover:-translate-y-[0.18vw]",
             "bg-[linear-gradient(180deg,#a8cf3c_0%,#93c02c_45%,#7cae1f_100%)]",
             "px-[4vw] py-[3.4vw] md:px-[0.85vw] md:py-[0.7vw]",
-            "shadow-[inset_0_0.06vw_0_0_rgba(255,255,255,0.4),0_0.3vw_1vw_-0.35vw_rgba(124,181,24,0.5)]",
-            "md:hover:shadow-[inset_0_0.06vw_0_0_rgba(255,255,255,0.55),0_0.7vw_1.8vw_-0.4vw_rgba(150,220,40,0.75)]",
+            /* ── EL RELIEVE ──
+
+               Cuatro sombras, y las dos primeras son las que hacen el trabajo:
+               una CLARA arriba y una OSCURA abajo, ambas internas. Es como se
+               finge una superficie con volumen — la luz entra por arriba, así
+               que el canto superior brilla y el inferior queda en sombra. Sin
+               ese par, la píldora es un rectángulo verde plano por muchos
+               degradados que lleve.
+
+               Van en píxeles y no en vw: son un canto, no una medida del
+               diseño. En vw se adelgazan al bajar la resolución y el relieve se
+               pierde justo donde más falta hace.
+
+               Las otras dos son la sombra proyectada —lo que separa la píldora
+               del fondo— y un halo verde muy tenue que la asienta sobre la
+               lluvia de código. */
+            "shadow-[inset_0_2px_0_0_rgba(255,255,255,0.55),inset_0_-2px_0_0_rgba(28,52,4,0.5),0_4px_10px_-3px_rgba(0,0,0,0.55),0_0_16px_-6px_rgba(124,181,24,0.6)]",
+            /* Al pasar el ratón el contraste sube por los dos lados a la vez
+               —más luz arriba, más sombra abajo— y la pieza parece levantarse
+               de verdad, no sólo desplazarse. */
+            "md:hover:shadow-[inset_0_3px_0_0_rgba(255,255,255,0.7),inset_0_-3px_0_0_rgba(28,52,4,0.55),0_10px_22px_-6px_rgba(0,0,0,0.6),0_0_26px_-4px_rgba(150,220,40,0.75)]",
             "font-sans text-[3.7vw] leading-[1.45] text-[#16210a] md:text-[clamp(0.45rem,0.79vw,1rem)]",
           ].join(" ")}
         >

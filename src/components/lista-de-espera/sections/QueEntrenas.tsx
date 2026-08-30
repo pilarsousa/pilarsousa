@@ -65,11 +65,24 @@ export function QueEntrenas() {
         {QUE_ENTRENAS.titleAccent}?
       </h2>
 
-      {/* El subtítulo va en un tarjetón verde, el mismo recurso que la sección 3:
-          sobre blanco el verde de marca no aguanta como tinta, así que se usa
-          como fondo y la letra va oscura encima. Se ajusta a su contenido. */}
-      <p className="mx-auto mt-[6vw] w-fit max-w-[86%] rounded-[2vw] border border-[#4a6b12] bg-[linear-gradient(180deg,#a8cf3c_0%,#93c02c_45%,#7cae1f_100%)] px-[4.5vw] py-[3vw] text-center font-sans text-[3.7vw] leading-[1.4] text-[#16210a] md:mt-[1.65vw] md:max-w-none md:rounded-[0.45vw] md:border-[max(0.06vw,1px)] md:px-[1.1vw] md:py-[0.7vw] md:text-[clamp(0.45rem,0.79vw,1rem)] md:leading-none shadow-[inset_0_0.06vw_0_0_rgba(255,255,255,0.4),0_0.3vw_1vw_-0.35vw_rgba(124,181,24,0.5)]">
-        <strong className="font-bold">Una nueva forma</strong>
+      {/* EL SUBTÍTULO ERA UN BLOQUE VERDE MACIZO Y AHORA ES UNA PÍLDORA DE
+          CRISTAL.
+
+          Copiaba el recurso de la sección 3 —tarjetón verde, letra oscura
+          encima— y ahí funciona porque va sobre la lluvia de código, un fondo
+          oscuro y ruidoso donde un bloque macizo es lo único que se recorta.
+          Aquí el fondo es BLANCO liso, y sobre blanco ese mismo bloque pega un
+          grito: es un subtítulo, la línea que acompaña al titular, y pesaba más
+          que el titular mismo.
+
+          Ahora es un filete verde apenas teñido con la letra en verde oscuro:
+          se lee como una anotación al pie del titular, que es su papel. El
+          contraste del texto sobre el fondo claro sigue siendo de sobra.
+
+          El acento se queda en negrita —es la promesa de la frase— pero ya no
+          necesita gritar desde el fondo. */}
+      <p className="mx-auto mt-[6vw] w-fit max-w-[86%] rounded-full border border-[#7cae1f]/35 bg-[#a3ca23]/10 px-[5vw] py-[2.6vw] text-center font-sans text-[3.6vw] leading-[1.4] text-[#3d5410] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.6),0_1px_3px_-1px_rgba(124,181,24,0.25)] md:mt-[1.65vw] md:max-w-none md:px-[1.4vw] md:py-[0.55vw] md:text-[clamp(0.5rem,0.82vw,1.05rem)] md:leading-normal">
+        <strong className="font-bold text-[#2a3d06]">Una nueva forma</strong>
         {QUE_ENTRENAS.subtitle.replace("Una nueva forma", "")}
       </p>
 
