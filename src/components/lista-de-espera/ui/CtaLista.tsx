@@ -79,16 +79,21 @@ export function CtaLista({
       onClick={open}
       className={cn(
         "group inline-flex w-full max-w-[470px] cursor-pointer rounded-[0.9em]",
-        /* 18px FIJOS, y antes era clamp(14, 0.9375vw, 18). Ese clamp sólo
-           alcanzaba los 18 a partir de 1920: por debajo encogía —15px a 1600,
-           12 a 1280— y el rótulo se leía pequeño en la mayoría de las pantallas.
+        /* DOS TAMAÑOS FIJOS: 16px en móvil y 18 de md en adelante.
+           Antes era un clamp(14, 0.9375vw, 18) que sólo alcanzaba los 18 a
+           partir de 1920: por debajo encogía —15px a 1600, 12 a 1280— y el
+           rótulo se leía pequeño en la mayoría de las pantallas.
+
+           En móvil baja a 16 porque el botón ocupa casi todo el ancho de la
+           columna y a 18 el rótulo llegaba al borde: `whitespace-nowrap` no
+           permite que parta, así que un copy algo más largo desbordaría.
 
            Toda la pieza se dimensiona contra este valor, porque lo de dentro va
            en em: fijarlo fija también el alto y el relleno, que es lo que
            mantiene el botón igual a sí mismo en cualquier ancho. El ancho sigue
            siendo elástico —w-full con tope de 470— así que no desborda su
            columna. */
-        "text-[18px]",
+        "text-[16px] md:text-[18px]",
         /* EL ANILLO ESTÁ VIVO: un filete de luz recorre el perímetro y el halo
            respira con él (ver .le-cta-anillo en globals.css).
 

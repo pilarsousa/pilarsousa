@@ -66,9 +66,18 @@ export function QueEntrenas() {
           apaga cada 6 s, tan desenfocado que se lee como atmósfera y no como una
           mancha. Los detalles y el porqué del color, en .le-luz-lateral
           (globals.css). */}
+      {/* ⚠️ EN MÓVIL VA CENTRADA Y NO A UN LADO. Estaba en `calc(50% + 40px)`,
+          y con una mancha más ancha que la pantalla eso la mandaba casi entera
+          fuera del viewport, donde la recortaba el `overflow-x-clip`: no se veía
+          nada. Centrada, el degradado cubre la columna de contenido — que es
+          donde el tinte tiene algo contra lo que multiplicar.
+
+          `-translate-x-1/2` sólo se aplica por debajo de md; en escritorio la
+          mancha sigue desplazada a la derecha, que es donde el diseño la quiere:
+          allí hay ancho de sobra y el efecto es un halo lateral, no un velo. */}
       <div
         aria-hidden
-        className="le-luz-lateral top-[8%] left-[calc(50%+380px)] max-md:left-[calc(50%+40px)]"
+        className="le-luz-lateral top-[8%] left-[calc(50%+380px)] max-md:top-[18%] max-md:left-1/2 max-md:-translate-x-1/2"
       />
       <h2
         id="que-entrenas-titulo"

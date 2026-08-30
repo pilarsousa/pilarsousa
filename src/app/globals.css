@@ -3140,11 +3140,44 @@ body {
   animation: le-latido-luz 6s infinite ease-in-out;
 }
 
+/*
+  ⚠️ EN MÓVIL NO SE VEÍA, y la causa eran tres cosas a la vez:
+
+  · LA MEDIDA. Con 380px de ancho colocada en `calc(50% + 40px)`, en un teléfono
+    de 390 arrancaba en el píxel 235 y terminaba en el 615 — o sea que dos
+    tercios caían fuera de la pantalla y los recortaba el `overflow-x-clip` de
+    la sección. Lo que quedaba dentro era la cola del degradado, ya casi
+    transparente.
+  · EL DESENFOQUE. 90px sobre una mancha de 380 la deja difusa, pero el borde
+    recortado seguía siendo el problema, no la nitidez.
+  · Y LA MEZCLA. `multiply` tiñe sobre lo que hay debajo, y en el margen derecho
+    de un teléfono no hay contenido: sólo blanco. Multiplicar contra blanco
+    apenas cambia nada.
+
+  Ahora ocupa 620px —más ancho que la pantalla— y se centra: el degradado cubre
+  la columna entera, así que el tinte cae donde está el contenido en vez de en
+  un margen vacío. El desenfoque sube a 130 para que a ese tamaño siga leyéndose
+  como atmósfera y no como un círculo.
+
+  La opacidad máxima baja a 0,55 en el keyframe de móvil: a plena intensidad y
+  cubriendo toda la columna, el verde se comía el contraste del texto oscuro.
+*/
+@keyframes le-latido-luz-mov {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
 @media (max-width: 767px) {
   .le-luz-lateral {
-    width: 380px;
-    height: 380px;
-    filter: blur(90px);
+    width: 620px;
+    height: 620px;
+    filter: blur(130px);
+    animation-name: le-latido-luz-mov;
   }
 }
 
