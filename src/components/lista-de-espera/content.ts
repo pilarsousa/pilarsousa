@@ -510,7 +510,12 @@ export const GRACIAS = {
     { text: ". La información más importante se compartirá por allí." },
   ],
   nudge: "No cierres esta página sin unirte al grupo.",
-  cta: "Entrar al grupo privado de WhatsApp",
+  /* ⚠️ CORTO A PROPÓSITO. Era "Entrar al grupo privado de WhatsApp" —35
+     caracteres— y el botón lleva `whitespace-nowrap`, así que no partía: se
+     salía de su caja. Y acortar es lo correcto, no un apaño: el icono de
+     WhatsApp que va al lado ya dice a dónde lleva, y "privado" lo aclara el
+     texto legal de debajo. Un rótulo de botón nombra la acción, no la explica. */
+  cta: "Entrar al grupo",
   disclaimer:
     "El grupo será utilizado únicamente para compartir información relacionada con la próxima edición de Volver al Origen.",
   whatsappUrl: "https://chat.whatsapp.com/HMR8VTK4wFVHczUuCKc24u",

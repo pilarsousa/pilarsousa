@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Check } from "lucide-react";
 import { VoContainer } from "@/components/lista-de-espera/ui/VoContainer";
-import { LogoVao } from "@/components/lista-de-espera/ui/LogoVao";
 import { LluviaCodigo } from "@/components/lista-de-espera/ui/LluviaCodigo";
 import { BotonVo } from "@/components/lista-de-espera/ui/BotonVo";
 import { WhatsAppIcon } from "@/components/lista-de-espera/ui/WhatsAppIcon";
@@ -130,11 +129,19 @@ export default function GraciasPage() {
               <Rich parts={GRACIAS.detail} />
             </p>
 
-            {/* El empujón, en su propia píldora verde. Es la misma tinta sobre
-                fondo lima que usan las afirmaciones de la sección 3: sobre el
-                negro, un bloque verde macizo es lo único que se recorta de
-                verdad, y esta frase es la que tiene que verse. */}
-            <p className="mt-8 inline-flex items-center gap-2 rounded-full border border-[#4a6b12] bg-[linear-gradient(180deg,#a8cf3c_0%,#93c02c_45%,#7cae1f_100%)] px-5 py-2.5 font-sans text-sm font-bold text-[#16210a] shadow-[inset_0_2px_0_0_rgba(255,255,255,0.55),inset_0_-2px_0_0_rgba(28,52,4,0.5),0_4px_14px_-4px_rgba(124,181,24,0.5)] sm:text-base">
+            {/* ⚠️ ESTE EMPUJÓN NO PUEDE PARECER UN BOTÓN, y lo parecía: llevaba
+                el MISMO degradado lima→verde que el CTA, que está treinta
+                píxeles más abajo. Dos piezas verdes idénticas seguidas, una
+                pulsable y la otra no, y el visitante no sabe cuál es cuál — en
+                la única pantalla donde hay una sola cosa que hacer.
+
+                Ahora es texto sobre el fondo, sin caja: sólo la tinta lima y el
+                peso. Se distingue del botón porque NO tiene forma de botón, que
+                es la única señal fiable.
+
+                El emoji se queda —es la flecha que apunta al CTA— y se separa
+                del texto con un gap en vez de ir pegado. */}
+            <p className="mt-9 inline-flex items-center gap-2.5 font-sans text-base font-bold text-[#b8ea3c] sm:text-lg">
               <span aria-hidden>👇</span>
               {GRACIAS.nudge}
             </p>
@@ -180,12 +187,14 @@ export default function GraciasPage() {
               </p>
             )}
 
-            {/* EL LOGO CIERRA EN VEZ DE ABRIR. Estaba arriba del todo, y ahí
-                empujaba hacia abajo lo único que importa —la confirmación y el
-                botón—. Quien llega aquí ya sabe de quién es la página: viene de
-                rellenar su formulario. Como remate firma el cierre sin robarle
-                sitio a la acción. */}
-            <LogoVao className="mt-12 w-24 opacity-70 sm:w-28" />
+            {/* ⚠️ AQUÍ NO VA NINGÚN LOGO. Llegó a haber uno —primero arriba y
+                luego como remate al pie— y en las dos posiciones sobraba por el
+                mismo motivo: el Footer va inmediatamente debajo de este <main> y
+                YA LLEVA el logo. Se veían dos, uno encima del otro, separados
+                por nada.
+
+                Quien llega aquí tampoco necesita que se le recuerde de quién es
+                la página: viene de rellenar este formulario. */}
           </div>
         </VoContainer>
       </main>
