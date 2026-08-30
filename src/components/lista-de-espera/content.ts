@@ -113,14 +113,30 @@ export const ENTRENAR = {
       ],
       [
         {
-          text: "Podés entender de energía, consciencia, leyes universales y espiritualidad.",
+          /* Sin "espiritualidad": ya aparece dos frases después, en el punto
+             sobre acumular contenido. Repetida aquí alarga la enumeración sin
+             añadir nada. */
+          text: "Podés entender de energía, consciencia y leyes universales.",
         },
       ],
       [
         {
-          text: "Pero existe una enorme diferencia entre saber algo y ser capaz de vivirlo.",
+          /* LA FRASE BISAGRA, y por eso es la más corta de las siete: separa el
+             "sabés" del "pero". El contraste dice lo que decía "enorme
+             diferencia" —y golpea más sin el adjetivo. */
+          text: "Pero saber algo y ",
         },
+        { text: "vivirlo", acento: true },
+        { text: " son cosas distintas." },
       ],
+      /* LAS TRES CONDICIONALES FUNCIONAN COMO RITMO: tres golpes que acorralan
+         desde tres ángulos, y para eso tienen que medir parecido. Estaban en 59,
+         69 y 90 caracteres —la última, cuatro renglones en un teléfono— así que
+         la cadencia se perdía justo al final. Ahora las tres rondan los 50.
+
+         Se mantienen COMO TRES y no se funden en una: cada una ataca un frente
+         distinto (dudar, postergarse, repetirse) y una sola frase resumen
+         perdería ese cerco. */
       [
         {
           text: "Porque si cuando llega el momento de elegir volvés a dudar…",
@@ -128,12 +144,14 @@ export const ENTRENAR = {
       ],
       [
         {
-          text: "Si sabés que deberías priorizarte, pero volvés a dejarte para después…",
+          text: "Si sabés que deberías priorizarte, y no lo hacés…",
         },
       ],
       [
         {
-          text: "Si visualizás una realidad diferente, pero seguís reaccionando desde los mismos patrones…",
+          /* "Los mismos patrones" es vocabulario del sector; "igual que siempre"
+             dice lo mismo en el idioma del lector. */
+          text: "Si visualizás otra vida, pero reaccionás igual que siempre…",
         },
       ],
       [{ text: "El problema ya no es falta de información." }],
@@ -158,9 +176,15 @@ export const ENTRENAR = {
         },
       ],
       [
-        {
-          text: "Venís a observarte, desafiar tus patrones, tomar decisiones diferentes y entrenar una nueva manera de relacionarte con vos mismo y con tu realidad.",
-        },
+        /* ERA LA FRASE MÁS LARGA DE LA LANDING: 147 caracteres, seis renglones
+           en un teléfono — y justo la que carga con lo que el programa HACE, o
+           sea la que hay que poder leer.
+
+           Se quita "tomar decisiones diferentes", que ya dice el punto anterior,
+           y la coda se cierra en cuatro palabras en vez de doce. */
+        { text: "Venís a observarte, desafiar tus patrones y entrenar " },
+        { text: "otra forma de vivir", acento: true },
+        { text: "." },
       ],
       [{ text: "No es filosófico. Es práctico.", fuerte: true }],
     ] as Tramo[][],
@@ -184,35 +208,51 @@ export const ENTRENAR = {
 export const PARA_VOS = {
   title: "Volver al Origen",
   titleAccent: "es para vos si…",
+  /* ⚠️ LOS SEIS SE ACORTARON, Y LOS CONCEPTOS EN NEGRITA NO SE TOCARON.
+
+     Es la sección donde el largo hacía más daño: el lector no las lee, las usa
+     para RECONOCERSE — mira si alguna le habla. Con tres o cuatro renglones cada
+     una dejaba de ser una lista que se barre y pasaba a ser texto. Rondaban los
+     101 caracteres de media y ahora los 67.
+
+     Todo el recorte cayó en el texto que rodea al concepto clave, nunca en él:
+     esa negrita es lo que permite barrer la lista con la vista, y cambiarla
+     cambiaría el punto que cada ítem defiende.
+
+     Tampoco cambia el voseo ni el registro. Lo único que se quitó son palabras
+     que el lector ya deducía. */
   items: [
     [
-      { text: "Llevás tiempo trabajando en vos, pero todavía " },
+      { text: "Trabajaste en vos, pero " },
       { text: "repetís patrones", clave: true },
-      { text: " que creías haber superado." },
+      { text: " que creías superados." },
     ],
     [
-      { text: "Querés tomar " },
-      { text: "decisiones con mayor seguridad", clave: true },
-      { text: " y dejar de cuestionarte constantemente." },
+      { text: "Querés " },
+      { text: "decidir con seguridad", clave: true },
+      { text: " y dejar de cuestionarte tanto." },
     ],
     [
       { text: "Sabés que necesitás " },
       { text: "priorizarte", clave: true },
-      { text: ", pero te cuesta sostenerte cuando llega el momento de hacerlo." },
+      { text: ", pero no lo sostenés." },
     ],
     [
-      { text: "Sentís que tu próximo nivel requiere " },
+      { text: "Sentís que para crecer tenés que " },
       { text: "elevar tus estándares", clave: true },
-      { text: ", tu entorno y aquello que estás dispuesto a aceptar." },
+      { text: " y tu entorno." },
     ],
     [
-      { text: "Consumiste libros, cursos o contenido espiritual, pero sentís que necesitás " },
+      { text: "Leíste libros y cursos, pero necesitás " },
       { text: "integrar, no seguir acumulando", clave: true },
       { text: "." },
     ],
     [
-      { text: "Querés ordenar tu espiritualidad y convertirla en una " },
-      { text: "forma de vivir más simple, práctica y coherente", clave: true },
+      /* Cierra la lista con una OPOSICIÓN y no con una enumeración: "simple,
+         práctica y coherente" eran tres adjetivos donde el contraste con
+         "teoría" dice más, y se recuerda mejor. */
+      { text: "Querés que tu espiritualidad sea una " },
+      { text: "forma de vivir, no una teoría", clave: true },
       { text: "." },
     ],
   ],
