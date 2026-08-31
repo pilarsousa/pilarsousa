@@ -375,9 +375,15 @@ export function Experiencia() {
           con margen ni padding en el titular: los dos se intentaron y ninguno
           separa un bloque anclado en absoluto (ver el comentario del h3).
 
-          Sube de 63,5 a 65,8%: son 2,3 puntos del alto del banner, unos 50 px a
-          1920, que es la separación que pide el diseño. */}
-      <div className="relative mt-[22vw] md:absolute md:top-[65.8%] md:left-[20.5%] md:mt-0 md:w-[59%]">
+          De 63,5 pasó a 65,8 y ahora a 68,2%: son 4,7 puntos sobre el original,
+          unos 100 px a 1920. El paso intermedio se quedó corto — la banda de las
+          tres áreas seguía leyéndose pegada al listado de arriba en vez de como
+          el apartado propio que es.
+
+          EL TECHO ESTÁ EN EL 63,5% QUE MARCA EL MONTAJE y en las tres cards, que
+          arrancan justo debajo del titular: bajar mucho más las empujaría contra
+          el pie del banner. Con 68,2 el bloque entero sigue dentro. */}
+      <div className="relative mt-[22vw] md:absolute md:top-[68.2%] md:left-[20.5%] md:mt-0 md:w-[59%]">
         {/* ⚠️ EN ESCRITORIO ESTE TITULAR NO SE SEPARA CON MARGEN NI CON PADDING.
             NINGUNO DE LOS DOS FUNCIONA, y conviene entender por qué antes de
             volver a intentarlo:
@@ -398,8 +404,13 @@ export function Experiencia() {
 
             EN MÓVIL SÍ VALE EL PADDING, porque allí el contenedor está en el
             flujo y no anclado. De ahí que el pt- siga puesto sin prefijo y se
-            anule con md:pt-0. */}
-        <h3 className="aparece-abajo pt-[50px] text-center font-display text-[5.6vw] leading-[1.3] text-[#f4f1e4] md:pt-0 md:text-[clamp(0.8rem,1.35vw,1.75rem)] md:leading-[1.35]">
+            anule con md:pt-0.
+
+            Baja de 50 a 38px: en móvil el contenedor ya trae su propio mt-[22vw]
+            —unos 86 px a 390— así que los 50 se sumaban a eso y el titular
+            quedaba descolgado del listado. Los dos juntos dan ahora unos 124,
+            que es la separación de un apartado nuevo sin llegar a corte. */}
+        <h3 className="aparece-abajo pt-[38px] text-center font-display text-[5.6vw] leading-[1.3] text-[#f4f1e4] md:pt-0 md:text-[clamp(0.8rem,1.35vw,1.75rem)] md:leading-[1.35]">
           {EXPERIENCIA.areasTitle.lead}{" "}
           <span className="text-[#a3ca23]">{EXPERIENCIA.areasTitle.acento}</span>{" "}
           {EXPERIENCIA.areasTitle.resto}
