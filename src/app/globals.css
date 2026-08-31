@@ -2640,7 +2640,11 @@ body {
     linear-gradient(#fff 1px, transparent 1px),
     linear-gradient(to right, #fff 1px, transparent 1px);
   background-size: 8px 8px;
-  opacity: 0.055;
+  /* 0,032 — la mitad de lo que llegó a tener. A 0,055 la retícula se percibía
+     como retícula sobre los fondos oscuros: se veían las líneas y competía con
+     la lluvia de código, que ya aporta su propia trama. Su trabajo es quitarle
+     lisura a los degradados, no dibujarse. */
+  opacity: 0.032;
   /*
     ── POR QUÉ HACEN FALTA DOS CAPAS Y NO BASTA CON SUBIR LA OPACIDAD ──
 
@@ -2673,11 +2677,11 @@ body {
     linear-gradient(rgba(20, 27, 10, 1) 1px, transparent 1px),
     linear-gradient(to right, rgba(20, 27, 10, 1) 1px, transparent 1px);
   background-size: 8px 8px;
-  /* 0,03 y no 0,045: sobre las secciones blancas la retícula oscura empezaba a
-     dibujarse como rejilla en vez de leerse como grano, y ahí es donde más se
-     nota porque el contraste con el fondo es máximo. La capa clara se queda
-     como está: sobre negro necesita más presencia para verse siquiera. */
-  opacity: 0.03;
+  /* 0,018, y baja más que la clara en proporción: sobre las secciones blancas el
+     contraste de una trama oscura es máximo, así que la misma opacidad se
+     percibe bastante más marcada que sobre negro. Igualadas de número, la mitad
+     clara de la landing se veía limpia y la blanca, cuadriculada. */
+  opacity: 0.018;
 }
 
 /*
