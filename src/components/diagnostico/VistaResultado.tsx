@@ -12,7 +12,7 @@ import {
 import { leerResultado } from "@/components/diagnostico/almacen";
 import { useHidratado } from "@/components/diagnostico/useHidratado";
 import { BotonDg } from "@/components/diagnostico/ui/BotonDg";
-import { EmbudoFrecuencias } from "@/components/diagnostico/ui/EmbudoFrecuencias";
+import { MedicionFrecuencias } from "@/components/diagnostico/ui/MedicionFrecuencias";
 import { WhatsAppIcon } from "@/components/lista-de-espera/ui/WhatsAppIcon";
 
 /*
@@ -67,7 +67,7 @@ type Resuelto = {
   nombre: string;
   email: string;
   /* El reparto de las 7 respuestas entre las 4 frecuencias, para dibujar el
-     embudo. Llega vacío cuando el resultado se recupera de la URL: allí sólo
+     medición. Llega vacío cuando el resultado se recupera de la URL: allí sólo
      viaja la dominante. */
   porcentajes: Record<string, number>;
 };
@@ -90,8 +90,8 @@ function resolverResultado(): Resuelto {
     const desdeUrl = new URLSearchParams(window.location.search).get("f");
     if (desdeUrl && esFrecuencia(desdeUrl)) {
       /* Por la URL sólo viaja la frecuencia: sin nombre, sin email y sin
-         reparto. El aviso se muestra en su versión impersonal y el embudo no
-         se dibuja — no hay con qué. */
+         reparto. El aviso se muestra en su versión impersonal y la medición
+         no se dibuja — no hay con qué. */
       return { frecuencia: desdeUrl, nombre: "", email: "", porcentajes: {} };
     }
   } catch {
@@ -133,9 +133,9 @@ export function VistaResultado() {
   const ficha = FICHA_FRECUENCIA[frecuencia];
   const hayWhatsapp = RESULTADO.whatsappUrl.length > 0;
 
-  /* El embudo sólo se puede dibujar con el reparto completo, y eso vive en el
-     almacenamiento. Quien llegue con el resultado recuperado de la URL ve la
-     página de siempre, a una columna: es preferible a un embudo inventado. */
+  /* La medición sólo se puede dibujar con el reparto completo, y eso vive en
+     el almacenamiento. Quien llegue con el resultado recuperado de la URL ve
+     la página a una columna: es preferible a unas barras inventadas. */
   const hayReparto = Object.keys(porcentajes).length > 0;
 
   return (
@@ -147,11 +147,11 @@ export function VistaResultado() {
     >
       {/* ═════════ PASO 1 — el diagnóstico ═════════
 
-          Con reparto son dos columnas: el embudo a la izquierda y el
+          Con reparto son dos columnas: la medición a la izquierda y el
           diagnóstico a la derecha. En móvil se apilan, y AHÍ EL ORDEN SE
           INVIERTE — el diagnóstico primero. Es lo que la persona vino a buscar;
           el desglose explica el resultado, así que no puede llegar antes que
-          él. En escritorio caben los dos a la vez y el embudo se lee como el
+          él. En escritorio caben los dos a la vez y la medición se lee como el
           soporte de lo que dice el titular de al lado. */}
       <section
         className={cn(
@@ -161,7 +161,7 @@ export function VistaResultado() {
       >
         {hayReparto && (
           <div className="order-2 md:order-1">
-            <EmbudoFrecuencias
+            <MedicionFrecuencias
               porcentajes={porcentajes}
               dominante={frecuencia}
             />
@@ -209,7 +209,7 @@ export function VistaResultado() {
       </section>
 
       {/* Las dos cajas de abajo NO se ensanchan con la cabecera. Aunque la
-          página pase a 64rem para que quepan el embudo y el diagnóstico, un
+          página pase a 64rem para que quepan la medición y el diagnóstico, un
           párrafo de aviso a ese ancho se lee mal: la línea se hace tan larga
           que el ojo pierde el renglón al volver. */}
       <div className="mx-auto max-w-2xl">

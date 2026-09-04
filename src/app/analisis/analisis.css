@@ -1,6 +1,6 @@
 /*
   ═══════════════════════════════════════════════════════════════════════════
-  TOKENS DEL DIAGNÓSTICO — /diagnostico
+  TOKENS DEL ANÁLISIS — /analisis
   ═══════════════════════════════════════════════════════════════════════════
 
   ⚠️ TODOS ESTOS VALORES SON PROVISIONALES. El branding nuevo de Pilar (logo y
@@ -16,7 +16,7 @@
   todas las demás — con el riesgo de romper una landing en producción por un
   cambio de esta.
 
-  Como archivo aparte, importado sólo desde el layout de /diagnostico, el
+  Como archivo aparte, importado sólo desde el layout de /analisis, el
   rediseño de marca es reemplazar este archivo y nada más.
 
   Se declaran como variables CSS sobre .dg-scope y se usan desde las clases con
@@ -65,8 +65,8 @@
 /*
   EL ANILLO DE FOCO, DECLARADO UNA VEZ PARA TODA LA RUTA.
 
-  El diagnóstico se puede recorrer entero con el teclado —es un formulario de
-  once pasos— y sin un foco visible no hay forma de saber dónde estás. El del
+  El análisis se puede recorrer entero con el teclado —son once pantallas con
+  campos y botones— y sin un foco visible no hay forma de saber dónde estás. El del
   navegador se pierde sobre un fondo casi negro, así que se sustituye por uno
   en el color de acento.
 
@@ -448,6 +448,45 @@
 }
 
 /*
+  ═══════════════════════════════════════════════════════════════════════════
+  LAS BARRAS DE LA MEDICIÓN — se llenan como una carga
+  ═══════════════════════════════════════════════════════════════════════════
+
+  Cada barra arranca vacía y crece hasta su porcentaje. No es adorno: es lo que
+  convierte cuatro cifras impresas en una MEDICIÓN — algo que se ha calculado
+  delante de ti— y es la diferencia entre leer un número y verlo salir.
+
+  ── scaleX Y NO width ──
+
+  El relleno se dibuja ya con su ancho final y se encoge a cero con la escala,
+  para volver a 1. Animar `width` obliga al navegador a recalcular la
+  disposición en cada fotograma; `transform` sólo compone, y va a 60 fps hasta
+  en un teléfono viejo. Con cuatro barras a la vez, la diferencia se nota.
+
+  `transform-origin: left` es lo que hace que crezca desde el borde izquierdo.
+  Sin él escalaría desde el centro y las barras se abrirían hacia los dos
+  lados, que no es cómo se llena nada.
+
+  ── `both` ES IMPRESCINDIBLE ──
+
+  Sin él, durante su retardo la barra se pinta ENTERA y luego salta a cero para
+  empezar a crecer. Con `both` toma el fotograma inicial desde el principio.
+*/
+@keyframes dg-carga {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.dg-carga {
+  transform-origin: left center;
+  animation: dg-carga 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/*
   EL BARRIDO DE LUZ AL PASAR POR ENCIMA DE UNA RESPUESTA.
 
   Una banda diagonal muy tenue que cruza el botón. Es la recompensa a apuntar
@@ -503,6 +542,13 @@
   .dg-respira {
     animation: none;
     opacity: 0.42;
+  }
+  /* La barra se queda LLENA, no vacía: la animación usa `both`, así que
+     anularla a secas la congelaría en scaleX(0) y la medición se vería en
+     blanco. Hay que devolverle el transform explícitamente. */
+  .dg-carga {
+    animation: none;
+    transform: none;
   }
   .dg-opcion::after {
     display: none;
