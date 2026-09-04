@@ -685,6 +685,69 @@
 }
 
 /*
+  ═══════════════════════════════════════════════════════════════════════════
+  EL TILDE QUE SE DIBUJA
+  ═══════════════════════════════════════════════════════════════════════════
+
+  El disco de confirmación de la página de resultados. Estaba puesto y ya, y
+  eso desperdicia el único momento del embudo en que hay algo que celebrar:
+  quien llega acaba de terminar el test y lo primero que necesita saber es que
+  salió bien. Un tilde que se traza lo dice; uno fijo sólo está ahí.
+
+  ── DOS TIEMPOS, NO UNO ──
+
+  Primero aterriza el disco —entra pequeño, se pasa un poco de tamaño y vuelve—
+  y 340 ms después empieza a trazarse el tilde dentro. En el mismo instante los
+  dos se pisarían: el trazo quedaría escondido tras el rebote del disco.
+
+  ── CÓMO SE DIBUJA UNA LÍNEA ──
+
+  `stroke-dasharray` convierte el trazo en un patrón de guiones, y
+  `stroke-dashoffset` lo desplaza. Con un guión tan largo como el propio
+  camino, un desfase igual de grande lo deja ENTERO fuera de la vista;
+  llevándolo a cero, el trazo va entrando. No se anima ninguna forma: lo único
+  que cambia es dónde empieza el guión.
+
+  El 24 no es un número redondo elegido a ojo: el tilde de lucide es
+  `M20 6 9 17l-5-5` sobre un lienzo de 24, o sea unas 22,6 unidades de camino.
+  Se redondea al alza para que no quede un cabo sin dibujar.
+
+  ⚠️ ES UNA ANIMACIÓN DE UNA SOLA PASADA, sin `infinite`. Un tilde que se
+  redibuja cada pocos segundos deja de leerse como una confirmación y pasa a
+  parecer que la página está reintentando algo.
+*/
+@keyframes dg-check-disco {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes dg-check-trazo {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.dg-check {
+  animation: dg-check-disco 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.dg-check svg path {
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+  animation: dg-check-trazo 480ms cubic-bezier(0.65, 0, 0.35, 1) 340ms both;
+}
+
+/*
   EL LATIDO — un resplandor que crece y se apaga sobre el propio texto.
 
   Va en "Un último paso", y es a propósito UN EFECTO DISTINTO del barrido: esa
@@ -870,6 +933,18 @@
   .dg-zoom {
     animation: none;
     transform: none;
+  }
+  /* ⚠️ EL TILDE NO PUEDE QUEDARSE SIN DIBUJAR. Su trazo empieza fuera de la
+     vista (stroke-dashoffset 24) y es la animacion la que lo trae; anularla a
+     secas dejaria el disco vacio. Hay que llevar el desfase a cero a mano. */
+  .dg-check {
+    animation: none;
+    transform: none;
+    opacity: 1;
+  }
+  .dg-check svg path {
+    animation: none;
+    stroke-dashoffset: 0;
   }
   .dg-pulso::after {
     display: none;

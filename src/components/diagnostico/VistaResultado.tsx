@@ -174,7 +174,10 @@ export function VistaResultado() {
             salió bien. */}
           <span
             aria-hidden
-            className="mx-auto flex size-14 items-center justify-center rounded-full border border-[var(--dg-acento)]/40 bg-[var(--dg-fondo-alto)] text-[var(--dg-acento-vivo)]"
+            /* El disco entra y el tilde se traza dentro, en ese orden. Es el
+               único momento del embudo en que hay algo que confirmar, y un
+               tilde ya puesto se lo salta. Ver .dg-check en analisis.css. */
+            className="dg-check mx-auto flex size-14 items-center justify-center rounded-full border border-[var(--dg-acento)]/40 bg-[var(--dg-fondo-alto)] text-[var(--dg-acento-vivo)]"
           >
             <Check className="size-7" strokeWidth={2.6} />
           </span>
