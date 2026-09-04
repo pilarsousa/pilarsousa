@@ -223,12 +223,37 @@ export default function DiagnosticoPage() {
               cuántas preguntas son, cuánto tarda y cuándo llega el resultado.
               Van DEBAJO del formulario porque ahí responden a la duda que
               aparece justo al ver un campo de email. */}
-          <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[0.8rem] text-[var(--dg-texto-tenue)]">
-            {LANDING.señales.map((señal) => (
-              <li key={señal} className="flex items-center gap-2">
+          {/* ── SON PÍLDORAS, NO TEXTO SUELTO ──
+
+              Eran tres frases con un punto delante, separadas por aire, y se
+              leían como una nota al pie del formulario. Con contorno y fondo
+              propio se leen como tres piezas —tres cosas que el test cumple— y
+              eso es lo que son.
+
+              El texto sube de tinte terciario a secundario: no compiten con la
+              promesa, pero tampoco tienen que costar esfuerzo. */}
+          <ul className="mt-7 flex flex-wrap items-center justify-center gap-2.5 text-[0.8rem]">
+            {LANDING.señales.map((señal, i) => (
+              <li
+                key={señal}
+                className="flex items-center gap-2 rounded-full border border-[var(--dg-borde)] bg-[var(--dg-fondo-alto)] px-3.5 py-1.5 text-[var(--dg-texto-suave)]"
+              >
+                {/* LOS TRES PUNTOS NO LATEN A LA VEZ: cada uno arranca con un
+                    tercio de ciclo de retraso. Sincronizados se leerían como un
+                    parpadeo —o peor, como un aviso—; desfasados se leen como
+                    que algo está encendido y funcionando, que es justo lo que
+                    las tres frases afirman.
+
+                    El retardo va en estilo en línea porque Tailwind no genera
+                    clases con un valor calculado en ejecución: se escribiría en
+                    el HTML sin producir ninguna regla. */}
+                {/* El retardo es un tercio del ciclo de .dg-chispa, que dura
+                    5 s. Si allí cambia la duración, este número cambia con
+                    ella o los tres puntos acaban latiendo juntos. */}
                 <span
                   aria-hidden
-                  className="size-1.5 rounded-full bg-[var(--dg-acento)]"
+                  style={{ animationDelay: `${i * 1.67}s` }}
+                  className="dg-chispa size-1.5 shrink-0 rounded-full bg-[var(--dg-acento)]"
                 />
                 {señal}
               </li>

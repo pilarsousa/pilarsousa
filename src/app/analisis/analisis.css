@@ -583,9 +583,18 @@
 
   ── LA PAUSA ES LA MITAD DEL EFECTO ──
 
-  La luz cruza durante el primer 45% del ciclo y el resto lo pasa FUERA del
-  texto. Un barrido continuo se convierte en un parpadeo permanente al lado de
-  algo que hay que leer; con la pausa se percibe como un destello ocasional.
+  El ciclo dura 8 s y se reparte así: la luz cruza durante el primer 35% —unos
+  2,8 s, despacio, para que se lea como una luz que pasa y no como un
+  parpadeo— y los 5,2 s restantes los pasa FUERA del texto.
+
+  Esos cinco segundos de silencio son lo que hace que el efecto se note cuando
+  ocurre. Un barrido continuo se convierte en ruido de fondo al lado de algo
+  que hay que leer, y deja de señalar nada.
+
+  ⚠️ SI SE CAMBIA LA DURACIÓN, HAY QUE MOVER TAMBIÉN EL 35%: los dos números
+  van juntos. La parada define qué fracción del ciclo se dedica al recorrido, y
+  el resto es la espera — subir sólo la duración haría el barrido más lento y
+  la pausa más larga a la vez, en la misma proporción.
 
   Las paradas fuera del rango 0–100% no son un error: con un fondo de 220% del
   ancho, mandar la posición a 200% o a -60% es lo que deja la banda clara
@@ -595,7 +604,7 @@
   0% {
     background-position: 200% center;
   }
-  45%,
+  35%,
   100% {
     background-position: -60% center;
   }
@@ -614,7 +623,41 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: dg-luz-texto 5s ease-in-out infinite;
+  animation: dg-luz-texto 8s ease-in-out infinite;
+}
+
+/*
+  LA CHISPA — el punto de cada señal, encendiéndose y apagándose.
+
+  Va en los tres distintivos de debajo del formulario ("7 preguntas", "Menos de
+  60 segundos", "Resultado al instante"). Es el efecto más pequeño de la
+  página, y tiene que serlo: son tres piezas de apoyo, no la promesa.
+
+  ── EL DESFASE ES LO QUE LO HACE FUNCIONAR ──
+
+  Los tres puntos NO laten a la vez: cada uno arranca con un tercio de ciclo de
+  retraso respecto del anterior (el retardo lo pone el componente). Tres luces
+  sincronizadas se leen como un parpadeo —o peor, como un aviso de error—;
+  desfasadas se leen como que algo está encendido y funcionando, que es
+  exactamente lo que las tres frases afirman.
+
+  Se anima la opacidad y un halo, nunca el tamaño: un punto que crece y encoge
+  empujaría el texto de al lado en cada ciclo.
+*/
+@keyframes dg-chispa {
+  0%,
+  100% {
+    opacity: 0.5;
+    box-shadow: 0 0 0 0 rgba(163, 202, 35, 0);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 9px 1px rgba(163, 202, 35, 0.55);
+  }
+}
+
+.dg-chispa {
+  animation: dg-chispa 5s ease-in-out infinite;
 }
 
 /*
@@ -639,7 +682,7 @@
 }
 
 .dg-latido {
-  animation: dg-latido 3.4s ease-in-out infinite;
+  animation: dg-latido 5.4s ease-in-out infinite;
 }
 
 /*
@@ -681,7 +724,7 @@
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  animation: dg-pulso 2.8s ease-out infinite;
+  animation: dg-pulso 4.4s ease-out infinite;
 }
 
 /*
@@ -796,7 +839,8 @@
     background-image: none;
     color: var(--dg-acento-vivo);
   }
-  .dg-latido {
+  .dg-latido,
+  .dg-chispa {
     animation: none;
   }
   .dg-pulso::after {

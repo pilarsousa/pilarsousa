@@ -284,7 +284,12 @@ export function FormularioContacto({
               Van con aria-hidden y el estado real lo dice el texto de al lado:
               para un lector de pantalla, tres rayas de colores no son
               información. */}
-            <div className="mt-6 flex items-center gap-2.5">
+            {/* CENTRADOS, aunque el resto de la columna vaya alineado a la
+              izquierda. No es una incoherencia: los puntos no forman parte de
+              la conversación —no se leen con la pregunta ni con el campo—, son
+              el pie de la tarjeta. Pegados al margen izquierdo quedaban
+              colgando del botón; centrados cierran el bloque. */}
+          <div className="mt-6 flex items-center justify-center gap-2.5">
               <span aria-hidden className="flex items-center gap-1.5">
                 {FORMULARIO.pasos.map((p, i) => (
                   <span
