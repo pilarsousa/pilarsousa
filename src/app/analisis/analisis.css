@@ -696,9 +696,14 @@
 
   ── DOS TIEMPOS, NO UNO ──
 
-  Primero aterriza el disco —entra pequeño, se pasa un poco de tamaño y vuelve—
-  y 340 ms después empieza a trazarse el tilde dentro. En el mismo instante los
-  dos se pisarían: el trazo quedaría escondido tras el rebote del disco.
+  Primero aterriza el disco —entra pequeño, se pasa un poco de tamaño y vuelve,
+  en 800 ms— y a los 620 empieza a trazarse el tilde dentro, durante otros 900.
+  Metro y medio de segundo en total.
+
+  El retardo NO es la duración del disco: arranca cuando éste ya ha pasado su
+  rebote (al 60% del recorrido) y sólo le queda asentarse. Esperar a que
+  termine del todo dejaría un hueco en el que no pasa nada; empezar a la vez
+  escondería el trazo tras el rebote.
 
   ── CÓMO SE DIBUJA UNA LÍNEA ──
 
@@ -738,13 +743,13 @@
 }
 
 .dg-check {
-  animation: dg-check-disco 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: dg-check-disco 800ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .dg-check svg path {
   stroke-dasharray: 24;
   stroke-dashoffset: 24;
-  animation: dg-check-trazo 480ms cubic-bezier(0.65, 0, 0.35, 1) 340ms both;
+  animation: dg-check-trazo 900ms cubic-bezier(0.65, 0, 0.35, 1) 620ms both;
 }
 
 /*
