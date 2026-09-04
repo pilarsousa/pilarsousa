@@ -560,9 +560,13 @@ export const RESULTADO = {
     "Si querés seguir contenido como este y estar cerca de la comunidad, unite al grupo de WhatsApp de Origen.",
   comunidadCta: "Entrar a la comunidad",
 
-  /* ⚠️ PENDIENTE: el enlace real del grupo. Vacío deja el botón desactivado,
-     que es preferible a mandar a un enlace roto justo tras convertir. */
-  whatsappUrl: "",
+  /* EL MISMO GRUPO que usan las páginas de gracias de /volver-al-origen y
+     /lista-de-espera. Es una sola comunidad: un enlace distinto por embudo
+     repartiría a la misma gente en salas separadas.
+
+     Si algún día se vacía, el botón se dibuja desactivado en vez de mandar a
+     un enlace roto justo después de convertir. */
+  whatsappUrl: "https://chat.whatsapp.com/HMR8VTK4wFVHczUuCKc24u",
 
   /* ⚠️ SIN DECIDIR (documento, sección 8): si va o no un botón directo al mail.
      En false no se muestra. Al ponerlo en true aparece, sin tocar el montaje. */

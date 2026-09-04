@@ -288,11 +288,15 @@ export function VistaResultado() {
             )}
           </div>
 
-          {!hayWhatsapp && (
-            <p className="mt-3 text-[0.75rem] text-[var(--dg-texto-tenue)]">
-              Enlace del grupo pendiente de configurar.
-            </p>
-          )}
+          {/* ⚠️ AQUÍ HABÍA UN AVISO —"Enlace del grupo pendiente de
+              configurar"— y se retiró. Era una nota para nosotros que se
+              colaba en la pantalla del visitante: no le dice nada que pueda
+              hacer, y encima aparecía justo en el momento de más confianza,
+              después de convertir.
+
+              El botón desactivado sí se queda: si algún día se vacía el
+              enlace, es mejor un botón que no lleva a ningún sitio que uno que
+              lleva a un enlace roto. Que esté apagado ya lo cuenta todo. */}
         </section>
       </div>
     </div>

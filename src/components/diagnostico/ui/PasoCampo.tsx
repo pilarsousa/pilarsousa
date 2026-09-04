@@ -2,6 +2,11 @@
 
 import { useEffect, useRef } from "react";
 import { ArrowLeft, ArrowRight, Mail, User } from "lucide-react";
+import PhoneInput, { type Country } from "react-phone-number-input";
+import flags from "react-phone-number-input/flags";
+import "react-phone-number-input/style.css";
+import { cn } from "@/lib/cn";
+import { useVisitorCountry } from "@/lib/useVisitorCountry";
 import { BotonDg } from "@/components/diagnostico/ui/BotonDg";
 import { WhatsAppIcon } from "@/components/lista-de-espera/ui/WhatsAppIcon";
 
@@ -97,14 +102,37 @@ export function PasoCampo({
 }) {
   const ref = useRef<HTMLInputElement>(null);
   const Icono = ICONOS[icono];
+  /* País para preseleccionar el prefijo. Se pide a /api/geo al montar, con
+     España como respaldo mientras llega — el mismo enganche que usan los
+     formularios de las otras landings, así que la respuesta ya suele estar en
+     caché de sesión. */
+  const paisPorDefecto = useVisitorCountry();
+  const esTelefono = tipo === "tel";
 
   useEffect(() => {
     if (!enfocarAlMontar) return;
-    /* preventScroll: en móvil, enfocar un campo desplaza la página para
-       dejarlo sobre el teclado. Como aquí el campo ya está donde tiene que
-       estar, ese desplazamiento sólo produce un salto. */
+
+    /*
+      EL TELÉFONO SE ENFOCA POR ID Y NO POR REF, y no es un rodeo: el `ref` de
+      PhoneInput apunta a la INSTANCIA del componente de la librería, no al
+      <input> de dentro, así que no se le puede pedir un `focus` con opciones.
+      La librería sí pasa el `id` al input real, de modo que buscarlo por ahí
+      da el elemento de verdad.
+
+      preventScroll: en móvil, enfocar un campo desplaza la página para dejarlo
+      sobre el teclado. Como aquí el campo ya está donde tiene que estar, ese
+      desplazamiento sólo produce un salto.
+    */
+    if (esTelefono) {
+      const elemento = document.getElementById(campo);
+      if (elemento instanceof HTMLInputElement) {
+        elemento.focus({ preventScroll: true });
+      }
+      return;
+    }
+
     ref.current?.focus({ preventScroll: true });
-  }, [campo, enfocarAlMontar]);
+  }, [campo, enfocarAlMontar, esTelefono]);
 
   const idError = `${campo}-error`;
 
@@ -166,29 +194,69 @@ export function PasoCampo({
           pointer-events-none: está encima del campo, y sin esto un clic sobre
           el icono no llegaría al input y no enfocaría nada. */}
       <div className="relative mt-5">
-        <span
-          aria-hidden
-          className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-[var(--dg-texto-tenue)]"
-        >
-          <Icono className="size-[1.05rem]" />
-        </span>
-        <input
-          ref={ref}
-          id={campo}
-          name={campo}
-          type={tipo}
-          inputMode={inputMode}
-          autoComplete={autoComplete}
-          placeholder={placeholder}
-          value={valor}
-          onChange={(e) => onCambio(e.target.value)}
-          /* aria-invalid y aria-describedby son lo que hace que el error se
-             anuncie: sin ellos el mensaje está en pantalla pero un lector de
-             pantalla no lo asocia al campo y lo lee como texto suelto. */
-          aria-invalid={error ? true : undefined}
-          aria-describedby={error ? idError : undefined}
-          className="w-full rounded-xl border border-[var(--dg-borde)] bg-[var(--dg-superficie)] py-3.5 pr-4 pl-11 text-[1rem] text-[var(--dg-texto)] placeholder:text-[var(--dg-texto-tenue)] focus:border-[var(--dg-borde-vivo)] focus:outline-none aria-[invalid]:border-[#c2603f]"
-        />
+        {esTelefono ? (
+          /* ── EL TELÉFONO LLEVA SELECTOR DE PREFIJO ──
+
+             Es el mismo campo que usan los formularios de las otras landings
+             del proyecto. El selector inyecta el prefijo internacional y lo
+             mantiene separado del número, así que el valor sale siempre en
+             E.164 (+34600111222) y llega al CRM en el formato que espera —
+             sin que nadie tenga que acordarse de escribir el prefijo.
+
+             `countryCallingCodeEditable={false}` impide teclear encima del
+             prefijo: se cambia eligiendo país, que es lo que evita un "+3"
+             suelto por haber borrado un dígito sin querer.
+
+             AQUÍ NO VA EL ICONO del distintivo: la bandera ya ocupa ese sitio
+             y hace el mismo trabajo — decir de un vistazo qué se está
+             pidiendo. Dos símbolos seguidos en la misma esquina compiten.
+
+             El aspecto vive en .dg-phone (analisis.css): la librería trae una
+             hoja pensada para fondo claro y hay que repintarla entera. */
+          <PhoneInput
+            id={campo}
+            name={campo}
+            international
+            flags={flags}
+            countryCallingCodeEditable={false}
+            defaultCountry={paisPorDefecto as Country}
+            autoComplete={autoComplete}
+            placeholder={placeholder}
+            value={valor}
+            /* PhoneInput emite undefined con el campo vacío; se normaliza a ""
+               para que el estado sea siempre una cadena. */
+            onChange={(v) => onCambio(v ?? "")}
+            aria-invalid={error ? true : undefined}
+            aria-describedby={error ? idError : undefined}
+            className={cn("dg-phone", error && "dg-phone--error")}
+          />
+        ) : (
+          <>
+            <span
+              aria-hidden
+              className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-[var(--dg-texto-tenue)]"
+            >
+              <Icono className="size-[1.05rem]" />
+            </span>
+            <input
+              ref={ref}
+              id={campo}
+              name={campo}
+              type={tipo}
+              inputMode={inputMode}
+              autoComplete={autoComplete}
+              placeholder={placeholder}
+              value={valor}
+              onChange={(e) => onCambio(e.target.value)}
+              /* aria-invalid y aria-describedby son lo que hace que el error se
+                 anuncie: sin ellos el mensaje está en pantalla pero un lector
+                 de pantalla no lo asocia al campo y lo lee como texto suelto. */
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? idError : undefined}
+              className="w-full rounded-xl border border-[var(--dg-borde)] bg-[var(--dg-superficie)] py-3.5 pr-4 pl-11 text-[1rem] text-[var(--dg-texto)] placeholder:text-[var(--dg-texto-tenue)] focus:border-[var(--dg-borde-vivo)] focus:outline-none aria-[invalid]:border-[#c2603f]"
+            />
+          </>
+        )}
       </div>
 
       {/* role="alert" para que el error se lea en cuanto aparece, sin esperar a

@@ -93,6 +93,117 @@
 }
 
 /*
+  ═══════════════════════════════════════════════════════════════════════════
+  EL CAMPO DE TELÉFONO — react-phone-number-input repintado
+  ═══════════════════════════════════════════════════════════════════════════
+
+  La librería trae su propia hoja de estilos, pensada para fondo claro. Estas
+  reglas la sobrescriben para que el selector de país y el número compartan el
+  mismo tratamiento que los otros dos campos del formulario. Los selectores
+  imitan los nombres de clase que genera la librería.
+
+  Es el mismo planteamiento que .vo-phone y .mo-phone en globals.css, con esta
+  paleta. Se mantienen separados a propósito: compartir una sola clase
+  obligaría a parametrizar cada color y ataría el aspecto de tres landings que
+  van a evolucionar por su cuenta.
+
+  ⚠️ EL ALTO SE FIJA A MANO Y TIENE QUE COINCIDIR con el de los otros campos.
+  Aquéllos lo sacan de `py-3.5` más la altura de línea; aquí no se puede usar
+  relleno vertical porque el selector de país es un hijo que se estira, así que
+  se declara el resultado. Si cambia el relleno de los campos de texto, hay que
+  cambiar este número con él o el paso del teléfono dará un salto.
+*/
+.dg-phone {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 3.5rem;
+  border: 1px solid var(--dg-borde);
+  border-radius: 0.75rem;
+  background-color: var(--dg-superficie);
+  padding-inline: 0.9rem;
+  transition: border-color 200ms ease;
+}
+
+.dg-phone:focus-within {
+  border-color: var(--dg-borde-vivo);
+}
+
+.dg-phone--error {
+  border-color: #c2603f;
+}
+
+/* El campo del número: se le quita el cromado de la librería y hereda el
+   nuestro. `min-width: 0` es lo que le permite encogerse dentro del flex — sin
+   él, el ancho mínimo automático de un input desborda la tarjeta en un móvil
+   estrecho. */
+.dg-phone .PhoneInputInput {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-family: var(--dg-fuente-texto);
+  font-size: 1rem;
+  color: var(--dg-texto);
+  outline: none;
+}
+
+.dg-phone .PhoneInputInput::placeholder {
+  color: var(--dg-texto-tenue);
+}
+
+/* Selector de país y bandera, separados del número por una línea: son dos
+   controles distintos dentro de la misma caja y sin la línea se leen como uno
+   solo. */
+.dg-phone .PhoneInputCountry {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-right: 0.15rem;
+  padding-right: 0.65rem;
+  border-right: 1px solid var(--dg-borde);
+}
+
+.dg-phone .PhoneInputCountrySelect {
+  color: var(--dg-texto);
+  /* El <select> va superpuesto y transparente sobre la bandera, así que es lo
+     que recibe el puntero: sin esto, el área del país no señala que se
+     despliega. */
+  cursor: pointer;
+}
+
+/* El desplegable lo dibuja el sistema operativo, no la página, así que sus
+   opciones necesitan fondo explícito o heredan uno transparente y se leen
+   sobre lo que haya detrás. */
+.dg-phone .PhoneInputCountrySelect option {
+  background-color: var(--dg-fondo-alto);
+  color: var(--dg-texto);
+}
+
+.dg-phone .PhoneInputCountrySelectArrow {
+  color: var(--dg-acento);
+  opacity: 1;
+}
+
+/* La librería dimensiona la bandera en em; sobre este cuerpo queda diminuta,
+   así que se le da tamaño explícito. */
+.dg-phone .PhoneInputCountryIcon {
+  width: 1.6rem;
+  height: 1.1rem;
+  box-shadow: none;
+}
+
+.dg-phone .PhoneInputCountryIcon img,
+.dg-phone .PhoneInputCountryIcon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+/*
   LA IMAGEN DE CADA PREGUNTA SE DISUELVE POR ABAJO.
 
   ── POR QUÉ UNA MÁSCARA Y NO UN DEGRADADO ENCIMA ──

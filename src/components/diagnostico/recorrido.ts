@@ -26,6 +26,7 @@
   está respondida, es que toca la 3. Eso no se puede desincronizar de sí mismo.
 */
 
+import { isValidPhoneNumber } from "react-phone-number-input";
 import { FORMULARIO, PREGUNTAS } from "@/components/diagnostico/contenido";
 import type { DatosContacto } from "@/components/diagnostico/almacen";
 import type { Respuestas } from "@/components/diagnostico/puntaje";
@@ -35,7 +36,10 @@ import type { Respuestas } from "@/components/diagnostico/puntaje";
    navegador viven aquí y en ningún otro sitio. Si cambia una, tiene que
    cambiar la del endpoint. */
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-export const TEL_RE = /^\+?[\d\s()-]{7,}$/;
+/* ⚠️ EL TELÉFONO YA NO SE VALIDA CON UNA EXPRESIÓN REGULAR EN EL NAVEGADOR.
+   Se usa `isValidPhoneNumber` (ver más abajo). El servidor SÍ conserva la
+   suya, porque allí no se puede dar por hecho que el valor venga del campo con
+   selector de país. */
 
 /**
  * Devuelve el mensaje de error de un campo, o null si es válido.
@@ -59,7 +63,17 @@ export function validarCampo(
     return null;
   }
   if (v === "") return "Necesito tu teléfono para avisarte por WhatsApp.";
-  if (!TEL_RE.test(v)) return "Revisá el teléfono: sólo números y el prefijo.";
+  /*
+    Se valida con la librería del selector de país, no con una regex.
+
+    Una expresión regular sólo puede comprobar que haya dígitos suficientes;
+    `isValidPhoneNumber` conoce la longitud y los prefijos reales de cada país,
+    así que rechaza un número con un dígito de más o de menos — que es el error
+    habitual, y el que deja al CRM con un teléfono al que nadie contesta.
+
+    El valor llega en E.164 (+34600111222) porque lo produce el propio campo.
+  */
+  if (!isValidPhoneNumber(v)) return "Revisá el número: parece incompleto.";
   return null;
 }
 
