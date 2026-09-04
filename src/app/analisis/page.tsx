@@ -233,27 +233,24 @@ export default function DiagnosticoPage() {
               El texto sube de tinte terciario a secundario: no compiten con la
               promesa, pero tampoco tienen que costar esfuerzo. */}
           <ul className="mt-7 flex flex-wrap items-center justify-center gap-2.5 text-[0.8rem]">
+            {/* CADA PÍLDORA CRECE MEDIO SEGUNDO DESPUÉS DE LA ANTERIOR, así que
+                el zoom recorre la fila como una ola en vez de latir todo el
+                bloque a la vez. El solape es deliberado: la segunda empieza
+                antes de que la primera haya vuelto, y sin él se leerían como
+                tres golpes sueltos.
+
+                El retardo va en estilo en línea porque Tailwind no genera
+                clases con un valor calculado en ejecución: se escribiría en el
+                HTML sin producir ninguna regla, y fallaría en silencio. */}
             {LANDING.señales.map((señal, i) => (
               <li
                 key={señal}
-                className="flex items-center gap-2 rounded-full border border-[var(--dg-borde)] bg-[var(--dg-fondo-alto)] px-3.5 py-1.5 text-[var(--dg-texto-suave)]"
+                style={{ animationDelay: `${i * 0.5}s` }}
+                className="dg-zoom flex items-center gap-2 rounded-full border border-[var(--dg-borde)] bg-[var(--dg-fondo-alto)] px-3.5 py-1.5 text-[var(--dg-texto-suave)]"
               >
-                {/* LOS TRES PUNTOS NO LATEN A LA VEZ: cada uno arranca con un
-                    tercio de ciclo de retraso. Sincronizados se leerían como un
-                    parpadeo —o peor, como un aviso—; desfasados se leen como
-                    que algo está encendido y funcionando, que es justo lo que
-                    las tres frases afirman.
-
-                    El retardo va en estilo en línea porque Tailwind no genera
-                    clases con un valor calculado en ejecución: se escribiría en
-                    el HTML sin producir ninguna regla. */}
-                {/* El retardo es un tercio del ciclo de .dg-chispa, que dura
-                    5 s. Si allí cambia la duración, este número cambia con
-                    ella o los tres puntos acaban latiendo juntos. */}
                 <span
                   aria-hidden
-                  style={{ animationDelay: `${i * 1.67}s` }}
-                  className="dg-chispa size-1.5 shrink-0 rounded-full bg-[var(--dg-acento)]"
+                  className="size-1.5 shrink-0 rounded-full bg-[var(--dg-acento)]"
                 />
                 {señal}
               </li>

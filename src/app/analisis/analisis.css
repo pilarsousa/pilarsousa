@@ -583,15 +583,19 @@
 
   ── LA PAUSA ES LA MITAD DEL EFECTO ──
 
-  El ciclo dura 8 s y se reparte así: la luz cruza durante el primer 35% —unos
-  2,8 s, despacio, para que se lea como una luz que pasa y no como un
-  parpadeo— y los 5,2 s restantes los pasa FUERA del texto.
+  El ciclo dura 10 s repartido a la mitad: la luz tarda 5 SEGUNDOS EN CRUZAR y
+  los otros 5 los pasa FUERA del texto.
+
+  El recorrido va en `linear` y no en `ease-in-out`. Con una curva suave la luz
+  acelera en el centro del texto —justo donde se está mirando— y el conjunto se
+  percibe rápido por mucho que el total sea largo. En lineal avanza al mismo
+  paso de principio a fin, que es lo que se lee como lento.
 
   Esos cinco segundos de silencio son lo que hace que el efecto se note cuando
   ocurre. Un barrido continuo se convierte en ruido de fondo al lado de algo
   que hay que leer, y deja de señalar nada.
 
-  ⚠️ SI SE CAMBIA LA DURACIÓN, HAY QUE MOVER TAMBIÉN EL 35%: los dos números
+  ⚠️ SI SE CAMBIA LA DURACIÓN, HAY QUE MOVER TAMBIÉN EL 50%: los dos números
   van juntos. La parada define qué fracción del ciclo se dedica al recorrido, y
   el resto es la espera — subir sólo la duración haría el barrido más lento y
   la pausa más larga a la vez, en la misma proporción.
@@ -604,7 +608,7 @@
   0% {
     background-position: 200% center;
   }
-  35%,
+  50%,
   100% {
     background-position: -60% center;
   }
@@ -623,41 +627,61 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: dg-luz-texto 8s ease-in-out infinite;
+  animation: dg-luz-texto 10s linear infinite;
 }
 
 /*
-  LA CHISPA — el punto de cada señal, encendiéndose y apagándose.
+  EL ZOOM DE LAS SEÑALES — las tres píldoras crecen por turnos.
 
   Va en los tres distintivos de debajo del formulario ("7 preguntas", "Menos de
-  60 segundos", "Resultado al instante"). Es el efecto más pequeño de la
-  página, y tiene que serlo: son tres piezas de apoyo, no la promesa.
+  60 segundos", "Resultado al instante"). Antes el punto de cada una se
+  encendía y apagaba, y se quedaba corto: sobre una píldora ya de por sí
+  pequeña, un halo de nueve píxeles no llega a llamar la atención de nadie.
 
-  ── EL DESFASE ES LO QUE LO HACE FUNCIONAR ──
+  ── SE ENCADENAN, NO SUENAN A LA VEZ ──
 
-  Los tres puntos NO laten a la vez: cada uno arranca con un tercio de ciclo de
-  retraso respecto del anterior (el retardo lo pone el componente). Tres luces
-  sincronizadas se leen como un parpadeo —o peor, como un aviso de error—;
-  desfasadas se leen como que algo está encendido y funcionando, que es
-  exactamente lo que las tres frases afirman.
+  Cada píldora arranca medio segundo después de la anterior (el retardo lo pone
+  el componente), así que el crecimiento recorre la fila de izquierda a derecha
+  como una ola. Las tres a la vez serían un parpadeo del bloque entero; en
+  cadena se lee como que las tres cosas se van confirmando una por una.
 
-  Se anima la opacidad y un halo, nunca el tamaño: un punto que crece y encoge
-  empujaría el texto de al lado en cada ciclo.
+  El solape es deliberado: la segunda empieza a crecer antes de que la primera
+  haya vuelto del todo. Sin solape se leerían como tres golpes sueltos.
+
+  ── ESCALA UN 6% Y NO MÁS ──
+
+  Es una fila de tres piezas pegadas: por encima de eso se pisan entre ellas y
+  el bloque parece temblar. El borde encendiéndose al mismo tiempo es lo que
+  hace visible un crecimiento tan pequeño.
+
+  ⚠️ EL BORDE HAY QUE DECLARARLO EN LOS TRES FOTOGRAMAS. Una animación que sólo
+  fija `border-color` en el pico se lo queda para todo el ciclo, así que los
+  extremos tienen que devolver el color de reposo explícitamente.
+
+  ── `transform` Y NO `width`/`padding` ──
+
+  Escalar no toca la disposición: la píldora crece sobre sí misma sin empujar a
+  las de al lado. Con relleno o ancho, cada crecimiento recolocaría la fila
+  entera y el texto bailaría.
 */
-@keyframes dg-chispa {
+@keyframes dg-zoom {
   0%,
   100% {
-    opacity: 0.5;
-    box-shadow: 0 0 0 0 rgba(163, 202, 35, 0);
+    transform: scale(1);
+    border-color: var(--dg-borde);
   }
-  50% {
-    opacity: 1;
-    box-shadow: 0 0 9px 1px rgba(163, 202, 35, 0.55);
+  9% {
+    transform: scale(1.06);
+    border-color: var(--dg-acento);
+  }
+  22% {
+    transform: scale(1);
+    border-color: var(--dg-borde);
   }
 }
 
-.dg-chispa {
-  animation: dg-chispa 5s ease-in-out infinite;
+.dg-zoom {
+  animation: dg-zoom 6s ease-in-out infinite;
 }
 
 /*
@@ -839,9 +863,13 @@
     background-image: none;
     color: var(--dg-acento-vivo);
   }
+  /* El zoom se anula devolviendo la escala: la animacion no usa `both`,
+     asi que sin ella la pildora se queda a su tamano normal — pero se declara
+     igual para que no dependa de ese detalle. */
   .dg-latido,
-  .dg-chispa {
+  .dg-zoom {
     animation: none;
+    transform: none;
   }
   .dg-pulso::after {
     display: none;
