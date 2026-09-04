@@ -1,0 +1,513 @@
+/*
+  ═══════════════════════════════════════════════════════════════════════════
+  TOKENS DEL DIAGNÓSTICO — /diagnostico
+  ═══════════════════════════════════════════════════════════════════════════
+
+  ⚠️ TODOS ESTOS VALORES SON PROVISIONALES. El branding nuevo de Pilar (logo y
+  colores) todavía no llegó; cuando llegue, se cambian los valores de este
+  bloque y la landing entera cambia con ellos. Ningún componente escribe un
+  color a mano.
+
+  ── POR QUÉ NO ESTÁ EN globals.css ──
+
+  Ahí viven los tokens compartidos por las seis landings del proyecto, en un
+  @theme global con un único :root. Meter aquí una paleta que sabemos que va a
+  cambiar entera obligaría a editar un archivo de dos mil líneas que comparten
+  todas las demás — con el riesgo de romper una landing en producción por un
+  cambio de esta.
+
+  Como archivo aparte, importado sólo desde el layout de /diagnostico, el
+  rediseño de marca es reemplazar este archivo y nada más.
+
+  Se declaran como variables CSS sobre .dg-scope y se usan desde las clases con
+  la sintaxis de valor arbitrario —bg-[var(--dg-fondo)]—, en vez de como @theme.
+  Es a propósito: @theme es global y estos nombres sólo tienen sentido dentro
+  de esta ruta.
+*/
+
+.dg-scope {
+  /* ── Superficies ── */
+  --dg-fondo: #080d04; /* fondo de la página */
+  --dg-fondo-alto: #0d1406; /* tarjetas, paneles */
+  --dg-superficie: #121b08; /* opciones de respuesta, campos */
+  --dg-superficie-viva: #1a2a0a; /* la misma, al pasar por encima */
+  --dg-borde: #2a3d13; /* contornos en reposo */
+  --dg-borde-vivo: #5c8419; /* contornos al enfocar o pasar */
+
+  /* ── Tinta ── */
+  --dg-texto: #f2efe4; /* texto principal */
+  --dg-texto-suave: #b6bda6; /* secundario, ayudas, notas */
+  --dg-texto-tenue: #7d876c; /* terciario, contadores */
+
+  /* ── Acento ── */
+  --dg-acento: #a3ca23;
+  --dg-acento-vivo: #d4ef7a;
+  --dg-acento-oscuro: #3d5410; /* texto sobre fondo de acento */
+
+  /* ── Tipografía ──
+     Se apoya en las familias que el layout raíz ya carga, así que esta ruta no
+     descarga ni una fuente más. Trajan sólo para titulares: no tiene caja baja
+     de verdad —sus minúsculas son versalitas— y no sirve para texto corrido ni
+     para campos de formulario. */
+  --dg-fuente-titulo: var(--font-trajan), var(--font-cinzel), Georgia, serif;
+  --dg-fuente-texto: var(--font-montserrat), var(--font-manrope), system-ui,
+    sans-serif;
+
+  background-color: var(--dg-fondo);
+  color: var(--dg-texto);
+  font-family: var(--dg-fuente-texto);
+}
+
+.dg-titulo {
+  font-family: var(--dg-fuente-titulo);
+}
+
+/*
+  EL ANILLO DE FOCO, DECLARADO UNA VEZ PARA TODA LA RUTA.
+
+  El diagnóstico se puede recorrer entero con el teclado —es un formulario de
+  once pasos— y sin un foco visible no hay forma de saber dónde estás. El del
+  navegador se pierde sobre un fondo casi negro, así que se sustituye por uno
+  en el color de acento.
+
+  :focus-visible y no :focus: así el anillo aparece al tabular pero no al
+  hacer clic con el ratón, que es el comportamiento que la gente espera.
+*/
+.dg-scope :focus-visible {
+  outline: 2px solid var(--dg-acento-vivo);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/*
+  LA BARRA DE PROGRESO SE ANIMA CON transform, NO CON width.
+
+  Animar `width` obliga al navegador a recalcular la disposición en cada
+  fotograma; `transform: scaleX()` sólo compone, y va a 60 fps hasta en un
+  teléfono viejo. La barra se dibuja al ancho completo y se encoge con la
+  escala, con el origen a la izquierda.
+*/
+.dg-progreso-relleno {
+  transform-origin: left center;
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/*
+  LA IMAGEN DE CADA PREGUNTA SE DISUELVE POR ABAJO.
+
+  ── POR QUÉ UNA MÁSCARA Y NO UN DEGRADADO ENCIMA ──
+
+  Lo obvio sería tapar la mitad inferior con un degradado del color del fondo.
+  Funciona sólo mientras el fondo sea ese color exacto: en cuanto la sección
+  cambie de tono —o llegue el branding nuevo de Pilar— quedaría una banda de
+  otro color flotando sobre la imagen, y es un fallo que no se ve hasta que
+  alguien cambia un token lejos de aquí.
+
+  `mask-image` no pinta nada: recorta la opacidad del propio elemento. La
+  imagen se vuelve transparente de verdad y deja ver lo que haya detrás, sea lo
+  que sea. Da igual el color del fondo hoy y el de dentro de un mes.
+
+  ── LOS TRAMOS ──
+
+  Opaca hasta el 45% —la mitad de arriba, donde va el enunciado, se ve entera—,
+  y a partir de ahí cae. El tramo intermedio al 30% alarga la caída para que no
+  se lea como una línea de corte: un degradado de dos paradas se percibe como
+  un borde difuso, y con tres se percibe como que la imagen se apaga.
+
+  ── EL PREFIJO ──
+
+  Safari soportó `-webkit-mask-image` durante años antes que la propiedad sin
+  prefijo. Van los dos, y el prefijado primero: si el navegador entiende el
+  estándar, la segunda declaración pisa a la primera.
+*/
+.dg-imagen-fundida {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 45%,
+    rgba(0, 0, 0, 0.3) 78%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 45%,
+    rgba(0, 0, 0, 0.3) 78%,
+    transparent 100%
+  );
+}
+
+/*
+  ═══════════════════════════════════════════════════════════════════════════
+  EL FILETE DE NEÓN QUE GIRA ALREDEDOR DE LA TARJETA
+  ═══════════════════════════════════════════════════════════════════════════
+
+  Es el mismo recurso que .le-borde-giro en /lista-de-espera, con la paleta de
+  esta ruta. Se rehace aquí en vez de reutilizar aquél porque sus colores están
+  escritos a mano en el gradiente y son los de la otra landing: importarlo
+  traería su verde, no el nuestro.
+
+  ── POR QUÉ NO ES UN `border` ──
+
+  Un borde no puede llevar degradado. `border-image` sí, pero IGNORA el
+  redondeo de las esquinas: dejaría el filete en ángulo recto alrededor de una
+  tarjeta redondeada.
+
+  El montaje es un envoltorio con el degradado de fondo y 1 px de relleno, y
+  dentro la tarjeta con su propio fondo tapando el centro. Lo único que asoma
+  del degradado es ese milímetro del contorno.
+
+  ⚠️ EL RADIO DEL ENVOLTORIO TIENE QUE SER EL DEL INTERIOR MÁS 1 PX. Si son
+  iguales, la esquina exterior queda más cerrada que la interior y el filete se
+  ve más grueso en las esquinas que en los lados.
+
+  ── HACE FALTA @property ──
+
+  Un ángulo declarado como variable suelta es, para el navegador, una cadena de
+  texto — y las cadenas no se interpolan: la animación saltaría de 0 a 360 de
+  golpe en vez de girar. Declarándolo como <angle> pasa a ser un valor animable.
+
+  ── DOS CLAROS OPUESTOS Y NO UNO ──
+
+  Con un solo destello, media vuelta de cada ciclo deja la tarjeta entera
+  apagada y el efecto se lee como intermitente en vez de como un recorrido.
+
+  Los arcos son cortos —unos 45°— para que se lean como una luz que recorre el
+  contorno y no como medio marco encendido.
+*/
+@property --dg-giro {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes dg-giro {
+  to {
+    --dg-giro: 360deg;
+  }
+}
+
+.dg-borde-giro {
+  background-image: conic-gradient(
+    from var(--dg-giro),
+    var(--dg-borde) 0deg,
+    var(--dg-acento-vivo) 20deg,
+    var(--dg-borde) 45deg,
+    var(--dg-borde) 180deg,
+    var(--dg-acento-vivo) 200deg,
+    var(--dg-borde) 225deg,
+    var(--dg-borde) 360deg
+  );
+  animation: dg-giro 7s linear infinite;
+}
+
+/* Sin movimiento, el filete se queda quieto con un claro arriba: el mismo
+   remate que tendría la tarjeta si nunca hubiera girado. No se acorta la
+   animación, se anula — es una preferencia del sistema, no una sugerencia. */
+@media (prefers-reduced-motion: reduce) {
+  .dg-borde-giro {
+    animation: none;
+    --dg-giro: 200deg;
+  }
+}
+
+/*
+  LA ILUSTRACIÓN DE CADA PASO DEL FORMULARIO.
+
+  Va a la DERECHA de la tarjeta, así que se disuelve hacia su borde IZQUIERDO:
+  entra desde la nada justo donde termina el campo de texto y va cogiendo
+  cuerpo hacia fuera. Es el espejo del hero, que hace lo contrario porque allí
+  la imagen está al otro lado.
+
+  En móvil no caben dos columnas: la ilustración se coloca arriba y el
+  contenido debajo, así que ahí la disolución vuelve a ser hacia abajo.
+
+  El tramo opaco empieza pronto (35%) porque esta imagen se recorta con
+  `object-cover` para llenar el alto de la tarjeta: queda mucho más estrecha
+  que su original y una caída lenta se comería la ilustración entera.
+*/
+.dg-imagen-formulario {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 46%,
+    rgba(0, 0, 0, 0.3) 80%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 46%,
+    rgba(0, 0, 0, 0.3) 80%,
+    transparent 100%
+  );
+}
+
+@media (min-width: 768px) {
+  .dg-imagen-formulario {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(0, 0, 0, 0.35) 18%,
+      #000 35%,
+      #000 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(0, 0, 0, 0.35) 18%,
+      #000 35%,
+      #000 100%
+    );
+  }
+}
+
+/*
+  LA IMAGEN DEL HERO SE DISUELVE, PERO NO SIEMPRE HACIA EL MISMO LADO.
+
+  En escritorio la imagen va a la izquierda y el titular arranca a la mitad de
+  ella, así que la disolución tiene que ir HACIA LA DERECHA: la mitad izquierda
+  se ve entera —la mujer, el arco, la montaña— y la derecha se apaga justo
+  donde empieza a leerse el texto.
+
+  En móvil no hay sitio para poner nada al lado, así que la imagen va arriba y
+  el texto debajo: ahí la disolución tiene que ir HACIA ABAJO, o el borde
+  inferior cortaría en seco contra el fondo.
+
+  ── LA CURVA ESTÁ CALCULADA CONTRA EL TEXTO, NO A OJO ──
+
+  El titular empieza al 50% del ancho de la imagen. Con estas paradas, en ese
+  punto exacto a la imagen le queda un 35% de opacidad: el mandala verde sigue
+  ahí como atmósfera —que es la única parte con interés visual de esa mitad—
+  pero ya no compite con la letra. A partir del 88% no queda nada.
+
+  Si algún día se mueve la columna de texto, hay que mover estas paradas con
+  ella: son las dos mitades de la misma decisión.
+
+  ── POR QUÉ UNA MÁSCARA Y NO UN DEGRADADO ENCIMA ──
+
+  Un degradado del color del fondo sólo funciona mientras el fondo sea ese
+  color exacto. `mask-image` no pinta nada: recorta la opacidad del propio
+  elemento, así que da igual lo que haya detrás hoy y dentro de un mes.
+*/
+.dg-hero-imagen {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 44%,
+    rgba(0, 0, 0, 0.3) 78%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 44%,
+    rgba(0, 0, 0, 0.3) 78%,
+    transparent 100%
+  );
+}
+
+@media (min-width: 768px) {
+  .dg-hero-imagen {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      #000 0%,
+      #000 26%,
+      rgba(0, 0, 0, 0.3) 52%,
+      transparent 88%
+    );
+    mask-image: linear-gradient(
+      to right,
+      #000 0%,
+      #000 26%,
+      rgba(0, 0, 0, 0.3) 52%,
+      transparent 88%
+    );
+  }
+}
+
+/*
+  LA ENTRADA DE CADA PASO. Un desplazamiento de 10 px y una opacidad, nada más.
+
+  El documento pide "sin microanimaciones todavía", y esto no lo contradice:
+  no es decoración, es lo que evita que once pantallas que se sustituyen en el
+  mismo sitio se lean como un parpadeo. Sin ella, el cambio de pregunta parece
+  un fallo de la página.
+*/
+@keyframes dg-entra {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.dg-entra {
+  animation: dg-entra 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/*
+  ═══════════════════════════════════════════════════════════════════════════
+  LA ENTRADA DE UNA PREGUNTA — tres tiempos, no uno
+  ═══════════════════════════════════════════════════════════════════════════
+
+  La pantalla no aparece de golpe: primero se asienta la ilustración, luego
+  sube el enunciado y después las cuatro respuestas una detrás de otra. Son
+  menos de nueve décimas en total, así que no se percibe como una espera sino
+  como que la escena se arma sola.
+
+  ── POR QUÉ ESCALONADO Y NO TODO A LA VEZ ──
+
+  Con todo entrando junto, el ojo no sabe dónde mirar y las cuatro respuestas
+  se leen como un bloque de texto. Entrando en cascada, la mirada las recorre
+  en orden — que es exactamente el orden en que hay que leerlas para elegir.
+
+  El retardo entre respuestas es corto (70 ms). Por encima de unos 120 se
+  empieza a percibir como que la página va lenta, y hay que repetirlo siete
+  veces seguidas.
+
+  ── EL RETARDO VA EN ESTILO EN LÍNEA, NO EN UNA CLASE ──
+
+  Tailwind no puede generar clases con un valor calculado en tiempo de
+  ejecución: `delay-[${i * 70}ms]` se escribe en el HTML pero NO produce
+  ninguna regla, y falla en silencio. El índice lo pone el componente como
+  `animationDelay`.
+*/
+@keyframes dg-sube {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.dg-sube {
+  /* `both` es imprescindible: sin él, el elemento se pinta VISIBLE durante su
+     retardo y luego salta a invisible para empezar a animar. Con `both` toma
+     el fotograma inicial desde el principio y el escalonado se ve limpio. */
+  animation: dg-sube 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/*
+  LA ILUSTRACIÓN SE ASIENTA en vez de aparecer: entra un 4,5% más grande y baja
+  a su tamaño. Es un gesto muy pequeño —35 px de recorrido en una imagen de
+  700— y justo por eso funciona: se percibe como que la escena se posa, no como
+  un zoom.
+
+  Dura más que el resto (760 ms) a propósito. Es el fondo sobre el que caen el
+  enunciado y las respuestas, y si terminara antes que ellas parecería que se
+  ha quedado esperando.
+*/
+@keyframes dg-asienta {
+  from {
+    opacity: 0;
+    transform: scale(1.045);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.dg-asienta {
+  animation: dg-asienta 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/*
+  EL HALO QUE RESPIRA detrás de la ilustración.
+
+  Es lo único que se mueve una vez que la pantalla ha terminado de entrar, y
+  está calibrado para que no se note mirándolo de frente: nueve segundos por
+  ciclo y un recorrido de opacidad de 0,3 a 0,55. Lo que se percibe no es el
+  halo cambiando sino que la escena está viva.
+
+  Va DETRÁS de la imagen y con mix-blend-screen, que no puede oscurecer: sobre
+  el negro del fondo suma verde y sobre la propia ilustración no hace nada. Así
+  no ensucia el dibujo por mucho que crezca.
+*/
+@keyframes dg-respira {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(1.02);
+  }
+}
+
+.dg-respira {
+  animation: dg-respira 9s ease-in-out infinite;
+}
+
+/*
+  EL BARRIDO DE LUZ AL PASAR POR ENCIMA DE UNA RESPUESTA.
+
+  Una banda diagonal muy tenue que cruza el botón. Es la recompensa a apuntar
+  con el ratón: dice "esto se puede pulsar" sin cambiar de color ni de tamaño,
+  que es lo que haría que las cuatro filas se movieran al recorrerlas.
+
+  El pseudoelemento arranca fuera por la izquierda y se va por la derecha. Al
+  retirar el cursor vuelve por donde vino, que es lo que hace la transición
+  inversa — y queda mejor que desaparecer de golpe.
+
+  `overflow: hidden` lo mantiene dentro del botón, y `pointer-events: none`
+  evita que la banda intercepte el clic.
+*/
+.dg-opcion {
+  position: relative;
+  overflow: hidden;
+}
+
+.dg-opcion::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 32%,
+    rgba(212, 239, 122, 0.14) 50%,
+    transparent 68%
+  );
+  transform: translateX(-100%);
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dg-opcion:hover::after {
+  transform: translateX(100%);
+}
+
+/* Quien pide menos movimiento no recibe ninguno. Las animaciones se anulan del
+   todo en vez de acortarse: es una preferencia del sistema operativo, no una
+   sugerencia.
+
+   Las de ENTRADA se anulan poniendo el estado final, no quitando la animación
+   a secas: `dg-sube` y `dg-asienta` usan `both`, así que sin animación el
+   elemento se quedaría congelado en su fotograma inicial — invisible. */
+@media (prefers-reduced-motion: reduce) {
+  .dg-entra,
+  .dg-sube,
+  .dg-asienta {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .dg-respira {
+    animation: none;
+    opacity: 0.42;
+  }
+  .dg-opcion::after {
+    display: none;
+  }
+  .dg-progreso-relleno {
+    transition: none;
+  }
+}
