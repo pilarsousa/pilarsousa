@@ -165,7 +165,12 @@ export default function DiagnosticoPage() {
                 arrastrar el ritmo de la frase. */}
             <h1 className="dg-titulo text-center text-[1.7rem] leading-[1.25] text-balance sm:text-[2.1rem] sm:leading-[1.2] md:text-left md:text-[2.5rem]">
               <span className="text-[var(--dg-texto)]">{LANDING.titulo}</span>{" "}
-              <span className="font-bold text-[var(--dg-acento-vivo)]">
+              {/* ⚠️ SIN CLASE DE COLOR, y no es un olvido: .dg-luz-texto pinta
+                  estas palabras con un degradado recortado a las letras y el
+                  color en transparente. Un `text-[...]` aquí ganaría en la
+                  hoja, devolvería el color plano y el barrido desaparecería —
+                  sin romper nada y sin que se entienda por qué. */}
+              <span className="dg-luz-texto font-bold">
                 {LANDING.tituloAcento}
               </span>{" "}
               <span className="text-[var(--dg-texto)]">

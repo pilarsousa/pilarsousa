@@ -194,7 +194,11 @@ export function VistaResultado() {
             única información que el visitante vino a buscar; todo lo demás
             —el tilde, el aviso del email, el grupo— existe alrededor de esta
             palabra. */}
-          <p className="dg-titulo mt-2 text-[2.6rem] leading-none font-bold text-[var(--dg-acento-vivo)] sm:text-[3.4rem]">
+          {/* ⚠️ SIN CLASE DE COLOR: .dg-luz-texto pinta la palabra con un
+              degradado recortado a las letras y el color en transparente. Un
+              `text-[...]` aquí ganaría en la hoja, devolvería el color plano y
+              el barrido desaparecería sin que se entienda por qué. */}
+          <p className="dg-titulo dg-luz-texto mt-2 text-[2.6rem] leading-none font-bold sm:text-[3.4rem]">
             {ficha.titulo}
           </p>
 
@@ -261,7 +265,10 @@ export function VistaResultado() {
 
         {/* ═════════ PASO 2 — la comunidad ═════════ */}
         <section className="mt-6 rounded-2xl border border-[var(--dg-acento)]/25 bg-[var(--dg-fondo-alto)] p-6 text-center sm:p-7">
-          <h2 className="dg-titulo text-[1.15rem] text-[var(--dg-texto)] sm:text-[1.3rem]">
+          {/* El latido y no el barrido: el nombre de la frecuencia está en
+              esta misma pantalla, y repetir el mismo recurso a dos palmos haría
+              que ninguno de los dos señalara nada. */}
+          <h2 className="dg-titulo dg-latido text-[1.15rem] text-[var(--dg-texto)] sm:text-[1.3rem]">
             {RESULTADO.comunidadTitulo}
           </h2>
           <p className="mx-auto mt-2.5 max-w-md text-[0.93rem] leading-relaxed text-[var(--dg-texto-suave)]">
@@ -272,7 +279,10 @@ export function VistaResultado() {
             {hayWhatsapp ? (
               <BotonDg
                 href={RESULTADO.whatsappUrl}
-                className="sm:min-w-[18rem]"
+                /* El pulso vive en un ::after del botón, no en su box-shadow:
+                   animar esa propiedad aquí sustituiría el brillo interior y la
+                   sombra que le dan cuerpo. Ver .dg-pulso. */
+                className="dg-pulso sm:min-w-[18rem]"
               >
                 <span className="inline-flex items-center justify-center gap-2.5">
                   <WhatsAppIcon className="size-5 shrink-0" />

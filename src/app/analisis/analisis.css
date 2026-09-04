@@ -560,6 +560,132 @@
 
 /*
   ═══════════════════════════════════════════════════════════════════════════
+  LA LUZ QUE RECORRE EL TEXTO
+  ═══════════════════════════════════════════════════════════════════════════
+
+  Un degradado con una banda clara en medio, recortado a la forma de las
+  letras, que se desplaza de derecha a izquierda. Se usa en las dos palabras
+  que sostienen el embudo entero: la promesa del titular y el nombre de la
+  frecuencia en los resultados.
+
+  ── CÓMO SE RECORTA A LAS LETRAS ──
+
+  `background-clip: text` mas `color: transparent`: el color del texto se
+  vuelve invisible y lo que se ve a través de él es el fondo. El prefijo
+  -webkit- va primero por Safari, que lo soportó años antes que la propiedad
+  sin prefijar.
+
+  ⚠️ ESO SIGNIFICA QUE EL TEXTO DEPENDE DEL FONDO PARA VERSE. Si alguien pone
+  un `text-[...]` de Tailwind sobre este mismo elemento y gana en la hoja, el
+  color deja de ser transparente y el barrido desaparece — sin romper nada,
+  que es lo peor: se queda un texto de color plano y nadie sabe por qué. Por
+  eso los elementos que llevan esta clase NO llevan clase de color.
+
+  ── LA PAUSA ES LA MITAD DEL EFECTO ──
+
+  La luz cruza durante el primer 45% del ciclo y el resto lo pasa FUERA del
+  texto. Un barrido continuo se convierte en un parpadeo permanente al lado de
+  algo que hay que leer; con la pausa se percibe como un destello ocasional.
+
+  Las paradas fuera del rango 0–100% no son un error: con un fondo de 220% del
+  ancho, mandar la posición a 200% o a -60% es lo que deja la banda clara
+  completamente fuera de la caja.
+*/
+@keyframes dg-luz-texto {
+  0% {
+    background-position: 200% center;
+  }
+  45%,
+  100% {
+    background-position: -60% center;
+  }
+}
+
+.dg-luz-texto {
+  background-image: linear-gradient(
+    100deg,
+    var(--dg-acento-vivo) 0%,
+    var(--dg-acento-vivo) 42%,
+    #ffffff 50%,
+    var(--dg-acento-vivo) 58%,
+    var(--dg-acento-vivo) 100%
+  );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: dg-luz-texto 5s ease-in-out infinite;
+}
+
+/*
+  EL LATIDO — un resplandor que crece y se apaga sobre el propio texto.
+
+  Va en "Un último paso", y es a propósito UN EFECTO DISTINTO del barrido: esa
+  línea y el nombre de la frecuencia están en la misma pantalla, y repetir el
+  mismo recurso a dos palmos haría que ninguno de los dos señalara nada.
+
+  Se hace con `text-shadow` y no con un fondo recortado porque aquí el texto
+  tiene que conservar su color: no es la palabra que se ha calculado, es el
+  rótulo que anuncia lo que falta por hacer.
+*/
+@keyframes dg-latido {
+  0%,
+  100% {
+    text-shadow: 0 0 0 rgba(163, 202, 35, 0);
+  }
+  50% {
+    text-shadow: 0 0 18px rgba(163, 202, 35, 0.6);
+  }
+}
+
+.dg-latido {
+  animation: dg-latido 3.4s ease-in-out infinite;
+}
+
+/*
+  EL PULSO DEL BOTÓN FINAL — un anillo que se expande y se desvanece.
+
+  ── VA EN UN ::after Y NO EN EL PROPIO BOTÓN ──
+
+  Y no es un rodeo. El botón ya tiene su `box-shadow` —el brillo interior y la
+  sombra proyectada que le dan cuerpo— y animar esa misma propiedad en el
+  elemento la sustituiría entera: el botón perdería su relieve durante toda la
+  animación. En un pseudoelemento, cada uno conserva la suya.
+
+  `border-radius: inherit` copia el redondeo del botón sin tener que repetirlo,
+  así que el anillo sigue su forma aunque el botón deje de ser una píldora.
+
+  El ciclo es largo (2,8 s) y la onda se apaga en el 70%: lo que queda es un
+  latido espaciado, no un parpadeo. Es el último botón del embudo y tiene que
+  llamar, pero quien ya decidió pulsarlo no debería sentirse apurado.
+*/
+@keyframes dg-pulso {
+  0% {
+    box-shadow: 0 0 0 0 rgba(163, 202, 35, 0.45);
+  }
+  70% {
+    box-shadow: 0 0 0 16px rgba(163, 202, 35, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(163, 202, 35, 0);
+  }
+}
+
+.dg-pulso {
+  position: relative;
+}
+
+.dg-pulso::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  animation: dg-pulso 2.8s ease-out infinite;
+}
+
+/*
+  ═══════════════════════════════════════════════════════════════════════════
   LAS BARRAS DE LA MEDICIÓN — se llenan como una carga
   ═══════════════════════════════════════════════════════════════════════════
 
@@ -660,6 +786,21 @@
   .dg-carga {
     animation: none;
     transform: none;
+  }
+  /* ⚠️ AQUÍ NO BASTA CON QUITAR LA ANIMACIÓN. El barrido pinta el texto con un
+     fondo recortado y `color: transparent`, así que sin animación el texto
+     seguiría siendo INVISIBLE. Hay que devolverle el color plano y retirar el
+     fondo: se pierde el efecto, que es lo pedido, pero no la palabra. */
+  .dg-luz-texto {
+    animation: none;
+    background-image: none;
+    color: var(--dg-acento-vivo);
+  }
+  .dg-latido {
+    animation: none;
+  }
+  .dg-pulso::after {
+    display: none;
   }
   .dg-opcion::after {
     display: none;
