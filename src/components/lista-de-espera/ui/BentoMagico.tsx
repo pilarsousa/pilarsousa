@@ -57,9 +57,22 @@ const PARTICULAS = 12;
 const RADIO_FOCO = 300;
 const MOVIL = 768;
 
-/* Verde de marca (#a3ca23) en componentes sueltos: entra en rgba() dentro de
-   plantillas, y ahí un hexadecimal no sirve. */
-const VERDE = "163, 202, 35";
+/*
+  Verde de marca (#a3ca23) en componentes sueltos: entra en rgba() dentro de
+  plantillas, y ahí un hexadecimal no sirve.
+
+  ── ES EL RESPALDO, NO EL ÚNICO VALOR ──
+
+  Los efectos leen `--le-bento-rgb` y sólo caen aquí si nadie la define. Eso
+  permite montar estas cards sobre otra paleta —la landing de /volver-al-origen
+  las usa sobre fondo claro, donde este lima desaparecería— sin duplicar las
+  casi 500 líneas de GSAP que hay debajo por un cambio de color.
+
+  ⚠️ LA VARIABLE LLEVA LOS TRES CANALES SUELTOS ("r, g, b") y no un color: se
+  interpola dentro de `rgba(…, 0.4)`, así que un `#a3ca23` o un `rgb(...)`
+  completo produciría CSS inválido y el efecto desaparecería sin avisar.
+*/
+const VERDE = "var(--le-bento-rgb, 163, 202, 35)";
 
 function crearParticula(x: number, y: number) {
   const el = document.createElement("div");

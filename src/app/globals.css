@@ -2815,10 +2815,21 @@ body {
   border-radius: inherit;
   pointer-events: none;
   z-index: 30;
+  /* ⚠️ EL COLOR SALE DE --le-bento-rgb, con el lima de siempre como respaldo.
+
+     Estaba escrito a mano dos veces aquí, y eso ataba estas cards al fondo
+     oscuro de /lista-de-espera: la sección de la historia en /volver-al-origen
+     las monta sobre crema, donde el lima desaparece. La variable la define cada
+     sección en su paleta y el respaldo mantiene el borrador exactamente igual.
+
+     La variable lleva los tres canales sueltos ("r, g, b") porque se interpola
+     dentro de rgba(): un color completo aquí produciría CSS inválido. */
   background: radial-gradient(
     var(--brillo-radio) circle at var(--brillo-x) var(--brillo-y),
-    rgba(163, 202, 35, calc(var(--brillo-fuerza) * 0.85)) 0%,
-    rgba(163, 202, 35, calc(var(--brillo-fuerza) * 0.4)) 30%,
+    rgba(var(--le-bento-rgb, 163, 202, 35), calc(var(--brillo-fuerza) * 0.85))
+      0%,
+    rgba(var(--le-bento-rgb, 163, 202, 35), calc(var(--brillo-fuerza) * 0.4))
+      30%,
     transparent 60%
   );
   -webkit-mask:
@@ -2837,9 +2848,11 @@ body {
    entonces las tres tendrían sombra a la vez y el efecto de proximidad se
    perdería. */
 .le-bento-card:hover {
+  /* El halo sigue a --le-bento-rgb por lo mismo que el borde; la sombra de
+     apoyo se queda en su verde oscuro, que funciona sobre los dos fondos. */
   box-shadow:
     0 4px 20px rgba(20, 40, 4, 0.45),
-    0 0 34px rgba(163, 202, 35, 0.22);
+    0 0 34px rgba(var(--le-bento-rgb, 163, 202, 35), 0.22);
 }
 
 /* La zona del grupo no debe poder seleccionarse: con el imantado y la

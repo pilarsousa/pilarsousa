@@ -2,7 +2,6 @@ import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
 import { ScrollIn } from "@/components/volver-al-origen/ui/ScrollIn";
 import { BenefitCard } from "@/components/volver-al-origen/ui/BenefitCard";
 import { SectionTitle } from "@/components/volver-al-origen/ui/SectionTitle";
-import { SparkDivider } from "@/components/volver-al-origen/ui/SparkDivider";
 import { WaitlistCta } from "@/components/volver-al-origen/ui/WaitlistCta";
 import { BENEFICIOS } from "@/components/volver-al-origen/content";
 
@@ -18,28 +17,23 @@ export function Beneficios() {
   return (
     <section
       aria-labelledby="beneficios-title"
-      /* Sin padding superior: todo el espacio de arriba lo gobierna el filete
-         con sus propios márgenes, para que los dos huecos que lo rodean se
-         puedan cuadrar exactamente. Si la sección aportara el suyo, el hueco
-         de arriba sería la suma de dos valores y el de abajo uno solo, y no
-         habría forma de igualarlos. */
-      className="bg-background pt-0 pb-[clamp(3.5rem,2rem+7vh,6rem)]"
+      /* ── AQUÍ IBA EL FILETE CON EL ✦, Y CON ÉL EL RELLENO SUPERIOR ──
+
+         El separador vivía dentro del contenedor y gobernaba todo el espacio
+         entre el hero y el título: la sección iba a `pt-0` y los huecos los
+         ponían sus dos márgenes (mt-8/lg:mt-4 arriba, mb-24 abajo).
+
+         Retirado el filete, ese espacio hay que devolverlo aquí o el título se
+         pega al hero. Los 128 px de `pt` son los que sumaban antes el margen
+         inferior del filete (96) y el suyo propio (32 en móvil, 16 en
+         escritorio) — así la distancia hasta el título no cambia.
+
+         ⚠️ EL HERO SIGUE APORTANDO SU PARTE por debajo del panel (64 px en
+         móvil, 80 en escritorio). Si se toca su relleno inferior, hay que
+         revisar este valor. */
+      className="bg-background pt-32 pb-[clamp(3.5rem,2rem+7vh,6rem)] lg:pt-28"
     >
       <VoContainer>
-        {/* Separador con el hero. Vive aquí y no en la página para que respete
-            el ancho de contenido (1140 px) en vez de cruzar la pantalla entera.
-
-            Los dos huecos que lo rodean miden 96 px EXACTOS, arriba y abajo.
-
-            El margen superior no es 96 porque el hero ya aporta su parte: deja
-            64 px por debajo del panel en móvil y 80 en escritorio. De ahí que
-            aquí se sumen los 32 y 16 que faltan en cada caso. Los de abajo sí
-            son los 96 completos, porque nada más los aporta.
-
-            Si se toca el padding inferior del hero, hay que recalcular estos
-            dos márgenes o la simetría se rompe. */}
-        <SparkDivider fade className="mt-8 mb-24 lg:mt-4" />
-
         <ScrollIn>
           <SectionTitle
             id="beneficios-title"
