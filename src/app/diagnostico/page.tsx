@@ -1,6 +1,7 @@
 import { ArranqueDiagnostico } from "@/components/diagnostico/ArranqueDiagnostico";
 import { MagicRings } from "@/components/diagnostico/ui/MagicRings";
 import { PruebaSocialDg } from "@/components/diagnostico/ui/PruebaSocialDg";
+import { ScrollSuave } from "@/components/diagnostico/ui/ScrollSuave";
 import { VistaPreviaVideo } from "@/components/diagnostico/ui/VistaPreviaVideo";
 import { LANDING } from "@/components/diagnostico/contenido";
 
@@ -60,6 +61,14 @@ export default function DiagnosticoPage() {
      serían dos hijos en la raíz, y un return devuelve una sola expresión. */
   return (
     <div className="dg-landing flex min-h-svh flex-col bg-[var(--dg-hero-fondo)]">
+      {/* EL SUAVIZADO DE SCROLL, sólo en esta pantalla.
+
+          Lenis se queda con el scroll de la ventana, así que montarlo en el
+          layout de la ruta se lo impondría también a /encuesta —once pantallas
+          cortas con foco automático en los campos, donde la inercia pelea con
+          ese foco— y a /resultado, que cabe casi entera. Aquí sí hay un
+          recorrido de arriba abajo. Ver ScrollSuave. */}
+      <ScrollSuave />
       {/* EL <main> NO LLEVA RELLENO LATERAL. Lo lleva cada bloque por su
           cuenta, porque el hero tiene que sangrar de canto a canto: una banda
           con fondo propio que no llegue a los bordes se lee como una tarjeta

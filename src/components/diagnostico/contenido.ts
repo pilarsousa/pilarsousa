@@ -17,6 +17,20 @@
      · El copy de la landing sigue siendo el primer borrador del documento.
      · Las descripciones de las frecuencias son de relleno: las escribe Pilar.
 
+  ── EL TRATAMIENTO ES TUTEO NEUTRO, NO VOSEO ──
+
+  "Descubre", "haz", "recibe" — nunca "descubrí", "hacé", "recibí". El público
+  es hispanohablante en general y no sólo argentino: el voseo lo entiende todo
+  el mundo, pero SUENA a español de un país concreto, y eso deja fuera a quien
+  no es de ahí justo en una página que le está hablando de lo que siente.
+
+  Las 7 preguntas del cliente y sus 28 respuestas YA venían en tuteo. El voseo
+  estaba sólo en lo que escribimos nosotros —landing, formulario, resultado—,
+  así que la página se leía con dos voces distintas según la pantalla.
+
+  ⚠️ AL AÑADIR O EDITAR CUALQUIER TEXTO DE AQUÍ, mantener el tuteo. Es el error
+  fácil de cometer si quien escribe es rioplatense.
+
   ── LA REGLA QUE NO SE PUEDE ROMPER ──
 
   CADA PREGUNTA TIENE QUE OFRECER LAS CUATRO FRECUENCIAS, UNA POR OPCIÓN.
@@ -87,21 +101,21 @@ export const FICHA_FRECUENCIA: Record<
 > = {
   culpa: {
     titulo: "Culpa",
-    resumen: "Vivís pagando una deuda que nadie te reclamó.",
+    resumen: "Vives pagando una deuda que nadie te reclamó.",
     descripcion:
-      "Tu energía se va en compensar: en merecer lo que ya tenés, en no ocupar demasiado espacio, en asegurarte de que nadie salga perdiendo por tu culpa. El problema no es que te importe el otro, es que te importa antes que vos.",
+      "Tu energía se va en compensar: en merecer lo que ya tienes, en no ocupar demasiado espacio, en asegurarte de que nadie salga perdiendo por tu culpa. El problema no es que te importe el otro, es que te importa antes que tú.",
   },
   apatia: {
     titulo: "Apatía",
-    resumen: "No es que no puedas. Es que hace rato que no te mueve nada.",
+    resumen: "No es que no puedas. Es que hace tiempo que no te mueve nada.",
     descripcion:
-      "Desde afuera parece calma, y por dentro es otra cosa: da igual lo que pase, no termina de llegarte. Es la frecuencia más difícil de detectar porque no duele — y por eso es la que más tiempo se lleva.",
+      "Desde fuera parece calma, y por dentro es otra cosa: da igual lo que pase, no termina de llegarte. Es la frecuencia más difícil de detectar porque no duele — y por eso es la que más tiempo se lleva.",
   },
   verguenza: {
     titulo: "Vergüenza",
-    resumen: "El problema no es lo que hacés. Es que te vean haciéndolo.",
+    resumen: "El problema no es lo que haces. Es que te vean haciéndolo.",
     descripcion:
-      "Medís cada cosa por cómo va a quedar, y esa medición te llega antes que el deseo. No te frena la falta de capacidad: te frena la posibilidad de quedar expuesta haciendo el intento.",
+      "Mides cada cosa por cómo va a quedar, y esa medición te llega antes que el deseo. No te frena la falta de capacidad: te frena la posibilidad de quedar expuesta haciendo el intento.",
   },
   miedo: {
     titulo: "Miedo",
@@ -384,14 +398,14 @@ export const LANDING = {
      frecuencia y cambiarla— y leerlos seguidos era oír la promesa dos veces
      antes de que la página hubiera dicho nada. Al pie cierra en vez de
      adelantar, que es lo que hace un eslogan. */
-  tagline: "Encontrá tu frecuencia. Cambiá tu realidad.",
+  tagline: "Encuentra tu frecuencia. Cambia tu realidad.",
 
-  titulo: "Descubrí en menos de 60 segundos",
+  titulo: "Descubre en menos de 60 segundos",
   tituloAcento: "qué frecuencia te está frenando",
   tituloCierre: "y el primer paso para cambiarla.",
 
   subtitulo:
-    "Hacé el diagnóstico gratuito y recibí un video personalizado de Pilar con la solución exacta para elevar tu frecuencia y empezar a manifestar la vida que querés.",
+    "Haz el diagnóstico gratuito y recibe un video personalizado de Pilar con la solución exacta para elevar tu frecuencia y empezar a manifestar la vida que quieres.",
 
   /* LA FILA DE AVATARES DEL HERO.
 
@@ -418,7 +432,7 @@ export const LANDING = {
      en vez de dejar el círculo vacío. Y con `texto` en blanco desaparece el
      bloque entero — media pieza dice menos que ninguna. */
   pruebaSocial: {
-    texto: "Sumate y descubrí tu frecuencia como ellos",
+    texto: "Súmate y descubre tu frecuencia como ellos",
     avatares: [
       "/Testimonios/cards-test/card-1.png",
       "/Testimonios/cards-test/card-2.png",
@@ -468,11 +482,11 @@ export const LANDING = {
      nada: el video se desbloquea completando el diagnóstico. */
   regaloTitulo: "Lo que vas a recibir",
   regaloTexto:
-    "Un video de Pilar grabado para tu frecuencia dominante, con el primer movimiento concreto para salir de ahí. Te llega al email apenas termines el diagnóstico.",
+    "Un video de Pilar grabado para tu frecuencia dominante, con el primer movimiento concreto para salir de ese estado. Te llega al email apenas termines el diagnóstico.",
   regaloPuntos: [
     "Lectura de tu frecuencia dominante",
-    "Primer movimiento concreto para salir de ahí",
-    "Enviado apenas terminás el diagnóstico",
+    "Primer movimiento concreto para salir de ese estado",
+    "Enviado apenas termines el diagnóstico",
   ],
   regaloImagen: "/diagnostico/contenido/main/prevew-video.png",
   regaloImagenAlt: "Pilar Sousa hablando a cámara en el video del diagnóstico",
@@ -505,6 +519,95 @@ export const LANDING = {
 
    Va ANTES del test, como pide el documento: es la estructura de Hormozi, que
    captura primero y entrega después. */
+
+/*
+  ⚠️ EL TIPO SE DECLARA A MANO, Y NO ES UN ADORNO.
+
+  Sin él, TypeScript infiere la forma de cada paso a partir de lo que hay
+  escrito, y `ayuda` —que hoy no usa ninguno— simplemente deja de existir en el
+  tipo. FormularioContacto la lee para pasársela a PasoCampo, así que el
+  proyecto dejaba de compilar en cuanto se retiró de los tres pasos.
+
+  Declarándolo, el campo existe como OPCIONAL aunque nadie lo rellene: se puede
+  vaciar y volver a poner sin tocar ningún componente, que es justo lo que se
+  espera de un archivo de contenido.
+*/
+export type PasoFormulario = {
+  campo: "nombre" | "email" | "telefono";
+  imagen: string;
+  icono: "usuario" | "correo" | "whatsapp";
+  distintivo: string;
+  etiqueta: string;
+  /* Renglón bajo el titular. Opcional: hoy no lo lleva ninguno. */
+  ayuda?: string;
+  placeholder: string;
+  tipo: string;
+  autoComplete: string;
+  inputMode: "text" | "email" | "tel";
+};
+
+/* Los tres pasos, en su propia constante y CON EL TIPO ANOTADO.
+
+   Vivían en línea dentro de FORMULARIO, y ahí TypeScript infería su forma a
+   partir de lo escrito: al retirar `ayuda` de los tres, el campo desaparecía
+   del tipo y FormularioContacto —que lo lee para pasárselo a PasoCampo— dejaba
+   de compilar.
+
+   Con la anotación, `ayuda` existe como opcional aunque hoy no lo use ninguno:
+   se puede vaciar y volver a poner sin tocar ningún componente, que es lo que
+   se espera de un archivo de contenido. Y de paso, un dedazo en `icono` o en
+   `inputMode` lo caza el compilador en vez de fallar en pantalla.
+
+   ⚠️ `satisfies` NO sirve aquí: valida, pero conserva el tipo inferido, así que
+   `ayuda` seguiría sin existir. Tiene que ser una anotación. */
+const PASOS_FORMULARIO: PasoFormulario[] = [
+  {
+    campo: "nombre",
+    imagen: "/diagnostico/contenido/preguntas/primeras/nombre.png",
+    icono: "usuario",
+    distintivo: "Empieza tu diagnóstico",
+    etiqueta: "¿Cómo te llamas?",
+    /* ⚠️ NINGUNO DE LOS TRES PASOS LLEVA AYUDA, Y ES DELIBERADO.
+
+         Los tres renglones que había —"Tu nombre, para que el video vaya
+         dirigido a ti", "Ahí te llega el video", "Te avisaremos por
+         WhatsApp"— se retiraron: cada uno explicaba algo que el distintivo de
+         arriba ya dice con menos palabras ("Te llega por mail", "Aviso por
+         WhatsApp"), y decirlo dos veces en la misma pantalla alarga el paso
+         justo donde hay que ir rápido.
+
+         `ayuda` sigue siendo un campo válido y opcional en PasoCampo: si algún
+         paso futuro necesita aclarar algo de verdad, se rellena y aparece. Sin
+         él no queda hueco, porque el párrafo no se pinta. */
+    placeholder: "Escribe tu nombre",
+    tipo: "text",
+    autoComplete: "given-name",
+    inputMode: "text",
+  },
+  {
+    campo: "email",
+    imagen: "/diagnostico/contenido/preguntas/primeras/email.png",
+    icono: "correo",
+    distintivo: "Te llega por mail",
+    etiqueta: "¿A qué email te lo envío?",
+    placeholder: "Escribe tu email",
+    tipo: "email",
+    autoComplete: "email",
+    inputMode: "email",
+  },
+  {
+    campo: "telefono",
+    imagen: "/diagnostico/contenido/preguntas/primeras/telefono.png",
+    icono: "whatsapp",
+    distintivo: "Aviso por WhatsApp",
+    etiqueta: "¿Y tu teléfono?",
+    placeholder: "Escribe tu número",
+    tipo: "tel",
+    autoComplete: "tel",
+    inputMode: "tel",
+  },
+];
+
 export const FORMULARIO = {
   /*
     ── LA TARJETA ES UNA COLUMNA, Y EN MÓVIL LLEVA ILUSTRACIÓN ──
@@ -531,53 +634,7 @@ export const FORMULARIO = {
     `icono` es un NOMBRE y no un componente: este archivo es contenido y no
     debe importar React. PasoCampo traduce el nombre al glifo.
   */
-  pasos: [
-    {
-      campo: "nombre" as const,
-      imagen: "/diagnostico/contenido/preguntas/primeras/nombre.png",
-      icono: "usuario" as const,
-      distintivo: "Empezá tu diagnóstico",
-      etiqueta: "¿Cómo te llamás?",
-      /* ⚠️ SIN AYUDA, Y ES DELIBERADO. Decía "Tu nombre, para que el video vaya
-         dirigido a vos" y se retiró: es el primer campo que ve el visitante y
-         "¿Cómo te llamás?" no necesita que nadie lo explique. El renglón sólo
-         metía texto entre el titular y el campo.
-
-         Los otros dos pasos sí la conservan porque ahí sí hay algo que decir:
-         dónde llega el video, y para qué se pide el teléfono.
-
-         El campo es opcional en PasoCampo, así que quitarlo no deja hueco: el
-         párrafo no se pinta. */
-      placeholder: "Escribí tu nombre",
-      tipo: "text",
-      autoComplete: "given-name",
-      inputMode: "text" as const,
-    },
-    {
-      campo: "email" as const,
-      imagen: "/diagnostico/contenido/preguntas/primeras/email.png",
-      icono: "correo" as const,
-      distintivo: "Te llega por mail",
-      etiqueta: "¿A qué email te lo envío?",
-      ayuda: "Ahí te llega el video. Revisá que esté bien escrito.",
-      placeholder: "Escribí tu email",
-      tipo: "email",
-      autoComplete: "email",
-      inputMode: "email" as const,
-    },
-    {
-      campo: "telefono" as const,
-      imagen: "/diagnostico/contenido/preguntas/primeras/telefono.png",
-      icono: "whatsapp" as const,
-      distintivo: "Aviso por WhatsApp",
-      etiqueta: "¿Y tu teléfono?",
-      ayuda: "Te avisaremos por WhatsApp cuando abra la comunidad.",
-      placeholder: "Escribí tu número",
-      tipo: "tel",
-      autoComplete: "tel",
-      inputMode: "tel" as const,
-    },
-  ],
+  pasos: PASOS_FORMULARIO,
   siguiente: "Continuar",
   empezar: "Empezar el diagnóstico",
 
@@ -603,7 +660,7 @@ export const FORMULARIO = {
      sigue siendo sólo texto. Añadir o quitar líneas es añadir o quitar
      elementos. */
   introAyuda: [
-    "Elegí la que más se parezca a vos.",
+    "Elige la que más se parezca a ti.",
     "No hay respuestas correctas e incorrectas.",
   ],
 };
@@ -617,9 +674,9 @@ export const RESULTADO = {
   titulo: "Tu frecuencia dominante es",
 
   emailAviso:
-    "Ya te envié por mail el video con la solución para empezar a elevarla — andá a revisar tu casilla.",
+    "Ya te envié por mail el video con la solución para empezar a elevarla — ve a revisar tu bandeja de entrada.",
   emailNota:
-    "Si no lo ves en unos minutos, mirá en spam o en la pestaña de promociones.",
+    "Si no lo ves en unos minutos, mira en spam o en la pestaña de promociones.",
 
   /* EL TÍTULO DEL DESPLEGABLE DEL REPARTO.
 
@@ -631,7 +688,7 @@ export const RESULTADO = {
   /* PASO 2 — WhatsApp. El botón está confirmado en el documento. */
   comunidadTitulo: "Un último paso",
   comunidadTexto:
-    "Si querés seguir contenido como este y estar cerca de la comunidad, unite al grupo de WhatsApp de Origen.",
+    "Si quieres seguir contenido como este y estar cerca de la comunidad, únete al grupo de WhatsApp de Origen.",
   comunidadCta: "Entrar a la comunidad",
 
   /* EL MISMO GRUPO que usan las páginas de gracias de /volver-al-origen y
@@ -651,6 +708,6 @@ export const RESULTADO = {
      (un enlace compartido, una recarga después de limpiar la sesión). */
   sinResultadoTitulo: "Todavía no tenemos tu diagnóstico",
   sinResultadoTexto:
-    "Hacé el test —son 7 preguntas y menos de un minuto— y te digo cuál es tu frecuencia dominante.",
+    "Haz el test —son 7 preguntas y menos de un minuto— y te digo cuál es tu frecuencia dominante.",
   sinResultadoCta: "Hacer el diagnóstico",
 };

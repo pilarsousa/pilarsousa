@@ -205,9 +205,14 @@ export function FormularioContacto({
     <div
       className={cn("dg-borde-giro rounded-[calc(1.5rem+1px)] p-px", className)}
     >
+      {/* .dg-aurora pone dos manchas de luz muy desenfocadas moviéndose por
+          detrás del formulario. Apenas se percibe —a propósito: encima hay un
+          campo que rellenar— y es lo que evita que la tarjeta se lea como un
+          rectángulo plano. El `overflow-hidden` que ya llevaba es justo lo que
+          necesita para que las manchas entren y salgan por los cantos. */}
       <div
         aria-busy={transicionActiva}
-        className="dg-relieve relative overflow-hidden rounded-3xl bg-[var(--dg-fondo-alto)]"
+        className="dg-relieve dg-aurora relative overflow-hidden rounded-3xl bg-[var(--dg-fondo-alto)]"
       >
         {/* ── EN ESCRITORIO YA NO HAY DOS COLUMNAS ──
 
@@ -231,7 +236,10 @@ export function FormularioContacto({
           de HOY: en cuanto Laureano cambie una línea, vuelve. Con el contenido
           centrado en vertical, el aire sobrante se reparte arriba y abajo en
           vez de acumularse al final. */}
-        <div className="grid md:min-h-[23rem]">
+        {/* `relative` para quedar POR ENCIMA de la luz del fondo: la capa de
+            .dg-aurora va en z-index 0 dentro del contexto de apilado de la
+            tarjeta, y un hijo sin posicionar quedaría por debajo. */}
+        <div className="relative grid md:min-h-[23rem]">
           {/* ══ CONTENIDO ══
             En móvil va SEGUNDO, debajo de la ilustración. El margen negativo lo
             mete dentro del fundido inferior de ésta; sin él quedaría por debajo
@@ -316,7 +324,7 @@ export function FormularioContacto({
               la conversación —no se leen con la pregunta ni con el campo—, son
               el pie de la tarjeta. Pegados al margen izquierdo quedaban
               colgando del botón; centrados cierran el bloque. */}
-          <div className="mt-6 flex items-center justify-center gap-2.5">
+            <div className="mt-6 flex items-center justify-center gap-2.5">
               <span aria-hidden className="flex items-center gap-1.5">
                 {FORMULARIO.pasos.map((p, i) => (
                   <span

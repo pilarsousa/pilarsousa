@@ -147,7 +147,10 @@ export function PasoCampo({
   return (
     <form
       noValidate
-      onSubmit={(e) => { e.preventDefault(); onEnviar(); }}
+      onSubmit={(e) => {
+        e.preventDefault();
+        onEnviar();
+      }}
       className="text-center"
     >
       {/* ── EL DISTINTIVO ──
@@ -197,8 +200,9 @@ export function PasoCampo({
           el paso sin ayuda quedaría con un hueco entre el titular y el campo
           que nadie sabría de dónde sale.
 
-          El primer paso ya no la lleva: "¿Cómo te llamás?" no necesita que le
-          expliquen para qué sirve un nombre. */}
+          Hoy no la lleva NINGUNO de los tres pasos: cada ayuda repetía lo que
+          ya dice el distintivo de arriba. El campo se mantiene por si algún
+          paso futuro sí tiene algo que aclarar. Ver la nota en contenido.ts. */}
       {ayuda && (
         <p className="mx-auto mt-2 max-w-sm text-[0.85rem] leading-relaxed text-[var(--dg-texto-suave)]">
           {ayuda}
@@ -216,7 +220,10 @@ export function PasoCampo({
           el icono no llegaría al input y no enfocaría nada. */}
       {/* `text-left` devuelve la alineación a los dos campos: el <form> va
           centrado y sin esto lo que se teclea se despegaría del icono. */}
-      <div className="relative mt-5 text-left">
+      {/* El grupo se NOMBRA para que el icono de dentro pueda reaccionar al
+          foco del campo. Anónimo se engancharía a cualquier otro `group` que
+          apareciera por encima algún día. */}
+      <div className="group/campo relative mt-5 text-left">
         {esTelefono ? (
           /* ── EL TELÉFONO LLEVA SELECTOR DE PREFIJO ──
 
@@ -251,13 +258,19 @@ export function PasoCampo({
             onChange={(v) => onCambio(v ?? "")}
             aria-invalid={error ? true : undefined}
             aria-describedby={error ? idError : undefined}
-            className={cn("dg-phone", error && "dg-phone--error")}
+            className={cn("dg-campo dg-phone", error && "dg-campo--error")}
           />
         ) : (
           <>
+            {/* EL ICONO SE ENCIENDE AL ENFOCAR. Iba siempre en la tinta más
+                apagada, y ahí no distingue un campo activo de uno en reposo.
+
+                `group-focus-within` y no un estado de React: el navegador ya
+                sabe si hay foco dentro del contenedor, y llevarlo al estado
+                obligaría a un onFocus/onBlur por campo para pintar lo mismo. */}
             <span
               aria-hidden
-              className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-[var(--dg-texto-tenue)]"
+              className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-[var(--dg-texto-tenue)] transition-colors duration-200 group-focus-within/campo:text-[var(--dg-acento)]"
             >
               <Icono className="size-[1.05rem]" />
             </span>
@@ -276,7 +289,14 @@ export function PasoCampo({
                  de pantalla no lo asocia al campo y lo lee como texto suelto. */
               aria-invalid={error ? true : undefined}
               aria-describedby={error ? idError : undefined}
-              className="w-full rounded-xl border border-[var(--dg-borde)] bg-[var(--dg-superficie)] py-3.5 pr-4 pl-11 text-[1rem] text-[var(--dg-texto)] placeholder:text-[var(--dg-texto-tenue)] focus:border-[var(--dg-borde-vivo)] focus:outline-none aria-[invalid]:border-[#c2603f]"
+              /* El color, el borde y los estados vienen de .dg-campo (ver
+                 diagnostico.css). Aquí sólo queda la caja: medida, relleno y
+                 el hueco de la izquierda para el icono.
+
+                 `focus:outline-none` porque .dg-campo ya dibuja el foco con
+                 borde y halo; el contorno del navegador encima sería un
+                 segundo cerco cuadrado sobre uno redondeado. */
+              className="dg-campo w-full rounded-xl py-3.5 pr-4 pl-11 text-[1rem] text-[var(--dg-texto)] placeholder:text-[var(--dg-texto-tenue)] focus:outline-none"
             />
           </>
         )}
@@ -285,7 +305,11 @@ export function PasoCampo({
       {/* role="alert" para que el error se lea en cuanto aparece, sin esperar a
           que el visitante navegue hasta él. */}
       {error && (
-        <p id={idError} role="alert" className="mt-2 text-[0.82rem] text-[#e08a68]">
+        <p
+          id={idError}
+          role="alert"
+          className="mt-2 text-[0.82rem] text-[#e08a68]"
+        >
           {error}
         </p>
       )}

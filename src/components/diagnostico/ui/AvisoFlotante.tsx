@@ -136,10 +136,7 @@ export function AvisoFlotante({
             Se detiene al salir: la barra ya no cuenta nada mientras el aviso se
             va, y seguir animándola llama la atención sobre la esquina que está
             desapareciendo. */}
-        <div
-          aria-hidden
-          className="h-1 w-full bg-[var(--dg-borde)]/50"
-        >
+        <div aria-hidden className="h-1 w-full bg-[var(--dg-borde)]/50">
           <div
             className="dg-aviso-barra h-full bg-[linear-gradient(90deg,var(--dg-acento)_0%,var(--dg-acento-vivo)_100%)]"
             style={

@@ -42,7 +42,7 @@ export const metadata: Metadata = {
         .png({compressionLevel:9}).toFile('public/diagnostico/favicon.png')"
   */
   icons: { icon: "/diagnostico/favicon.png" },
-  title: "Descubrí tu frecuencia dominante | Volver al Origen",
+  title: "Descubre tu frecuencia dominante | Volver al Origen",
   description:
     "Un diagnóstico de 7 preguntas para descubrir qué frecuencia te está frenando, y el primer paso para cambiarla. Menos de 60 segundos.",
   /* ⚠️ noindex MIENTRAS SEA UN BOCETO. Los textos son provisionales, cuatro de
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "¿Qué frecuencia te está frenando?",
     description:
-      "Hacé el diagnóstico gratuito y recibí un video personalizado de Pilar con la solución exacta para elevar tu frecuencia.",
+      "Haz el diagnóstico gratuito y recibe un video personalizado de Pilar con la solución exacta para elevar tu frecuencia.",
     type: "website",
     locale: "es_ES",
   },

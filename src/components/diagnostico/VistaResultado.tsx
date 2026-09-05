@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { useState } from "react";
 import { Check, Mail } from "lucide-react";
 import { cn } from "@/lib/cn";
@@ -172,7 +173,19 @@ export function VistaResultado() {
           con color propio gana a la variable y se quedaría crema sobre crema. */}
       <section className="dg-entra text-center">
         <div className="dg-borde-giro rounded-[calc(2rem+1px)] p-px">
-          <div className="dg-claro dg-relieve-claro relative overflow-hidden rounded-[2rem] px-5 py-8 sm:px-8 sm:py-10">
+          <div
+            /* La luz del fondo va en verde y no en crema: dentro de .dg-claro
+               los tokens están dados la vuelta, y un halo crema sobre una
+               superficie crema no se vería. Es la misma pieza que llevan las
+               tarjetas de la landing, con el color que le toca aquí. */
+            style={
+              {
+                "--dg-aurora-luz": "rgba(8, 74, 44, 0.14)",
+                "--dg-aurora-luz-2": "rgba(0, 47, 1, 0.09)",
+              } as CSSProperties
+            }
+            className="dg-claro dg-relieve-claro dg-aurora relative overflow-hidden rounded-[2rem] px-5 py-8 sm:px-8 sm:py-10"
+          >
             {/* El barrido diagonal ahora es verde muy diluido, porque el token
                 del brillo se da la vuelta con el resto: un halo crema sobre una
                 superficie crema no se vería. */}
@@ -182,40 +195,40 @@ export function VistaResultado() {
             />
 
             <div className="relative">
-          {/* El tilde antes que nada. Quien llega acaba de dejar sus datos y lo
+              {/* El tilde antes que nada. Quien llega acaba de dejar sus datos y lo
             primero que necesita saber, antes que su resultado, es que el envío
             salió bien. */}
-          <span
-            aria-hidden
-            /* El disco entra y el tilde se traza dentro, en ese orden. Es el
+              <span
+                aria-hidden
+                /* El disco entra y el tilde se traza dentro, en ese orden. Es el
                único momento del embudo en que hay algo que confirmar, y un
                tilde ya puesto se lo salta. Ver .dg-check en diagnostico.css. */
-            /* EL DISCO SE INVIERTE CON LA TARJETA: relleno verde y tilde crema.
+                /* EL DISCO SE INVIERTE CON LA TARJETA: relleno verde y tilde crema.
                Sobre el crema, un tilde en el acento —que aquí ya es verde—
                dibujado sobre la propia superficie se leería, pero flojo. En
                negativo es lo más contrastado de la caja después del nombre de
                la frecuencia, que es la jerarquía que toca. */
-            className="dg-check mx-auto flex size-14 items-center justify-center rounded-full bg-[var(--dg-acento)] text-[var(--dg-acento-oscuro)] shadow-[0_10px_24px_-12px_var(--dg-brillo-fuerte)]"
-          >
-            <Check className="size-7" strokeWidth={2.6} />
-          </span>
+                className="dg-check mx-auto flex size-14 items-center justify-center rounded-full bg-[var(--dg-acento)] text-[var(--dg-acento-oscuro)] shadow-[0_10px_24px_-12px_var(--dg-brillo-fuerte)]"
+              >
+                <Check className="size-7" strokeWidth={2.6} />
+              </span>
 
-          <p className="mt-6 text-[0.72rem] tracking-[0.18em] text-[var(--dg-texto-tenue)] uppercase">
-            {RESULTADO.etiqueta}
-            {/* El nombre sólo aparece si lo tenemos. Con el resultado recuperado
+              <p className="mt-6 text-[0.72rem] tracking-[0.18em] text-[var(--dg-texto-tenue)] uppercase">
+                {RESULTADO.etiqueta}
+                {/* El nombre sólo aparece si lo tenemos. Con el resultado recuperado
               de la URL no hay nombre, y un "Hola, ." delata la costura. */}
-            {nombre && ` · ${nombre}`}
-          </p>
+                {nombre && ` · ${nombre}`}
+              </p>
 
-          <h1 className="dg-titulo mt-3 text-[1.35rem] leading-tight text-[var(--dg-texto)] sm:text-[1.8rem]">
-            {RESULTADO.titulo}
-          </h1>
+              <h1 className="dg-titulo mt-3 text-[1.35rem] leading-tight text-[var(--dg-texto)] sm:text-[1.8rem]">
+                {RESULTADO.titulo}
+              </h1>
 
-          {/* EL NOMBRE DE LA FRECUENCIA ES LO MÁS GRANDE DE LA PÁGINA. Es la
+              {/* EL NOMBRE DE LA FRECUENCIA ES LO MÁS GRANDE DE LA PÁGINA. Es la
             única información que el visitante vino a buscar; todo lo demás
             —el tilde, el aviso del email, el grupo— existe alrededor de esta
             palabra. */}
-          {/* ⚠️ SIN CLASE DE COLOR: .dg-luz-texto pinta la palabra con un
+              {/* ⚠️ SIN CLASE DE COLOR: .dg-luz-texto pinta la palabra con un
               degradado recortado a las letras y el color en transparente. Un
               `text-[...]` aquí ganaría en la hoja, devolvería el color plano y
               el barrido desaparecería sin que se entienda por qué.
@@ -225,27 +238,27 @@ export function VistaResultado() {
               se habrían quedado invisibles. No sustituye a .dg-luz-texto, la
               acompaña — de la base vienen el recorte y la animación, y de ésta
               sólo el degradado. */}
-          <p className="dg-titulo dg-luz-texto dg-luz-oscura mt-2 text-[3rem] leading-none font-bold sm:text-[4.4rem]">
-            {ficha.titulo}
-          </p>
+              <p className="dg-titulo dg-luz-texto dg-luz-oscura mt-2 text-[3rem] leading-none font-bold sm:text-[4.4rem]">
+                {ficha.titulo}
+              </p>
 
-          <p className="mx-auto mt-5 max-w-xl text-[1rem] leading-relaxed text-[var(--dg-texto)] sm:text-[1.1rem]">
-            {ficha.resumen}
-          </p>
+              <p className="mx-auto mt-5 max-w-xl text-[1rem] leading-relaxed text-[var(--dg-texto)] sm:text-[1.1rem]">
+                {ficha.resumen}
+              </p>
 
-          <p className="mx-auto mt-3 max-w-xl text-[0.92rem] leading-relaxed text-[var(--dg-texto-suave)]">
-            {ficha.descripcion}
-          </p>
+              <p className="mx-auto mt-3 max-w-xl text-[0.92rem] leading-relaxed text-[var(--dg-texto-suave)]">
+                {ficha.descripcion}
+              </p>
 
-          <div className="mt-6 flex flex-wrap justify-center gap-2 text-[0.68rem] font-semibold tracking-[0.12em] uppercase">
-            <span className="rounded-full border border-[var(--dg-borde)] bg-[var(--dg-superficie)] px-3 py-1.5 text-[var(--dg-texto-suave)]">
-              7 respuestas analizadas
-            </span>
-            <span className="rounded-full border border-[var(--dg-borde-vivo)] bg-[var(--dg-superficie-viva)] px-3 py-1.5 text-[var(--dg-acento-vivo)]">
-              Diagnóstico listo
-            </span>
-          </div>
-        </div>
+              <div className="mt-6 flex flex-wrap justify-center gap-2 text-[0.68rem] font-semibold tracking-[0.12em] uppercase">
+                <span className="rounded-full border border-[var(--dg-borde)] bg-[var(--dg-superficie)] px-3 py-1.5 text-[var(--dg-texto-suave)]">
+                  7 respuestas analizadas
+                </span>
+                <span className="rounded-full border border-[var(--dg-borde-vivo)] bg-[var(--dg-superficie-viva)] px-3 py-1.5 text-[var(--dg-acento-vivo)]">
+                  Diagnóstico listo
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -310,11 +323,11 @@ export function VistaResultado() {
             hayReparto ? "lg:grid-cols-2" : "mx-auto max-w-2xl",
           )}
         >
-        {/* ── El aviso del email ──
+          {/* ── El aviso del email ──
           Va en su propia caja, separado del diagnóstico: es una instrucción
-          ("andá a revisar tu casilla"), no parte del resultado, y mezclarlos
+          ("ve a revisar tu bandeja"), no parte del resultado, y mezclarlos
           hace que se lea por encima. */}
-        {/* ── EL ICONO ARRIBA Y EN UN DISCO, NO AL COSTADO ──
+          {/* ── EL ICONO ARRIBA Y EN UN DISCO, NO AL COSTADO ──
 
             Iba suelto a la izquierda del texto, y eso lo dejaba en el papel de
             viñeta: un adorno de 20 px pegado al margen del párrafo.
@@ -323,52 +336,52 @@ export function VistaResultado() {
             tarjeta — lo primero que se ve, y lo que dice de qué va la caja
             antes de leer una palabra. De paso emparja con el disco del tilde de
             arriba: los dos discos, misma familia. */}
-        {/* La columna en flex y centrada, por lo mismo que la tarjeta del
+          {/* La columna en flex y centrada, por lo mismo que la tarjeta del
             cierre: si ésta es la más corta de las dos, el aire sobrante se
             reparte arriba y abajo en vez de dejar el texto colgando del borde
             superior con un hueco debajo. */}
-        <section className="dg-claro dg-relieve-claro flex flex-col justify-center rounded-3xl p-5 text-center sm:p-6">
-          <span
-            aria-hidden
-            className="mx-auto flex size-12 items-center justify-center rounded-full bg-[var(--dg-acento)] text-[var(--dg-acento-oscuro)] shadow-[0_10px_24px_-12px_var(--dg-brillo-fuerte)]"
-          >
-            <Mail className="size-5" strokeWidth={1.9} />
-          </span>
+          <section className="dg-claro dg-relieve-claro flex flex-col justify-center rounded-3xl p-5 text-center sm:p-6">
+            <span
+              aria-hidden
+              className="mx-auto flex size-12 items-center justify-center rounded-full bg-[var(--dg-acento)] text-[var(--dg-acento-oscuro)] shadow-[0_10px_24px_-12px_var(--dg-brillo-fuerte)]"
+            >
+              <Mail className="size-5" strokeWidth={1.9} />
+            </span>
 
-          <div className="mt-4">
-            <p className="mx-auto max-w-sm text-[0.95rem] leading-relaxed text-[var(--dg-texto)]">
-              {RESULTADO.emailAviso}
-            </p>
-            {/* El email, si lo tenemos, sirve para dos cosas a la vez: confirma
+            <div className="mt-4">
+              <p className="mx-auto max-w-sm text-[0.95rem] leading-relaxed text-[var(--dg-texto)]">
+                {RESULTADO.emailAviso}
+              </p>
+              {/* El email, si lo tenemos, sirve para dos cosas a la vez: confirma
               que se escribió bien y dice exactamente dónde mirar.
               `break-words` porque un correo largo desborda la caja en un
               móvil estrecho. */}
-            {email && (
-              <p className="mt-2 text-[0.85rem] font-semibold break-words text-[var(--dg-acento)]">
-                {email}
+              {email && (
+                <p className="mt-2 text-[0.85rem] font-semibold break-words text-[var(--dg-acento)]">
+                  {email}
+                </p>
+              )}
+              <p className="mx-auto mt-2.5 max-w-sm text-[0.8rem] leading-relaxed text-[var(--dg-texto-tenue)]">
+                {RESULTADO.emailNota}
               </p>
-            )}
-            <p className="mx-auto mt-2.5 max-w-sm text-[0.8rem] leading-relaxed text-[var(--dg-texto-tenue)]">
-              {RESULTADO.emailNota}
-            </p>
-          </div>
+            </div>
 
-          {/* ⚠️ SIN DECIDIR (sección 8 del documento): si va o no un botón que
+            {/* ⚠️ SIN DECIDIR (sección 8 del documento): si va o no un botón que
             abra el correo. Se controla desde contenido.ts sin tocar esto.
 
             Mi opinión, para cuando se decida: en escritorio un botón "abrir mi
             correo" no puede saber qué cliente usa la persona, y mandar a
             gmail.com a quien usa Outlook es peor que no poner nada. */}
-          {RESULTADO.mostrarBotonMail && (
-            <div className="mt-4">
-              <BotonDg href="https://mail.google.com" variante="secundario">
-                {RESULTADO.mailCta}
-              </BotonDg>
-            </div>
-          )}
-        </section>
+            {RESULTADO.mostrarBotonMail && (
+              <div className="mt-4">
+                <BotonDg href="https://mail.google.com" variante="secundario">
+                  {RESULTADO.mailCta}
+                </BotonDg>
+              </div>
+            )}
+          </section>
 
-        {/* ═════════ PASO 2 — la comunidad ═════════
+          {/* ═════════ PASO 2 — la comunidad ═════════
 
             ── ES LO ÚNICO QUE QUEDA POR HACER, Y SE NOTA ──
 
@@ -386,7 +399,7 @@ export function VistaResultado() {
             ⚠️ EL REDONDEO DE FUERA ES EL DE DENTRO + 1px, que es el grosor del
             borde. Con el mismo valor, la curva exterior cae por dentro de la
             interior y el filo se ve más fino en las esquinas. */}
-        {/* `flex` en el marco y `w-full` + centrado en la tarjeta: es lo que
+          {/* `flex` en el marco y `w-full` + centrado en la tarjeta: es lo que
             hace que el relleno de 1 px se estire a la altura de la columna y la
             tarjeta de dentro con él. Sin el flex, la tarjeta mide su contenido y
             el marco queda más alto que ella — con una franja del degradado
@@ -394,51 +407,51 @@ export function VistaResultado() {
 
             El centrado vertical reparte el aire sobrante entre el titular y el
             botón cuando esta tarjeta es la más corta de las dos. */}
-        <div className="dg-borde-vivo-anim flex rounded-[calc(1.5rem+1px)] p-px">
-          <section className="relative flex w-full flex-col justify-center overflow-hidden rounded-3xl bg-[var(--dg-fondo-alto)] p-6 text-center sm:p-7">
-            <span
-              aria-hidden
-              className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,var(--dg-brillo-suave)_0%,transparent_40%,transparent_60%,var(--dg-brillo-suave)_100%)]"
-            />
+          <div className="dg-borde-vivo-anim flex rounded-[calc(1.5rem+1px)] p-px">
+            <section className="relative flex w-full flex-col justify-center overflow-hidden rounded-3xl bg-[var(--dg-fondo-alto)] p-6 text-center sm:p-7">
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,var(--dg-brillo-suave)_0%,transparent_40%,transparent_60%,var(--dg-brillo-suave)_100%)]"
+              />
 
-            <div className="relative">
-          {/* El latido y no el barrido: el nombre de la frecuencia está en
+              <div className="relative">
+                {/* El latido y no el barrido: el nombre de la frecuencia está en
               esta misma pantalla, y repetir el mismo recurso a dos palmos haría
               que ninguno de los dos señalara nada. */}
-          {/* Sin .dg-latido: el titular se queda quieto. Ver la nota del pulso
+                {/* Sin .dg-latido: el titular se queda quieto. Ver la nota del pulso
               del botón, aquí debajo. */}
-          <h2 className="dg-titulo text-[1.15rem] text-[var(--dg-texto)] sm:text-[1.3rem]">
-            {RESULTADO.comunidadTitulo}
-          </h2>
-          <p className="mx-auto mt-2.5 max-w-md text-[0.93rem] leading-relaxed text-[var(--dg-texto-suave)]">
-            {RESULTADO.comunidadTexto}
-          </p>
+                <h2 className="dg-titulo text-[1.15rem] text-[var(--dg-texto)] sm:text-[1.3rem]">
+                  {RESULTADO.comunidadTitulo}
+                </h2>
+                <p className="mx-auto mt-2.5 max-w-md text-[0.93rem] leading-relaxed text-[var(--dg-texto-suave)]">
+                  {RESULTADO.comunidadTexto}
+                </p>
 
-          <div className="mt-6 flex justify-center">
-            {hayWhatsapp ? (
-              <BotonDg
-                href={RESULTADO.whatsappUrl}
-                /* ⚠️ SIN .dg-pulso, y no sólo por quitar adorno: ese pulso vivía
+                <div className="mt-6 flex justify-center">
+                  {hayWhatsapp ? (
+                    <BotonDg
+                      href={RESULTADO.whatsappUrl}
+                      /* ⚠️ SIN .dg-pulso, y no sólo por quitar adorno: ese pulso vivía
                    en un ::after del botón, y BotonDg usa ahora ::before y ::after
                    para su propio latido. Las dos reglas se peleaban por la misma
                    capa. El botón ya late por su cuenta, igual que en la landing. */
-                className="sm:min-w-[18rem]"
-              >
-                <span className="inline-flex items-center justify-center gap-2.5">
-                  <WhatsAppIcon className="size-5 shrink-0" />
-                  {RESULTADO.comunidadCta}
-                </span>
-              </BotonDg>
-            ) : (
-              /* Sin enlace configurado, el botón va desactivado. Es preferible a
+                      className="sm:min-w-[18rem]"
+                    >
+                      <span className="inline-flex items-center justify-center gap-2.5">
+                        <WhatsAppIcon className="size-5 shrink-0" />
+                        {RESULTADO.comunidadCta}
+                      </span>
+                    </BotonDg>
+                  ) : (
+                    /* Sin enlace configurado, el botón va desactivado. Es preferible a
                mandar a un enlace roto justo después de convertir. */
-              <BotonDg disabled className="sm:min-w-[18rem]">
-                {RESULTADO.comunidadCta}
-              </BotonDg>
-            )}
-          </div>
+                    <BotonDg disabled className="sm:min-w-[18rem]">
+                      {RESULTADO.comunidadCta}
+                    </BotonDg>
+                  )}
+                </div>
 
-          {/* ⚠️ AQUÍ HABÍA UN AVISO —"Enlace del grupo pendiente de
+                {/* ⚠️ AQUÍ HABÍA UN AVISO —"Enlace del grupo pendiente de
               configurar"— y se retiró. Era una nota para nosotros que se
               colaba en la pantalla del visitante: no le dice nada que pueda
               hacer, y encima aparecía justo en el momento de más confianza,
@@ -447,8 +460,8 @@ export function VistaResultado() {
               El botón desactivado sí se queda: si algún día se vacía el
               enlace, es mejor un botón que no lleva a ningún sitio que uno que
               lleva a un enlace roto. Que esté apagado ya lo cuenta todo. */}
-            </div>
-          </section>
+              </div>
+            </section>
           </div>
         </div>
       </div>

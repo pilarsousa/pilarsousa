@@ -464,26 +464,99 @@
   se declara el resultado. Si cambia el relleno de los campos de texto, hay que
   cambiar este número con él o el paso del teléfono dará un salto.
 */
+/*
+  ═══════════════════════════════════════════════════════════════════════════
+  LOS CAMPOS — .dg-campo
+  ═══════════════════════════════════════════════════════════════════════════
+
+  ── EL PROBLEMA QUE RESUELVE ──
+
+  Los campos iban en --dg-superficie (verde 2 al 55%) sobre una tarjeta en
+  --dg-fondo-alto (verde 2 al 30%). Entre esos dos tonos hay 1,2:1: es el mismo
+  verde con otro nombre. El recuadro donde hay que escribir no se distinguía de
+  la caja que lo contiene, y en el punto de mayor abandono del embudo eso es
+  caro — quien no ve un campo, no lo rellena.
+
+  ── LA SALIDA ES UN BLANCO MUY DILUIDO, NO UN VERDE MÁS CLARO ──
+
+  Subir el verde no llegaba: entre el verde 2 y el fondo no hay recorrido
+  suficiente (por eso mismo el acento de esta paleta es el crema y no el verde,
+  ver la nota de --dg-acento). Con un velo de crema al 9% el campo se levanta
+  de la tarjeta de verdad, sigue siendo oscuro —no rompe el tema— y el texto
+  blanco encima se lee holgado.
+
+  El borde sube a la vez: con el relleno más claro, un contorno al 80% de verde
+  se quedaba por debajo del propio relleno y el campo perdía su canto.
+
+  ── EL FOCO SE VE, Y SE VE MUCHO ──
+
+  Borde en crema pleno más un halo exterior. El halo va en `box-shadow` y no en
+  `outline` porque sigue el redondeo; y no sustituye al `:focus-visible` del
+  ámbito, se suma a él.
+
+  ⚠️ EL RELIEVE INTERIOR VA HACIA DENTRO, al revés que en las tarjetas claras:
+  un campo es un hueco, no una lámina levantada. La sombra en el canto superior
+  es lo que lo hunde.
+*/
+.dg-campo {
+  border: 1px solid color-mix(in srgb, var(--dg-crema) 22%, var(--dg-verde-2));
+  background-color: color-mix(in srgb, var(--dg-crema) 9%, var(--dg-verde-2));
+  box-shadow:
+    inset 0 2px 6px -2px rgba(0, 0, 0, 0.45),
+    inset 0 -1px 0 0 rgba(255, 248, 240, 0.06);
+  transition:
+    border-color 200ms ease,
+    background-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+/* Al pasar por encima el campo se aclara un punto. Es la señal de que se puede
+   escribir ahí, y cuesta menos que un cambio de borde: no mueve nada. */
+.dg-campo:hover:not(:focus-within) {
+  background-color: color-mix(in srgb, var(--dg-crema) 13%, var(--dg-verde-2));
+  border-color: color-mix(in srgb, var(--dg-crema) 32%, var(--dg-verde-2));
+}
+
+.dg-campo:focus-within {
+  border-color: var(--dg-acento);
+  background-color: color-mix(in srgb, var(--dg-crema) 14%, var(--dg-verde-2));
+  box-shadow:
+    inset 0 2px 6px -2px rgba(0, 0, 0, 0.35),
+    0 0 0 3px var(--dg-brillo-suave);
+}
+
+/* El rojo del error gana al foco mientras el campo siga mal: si al enfocarlo
+   volviera al crema, corregir un error empezaría por perder la señal de que
+   hay uno. */
+.dg-campo[aria-invalid],
+.dg-campo--error {
+  border-color: #c2603f;
+}
+
+.dg-campo[aria-invalid]:focus-within,
+.dg-campo--error:focus-within {
+  border-color: #d4795a;
+  box-shadow:
+    inset 0 2px 6px -2px rgba(0, 0, 0, 0.35),
+    0 0 0 3px rgba(194, 96, 63, 0.25);
+}
+
+/* El campo del teléfono comparte todo el aspecto de .dg-campo —lo lleva puesto
+   en el marcado— y sólo añade su propia disposición: la bandera y el prefijo a
+   la izquierda del número. */
 .dg-phone {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   width: 100%;
   min-height: 3.5rem;
-  border: 1px solid var(--dg-borde);
   border-radius: 0.75rem;
-  background-color: var(--dg-superficie);
   padding-inline: 0.9rem;
-  transition: border-color 200ms ease;
 }
 
-.dg-phone:focus-within {
-  border-color: var(--dg-borde-vivo);
-}
-
-.dg-phone--error {
-  border-color: #c2603f;
-}
+/* ⚠️ AQUÍ ESTABA .dg-phone--error, y se retiró: el estado de error lo lleva
+   ahora .dg-campo--error, que sirve para los tres campos en vez de sólo para
+   el del teléfono. El marcado pasa las dos clases juntas. */
 
 /* El campo del número: se le quita el cromado de la librería y hereda el
    nuestro. `min-width: 0` es lo que le permite encogerse dentro del flex — sin
@@ -1650,6 +1723,139 @@
 
 /*
   ═══════════════════════════════════════════════════════════════════════════
+  LA LUZ QUE SE MUEVE POR EL FONDO — .dg-aurora
+  ═══════════════════════════════════════════════════════════════════════════
+
+  Dos manchas de luz muy desenfocadas que se desplazan despacio por detrás del
+  contenido de una tarjeta. No es un adorno que se mire: es lo que hace que una
+  superficie plana deje de parecer un rectángulo pintado.
+
+  ── APENAS SE TIENE QUE NOTAR ──
+
+  Ése es el encargo y es también la única forma de que funcione. Una luz que se
+  ve moverse compite con el texto que tiene encima y se convierte en un
+  distractor justo donde hay que leer. A esta opacidad y con este desenfoque lo
+  que se percibe es que "algo respira", no una mancha cruzando.
+
+  ── LOS CICLOS SON PRIMOS ENTRE SÍ (19 s y 23 s) ──
+
+  Y no es una cifra caprichosa. Con dos duraciones que compartan divisor, las
+  manchas vuelven a la misma posición relativa cada pocos ciclos y el ojo
+  aprende el bucle. Con 19 y 23 el patrón tarda 437 segundos en repetirse: más
+  de siete minutos, que es mucho más de lo que dura una visita.
+
+  ── ES UN ::before, NO UN ELEMENTO ──
+
+  No hay nada que anunciar ni que seleccionar, así que no merece un nodo en el
+  árbol. Va detrás del contenido con z-index 0 sobre un contexto de apilado
+  propio (el `isolation`), y por eso el contenido de la tarjeta necesita su
+  `relative`: sin él quedaría por debajo de la luz.
+
+  ⚠️ PIDE `overflow: hidden` EN LA TARJETA. La capa se desborda a propósito
+  —inset negativo— para que las manchas entren y salgan por los cantos en vez
+  de aparecer de la nada dentro del recuadro.
+*/
+@keyframes dg-aurora-a {
+  0%,
+  100% {
+    transform: translate(-12%, -8%) scale(1);
+  }
+  50% {
+    transform: translate(14%, 10%) scale(1.18);
+  }
+}
+
+@keyframes dg-aurora-b {
+  0%,
+  100% {
+    transform: translate(10%, 12%) scale(1.12);
+  }
+  50% {
+    transform: translate(-14%, -6%) scale(1);
+  }
+}
+
+.dg-aurora {
+  position: relative;
+  isolation: isolate;
+}
+
+.dg-aurora::before,
+.dg-aurora::after {
+  content: "";
+  position: absolute;
+  inset: -35%;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(46px);
+  will-change: transform;
+}
+
+.dg-aurora::before {
+  background: radial-gradient(
+    circle at 30% 35%,
+    var(--dg-aurora-luz, rgba(255, 248, 240, 0.1)) 0%,
+    transparent 62%
+  );
+  animation: dg-aurora-a 19s ease-in-out infinite;
+}
+
+.dg-aurora::after {
+  background: radial-gradient(
+    circle at 70% 65%,
+    var(--dg-aurora-luz-2, rgba(255, 248, 240, 0.07)) 0%,
+    transparent 58%
+  );
+  animation: dg-aurora-b 23s ease-in-out infinite;
+}
+
+/*
+  LA PÍLDORA DE "LO QUE VAS A RECIBIR" — el relieve y la respuesta al ratón.
+
+  El relieve en reposo es el de las tarjetas claras (.dg-relieve-claro): luz de
+  un píxel arriba, sombra abajo. Al pasar por encima se levanta.
+
+  ── SE LEVANTA 2 PÍXELES, NO MÁS ──
+
+  Son tres piezas apiladas con 12 px de hueco. Por encima de eso la que sube se
+  mete en el aire de la de arriba y la fila parece temblar. Dos píxeles con la
+  sombra creciendo a la vez ya se leen como "esto está más cerca".
+
+  ⚠️ EL RELIEVE HAY QUE REPETIRLO ENTERO EN EL HOVER. `box-shadow` no se suma:
+  la declaración del hover sustituye a la de reposo, así que si sólo se pusiera
+  la sombra exterior, el filo claro de arriba desaparecería justo al apuntar.
+
+  El disco del icono gira un pelo y crece, y eso va en su propia clase para que
+  el giro no arrastre al texto de al lado.
+*/
+.dg-punto {
+  transition:
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 320ms ease;
+}
+
+.dg-punto:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 0 rgba(8, 74, 44, 0.14),
+    0 18px 40px -22px rgba(0, 0, 0, 0.55);
+}
+
+.dg-punto-icono {
+  transition:
+    transform 320ms cubic-bezier(0.34, 1.42, 0.64, 1),
+    box-shadow 320ms ease;
+}
+
+.dg-punto:hover .dg-punto-icono {
+  transform: scale(1.12) rotate(-6deg);
+  box-shadow: 0 8px 18px -8px rgba(8, 74, 44, 0.6);
+}
+
+/*
+  ═══════════════════════════════════════════════════════════════════════════
   EL ACORDEÓN DEL REPARTO
   ═══════════════════════════════════════════════════════════════════════════
 
@@ -1987,5 +2193,33 @@
   }
   .dg-avatar:hover {
     scale: none;
+  }
+
+  /* La luz del fondo se queda QUIETA, no se apaga: es una capa de color que da
+     profundidad a la superficie, y quitarla dejaría la tarjeta más plana sin
+     que nadie hubiera pedido eso. Lo que sobra es el movimiento. */
+  .dg-aurora::before,
+  .dg-aurora::after {
+    animation: none;
+  }
+
+  /* Las píldoras dejan de levantarse y el icono de girar. El cambio de sombra
+     sí se queda —no es movimiento— pero sin la transición, así que responde
+     en el acto. */
+  .dg-punto,
+  .dg-punto-icono {
+    transition: none;
+  }
+  .dg-punto:hover {
+    transform: none;
+  }
+  .dg-punto:hover .dg-punto-icono {
+    transform: none;
+  }
+
+  /* El campo conserva sus colores de foco —que son lo que dice dónde estás
+     escribiendo— y pierde sólo el desvanecido entre estados. */
+  .dg-campo {
+    transition: none;
   }
 }

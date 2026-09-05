@@ -1,8 +1,16 @@
 "use client";
 
 import Image from "next/image";
+import type { CSSProperties } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { BadgeCheck, Lock, MailCheck, Play, Sparkles, Target } from "lucide-react";
+import {
+  BadgeCheck,
+  Lock,
+  MailCheck,
+  Play,
+  Sparkles,
+  Target,
+} from "lucide-react";
 import { cn } from "@/lib/cn";
 import { LANDING } from "@/components/diagnostico/contenido";
 import { AvisoFlotante } from "@/components/diagnostico/ui/AvisoFlotante";
@@ -104,7 +112,10 @@ export function VistaPreviaVideo() {
       aria-busy={bloqueado}
       className="dg-borde-giro relative mt-14 w-full rounded-[calc(1.5rem+1px)] p-px sm:mt-16"
     >
-      <div className="dg-relieve relative overflow-hidden rounded-3xl bg-[var(--dg-fondo-alto)] p-5 sm:p-7 lg:p-8">
+      {/* La misma luz en movimiento que la tarjeta del formulario, para que
+          las dos piezas del panel crema respondan al mismo sistema. Ver
+          .dg-aurora en diagnostico.css. */}
+      <div className="dg-relieve dg-aurora relative overflow-hidden rounded-3xl bg-[var(--dg-fondo-alto)] p-5 sm:p-7 lg:p-8">
         <span
           aria-hidden
           className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,var(--dg-brillo-suave)_0%,transparent_28%,transparent_68%,var(--dg-brillo-suave)_100%)]"
@@ -166,15 +177,30 @@ export function VistaPreviaVideo() {
                      ojo la primera línea del texto. */
                   <li
                     key={punto}
-                    className="dg-claro dg-relieve-claro flex items-center gap-3 rounded-2xl px-3.5 py-3 text-sm leading-snug text-[var(--dg-texto)]"
+                    /* .dg-aurora mete la luz que se mueve por detrás y necesita
+                       el `overflow-hidden` para que las manchas entren y salgan
+                       por los cantos; el texto va en su propio <span> con
+                       `relative` para quedar por encima de ella.
+
+                       ⚠️ La luz aquí es VERDE y no crema: dentro de .dg-claro
+                       los tokens están dados la vuelta, y un halo crema sobre
+                       una superficie crema no se vería. Se pasa por las
+                       variables que .dg-aurora deja abiertas. */
+                    style={
+                      {
+                        "--dg-aurora-luz": "rgba(8, 74, 44, 0.16)",
+                        "--dg-aurora-luz-2": "rgba(8, 74, 44, 0.1)",
+                      } as CSSProperties
+                    }
+                    className="dg-claro dg-relieve-claro dg-aurora dg-punto flex items-center gap-3 overflow-hidden rounded-2xl px-3.5 py-3 text-sm leading-snug text-[var(--dg-texto)]"
                   >
                     <span
                       aria-hidden
-                      className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[var(--dg-acento)] text-[var(--dg-acento-oscuro)]"
+                      className="dg-punto-icono relative flex size-7 shrink-0 items-center justify-center rounded-full bg-[var(--dg-acento)] text-[var(--dg-acento-oscuro)]"
                     >
                       <Icono className="size-3.5" strokeWidth={1.9} />
                     </span>
-                    <span>{punto}</span>
+                    <span className="relative">{punto}</span>
                   </li>
                 );
               })}
@@ -210,7 +236,8 @@ export function VistaPreviaVideo() {
                 sizes="(min-width: 1024px) 36rem, (min-width: 640px) 44rem, 90vw"
                 className={cn(
                   "aspect-video w-full object-cover transition-[filter,transform] duration-500 group-hover:scale-[1.015]",
-                  bloqueado && "brightness-[0.4] grayscale group-hover:scale-100",
+                  bloqueado &&
+                    "brightness-[0.4] grayscale group-hover:scale-100",
                 )}
               />
 

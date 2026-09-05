@@ -54,12 +54,12 @@ export function validarCampo(
 ): string | null {
   const v = valor.trim();
   if (campo === "nombre") {
-    if (v.length < 2) return "Escribí tu nombre para poder seguir.";
+    if (v.length < 2) return "Escribe tu nombre para poder seguir.";
     return null;
   }
   if (campo === "email") {
     if (v === "") return "Necesito tu email para enviarte el video.";
-    if (!EMAIL_RE.test(v)) return "Revisá el email: parece que falta algo.";
+    if (!EMAIL_RE.test(v)) return "Revisa el email: parece que falta algo.";
     return null;
   }
   if (v === "") return "Necesito tu teléfono para avisarte por WhatsApp.";
@@ -73,7 +73,7 @@ export function validarCampo(
 
     El valor llega en E.164 (+34600111222) porque lo produce el propio campo.
   */
-  if (!isValidPhoneNumber(v)) return "Revisá el número: parece incompleto.";
+  if (!isValidPhoneNumber(v)) return "Revisa el número: parece incompleto.";
   return null;
 }
 
