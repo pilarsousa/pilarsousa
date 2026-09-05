@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ArranqueDiagnostico } from "@/components/diagnostico/ArranqueDiagnostico";
 import { GridScan } from "@/components/diagnostico/ui/GridScan";
 import { PruebaSocialDg } from "@/components/diagnostico/ui/PruebaSocialDg";
@@ -26,12 +27,17 @@ import { LANDING } from "@/components/diagnostico/contenido";
   los anillos no tenían: esta página es un DIAGNÓSTICO, y un haz recorriendo
   una rejilla dice "esto te está midiendo" sin escribirlo.
 
-  ── NO HAY LOGO EN NINGUNA DE LAS TRES PANTALLAS ──
+  ── EL LOGO VUELVE, Y SÓLO AQUÍ ──
 
   Estaba superpuesto sobre la foto del hero, y en /encuesta y /resultado en una
-  franja propia. Se retiró por decisión de diseño mientras no esté cerrado el
-  branding. La pieza sigue en el proyecto (ui/Marca.tsx) y volver a montarla es
-  una línea en cada página.
+  franja propia. Se retiró de las tres mientras el branding no estuviera
+  cerrado.
+
+  Ahora vuelve al hero de esta página —encima de la promesa, como primer
+  elemento— con el archivo logo2.png. En /encuesta y /resultado sigue sin
+  aparecer: allí el visitante ya sabe dónde está, y repetirlo en cada pantalla
+  del embudo le quita sitio a lo que sí cambia. La pieza que lo montaba en una
+  franja propia sigue en el proyecto (ui/Marca.tsx).
 
   ── EL FORMULARIO ESTÁ EN LA PÁGINA, NO DETRÁS DE UN BOTÓN ──
 
@@ -199,6 +205,46 @@ export default function DiagnosticoPage() {
               `relative` sin z-index: al venir después en el documento y estar
               posicionado, gana el orden de pintado sobre el fondo. */}
           <div className="relative mx-auto max-w-2xl text-center">
+            {/* ══ EL LOGOTIPO, LO PRIMERO DE LA PÁGINA ══
+
+                ── VUELVE, Y ANTES NO ESTABA EN NINGUNA PANTALLA ──
+
+                Se había retirado de las tres mientras el branding no estuviera
+                cerrado (queda la nota en la cabecera de este archivo). Vuelve
+                sólo aquí, encima de la promesa: es la primera pieza que se ve y
+                lo que dice de quién es esta página antes de leer nada.
+
+                ── SE DIMENSIONA POR EL ALTO, NO POR EL ANCHO ──
+
+                El archivo es 992x322, casi 3:1. Fijando el ancho, el logo mide
+                distinto de alto en cada pantalla y el hueco hasta el titular
+                baila. Con `h-*` y `w-auto` el alto es el que se controla —que
+                es lo que se percibe— y el ancho lo pone la proporción.
+
+                ⚠️ `width` y `height` EN EL COMPONENTE SON LOS DEL ARCHIVO. No
+                son el tamaño en pantalla: sirven para reservar el hueco y
+                calcular la proporción, y mentir ahí produce un salto de
+                maquetación al cargar. El tamaño real lo ponen las clases.
+
+                ── EL HUECO HASTA EL TITULAR ──
+
+                `mb-5` son 20 px, dentro de los 15/20 pedidos. Va en el logo y
+                no como `mt` del titular porque es el logo el que se acaba de
+                añadir: si mañana se retira, se va con su margen y el titular
+                queda donde estaba.
+
+                `priority` porque es lo más alto de la página: sin él, Next lo
+                carga en diferido y el primer elemento que ve el visitante
+                aparece un instante después que el resto. */}
+            <Image
+              src="/diagnostico/contenido/logo/logo2.png"
+              alt="Volver al Origen"
+              width={992}
+              height={322}
+              priority
+              className="mx-auto mb-5 h-10 w-auto sm:h-12 md:h-14"
+            />
+
             {/* El titular va en tres tramos porque el del medio —lo que de
                 verdad promete— tiene que destacarse del resto. Partirlo en
                 tres cadenas permite que el acento cambie de línea sin
