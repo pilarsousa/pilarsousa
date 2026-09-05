@@ -927,18 +927,28 @@
   en cuanto la seccion cambie de tono. La mascara recorta la opacidad del
   propio lienzo, asi que da igual lo que haya debajo.
 
-  ⚠️ LOS ANILLOS TERMINAN EN EL 72%, NO EN EL 100%.
+  ⚠️ LA REJILLA LLEGA AL 96%, Y ANTES LLEGABA AL 72%.
 
-  Llegaron a apagarse justo en el borde, y ahí se veía el problema que esto
-  resuelve: el aro exterior es casi BLANCO, y su arco inferior cruzaba la
-  sección de lado a lado justo donde ésta acaba. A ese tamaño un arco tan
-  abierto no se lee como un círculo — se lee como una línea recta y clara
-  marcando el final del hero, que es exactamente lo que el fundido intenta
-  evitar.
+  Ese 72% venía de los anillos y tenía su motivo: el aro exterior era casi
+  BLANCO, y su arco inferior cruzaba la sección de lado a lado justo donde ésta
+  acaba. A ese tamaño un arco tan abierto no se lee como un círculo, se lee como
+  una raya clara marcando el final del hero — justo lo que este fundido existe
+  para evitar. Apagándolos antes, los aros se habían ido para cuando empezaba el
+  degradado que empalma los dos verdes.
 
-  Terminando en el 72% los aros se han ido ANTES de que empiece el degradado
-  que empalma los dos verdes (los últimos 128 px). Cada cosa ocurre en su
-  tramo y ninguna deja canto.
+  LA REJILLA NO TIENE ESE PROBLEMA. Sus líneas convergen hacia el punto de fuga
+  en vez de cruzar la sección en horizontal, y son de un verde medio, no blancas.
+  Manteniendo el 72% lo que se conseguía era otra cosa: el fondo se apagaba
+  justo a la altura de los avatares —medido, caían en el 73,8%— y la sección
+  parecía cortada por una sombra a media altura.
+
+  Ahora empieza antes (6%) y termina casi al final (96%), con tramos de fundido
+  cortos en los dos cantos. Lo justo para que las líneas no choquen en seco
+  contra los bordes, sin dejar media sección vacía.
+
+  ⚠️ NO SUBIRLO AL 100%: ahí la rejilla terminaría a filo con el degradado que
+  empalma el hero con el panel crema, y las dos transiciones se pisarían en el
+  mismo píxel.
 */
 /*
   ── Y UNA SEGUNDA MÁSCARA QUE ABRE EL CENTRO ──
@@ -964,14 +974,14 @@
     linear-gradient(
       to bottom,
       transparent 0%,
-      #000 18%,
-      #000 45%,
-      transparent 72%
+      #000 6%,
+      #000 88%,
+      transparent 96%
     ),
     radial-gradient(
-      ellipse 46% 34% at 50% 40%,
-      rgba(0, 0, 0, 0.12) 0%,
-      rgba(0, 0, 0, 0.55) 55%,
+      ellipse 52% 40% at 50% 41%,
+      rgba(0, 0, 0, 0.06) 0%,
+      rgba(0, 0, 0, 0.45) 58%,
       #000 100%
     );
   -webkit-mask-composite: source-in;
@@ -979,14 +989,14 @@
     linear-gradient(
       to bottom,
       transparent 0%,
-      #000 18%,
-      #000 45%,
-      transparent 72%
+      #000 6%,
+      #000 88%,
+      transparent 96%
     ),
     radial-gradient(
-      ellipse 46% 34% at 50% 40%,
-      rgba(0, 0, 0, 0.12) 0%,
-      rgba(0, 0, 0, 0.55) 55%,
+      ellipse 52% 40% at 50% 41%,
+      rgba(0, 0, 0, 0.06) 0%,
+      rgba(0, 0, 0, 0.45) 58%,
       #000 100%
     );
   mask-composite: intersect;
