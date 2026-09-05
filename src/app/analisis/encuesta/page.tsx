@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Marca } from "@/components/diagnostico/ui/Marca";
 import { FlujoTest } from "@/components/diagnostico/FlujoTest";
+import { AcidSquaresFondo } from "@/components/diagnostico/ui/AcidSquaresFondo";
 
 /*
   /analisis/encuesta — el formulario y las 7 preguntas.
@@ -25,9 +25,9 @@ export const metadata: Metadata = {
 
 export default function TestPage() {
   return (
-    <div className="flex min-h-svh flex-col">
-      <Marca />
-      <main className="flex-1">
+    <div className="dg-encuesta-tema-anterior relative isolate flex min-h-svh flex-col">
+      <AcidSquaresFondo />
+      <main className="relative z-10 flex-1">
         <FlujoTest />
       </main>
     </div>

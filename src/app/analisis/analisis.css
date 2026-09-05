@@ -3,10 +3,10 @@
   TOKENS DEL ANÁLISIS — /analisis
   ═══════════════════════════════════════════════════════════════════════════
 
-  ⚠️ TODOS ESTOS VALORES SON PROVISIONALES. El branding nuevo de Pilar (logo y
-  colores) todavía no llegó; cuando llegue, se cambian los valores de este
-  bloque y la landing entera cambia con ellos. Ningún componente escribe un
-  color a mano.
+  LOS COLORES SON LOS DE LA MARCA — verde #002F01, verde 2 #084A2C y crema
+  #FFF8F0. Todo lo demás sale de esos tres con color-mix, así que cambiarlos
+  repinta la ruta entera manteniendo las relaciones entre tonos. Ningún
+  componente escribe un color a mano.
 
   ── POR QUÉ NO ESTÁ EN globals.css ──
 
@@ -26,23 +26,115 @@
 */
 
 .dg-scope {
-  /* ── Superficies ── */
-  --dg-fondo: #080d04; /* fondo de la página */
-  --dg-fondo-alto: #0d1406; /* tarjetas, paneles */
-  --dg-superficie: #121b08; /* opciones de respuesta, campos */
-  --dg-superficie-viva: #1a2a0a; /* la misma, al pasar por encima */
-  --dg-borde: #2a3d13; /* contornos en reposo */
-  --dg-borde-vivo: #5c8419; /* contornos al enfocar o pasar */
+  /*
+    ── LOS TRES COLORES DE MARCA ──
+
+    Todo lo demás se deriva de aquí con color-mix. Cambiar estos tres repinta
+    la ruta entera y mantiene las relaciones entre tonos: un token intermedio
+    escrito a mano se quedaría descolgado en cuanto se moviera su base.
+  */
+  --dg-verde: #002f01;
+  --dg-verde-2: #084a2c;
+  --dg-crema: #fff8f0;
+
+  /* ── Superficies ──
+     Escalones hacia el verde 2 desde el fondo. Los porcentajes están medidos
+     para que cada capa se distinga de la anterior sin que ninguna compita con
+     el texto que lleva encima. */
+  --dg-fondo: var(--dg-verde); /* fondo de la página */
+  --dg-fondo-alto: color-mix(
+    in srgb,
+    var(--dg-verde-2) 30%,
+    var(--dg-verde)
+  ); /* tarjetas */
+  --dg-superficie: color-mix(
+    in srgb,
+    var(--dg-verde-2) 55%,
+    var(--dg-verde)
+  ); /* campos, opciones */
+  --dg-superficie-viva: var(--dg-verde-2); /* la misma, al pasar por encima */
+  --dg-borde: color-mix(
+    in srgb,
+    var(--dg-verde-2) 80%,
+    var(--dg-verde)
+  ); /* contornos en reposo */
+  /* El contorno activo lleva crema mezclado porque tiene que llegar a 3:1
+     contra el fondo: es lo que señala el foco del teclado, y un verde sobre
+     verde no lo consigue. Medido: 3,58:1. */
+  --dg-borde-vivo: color-mix(in srgb, var(--dg-crema) 34%, var(--dg-verde-2));
 
   /* ── Tinta ── */
-  --dg-texto: #f2efe4; /* texto principal */
-  --dg-texto-suave: #b6bda6; /* secundario, ayudas, notas */
-  --dg-texto-tenue: #7d876c; /* terciario, contadores */
+  --dg-texto: var(--dg-crema); /* 14,17:1 sobre el fondo */
+  --dg-texto-suave: color-mix(
+    in srgb,
+    var(--dg-crema) 72%,
+    var(--dg-verde)
+  ); /* 7,95:1 */
+  --dg-texto-tenue: color-mix(
+    in srgb,
+    var(--dg-crema) 50%,
+    var(--dg-verde)
+  ); /* 4,57:1 */
 
-  /* ── Acento ── */
-  --dg-acento: #a3ca23;
-  --dg-acento-vivo: #d4ef7a;
-  --dg-acento-oscuro: #3d5410; /* texto sobre fondo de acento */
+  /*
+    ── EL ACENTO ES EL CREMA, NO EL VERDE 2 ──
+
+    Parece raro con una marca verde, y no hay alternativa: #084A2C sobre
+    #002F01 da 1,44:1. Hace falta 3:1 para que una forma se distinga del
+    fondo, así que un botón en verde 2 sería un rectángulo invisible. El crema
+    da 14,17:1.
+
+    El verde 2 sí funciona —y es donde se usa— como SUPERFICIE: una capa que
+    se levanta del fondo lo justo para delimitar una tarjeta o un campo, sin
+    tener que reclamar atención.
+  */
+  --dg-acento: var(--dg-crema);
+  --dg-acento-vivo: #ffffff;
+  --dg-acento-oscuro: var(--dg-verde); /* texto sobre fondo de acento */
+
+  /*
+    ── LOS BRILLOS, CON SU ALFA YA PUESTA ──
+
+    Los resplandores estaban escritos a mano por media docena de archivos
+    —`rgba(163,202,35,0.8)` repetido— y al cambiar la paleta había que
+    encontrarlos uno por uno. Como tokens, se retocan en un sitio.
+
+    Van con alfa porque un resplandor opaco no es un resplandor: lo que define
+    un halo es cuánto deja ver de lo que hay debajo.
+  */
+  --dg-brillo-fuerte: rgba(255, 248, 240, 0.85);
+  --dg-brillo-medio: rgba(255, 248, 240, 0.45);
+  --dg-brillo-suave: rgba(255, 248, 240, 0.16);
+
+  /*
+    ── EL HERO SE HUNDE UN TONO POR DEBAJO DEL RESTO ──
+
+    Llegó a ser el verde 2, un escalón POR ENCIMA, y quedaba demasiado claro.
+    Ahora va al revés: el verde de marca rebajado hacia el negro, así que el
+    hero es el plano más profundo de la página y lo que viene debajo asciende.
+
+    ── POR QUÉ HACIA ABAJO Y NO UN VERDE INTERMEDIO ──
+
+    Entre el verde de marca y el verde 2 no hay sitio: un tono intermedio se
+    queda a 1,06–1,12:1 del fondo, que es indistinguible. Bajando, a este valor
+    la diferencia es de 1,23:1 — poca en absoluto, pero es la mayor que permite
+    la paleta sin meter un color que no es de marca.
+
+    Por eso el corte NO se confía al color: lo marcan el fundido, la disolución
+    de los anillos y el filete (ver page.tsx). El tono sólo acompaña.
+
+    De paso el texto gana: sobre este fondo mide 17,4:1 el principal, 9,7:1 el
+    suave y 5,6:1 el tenue — los tres por encima de lo que medían antes.
+  */
+  --dg-hero-fondo: color-mix(in srgb, var(--dg-verde) 55%, #000);
+
+  /* El velo que se pone sobre una imagen para que se lea el texto encima. Es
+     el verde de marca casi opaco, no un negro: un negro sobre este fondo se
+     vería como una mancha gris de otro sitio. */
+  --dg-velo: rgba(0, 47, 1, 0.88);
+  --dg-velo-medio: rgba(0, 47, 1, 0.58);
+  --dg-velo-leve: rgba(0, 47, 1, 0.34);
+  --dg-velo-nulo: rgba(0, 47, 1, 0);
 
   /* ── Tipografía ──
      Se apoya en las familias que el layout raíz ya carga, así que esta ruta no
@@ -50,8 +142,8 @@
      de verdad —sus minúsculas son versalitas— y no sirve para texto corrido ni
      para campos de formulario. */
   --dg-fuente-titulo: var(--font-trajan), var(--font-cinzel), Georgia, serif;
-  --dg-fuente-texto: var(--font-montserrat), var(--font-manrope), system-ui,
-    sans-serif;
+  --dg-fuente-texto:
+    var(--font-montserrat), var(--font-manrope), system-ui, sans-serif;
 
   background-color: var(--dg-fondo);
   color: var(--dg-texto);
@@ -62,13 +154,108 @@
   font-family: var(--dg-fuente-titulo);
 }
 
+.dg-landing button:not(:disabled),
+.dg-landing a[href],
+.dg-landing [role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
+
+/*
+  /analisis/encuesta vuelve a la paleta anterior: fondo casi negro y acento
+  lima. El resto de /analisis puede seguir usando los tokens nuevos del layout.
+*/
+.dg-encuesta-tema-anterior {
+  --dg-fondo: #080d04;
+  --dg-fondo-alto: #0d1406;
+  --dg-superficie: #121b08;
+  --dg-superficie-viva: #1a2a0a;
+  --dg-borde: #2a3d13;
+  --dg-borde-vivo: #5c8419;
+  --dg-texto: #f2efe4;
+  --dg-texto-suave: #b6bda6;
+  --dg-texto-tenue: #7d876c;
+  --dg-acento: #a3ca23;
+  --dg-acento-vivo: #d4ef7a;
+  --dg-acento-oscuro: #3d5410;
+  --dg-brillo-fuerte: rgba(163, 202, 35, 0.85);
+  --dg-brillo-medio: rgba(163, 202, 35, 0.45);
+  --dg-brillo-suave: rgba(212, 239, 122, 0.14);
+  --dg-velo: rgba(4, 8, 2, 0.88);
+  --dg-velo-medio: rgba(4, 8, 2, 0.58);
+  --dg-velo-leve: rgba(4, 8, 2, 0.34);
+  --dg-velo-nulo: rgba(4, 8, 2, 0);
+
+  background-color: var(--dg-fondo);
+  color: var(--dg-texto);
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+.dg-encuesta-tema-anterior button:not(:disabled),
+.dg-encuesta-tema-anterior a[href],
+.dg-encuesta-tema-anterior [role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
+
+.dg-acid-fondo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: #080d04;
+}
+
+.dg-acid-fondo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at 50% 32%,
+      rgba(212, 239, 122, 0.12),
+      transparent 42%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(8, 13, 4, 0.06) 0%,
+      rgba(8, 13, 4, 0.38) 48%,
+      rgba(4, 8, 2, 0.72) 100%
+    );
+}
+
+.acid-squares-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.acid-squares-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.dg-quiz-escena {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+}
+
+.dg-onboarding-fondo {
+  position: relative;
+  isolation: isolate;
+}
+
 /*
   EL ANILLO DE FOCO, DECLARADO UNA VEZ PARA TODA LA RUTA.
 
   El análisis se puede recorrer entero con el teclado —son once pantallas con
   campos y botones— y sin un foco visible no hay forma de saber dónde estás. El del
-  navegador se pierde sobre un fondo casi negro, así que se sustituye por uno
-  en el color de acento.
+  navegador se pierde sobre el verde oscuro del fondo, así que se sustituye por
+  uno en el color de acento.
 
   :focus-visible y no :focus: así el anillo aparece al tabular pero no al
   hacer clic con el ratón, que es el comportamiento que la gente espera.
@@ -323,19 +510,22 @@
 }
 
 /*
-  LA ILUSTRACIÓN DE CADA PASO DEL FORMULARIO.
+  LA ILUSTRACIÓN DE CADA PASO DEL FORMULARIO — SÓLO EN MÓVIL.
 
-  Va a la DERECHA de la tarjeta, así que se disuelve hacia su borde IZQUIERDO:
-  entra desde la nada justo donde termina el campo de texto y va cogiendo
-  cuerpo hacia fuera. Es el espejo del hero, que hace lo contrario porque allí
-  la imagen está al otro lado.
+  Va arriba, a lo ancho de la tarjeta, y se disuelve HACIA ABAJO contra el
+  contenido: sin canto entre la foto y el texto, la una se convierte en el otro.
+  El margen negativo de la columna de contenido es la otra mitad del apaño —
+  sube el texto hasta dentro del desvanecido.
 
-  En móvil no caben dos columnas: la ilustración se coloca arriba y el
-  contenido debajo, así que ahí la disolución vuelve a ser hacia abajo.
+  ⚠️ EN ESCRITORIO NO SE PINTA. La ilustración se retiró de ahí por el feedback
+  de la primera entrega (`md:hidden` en FormularioContacto), así que esta
+  máscara sólo llega a actuar por debajo de 768 px. Tuvo una variante lateral
+  —la imagen ocupaba la segunda columna y se disolvía hacia su borde izquierdo,
+  espejo de lo que hacía el hero— que se fue con ella.
 
-  El tramo opaco empieza pronto (35%) porque esta imagen se recorta con
-  `object-cover` para llenar el alto de la tarjeta: queda mucho más estrecha
-  que su original y una caída lenta se comería la ilustración entera.
+  El tramo opaco llega al 46% y de ahí cae. Puede permitirse la mitad inferior
+  entera porque la imagen conserva su 16:9 y no se recorta: hay alto de sobra y
+  el degradado no se come el motivo.
 */
 .dg-imagen-formulario {
   -webkit-mask-image: linear-gradient(
@@ -354,87 +544,53 @@
   );
 }
 
-@media (min-width: 768px) {
-  .dg-imagen-formulario {
-    -webkit-mask-image: linear-gradient(
-      to right,
-      transparent 0%,
-      rgba(0, 0, 0, 0.35) 18%,
-      #000 35%,
-      #000 100%
-    );
-    mask-image: linear-gradient(
-      to right,
-      transparent 0%,
-      rgba(0, 0, 0, 0.35) 18%,
-      #000 35%,
-      #000 100%
-    );
-  }
-}
-
 /*
-  LA IMAGEN DEL HERO SE DISUELVE, PERO NO SIEMPRE HACIA EL MISMO LADO.
+  LOS ANILLOS SE DISUELVEN POR ARRIBA Y POR ABAJO.
 
-  En escritorio la imagen va a la izquierda y el titular arranca a la mitad de
-  ella, así que la disolución tiene que ir HACIA LA DERECHA: la mitad izquierda
-  se ve entera —la mujer, el arco, la montaña— y la derecha se apaga justo
-  donde empieza a leerse el texto.
+  El hero y la seccion siguiente comparten fondo, asi que el corte entre los
+  dos no lo puede marcar el color. Lo marca que la animacion SE APAGUE antes de
+  llegar al borde: los anillos entran desde la nada arriba y se van
+  desvaneciendo al final de la banda, donde los recoge el filete separador.
 
-  En móvil no hay sitio para poner nada al lado, así que la imagen va arriba y
-  el texto debajo: ahí la disolución tiene que ir HACIA ABAJO, o el borde
-  inferior cortaría en seco contra el fondo.
+  Sin esto, los aros se cortarian en seco contra el canto de la seccion y el
+  hero pareceria una ventana recortada sobre algo mas grande — justo lo
+  contrario de una seccion que termina.
 
-  ── LA CURVA ESTÁ CALCULADA CONTRA EL TEXTO, NO A OJO ──
+  ── UNA MASCARA Y NO UN DEGRADADO ENCIMA ──
 
-  El titular empieza al 50% del ancho de la imagen. Con estas paradas, en ese
-  punto exacto a la imagen le queda un 35% de opacidad: el mandala verde sigue
-  ahí como atmósfera —que es la única parte con interés visual de esa mitad—
-  pero ya no compite con la letra. A partir del 88% no queda nada.
+  Un degradado del color del fondo taparia tambien lo que hubiera detras, y
+  aqui detras esta el fondo de la pagina: funcionaria hoy y dejaria de hacerlo
+  en cuanto la seccion cambie de tono. La mascara recorta la opacidad del
+  propio lienzo, asi que da igual lo que haya debajo.
 
-  Si algún día se mueve la columna de texto, hay que mover estas paradas con
-  ella: son las dos mitades de la misma decisión.
+  ⚠️ LOS ANILLOS TERMINAN EN EL 72%, NO EN EL 100%.
 
-  ── POR QUÉ UNA MÁSCARA Y NO UN DEGRADADO ENCIMA ──
+  Llegaron a apagarse justo en el borde, y ahí se veía el problema que esto
+  resuelve: el aro exterior es casi BLANCO, y su arco inferior cruzaba la
+  sección de lado a lado justo donde ésta acaba. A ese tamaño un arco tan
+  abierto no se lee como un círculo — se lee como una línea recta y clara
+  marcando el final del hero, que es exactamente lo que el fundido intenta
+  evitar.
 
-  Un degradado del color del fondo sólo funciona mientras el fondo sea ese
-  color exacto. `mask-image` no pinta nada: recorta la opacidad del propio
-  elemento, así que da igual lo que haya detrás hoy y dentro de un mes.
+  Terminando en el 72% los aros se han ido ANTES de que empiece el degradado
+  que empalma los dos verdes (los últimos 128 px). Cada cosa ocurre en su
+  tramo y ninguna deja canto.
 */
-.dg-hero-imagen {
+.dg-anillos-fundidos {
   -webkit-mask-image: linear-gradient(
     to bottom,
-    #000 0%,
-    #000 44%,
-    rgba(0, 0, 0, 0.3) 78%,
-    transparent 100%
+    transparent 0%,
+    #000 18%,
+    #000 45%,
+    transparent 72%
   );
   mask-image: linear-gradient(
     to bottom,
-    #000 0%,
-    #000 44%,
-    rgba(0, 0, 0, 0.3) 78%,
-    transparent 100%
+    transparent 0%,
+    #000 18%,
+    #000 45%,
+    transparent 72%
   );
-}
-
-@media (min-width: 768px) {
-  .dg-hero-imagen {
-    -webkit-mask-image: linear-gradient(
-      to right,
-      #000 0%,
-      #000 26%,
-      rgba(0, 0, 0, 0.3) 52%,
-      transparent 88%
-    );
-    mask-image: linear-gradient(
-      to right,
-      #000 0%,
-      #000 26%,
-      rgba(0, 0, 0, 0.3) 52%,
-      transparent 88%
-    );
-  }
 }
 
 /*
@@ -458,6 +614,112 @@
 
 .dg-entra {
   animation: dg-entra 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes dg-puente-carga {
+  from {
+    transform: translateX(-120%);
+  }
+  to {
+    transform: translateX(220%);
+  }
+}
+
+.dg-puente-carga {
+  animation: dg-puente-carga 780ms cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+@keyframes dg-diagnostico-orbita {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dg-diagnostico-pulso {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes dg-diagnostico-icono {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes dg-diagnostico-progreso {
+  0% {
+    transform: translateX(-90%) scaleX(0.45);
+  }
+  48% {
+    transform: translateX(60%) scaleX(1);
+  }
+  100% {
+    transform: translateX(220%) scaleX(0.55);
+  }
+}
+
+@keyframes dg-diagnostico-item {
+  0%,
+  100% {
+    opacity: 0.58;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+.dg-diagnostico-medidor {
+  position: relative;
+  isolation: isolate;
+}
+
+.dg-diagnostico-medidor::before,
+.dg-diagnostico-medidor::after {
+  content: "";
+  position: absolute;
+  inset: -0.6rem;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.dg-diagnostico-medidor::before {
+  border: 1px solid var(--dg-borde-vivo);
+  border-block-color: transparent;
+  animation: dg-diagnostico-orbita 1.6s linear infinite;
+}
+
+.dg-diagnostico-medidor::after {
+  background: radial-gradient(circle, var(--dg-brillo-medio), transparent 68%);
+  animation: dg-diagnostico-pulso 1.8s ease-in-out infinite;
+}
+
+.dg-diagnostico-icono {
+  animation: dg-diagnostico-icono 1.35s ease-in-out infinite;
+}
+
+.dg-diagnostico-progreso {
+  display: block;
+  width: 45%;
+  animation: dg-diagnostico-progreso 1.25s cubic-bezier(0.65, 0, 0.35, 1)
+    infinite;
+  transform-origin: left center;
+}
+
+.dg-diagnostico-item {
+  animation: dg-diagnostico-item 1.75s ease-in-out infinite;
+  animation-delay: var(--dg-delay, 0ms);
 }
 
 /*
@@ -539,7 +801,7 @@
   halo cambiando sino que la escena está viva.
 
   Va DETRÁS de la imagen y con mix-blend-screen, que no puede oscurecer: sobre
-  el negro del fondo suma verde y sobre la propia ilustración no hace nada. Así
+  el verde oscuro del fondo suma luz y sobre la propia ilustración no hace nada. Así
   no ensucia el dibujo por mucho que crezca.
 */
 @keyframes dg-respira {
@@ -614,14 +876,56 @@
   }
 }
 
-.dg-luz-texto {
+/*
+  ── LA VARIANTE DORADA ──
+
+  Hereda de .dg-luz-texto la animación, el recorte a las letras y el tamaño del
+  fondo; lo único que cambia es el degradado.
+
+  Es el mismo oro de GoldText en la landing del bootcamp
+  (#e2c27a → #f3e2b0 → #fff4d6), pero con NUESTRO recorrido: allí es un vaivén
+  continuo de 6 s y aquí la luz cruza despacio y descansa cinco segundos. Se
+  toma el color, no el compás.
+
+  Y no hace falta el truco del valle: sobre un oro medio sí hay sitio para
+  subir el brillo, así que el destello es un pico y ya.
+
+  ⚠️ EL ORO NO ESTÁ EN LA PALETA DE LA MARCA. Está aquí porque se pidió para
+  estas tres palabras y porque sobre el verde del hero funciona —10,65:1 el
+  tono más oscuro del degradado—, pero es un color prestado de otra landing. Si
+  algún día hay que unificar, éste es el primero que sobra.
+*/
+.dg-luz-oro {
   background-image: linear-gradient(
     100deg,
-    var(--dg-acento-vivo) 0%,
-    var(--dg-acento-vivo) 42%,
+    #e2c27a 0%,
+    #e2c27a 34%,
+    #f3e2b0 44%,
+    #fff4d6 50%,
+    #f3e2b0 56%,
+    #e2c27a 66%,
+    #e2c27a 100%
+  );
+}
+
+.dg-luz-texto {
+  /* ⚠️ CON UNA PALETA CLARA NO SE PUEDE "SUBIR" EL BRILLO EN LA BANDA: el
+     texto ya está en crema, y por encima sólo queda el blanco puro, que apenas
+     se distingue. Así que el destello se construye al revés — la banda hace un
+     VALLE y luego un PICO, que es lo que hace de verdad una luz al pasar sobre
+     una superficie: oscurece un poco alrededor de donde ilumina.
+
+     La base se queda en crema pleno para que las palabras del acento sigan
+     siendo lo más brillante del titular. */
+  background-image: linear-gradient(
+    100deg,
+    var(--dg-crema) 0%,
+    var(--dg-crema) 38%,
+    color-mix(in srgb, var(--dg-crema) 74%, var(--dg-verde)) 45%,
     #ffffff 50%,
-    var(--dg-acento-vivo) 58%,
-    var(--dg-acento-vivo) 100%
+    color-mix(in srgb, var(--dg-crema) 74%, var(--dg-verde)) 55%,
+    var(--dg-crema) 62%,
+    var(--dg-crema) 100%
   );
   background-size: 220% auto;
   -webkit-background-clip: text;
@@ -680,6 +984,9 @@
   }
 }
 
+/* ⚠️ HOY NO LA LLEVA NADIE. Era de las tres píldoras bajo el formulario, que
+   se retiraron por el feedback de la primera entrega. Se conserva porque ese
+   "no van por ahora" es de ellos: si vuelven, vuelven con su animación. */
 .dg-zoom {
   animation: dg-zoom 6s ease-in-out infinite;
 }
@@ -766,10 +1073,10 @@
 @keyframes dg-latido {
   0%,
   100% {
-    text-shadow: 0 0 0 rgba(163, 202, 35, 0);
+    text-shadow: 0 0 0 rgba(255, 248, 240, 0);
   }
   50% {
-    text-shadow: 0 0 18px rgba(163, 202, 35, 0.6);
+    text-shadow: 0 0 18px var(--dg-brillo-medio);
   }
 }
 
@@ -796,13 +1103,13 @@
 */
 @keyframes dg-pulso {
   0% {
-    box-shadow: 0 0 0 0 rgba(163, 202, 35, 0.45);
+    box-shadow: 0 0 0 0 var(--dg-brillo-medio);
   }
   70% {
-    box-shadow: 0 0 0 16px rgba(163, 202, 35, 0);
+    box-shadow: 0 0 0 16px rgba(255, 248, 240, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(163, 202, 35, 0);
+    box-shadow: 0 0 0 0 rgba(255, 248, 240, 0);
   }
 }
 
@@ -885,7 +1192,7 @@
   background: linear-gradient(
     105deg,
     transparent 32%,
-    rgba(212, 239, 122, 0.14) 50%,
+    var(--dg-brillo-suave) 50%,
     transparent 68%
   );
   transform: translateX(-100%);
@@ -894,6 +1201,41 @@
 
 .dg-opcion:hover::after {
   transform: translateX(100%);
+}
+
+/*
+  El mockup del video usa el mismo gesto que las opciones, pero mas ancho y mas
+  lento: tiene que sentirse como una pieza protagonista, no como otro boton del
+  formulario.
+*/
+.dg-video-preview {
+  isolation: isolate;
+}
+
+.dg-video-preview::after {
+  content: "";
+  position: absolute;
+  inset: -28%;
+  z-index: 10;
+  pointer-events: none;
+  background: linear-gradient(
+    110deg,
+    transparent 35%,
+    var(--dg-brillo-suave) 46%,
+    var(--dg-brillo-medio) 50%,
+    var(--dg-brillo-suave) 54%,
+    transparent 65%
+  );
+  transform: translateX(-120%) skewX(-10deg);
+  transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dg-video-preview:hover::after {
+  transform: translateX(120%) skewX(-10deg);
+}
+
+.dg-video-preview:disabled::after {
+  display: none;
 }
 
 /* Quien pide menos movimiento no recibe ninguno. Las animaciones se anulan del
@@ -922,6 +1264,18 @@
     animation: none;
     transform: none;
   }
+  .dg-puente-carga {
+    animation: none;
+    transform: none;
+  }
+  .dg-diagnostico-medidor::before,
+  .dg-diagnostico-medidor::after,
+  .dg-diagnostico-icono,
+  .dg-diagnostico-progreso,
+  .dg-diagnostico-item {
+    animation: none;
+    transform: none;
+  }
   /* ⚠️ AQUÍ NO BASTA CON QUITAR LA ANIMACIÓN. El barrido pinta el texto con un
      fondo recortado y `color: transparent`, así que sin animación el texto
      seguiría siendo INVISIBLE. Hay que devolverle el color plano y retirar el
@@ -930,6 +1284,12 @@
     animation: none;
     background-image: none;
     color: var(--dg-acento-vivo);
+  }
+  /* ⚠️ Y LA DORADA, SU PROPIO COLOR. La regla de arriba devuelve el blanco del
+     acento, y las palabras que iban en oro se quedarían blancas: el efecto se
+     retira, pero el color no debería irse con él. */
+  .dg-luz-oro {
+    color: #e2c27a;
   }
   /* El zoom se anula devolviendo la escala: la animacion no usa `both`,
      asi que sin ella la pildora se queda a su tamano normal — pero se declara
@@ -955,6 +1315,9 @@
     display: none;
   }
   .dg-opcion::after {
+    display: none;
+  }
+  .dg-video-preview::after {
     display: none;
   }
   .dg-progreso-relleno {

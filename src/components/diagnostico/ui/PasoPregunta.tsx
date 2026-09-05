@@ -12,7 +12,7 @@ import type { Pregunta } from "@/components/diagnostico/contenido";
 
   El montaje, de arriba abajo:
 
-      enunciado centrado SOBRE la ilustración
+      enunciado centrado, ENCIMA de la ilustración
       ilustración, que se disuelve por su borde inferior
       las cuatro respuestas, subidas dentro de esa disolución
       "pregunta N de 7", centrado, al final de todo
@@ -39,8 +39,13 @@ import type { Pregunta } from "@/components/diagnostico/contenido";
   ── ANTES ERA DOS COLUMNAS Y AHORA ES UNA SOLA ──
 
   La ilustración iba a un lado y el texto al otro, y así quedaba como un
-  adorno lateral: se miraba una vez y no volvía a mirarse. Con el enunciado
-  encima, pasa a ser el soporte de la pregunta.
+  adorno lateral: se miraba una vez y no volvía a mirarse. Apilada bajo el
+  enunciado pasa a ser la escena de la pregunta, que es lo que cuenta.
+
+  El enunciado llegó a ir montado DENTRO de la ilustración, sobre un velo que
+  lo hacía legible. Salió de ahí por el feedback de la primera entrega —"subir
+  el título más arriba"— y ahora va antes, en el flujo normal, con el hueco
+  reservado para que la imagen no se mueva entre preguntas.
 
   Se aplica igual en móvil y en escritorio: es una composición vertical y
   escala sola. Mantener además la de dos columnas significaría sostener dos
@@ -88,7 +93,41 @@ export function PasoPregunta({
 
   return (
     <div className="mx-auto max-w-2xl">
-      {/* ── LA ESCENA: ilustración + enunciado ── */}
+      {/* ── EL ENUNCIADO, ENCIMA DE LA ILUSTRACIÓN ──
+
+          Estaba montado DENTRO de la escena, en absoluto y pegado al borde
+          superior de la imagen, sobre un velo que lo hacía legible. Sale de ahí
+          por el feedback —"subir el título más arriba"— y pasa al flujo normal,
+          antes de la ilustración.
+
+          ── EL HUECO ESTÁ RESERVADO A TRES RENGLONES ──
+
+          Los enunciados van de 33 a 84 caracteres: el más corto ocupa un
+          renglón y el más largo tres en móvil. En flujo normal eso movería la
+          ilustración de sitio en cada pregunta, y el test daría un salto en
+          cada pantalla — que es justo lo que evitaba el absoluto de antes.
+
+          El `min-h` reserva el alto del más largo y `items-end` pega el texto
+          al borde de abajo: la distancia entre el enunciado y la ilustración es
+          siempre la misma, y lo que crece lo hace hacia arriba, sobre el aire
+          que ya había debajo de la barra de progreso.
+
+          ⚠️ SI UN ENUNCIADO FUTURO PIDE UN CUARTO RENGLÓN hay que subir estos
+          dos números, o la ilustración volverá a saltar entre preguntas.
+
+          text-balance reparte las palabras entre los renglones en vez de dejar
+          el último cojo. */}
+      <div className="flex min-h-[4.75rem] items-end justify-center px-2 pb-5 sm:min-h-[6rem] sm:px-8 sm:pb-6">
+        <p
+          id={idEnunciado}
+          style={{ animationDelay: `${RITMO.enunciado}ms` }}
+          className="dg-titulo dg-sube text-center text-[1.15rem] leading-snug text-balance text-[var(--dg-texto)] sm:text-[1.45rem]"
+        >
+          {pregunta.enunciado}
+        </p>
+      </div>
+
+      {/* ── LA ESCENA: la ilustración y su atmósfera ── */}
       <div className="relative">
         {/* EL HALO QUE RESPIRA.
 
@@ -98,9 +137,9 @@ export function PasoPregunta({
             dibujo, y por el borde inferior, donde la imagen se disuelve, se
             cuela hacia dentro.
 
-            mix-blend-screen no puede oscurecer: sobre el negro del fondo suma
-            verde y sobre la propia ilustración no hace nada, así que por mucho
-            que crezca no ensucia el dibujo.
+            mix-blend-screen no puede oscurecer: sobre el verde oscuro del
+            fondo suma luz y sobre la propia ilustración no hace nada, así que
+            por mucho que crezca no ensucia el dibujo.
 
             Va ANTES que la imagen en el documento y la imagen lleva
             `relative`: así el orden de pintado deja el halo detrás sin
@@ -108,7 +147,7 @@ export function PasoPregunta({
             cuanto algún ancestro crea un contexto de apilado. */}
         <div
           aria-hidden
-          className="dg-respira pointer-events-none absolute -inset-x-[7%] -inset-y-[11%] bg-[radial-gradient(50%_50%_at_50%_50%,rgba(163,202,35,0.45)_0%,rgba(163,202,35,0.16)_45%,transparent_72%)] blur-[2.5vw] mix-blend-screen"
+          className="dg-respira pointer-events-none absolute -inset-x-[7%] -inset-y-[11%] bg-[radial-gradient(50%_50%_at_50%_50%,var(--dg-brillo-medio)_0%,var(--dg-brillo-suave)_45%,transparent_72%)] blur-[2.5vw] mix-blend-screen"
         />
 
         {/* ── LA ILUSTRACIÓN ──
@@ -136,33 +175,30 @@ export function PasoPregunta({
           className="dg-imagen-fundida dg-asienta relative aspect-video w-full rounded-2xl"
         />
 
-        {/* EL VELO SUPERIOR ES LO QUE HACE LEGIBLE EL ENUNCIADO. Las
-            ilustraciones son oscuras arriba, pero basta con que una futura
-            tenga una zona clara en esa franja para que el texto desaparezca.
-            Con el velo, la pregunta se lee sea cual sea el dibujo que acabe
-            debajo.
+        {/* EL VELO SUPERIOR — YA NO HACE FALTA PARA LEER, Y SE QUEDA IGUAL.
+
+            Estaba para que el enunciado se leyera encima de cualquier dibujo:
+            las ilustraciones son oscuras arriba, pero bastaba con que una
+            futura tuviera una zona clara en esa franja para que el texto
+            desapareciera. Con el enunciado fuera de la imagen, ese trabajo ya
+            no existe.
+
+            SE MANTIENE porque el feedback dice que la imagen está bien
+            integrada y que no se toca, y este degradado es parte de cómo se ve
+            hoy: quitarlo cambiaría el aspecto que aprobaron. Ahora su único
+            papel es atmósfera.
+
+            ⚠️ Si alguna vez piden la ilustración más luminosa, ESTE es el
+            primer sitio donde mirar — y ahora se puede aclarar o retirar sin
+            romper nada, que antes no.
 
             pointer-events-none: está por encima de la imagen, pero no puede
             interceptar ningún clic. */}
         <div
           aria-hidden
-          className="dg-asienta pointer-events-none absolute inset-x-0 top-0 h-[62%] rounded-t-2xl bg-[linear-gradient(180deg,rgba(4,8,2,0.88)_0%,rgba(4,8,2,0.58)_42%,rgba(4,8,2,0)_100%)]"
+          className="dg-asienta pointer-events-none absolute inset-x-0 top-0 h-[62%] rounded-t-2xl bg-[linear-gradient(180deg,var(--dg-velo)_0%,var(--dg-velo-medio)_42%,var(--dg-velo-nulo)_100%)]"
         />
 
-        {/* EL ENUNCIADO. Va en absoluto y anclado ARRIBA, no centrado en la
-            escena: así una pregunta de un renglón y otra de tres empiezan a la
-            misma altura, y el test no da un salto entre pantallas.
-
-            text-balance reparte las palabras entre los renglones en vez de
-            dejar el último cojo — sobre una imagen se nota mucho más que sobre
-            un fondo liso. */}
-        <p
-          id={idEnunciado}
-          style={{ animationDelay: `${RITMO.enunciado}ms` }}
-          className="dg-titulo dg-sube absolute inset-x-0 top-0 px-6 pt-7 text-center text-[1.15rem] leading-snug text-balance text-[var(--dg-texto)] sm:px-12 sm:pt-9 sm:text-[1.45rem]"
-        >
-          {pregunta.enunciado}
-        </p>
       </div>
 
       {/* ── LAS RESPUESTAS ──
@@ -198,7 +234,7 @@ export function PasoPregunta({
                   ? /* El resplandor confirma la elección durante los 260 ms que
                        tarda en pasar a la siguiente. Sin él, el único aviso es
                        un cambio de borde que se pierde en el movimiento. */
-                    "border-[var(--dg-acento)] bg-[var(--dg-superficie-viva)] text-[var(--dg-texto)] shadow-[0_0_26px_-8px_rgba(163,202,35,0.85)]"
+                    "border-[var(--dg-acento)] bg-[var(--dg-superficie-viva)] text-[var(--dg-texto)] shadow-[0_0_26px_-8px_var(--dg-brillo-fuerte)]"
                   : "border-[var(--dg-borde)] bg-[var(--dg-superficie)] text-[var(--dg-texto-suave)] hover:border-[var(--dg-borde-vivo)] hover:text-[var(--dg-texto)]",
               )}
             >
@@ -210,7 +246,7 @@ export function PasoPregunta({
                 className={cn(
                   "mt-px flex size-6 shrink-0 items-center justify-center rounded-md border text-[0.7rem] font-semibold transition-colors duration-150",
                   activa
-                    ? "border-[var(--dg-acento)] bg-[var(--dg-acento)] text-[#0b1204]"
+                    ? "border-[var(--dg-acento)] bg-[var(--dg-acento)] text-[var(--dg-acento-oscuro)]"
                     : "border-[var(--dg-borde)] text-[var(--dg-texto-tenue)]",
                 )}
               >

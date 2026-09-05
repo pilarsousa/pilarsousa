@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FormularioContacto } from "@/components/diagnostico/FormularioContacto";
 import { enviarFormulario } from "@/components/diagnostico/enviar";
@@ -26,12 +26,24 @@ import type { DatosContacto } from "@/components/diagnostico/almacen";
   teléfono, la página de las preguntas ya está descargada y el salto es
   inmediato.
 */
+const DURACION_PUENTE_FORMULARIO = 620;
+
 export function ArranqueDiagnostico({ className }: { className?: string }) {
   const router = useRouter();
+  const [preparandoPreguntas, setPreparandoPreguntas] = useState(false);
+  const temporizador = useRef<number | null>(null);
 
   useEffect(() => {
     router.prefetch("/analisis/encuesta");
   }, [router]);
+
+  useEffect(() => {
+    return () => {
+      if (temporizador.current !== null) {
+        window.clearTimeout(temporizador.current);
+      }
+    };
+  }, []);
 
   const alCompletar = useCallback(
     (datos: DatosContacto) => {
@@ -39,7 +51,15 @@ export function ArranqueDiagnostico({ className }: { className?: string }) {
          así queda registrado aunque el visitante cierre la pestaña en el
          salto. El envío no se espera (ver enviar.ts). */
       enviarFormulario(datos);
-      router.push("/analisis/encuesta");
+      setPreparandoPreguntas(true);
+
+      if (temporizador.current !== null) {
+        window.clearTimeout(temporizador.current);
+      }
+
+      temporizador.current = window.setTimeout(() => {
+        router.push("/analisis/encuesta");
+      }, DURACION_PUENTE_FORMULARIO);
     },
     [router],
   );
@@ -48,6 +68,7 @@ export function ArranqueDiagnostico({ className }: { className?: string }) {
     <FormularioContacto
       onCompleto={alCompletar}
       className={className}
+      transicionActiva={preparandoPreguntas}
     />
   );
 }

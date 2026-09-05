@@ -393,6 +393,40 @@ export const LANDING = {
   subtitulo:
     "Hacé el diagnóstico gratuito y recibí un video personalizado de Pilar con la solución exacta para elevar tu frecuencia y empezar a manifestar la vida que querés.",
 
+  /* LA FILA DE AVATARES DEL HERO.
+
+     ── SON CARAS REALES, Y POR ESO NO HAY CIFRA ──
+
+     Las cuatro fotos son las de perfil de reseñas REALES de Volver al Origen:
+     las mismas que ya se ven en los carruseles de /mision-origen y de las
+     otras landings (public/Testimonios/cards-test/). No hay retrato inventado
+     ni de banco de imágenes.
+
+     La frase tampoco cuenta a nadie. El documento prohíbe expresamente
+     inventar autoridad —"avalado por X mil personas"— si el dato no se puede
+     respaldar, y esa cifra no existe: nadie ha contado cuánta gente hizo el
+     diagnóstico. Así que la frase INVITA en vez de contar, que dice lo mismo
+     sin afirmar un número que habría que sostener.
+
+     ⚠️ MATIZ QUE CONVIENE NO PERDER: estas personas reseñaron el PROGRAMA, no
+     este diagnóstico —que es nuevo y todavía no tiene reseñas propias—. "Como
+     ellos" se sostiene porque el programa va justo de esto, pero si Ismael
+     quiere hilar más fino, la línea exacta sería "Sumate a los que ya
+     trabajaron su frecuencia con Pilar".
+
+     Un hueco puede ir a `null`: el componente pinta una silueta en su sitio
+     en vez de dejar el círculo vacío. Y con `texto` en blanco desaparece el
+     bloque entero — media pieza dice menos que ninguna. */
+  pruebaSocial: {
+    texto: "Sumate y descubrí tu frecuencia como ellos",
+    avatares: [
+      "/Testimonios/cards-test/card-1.png",
+      "/Testimonios/cards-test/card-2.png",
+      "/Testimonios/cards-test/card-4.png",
+      "/Testimonios/cards-test/card-7.png",
+    ] as (string | null)[],
+  },
+
   /* Cabecera de la caja del formulario, que va empotrada en la landing justo
      debajo de la promesa. Es corta a propósito: encima ya está el titular
      grande, y dos titulares seguidos compiten. */
@@ -402,9 +436,15 @@ export const LANDING = {
      mandar a nadie. Si alguna vez vuelve a hacer falta un rótulo de botón, va
      aquí — pero antes conviene releer el comentario del final de page.tsx. */
 
-  /* Las tres señales bajo el botón. Son hechos verificables del propio test,
-     no autoridad inventada: el documento prohíbe expresamente cifras del tipo
-     "avalado por X mil personas" si no son reales. */
+  /* ⚠️ HOY NO SE PINTAN EN NINGÚN SITIO. Las tres píldoras se retiraron de la
+     landing por el feedback de la primera entrega —"no van por ahora"— y el
+     texto se conserva porque ese "por ahora" es de ellos, no una decisión
+     cerrada. Para devolverlas: volver a montar la lista en page.tsx, donde
+     queda la nota que dice dónde iban.
+
+     Son hechos verificables del propio test, no autoridad inventada: el
+     documento prohíbe expresamente cifras del tipo "avalado por X mil
+     personas" si no son reales. */
   señales: ["7 preguntas", "Menos de 60 segundos", "Resultado al instante"],
 
   /* ⚠️ PRUEBA SOCIAL — BLOQUEADA, NO INVENTAR.
@@ -414,15 +454,13 @@ export const LANDING = {
      hace falta para que aparezca. */
   testimonios: [] as { nombre: string; texto: string; avatar?: string }[],
 
-  /* ── La imagen del hero ──
-     Va a la izquierda del titular y se disuelve hacia la derecha (en móvil,
-     hacia abajo). Los detalles del fundido, en .dg-hero-imagen.
+  /* ⚠️ EL HERO YA NO LLEVA FOTOGRAFÍA: su fondo es la animación de anillos
+     (ui/MagicRings.tsx). Los campos que apuntaban a img-hero.png se retiraron
+     de aquí porque nadie los leía, y un campo de contenido que no se pinta en
+     ninguna parte es una trampa para quien venga a editar el copy: parece que
+     cambiarlo hace algo.
 
-     Trae las esquinas redondeadas QUEMADAS sobre blanco, con un radio de 42 px
-     sobre 1672 de ancho. Se tapan con el redondeo del montaje; ver la nota en
-     page.tsx antes de cambiarle el tamaño. */
-  heroImagen: "/diagnostico/contenido/main/img-hero.png",
-  heroImagenAlt: "",
+     El archivo sigue en public/diagnostico/contenido/main/ por si vuelve. */
 
   /* ── Lo que la persona va a recibir ──
      Ya no es un mockup dibujado sino un fotograma real del video, con botón de
@@ -431,6 +469,11 @@ export const LANDING = {
   regaloTitulo: "Lo que vas a recibir",
   regaloTexto:
     "Un video de Pilar grabado para tu frecuencia dominante, con el primer movimiento concreto para salir de ahí. Te llega al email apenas termines el diagnóstico.",
+  regaloPuntos: [
+    "Lectura de tu frecuencia dominante",
+    "Primer movimiento concreto para salir de ahí",
+    "Enviado apenas terminás el diagnóstico",
+  ],
   regaloImagen: "/diagnostico/contenido/main/prevew-video.png",
   regaloImagenAlt: "Pilar Sousa hablando a cámara en el video del diagnóstico",
 
@@ -452,12 +495,15 @@ export const LANDING = {
    captura primero y entrega después. */
 export const FORMULARIO = {
   /*
-    ── CADA PASO ES UNA TARJETA DE DOS COLUMNAS ──
+    ── LA TARJETA ES UNA COLUMNA, Y EN MÓVIL LLEVA ILUSTRACIÓN ──
 
-    A la izquierda el contenido —distintivo, pregunta, ayuda, campo, botón— y a
-    la derecha la ilustración, que se disuelve por su borde IZQUIERDO hacia el
-    fondo de la tarjeta. En móvil no hay sitio para dos columnas: la imagen se
-    va arriba y se disuelve por abajo. Los detalles, en .dg-imagen-formulario.
+    Tuvo dos columnas —contenido a la izquierda, ilustración a la derecha— y en
+    escritorio se quedó sin ella por el feedback de la primera entrega. En MÓVIL
+    sigue: arriba, a lo ancho, disolviéndose hacia abajo contra el contenido.
+    Los detalles, en .dg-imagen-formulario.
+
+    ⚠️ POR ESO EL CAMPO `imagen` SIGUE AQUÍ aunque en un escritorio no se vea
+    nada. No es un resto olvidado: por debajo de 768 px se pinta.
 
     Las tres ilustraciones miden lo mismo (1672x941), así que la tarjeta NO
     CAMBIA DE ALTURA entre pasos y nada de lo que hay debajo en la landing se

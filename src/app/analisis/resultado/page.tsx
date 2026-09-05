@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Marca } from "@/components/diagnostico/ui/Marca";
 import { VistaResultado } from "@/components/diagnostico/VistaResultado";
+import { AcidSquaresFondo } from "@/components/diagnostico/ui/AcidSquaresFondo";
 
 /*
   /analisis/resultado — la página de gracias.
@@ -22,9 +22,9 @@ export const metadata: Metadata = {
 
 export default function ResultadoPage() {
   return (
-    <div className="flex min-h-svh flex-col">
-      <Marca />
-      <main className="flex-1">
+    <div className="relative isolate flex min-h-svh flex-col">
+      <AcidSquaresFondo />
+      <main className="relative z-10 flex-1">
         <VistaResultado />
       </main>
     </div>

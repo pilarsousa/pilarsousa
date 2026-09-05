@@ -138,7 +138,7 @@ export function MedicionFrecuencias({
                     /* Sólo la dominante lleva resplandor. Puesto en las cuatro
                        dejaría de señalar nada. */
                     esDominante &&
-                      "shadow-[0_0_16px_-2px_rgba(163,202,35,0.85)]",
+                      "shadow-[0_0_16px_-2px_var(--dg-brillo-fuerte)]",
                   )}
                 />
               </div>

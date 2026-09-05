@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { Lock, Play } from "lucide-react";
+import { BadgeCheck, Lock, MailCheck, Play, Sparkles, Target } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { LANDING } from "@/components/diagnostico/contenido";
 
@@ -25,12 +25,12 @@ import { LANDING } from "@/components/diagnostico/contenido";
   un fallo de carga.
 
   Lo único que cambia es el color del resplandor: allí es cian, que es la
-  paleta de /game. Aquí es el verde de acento de esta ruta. Un halo cian en
+  paleta de /game. Aquí es el crema de acento de esta ruta. Un halo cian en
   esta página se vería como una pieza pegada de otro sitio.
 
   ── VUELVE SOLO ──
 
-  El bloqueo se deshace a los 2,2 s. Si se quedara puesto, la sección terminaría
+  El bloqueo se deshace a los 7 s. Si se quedara puesto, la sección terminaría
   con una imagen gris y muerta para el resto de la visita — y quien lo pulsó por
   curiosidad no tendría forma de recuperar el fotograma. Volviendo, el gesto se
   lee como lo que es: una respuesta, no un estado final.
@@ -53,6 +53,7 @@ import { LANDING } from "@/components/diagnostico/contenido";
    El tope está en que a partir de unos diez segundos deja de parecer una
    respuesta y empieza a parecer que la página se colgó. */
 const DURACION_BLOQUEO = 7000;
+const ICONOS_REGALO = [Target, BadgeCheck, MailCheck] as const;
 
 export function VistaPreviaVideo() {
   const [bloqueado, setBloqueado] = useState(false);
@@ -69,6 +70,10 @@ export function VistaPreviaVideo() {
   }, []);
 
   function alPulsar() {
+    if (bloqueado) {
+      return;
+    }
+
     setBloqueado(true);
     if (temporizador.current !== null) {
       window.clearTimeout(temporizador.current);
@@ -80,94 +85,203 @@ export function VistaPreviaVideo() {
   }
 
   return (
-    <button
-      type="button"
-      onClick={alPulsar}
-      className="group relative block w-full overflow-hidden rounded-2xl border border-[var(--dg-borde)]"
+    <section
+      aria-labelledby="regalo-titulo"
+      aria-busy={bloqueado}
+      className="dg-borde-giro relative mt-14 w-full rounded-[calc(1.5rem+1px)] p-px sm:mt-16"
     >
-      {/* EL FOTOGRAMA. `aspect-video` y no la altura natural: es 1672x941, que
-          es 16:9 con un píxel de diferencia, y fijar la proporción evita que la
-          caja cambie de alto entre la carga y el pintado.
+      <div className="relative overflow-hidden rounded-3xl bg-[var(--dg-fondo-alto)] p-5 shadow-[0_28px_90px_-50px_rgba(0,0,0,0.95)] sm:p-7 lg:p-8">
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,var(--dg-brillo-suave)_0%,transparent_28%,transparent_68%,var(--dg-brillo-suave)_100%)]"
+        />
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,var(--dg-acento),transparent)]"
+        />
 
-          quality 90 y no el 75 por defecto: es un retrato con piel y pelo,
-          donde el bloque de compresión se ve enseguida. next.config sólo admite
-          75 y 90 — cualquier otro valor se ignora en silencio y sirve 75. */}
-      <Image
-        src={LANDING.regaloImagen}
-        alt={LANDING.regaloImagenAlt}
-        width={1672}
-        height={941}
-        quality={90}
-        sizes="(min-width: 640px) 24rem, 90vw"
-        className={cn(
-          "aspect-video w-full object-cover transition-[filter] duration-500",
-          bloqueado && "brightness-[0.4] grayscale",
-        )}
-      />
+        <div className="relative grid gap-6 lg:grid-cols-[0.85fr_1.25fr] lg:items-center lg:gap-8">
+          <div className="min-w-0 text-left">
+            <p className="inline-flex items-center gap-2 rounded-full border border-[var(--dg-borde-vivo)] bg-[var(--dg-superficie)] px-3 py-1 text-[0.7rem] font-semibold tracking-[0.14em] text-[var(--dg-acento)] uppercase">
+              <Sparkles className="size-3.5" aria-hidden strokeWidth={1.8} />
+              Tu recurso personalizado
+            </p>
 
-      {/* EL VELO. La foto está tomada en una habitación clara y el resto de la
-          página es casi negra: sin atenuarla, el recuadro es un rectángulo
-          blanco que le grita al ojo por encima de todo lo demás. Atenuada, se
-          integra y además le da contraste al botón.
-
-          Se retira mientras dura el bloqueo: ahí ya oscurece el propio filtro
-          de la imagen, y sumar los dos dejaría el fotograma casi negro y el
-          candado flotando sobre nada. */}
-      <span
-        aria-hidden
-        className={cn(
-          "pointer-events-none absolute inset-0 bg-[rgba(4,8,2,0.34)] transition-opacity duration-500",
-          bloqueado && "opacity-0",
-        )}
-      />
-
-      <span className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-        {bloqueado ? (
-          <>
-            {/* EL CANDADO, con el resplandor del acento de esta ruta. El
-                drop-shadow es lo que lo despega de la imagen gris: sin él, un
-                icono blanco sobre un fotograma desaturado se pierde entre los
-                grises claros de la pared del fondo. */}
-            <Lock
-              aria-hidden
-              className="dg-entra size-12 text-white [filter:drop-shadow(0_0_14px_rgba(163,202,35,0.8))] sm:size-14"
-              strokeWidth={1.6}
-            />
-            {/* aria-live: el estado cambia sin que cambie el foco, así que sin
-                esto quien usa un lector de pantalla pulsa el botón y no se
-                entera de que ha pasado nada. */}
-            <span
-              aria-live="polite"
-              className="dg-entra text-[0.72rem] font-semibold tracking-[0.18em] text-white/85 uppercase"
+            <h2
+              id="regalo-titulo"
+              className="dg-titulo mt-4 text-2xl leading-tight text-balance text-[var(--dg-texto)] sm:text-3xl"
             >
-              {LANDING.regaloBloqueadoRotulo}
-            </span>
-          </>
-        ) : (
-          <>
-            {/* El disco de reproducir. En el color de acento y no en blanco
-                translúcido: sobre una foto clara, el blanco translúcido
-                desaparece — y este disco es lo único que dice que el recuadro
-                se puede pulsar. */}
-            <span
-              aria-hidden
-              className="flex size-16 items-center justify-center rounded-full bg-[var(--dg-acento)] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.8)] transition-transform duration-200 group-hover:scale-110 sm:size-[4.5rem]"
+              {LANDING.regaloTitulo}
+            </h2>
+
+            <p className="mt-4 max-w-xl text-[0.98rem] leading-relaxed text-[var(--dg-texto-suave)]">
+              {LANDING.regaloTexto}
+            </p>
+
+            <ul className="mt-6 grid gap-3">
+              {LANDING.regaloPuntos.map((punto, indice) => {
+                const Icono = ICONOS_REGALO[indice] ?? BadgeCheck;
+
+                return (
+                  <li
+                    key={punto}
+                    className="flex items-start gap-3 rounded-2xl border border-[var(--dg-borde)] bg-[color-mix(in_srgb,var(--dg-superficie)_72%,transparent)] px-3.5 py-3 text-sm leading-snug text-[var(--dg-texto)]"
+                  >
+                    <span
+                      aria-hidden
+                      className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-[var(--dg-acento)] text-[var(--dg-acento-oscuro)]"
+                    >
+                      <Icono className="size-3.5" strokeWidth={1.9} />
+                    </span>
+                    <span>{punto}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+
+          <div className="min-w-0">
+            <button
+              type="button"
+              onClick={alPulsar}
+              disabled={bloqueado}
+              className={cn(
+                "dg-video-preview group relative block w-full cursor-pointer overflow-hidden rounded-2xl border border-[var(--dg-borde-vivo)] bg-black text-left shadow-[0_22px_70px_-38px_rgba(0,0,0,0.95)] transition-[border-color,box-shadow,transform] duration-300 hover:border-[var(--dg-acento)] hover:shadow-[0_28px_80px_-42px_var(--dg-brillo-fuerte)] focus-visible:translate-y-0 disabled:cursor-wait",
+                bloqueado && "border-[var(--dg-acento)]",
+              )}
             >
-              {/* El triángulo se desplaza un pelo a la derecha: centrado
-                  geométricamente, se ve descentrado hacia la izquierda porque
-                  su masa está en ese lado. */}
-              <Play
-                className="ml-[3px] size-7 fill-[#0b1204] text-[#0b1204] sm:size-8"
-                strokeWidth={1.5}
+              {/* EL FOTOGRAMA. `aspect-video` y no la altura natural: es 1672x941, que
+                  es 16:9 con un píxel de diferencia, y fijar la proporción evita que la
+                  caja cambie de alto entre la carga y el pintado.
+
+                  quality 90 y no el 75 por defecto: es un retrato con piel y pelo,
+                  donde el bloque de compresión se ve enseguida. next.config sólo admite
+                  75 y 90 — cualquier otro valor se ignora en silencio y sirve 75. */}
+              <Image
+                src={LANDING.regaloImagen}
+                alt={LANDING.regaloImagenAlt}
+                width={1672}
+                height={941}
+                quality={90}
+                /* El bloque vuelve a vivir dentro de una card ancha: en
+                   escritorio el fotograma ocupa la columna protagonista, y en
+                   móvil la tarjeta completa. */
+                sizes="(min-width: 1024px) 36rem, (min-width: 640px) 44rem, 90vw"
+                className={cn(
+                  "aspect-video w-full object-cover transition-[filter,transform] duration-500 group-hover:scale-[1.015]",
+                  bloqueado && "brightness-[0.4] grayscale group-hover:scale-100",
+                )}
               />
-            </span>
-          </>
-        )}
-      </span>
 
-      {/* El rótulo accesible del botón: para un lector de pantalla, un control
-          que sólo contiene iconos decorativos es un botón sin nombre. */}
-      <span className="sr-only">{LANDING.regaloPlayRotulo}</span>
-    </button>
+              {/* EL VELO. La foto está tomada en una habitación clara y el resto de la
+                  página es casi negra: sin atenuarla, el recuadro es un rectángulo
+                  blanco que le grita al ojo por encima de todo lo demás. Atenuada, se
+                  integra y además le da contraste al botón.
+
+                  Se retira mientras dura el bloqueo: ahí ya oscurece el propio filtro
+                  de la imagen, y sumar los dos dejaría el fotograma casi negro y el
+                  candado flotando sobre nada. */}
+              <span
+                aria-hidden
+                className={cn(
+                  "pointer-events-none absolute inset-0 bg-[var(--dg-velo-leve)] transition-opacity duration-500",
+                  bloqueado && "opacity-0",
+                )}
+              />
+
+              <span
+                aria-hidden
+                className="pointer-events-none absolute left-3 top-3 rounded-full border border-white/20 bg-black/35 px-3 py-1 text-[0.65rem] font-semibold tracking-[0.16em] text-white/85 uppercase backdrop-blur-sm"
+              >
+                Vista previa
+              </span>
+
+              <span className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+                {bloqueado ? (
+                  <>
+                    {/* ══ EL CANDADO, RECORTADO EN UN DISCO DE CREMA ══
+
+                        ── POR QUÉ NO VA SUELTO SOBRE LA FOTO ──
+
+                        Estuvo suelto, blanco y con un resplandor crema alrededor, y ese
+                        resplandor era lo único que lo despegaba del fotograma gris.
+                        Pedido el candado EN EL COLOR DEL FONDO DE LA SECCIÓN, suelto no
+                        se vería: verde oscuro sobre el fotograma atenuado son 1,5:1 —
+                        un trazo de 1,6 px a esa distancia desaparece, y no hay
+                        resplandor que arregle un icono que ya es del color de la
+                        sombra.
+
+                        Sobre el disco de crema se lee como un agujero recortado en la
+                        luz hasta el fondo de la sección, que es
+                        exactamente lo que se pidió: el color del fondo de la sección.
+
+                        ── Y ADEMÁS EMPAREJA LOS DOS ESTADOS ──
+
+                        Es el mismo disco que el de reproducir, en el mismo sitio y del
+                        mismo tamaño. Los dos estados del recuadro pasan a ser el mismo
+                        objeto cambiando de símbolo, en vez de un disco y un icono
+                        suelto que no se parecen en nada.
+
+                        Sin `group-hover:scale-110`, al revés que el de reproducir: aquí
+                        ya se ha pulsado y no hay nada que invitar.
+
+                        ⚠️ El triángulo de reproducir y el candado usan el mismo fondo
+                        de sección para que los dos discos respondan al mismo sistema. */}
+                    <span
+                      aria-hidden
+                      className="dg-entra flex size-16 items-center justify-center rounded-full bg-[var(--dg-acento)] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.8)] sm:size-[4.5rem]"
+                    >
+                      <Lock
+                        className="size-7 text-[var(--dg-fondo)] sm:size-8"
+                        strokeWidth={1.8}
+                      />
+                    </span>
+                    {/* aria-live: el estado cambia sin que cambie el foco, así que sin
+                        esto quien usa un lector de pantalla pulsa el botón y no se
+                        entera de que ha pasado nada. */}
+                    <span
+                      aria-live="polite"
+                      className="dg-entra text-[0.72rem] font-semibold tracking-[0.18em] text-white/85 uppercase"
+                    >
+                      {LANDING.regaloBloqueadoRotulo}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    {/* El disco de reproducir. En el color de acento y no en blanco
+                        translúcido: sobre una foto clara, el blanco translúcido
+                        desaparece — y este disco es lo único que dice que el recuadro
+                        se puede pulsar. */}
+                    <span
+                      aria-hidden
+                      className="flex size-16 items-center justify-center rounded-full bg-[var(--dg-acento)] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.8)] transition-transform duration-200 group-hover:scale-110 sm:size-[4.5rem]"
+                    >
+                      {/* El triángulo se desplaza un pelo a la derecha: centrado
+                          geométricamente, se ve descentrado hacia la izquierda porque
+                          su masa está en ese lado. */}
+                      <Play
+                        className="ml-[3px] size-7 fill-[var(--dg-acento-oscuro)] text-[var(--dg-acento-oscuro)] sm:size-8"
+                        strokeWidth={1.5}
+                      />
+                    </span>
+                  </>
+                )}
+              </span>
+
+              {/* El rótulo accesible del botón: para un lector de pantalla, un control
+                  que sólo contiene iconos decorativos es un botón sin nombre. */}
+              <span className="sr-only">{LANDING.regaloPlayRotulo}</span>
+            </button>
+          </div>
+        </div>
+
+        {bloqueado && (
+          <span
+            aria-hidden
+            className="absolute inset-0 z-30 cursor-wait rounded-3xl"
+          />
+        )}
+      </div>
+    </section>
   );
 }

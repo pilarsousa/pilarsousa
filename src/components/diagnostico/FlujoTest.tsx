@@ -1,8 +1,9 @@
 "use client";
 
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import { cn } from "@/lib/cn";
 import { FORMULARIO, PREGUNTAS } from "@/components/diagnostico/contenido";
 import {
   calcularDiagnostico,
@@ -26,6 +27,7 @@ import { FormularioContacto } from "@/components/diagnostico/FormularioContacto"
 import { Progreso } from "@/components/diagnostico/ui/Progreso";
 import { PasoPregunta } from "@/components/diagnostico/ui/PasoPregunta";
 import { BotonDg } from "@/components/diagnostico/ui/BotonDg";
+import { GenerandoDiagnostico } from "@/components/diagnostico/ui/GenerandoDiagnostico";
 
 /*
   ═══════════════════════════════════════════════════════════════════════════
@@ -59,10 +61,11 @@ import { BotonDg } from "@/components/diagnostico/ui/BotonDg";
   un objeto limpio le rompe la navegación de forma difícil de diagnosticar.
 */
 
-/* Pantalla 0: el puente. De la 1 a la 7: las preguntas. */
+/* Pantalla 0: el puente. De la 1 a la 7: las preguntas. La 8 calcula. */
 const IDX_INTRO = 0;
 const IDX_PRIMERA_PREGUNTA = 1;
-const IDX_FIN = IDX_PRIMERA_PREGUNTA + PREGUNTAS.length;
+const IDX_GENERANDO = IDX_PRIMERA_PREGUNTA + PREGUNTAS.length;
+const IDX_FIN = IDX_GENERANDO + 1;
 
 /*
   RETARDO ANTES DE PASAR A LA SIGUIENTE PREGUNTA.
@@ -73,6 +76,7 @@ const IDX_FIN = IDX_PRIMERA_PREGUNTA + PREGUNTAS.length;
   400 ms empieza a sentirse como una espera.
 */
 const RETARDO_AVANCE = 260;
+const RETARDO_DIAGNOSTICO = 1850;
 
 function acotarPaso(paso: number): number {
   return Math.min(Math.max(paso, 0), IDX_FIN - 1);
@@ -213,6 +217,18 @@ export function FlujoTest() {
     }
   }, []);
 
+  const mostrarGenerando = useCallback(() => {
+    setEstado((previo) => ({ ...previo, paso: IDX_GENERANDO }));
+    try {
+      window.history.replaceState(
+        { ...window.history.state, dgPaso: IDX_GENERANDO },
+        "",
+      );
+    } catch {
+      /* Ver el comentario del replaceState. */
+    }
+  }, []);
+
   const finalizar = useCallback(
     (respuestasFinales: Respuestas) => {
       const diagnostico = calcularDiagnostico(respuestasFinales);
@@ -260,6 +276,26 @@ export function FlujoTest() {
     [datos, irA, router],
   );
 
+  useEffect(() => {
+    if (paso !== IDX_GENERANDO) return;
+
+    if (temporizador.current !== null) {
+      window.clearTimeout(temporizador.current);
+    }
+
+    temporizador.current = window.setTimeout(() => {
+      temporizador.current = null;
+      finalizar(respuestas);
+    }, RETARDO_DIAGNOSTICO);
+
+    return () => {
+      if (temporizador.current !== null) {
+        window.clearTimeout(temporizador.current);
+        temporizador.current = null;
+      }
+    };
+  }, [paso, respuestas, finalizar]);
+
   const elegirOpcion = useCallback(
     (idPregunta: string, idOpcion: string) => {
       const nuevas = { ...respuestas, [idPregunta]: idOpcion };
@@ -274,14 +310,14 @@ export function FlujoTest() {
          desde la pregunta que acaba de responder, que es justo lo que hace el
          valor capturado. */
       temporizador.current = window.setTimeout(() => {
-        if (paso >= IDX_FIN - 1) {
-          finalizar(nuevas);
+        if (paso >= IDX_GENERANDO - 1) {
+          mostrarGenerando();
         } else {
           irA(paso + 1);
         }
       }, RETARDO_AVANCE);
     },
-    [paso, respuestas, finalizar, irA],
+    [paso, respuestas, mostrarGenerando, irA],
   );
 
   const alCompletarContacto = useCallback((nuevos: DatosContacto) => {
@@ -305,7 +341,7 @@ export function FlujoTest() {
      sembrado del borrador y sería distinto del HTML que mandó el servidor. El
      hueco ocupa el alto de la pantalla para que no haya salto al aparecer. */
   if (!hidratado) {
-    return <div className="min-h-svh" aria-hidden />;
+    return <div className="dg-quiz-escena min-h-svh" aria-hidden />;
   }
 
   /*
@@ -328,125 +364,164 @@ export function FlujoTest() {
   */
   if (faltanDatos) {
     if (almacenDisponible()) {
-      return <div className="min-h-svh" aria-hidden />;
+      return <div className="dg-quiz-escena min-h-svh" aria-hidden />;
     }
     return (
-      <div className="mx-auto w-full max-w-md px-5 pt-10 pb-16">
-        {/* Aquí el formulario SÍ se enfoca solo: es lo único que hay en la
-            pantalla, así que no le quita el sitio a nada y ahorra un toque. */}
-        <FormularioContacto onCompleto={alCompletarContacto} enfocarPrimerCampo />
+      <div className="dg-quiz-escena relative flex min-h-svh w-full items-center justify-center overflow-hidden px-5 py-8">
+        <div className="relative z-10 mx-auto w-full max-w-md">
+          {/* Aquí el formulario SÍ se enfoca solo: es lo único que hay en la
+              pantalla, así que no le quita el sitio a nada y ahorra un toque. */}
+          <FormularioContacto onCompleto={alCompletarContacto} enfocarPrimerCampo />
+        </div>
       </div>
     );
   }
 
   const enIntro = paso === IDX_INTRO;
+  const enGenerando = paso === IDX_GENERANDO;
   const indicePregunta = paso - IDX_PRIMERA_PREGUNTA;
-  const pregunta = enIntro ? null : PREGUNTAS[indicePregunta];
+  const pregunta = enIntro || enGenerando ? null : PREGUNTAS[indicePregunta];
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-5 pt-8 pb-16 sm:pt-10">
-      {/* ── Cabecera: atrás + progreso ──
-          El atrás delega en el historial del navegador en vez de restar uno al
-          paso. Así hay UN SOLO camino de vuelta —el del navegador— y los dos
-          gestos no pueden desincronizarse. */}
-      <div className="mb-8 flex items-center gap-4">
-        {paso > IDX_INTRO ? (
-          <button
-            type="button"
-            onClick={() => window.history.back()}
-            className="flex shrink-0 items-center gap-1.5 text-[0.8rem] text-[var(--dg-texto-tenue)] transition-colors hover:text-[var(--dg-texto)]"
-          >
-            <ArrowLeft className="size-4" aria-hidden />
-            Atrás
-          </button>
+    <div
+      className={cn(
+        "dg-quiz-escena relative flex min-h-svh w-full justify-center overflow-hidden px-5",
+        enIntro || enGenerando
+          ? "items-center py-8 sm:py-10"
+          : "items-start py-7 sm:py-10",
+      )}
+    >
+      <div className="relative z-10 mx-auto w-full max-w-2xl">
+        {/* ── Cabecera: atrás + progreso ──
+            El puente todavía no muestra la barra de las siete preguntas: queda
+            sólo un filete centrado para no abrir la pantalla con un espacio
+            vacío. En las preguntas, el atrás delega en el historial del navegador
+            en vez de restar uno al paso. */}
+        {enIntro || enGenerando ? (
+          <div className="mb-7 flex justify-center" aria-hidden>
+            <span className="h-px w-full max-w-xl bg-[linear-gradient(90deg,transparent,var(--dg-borde-vivo),transparent)]" />
+          </div>
         ) : (
-          /* Un hueco del mismo ancho mantiene la barra centrada en el puente.
-             Sin él, la barra salta al aparecer el botón en la pregunta 1. */
-          <span aria-hidden className="w-[3.9rem] shrink-0" />
-        )}
-
-        {/* La barra cuenta sólo las 7 preguntas: los tres campos ya quedaron
-            atrás, en la landing, y contarlos aquí haría empezar el test con la
-            barra a un tercio sin que se entienda por qué. */}
-        {!enIntro && (
-          <Progreso paso={indicePregunta} total={PREGUNTAS.length} />
-        )}
-        <span aria-hidden className="w-[3.9rem] shrink-0" />
-      </div>
-
-      {/*
-        LA CLAVE DEL <div> CAMBIA CON EL PASO, y eso es lo que dispara las
-        animaciones de entrada: React desmonta el nodo anterior y monta uno
-        nuevo, así que las animaciones CSS vuelven a correr. Sin la clave,
-        React reutilizaría el mismo nodo, sólo cambiaría el texto, y las ocho
-        pantallas se sucederían con un corte seco.
-
-        ⚠️ ESTE ENVOLTORIO YA NO ANIMA NADA. Llevaba `dg-entra`, y cuando la
-        pregunta pasó a montarse en cascada —ilustración, enunciado y las
-        cuatro respuestas, cada una con su retardo— las dos animaciones se
-        pisaban: el bloque entero se desplazaba mientras sus hijos también lo
-        hacían, y el escalonado se perdía en el movimiento del conjunto.
-
-        Ahora cada pantalla trae la suya. El puente, que es una sola cosa, se
-        queda con `dg-entra`; la pregunta la reparte entre sus piezas.
-      */}
-      <div key={paso}>
-        {/* ── El puente entre el formulario y la primera pregunta ──
-            Existe para cambiar de marcha: se pasa de dar datos a hablar de uno
-            mismo, y sin este respiro la primera pregunta llega como el cuarto
-            campo del formulario. */}
-        {enIntro && (
-          <div className="dg-entra mx-auto max-w-md text-center">
-            {/* El nombre se usa aquí y en ningún otro sitio del test: es el
-                único momento en que la página habla antes de preguntar, y
-                sirve además para confirmar que lo que se escribió llegó. */}
-            {datos.nombre && (
-              <p className="mb-3 text-[0.75rem] tracking-[0.16em] text-[var(--dg-acento)] uppercase">
-                Hola, {datos.nombre.trim()}
-              </p>
-            )}
-            {/* El título del test, literal del cliente. Va aquí y no en la
-                landing porque es el nombre del cuestionario, no de la página:
-                esta pantalla es justo la que da paso a las preguntas. */}
-            <h1 className="dg-titulo text-[1.45rem] leading-tight text-balance text-[var(--dg-texto)] sm:text-[1.75rem]">
-              {FORMULARIO.testTitulo}
-            </h1>
-
-            <p className="dg-titulo mt-4 text-[1.05rem] leading-snug text-balance text-[var(--dg-texto-suave)] sm:text-[1.2rem]">
-              {FORMULARIO.introTest}
-            </p>
-            {/* El salto de línea lo pone el montaje, no el copy: introAyuda es
-                un array de renglones (ver contenido.ts). El <br> va ANTES de
-                cada línea salvo la primera, que es lo que evita dejar un salto
-                colgando al final del párrafo. */}
-            <p className="mt-4 text-[0.9rem] leading-relaxed text-[var(--dg-texto-suave)]">
-              {FORMULARIO.introAyuda.map((linea, i) => (
-                <Fragment key={linea}>
-                  {i > 0 && <br />}
-                  {linea}
-                </Fragment>
-              ))}
-            </p>
-            <div className="mt-8">
-              <BotonDg
-                onClick={() => irA(IDX_PRIMERA_PREGUNTA)}
-                ancho="completo"
+          <div className="mb-7 rounded-2xl border border-[var(--dg-borde)] bg-[color-mix(in_srgb,var(--dg-fondo-alto)_88%,transparent)] p-2.5 shadow-[0_18px_50px_-40px_rgba(0,0,0,0.95)] sm:mb-8 sm:p-3">
+            <div className="flex items-center gap-4">
+              <button
+                type="button"
+                onClick={() => window.history.back()}
+                className="flex shrink-0 cursor-pointer items-center gap-1.5 text-[0.8rem] text-[var(--dg-texto-tenue)] transition-colors hover:text-[var(--dg-texto)]"
               >
-                Empezar
-              </BotonDg>
+                <ArrowLeft className="size-4" aria-hidden />
+                Atrás
+              </button>
+
+              {/* La barra cuenta sólo las 7 preguntas: los tres campos ya quedaron
+                  atrás, en la landing, y contarlos aquí haría empezar el test con
+                  la barra a un tercio sin que se entienda por qué. */}
+              <Progreso paso={indicePregunta} total={PREGUNTAS.length} />
+              <span aria-hidden className="w-[3.9rem] shrink-0" />
             </div>
           </div>
         )}
 
-        {pregunta && (
-          <PasoPregunta
-            pregunta={pregunta}
-            elegida={respuestas[pregunta.id]}
-            onElegir={(idOpcion) => elegirOpcion(pregunta.id, idOpcion)}
-            numero={indicePregunta + 1}
-            totalPreguntas={PREGUNTAS.length}
-          />
-        )}
+        {/*
+          LA CLAVE DEL <div> CAMBIA CON EL PASO, y eso es lo que dispara las
+          animaciones de entrada: React desmonta el nodo anterior y monta uno
+          nuevo, así que las animaciones CSS vuelven a correr. Sin la clave,
+          React reutilizaría el mismo nodo, sólo cambiaría el texto, y las ocho
+          pantallas se sucederían con un corte seco.
+
+          ⚠️ ESTE ENVOLTORIO YA NO ANIMA NADA. Llevaba `dg-entra`, y cuando la
+          pregunta pasó a montarse en cascada —ilustración, enunciado y las
+          cuatro respuestas, cada una con su retardo— las dos animaciones se
+          pisaban: el bloque entero se desplazaba mientras sus hijos también lo
+          hacían, y el escalonado se perdía en el movimiento del conjunto.
+
+          Ahora cada pantalla trae la suya. El puente, que es una sola cosa, se
+          queda con `dg-entra`; la pregunta la reparte entre sus piezas.
+        */}
+        <div key={paso}>
+          {/* ── El puente entre el formulario y la primera pregunta ──
+              Existe para cambiar de marcha: se pasa de dar datos a hablar de uno
+              mismo, y sin este respiro la primera pregunta llega como el cuarto
+              campo del formulario. */}
+          {enIntro && (
+            <div className="dg-onboarding-fondo dg-entra mx-auto max-w-xl">
+              <div className="dg-borde-giro rounded-[calc(1.5rem+1px)] p-px">
+                <div className="relative overflow-hidden rounded-3xl bg-[var(--dg-fondo-alto)] px-6 py-8 text-center shadow-[0_24px_60px_-40px_rgba(0,0,0,0.9)] sm:px-8 sm:py-10">
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,var(--dg-brillo-suave)_0%,transparent_32%,transparent_70%,var(--dg-brillo-suave)_100%)]"
+                  />
+
+                  <div className="relative">
+                    {/* El nombre se usa aquí y en ningún otro sitio del test: es
+                        el único momento en que la página habla antes de
+                        preguntar, y sirve además para confirmar que lo que se
+                        escribió llegó. */}
+                    <p className="text-[0.75rem] font-semibold tracking-[0.16em] text-[var(--dg-acento)] uppercase">
+                      {datos.nombre
+                        ? `Datos listos, ${datos.nombre.trim()}`
+                        : "Datos listos"}
+                    </p>
+
+                    {/* El título del test, literal del cliente. Va aquí y no en la
+                        landing porque es el nombre del cuestionario, no de la
+                        página: esta pantalla es justo la que da paso a las
+                        preguntas. */}
+                    <h1 className="dg-titulo mt-3 text-[1.45rem] leading-tight text-balance text-[var(--dg-texto)] sm:text-[1.75rem]">
+                      {FORMULARIO.testTitulo}
+                    </h1>
+
+                    <p className="dg-titulo mx-auto mt-4 max-w-md text-[1.05rem] leading-snug text-balance text-[var(--dg-texto-suave)] sm:text-[1.2rem]">
+                      {FORMULARIO.introTest}
+                    </p>
+
+                    <div className="mx-auto mt-6 flex max-w-md flex-col items-center text-center">
+                      <span
+                        aria-hidden
+                        className="h-px w-18 bg-[linear-gradient(90deg,transparent,var(--dg-acento),transparent)]"
+                      />
+                      <div className="mt-3 grid gap-1.5 text-sm leading-relaxed text-[var(--dg-texto-suave)]">
+                        {FORMULARIO.introAyuda.map((linea) => (
+                          <p key={linea}>{linea}</p>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="mt-7 flex items-center gap-3 text-[0.68rem] font-semibold tracking-[0.14em] text-[var(--dg-texto-tenue)] uppercase">
+                      <span>Formulario</span>
+                      <span
+                        aria-hidden
+                        className="h-px flex-1 bg-[linear-gradient(90deg,var(--dg-acento),var(--dg-borde))]"
+                      />
+                      <span className="text-[var(--dg-acento)]">Preguntas</span>
+                    </div>
+
+                    <div className="mt-8">
+                      <BotonDg
+                        onClick={() => irA(IDX_PRIMERA_PREGUNTA)}
+                        ancho="completo"
+                      >
+                        Empezar
+                      </BotonDg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {enGenerando && <GenerandoDiagnostico nombre={datos.nombre} />}
+
+          {pregunta && (
+            <PasoPregunta
+              pregunta={pregunta}
+              elegida={respuestas[pregunta.id]}
+              onElegir={(idOpcion) => elegirOpcion(pregunta.id, idOpcion)}
+              numero={indicePregunta + 1}
+              totalPreguntas={PREGUNTAS.length}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

@@ -114,17 +114,19 @@ export function VistaResultado() {
   /* ── Sin resultado: alguien abrió el enlace sin haber hecho el test ── */
   if (!frecuencia) {
     return (
-      <div className="mx-auto max-w-md px-5 py-20 text-center">
-        <h1 className="dg-titulo text-[1.5rem] text-[var(--dg-texto)] sm:text-[1.8rem]">
-          {RESULTADO.sinResultadoTitulo}
-        </h1>
-        <p className="mt-3 text-[0.95rem] leading-relaxed text-[var(--dg-texto-suave)]">
-          {RESULTADO.sinResultadoTexto}
-        </p>
-        <div className="mt-8 flex justify-center">
-          <BotonDg href="/analisis/encuesta">
-            {RESULTADO.sinResultadoCta}
-          </BotonDg>
+      <div className="mx-auto flex min-h-[70svh] max-w-md items-center px-5 py-20 text-center">
+        <div className="rounded-3xl border border-[var(--dg-borde)] bg-[color-mix(in_srgb,var(--dg-fondo-alto)_88%,transparent)] p-6 shadow-[0_24px_60px_-42px_rgba(0,0,0,0.95)]">
+          <h1 className="dg-titulo text-[1.5rem] text-[var(--dg-texto)] sm:text-[1.8rem]">
+            {RESULTADO.sinResultadoTitulo}
+          </h1>
+          <p className="mt-3 text-[0.95rem] leading-relaxed text-[var(--dg-texto-suave)]">
+            {RESULTADO.sinResultadoTexto}
+          </p>
+          <div className="mt-8 flex justify-center">
+            <BotonDg href="/analisis/encuesta">
+              {RESULTADO.sinResultadoCta}
+            </BotonDg>
+          </div>
         </div>
       </div>
     );
@@ -139,36 +141,16 @@ export function VistaResultado() {
   const hayReparto = Object.keys(porcentajes).length > 0;
 
   return (
-    <div
-      className={cn(
-        "mx-auto px-5 py-12 sm:py-16",
-        hayReparto ? "max-w-4xl" : "max-w-2xl",
-      )}
-    >
-      {/* ═════════ PASO 1 — el diagnóstico ═════════
-
-          Con reparto son dos columnas: la medición a la izquierda y el
-          diagnóstico a la derecha. En móvil se apilan, y AHÍ EL ORDEN SE
-          INVIERTE — el diagnóstico primero. Es lo que la persona vino a buscar;
-          el desglose explica el resultado, así que no puede llegar antes que
-          él. En escritorio caben los dos a la vez y la medición se lee como el
-          soporte de lo que dice el titular de al lado. */}
-      <section
-        className={cn(
-          "grid gap-9",
-          hayReparto && "md:grid-cols-2 md:items-center md:gap-10",
-        )}
-      >
-        {hayReparto && (
-          <div className="order-2 md:order-1">
-            <MedicionFrecuencias
-              porcentajes={porcentajes}
-              dominante={frecuencia}
+    <div className="mx-auto w-full max-w-5xl px-5 py-10 sm:py-14">
+      <section className="dg-entra mx-auto max-w-3xl text-center">
+        <div className="dg-borde-giro rounded-[calc(2rem+1px)] p-px">
+          <div className="relative overflow-hidden rounded-[2rem] bg-[color-mix(in_srgb,var(--dg-fondo-alto)_88%,transparent)] px-5 py-8 shadow-[0_30px_80px_-48px_rgba(0,0,0,0.95)] sm:px-8 sm:py-10">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,var(--dg-brillo-suave)_0%,transparent_34%,transparent_72%,var(--dg-brillo-suave)_100%)]"
             />
-          </div>
-        )}
 
-        <div className="order-1 text-center md:order-2">
+            <div className="relative">
           {/* El tilde antes que nada. Quien llega acaba de dejar sus datos y lo
             primero que necesita saber, antes que su resultado, es que el envío
             salió bien. */}
@@ -189,7 +171,7 @@ export function VistaResultado() {
             {nombre && ` · ${nombre}`}
           </p>
 
-          <h1 className="dg-titulo mt-3 text-[1.35rem] leading-tight text-[var(--dg-texto)] sm:text-[1.7rem]">
+          <h1 className="dg-titulo mt-3 text-[1.35rem] leading-tight text-[var(--dg-texto)] sm:text-[1.8rem]">
             {RESULTADO.titulo}
           </h1>
 
@@ -201,17 +183,28 @@ export function VistaResultado() {
               degradado recortado a las letras y el color en transparente. Un
               `text-[...]` aquí ganaría en la hoja, devolvería el color plano y
               el barrido desaparecería sin que se entienda por qué. */}
-          <p className="dg-titulo dg-luz-texto mt-2 text-[2.6rem] leading-none font-bold sm:text-[3.4rem]">
+          <p className="dg-titulo dg-luz-texto mt-2 text-[3rem] leading-none font-bold sm:text-[4.4rem]">
             {ficha.titulo}
           </p>
 
-          <p className="mx-auto mt-5 max-w-lg text-[1rem] leading-relaxed text-[var(--dg-texto)] sm:text-[1.08rem]">
+          <p className="mx-auto mt-5 max-w-xl text-[1rem] leading-relaxed text-[var(--dg-texto)] sm:text-[1.1rem]">
             {ficha.resumen}
           </p>
 
-          <p className="mx-auto mt-3 max-w-lg text-[0.92rem] leading-relaxed text-[var(--dg-texto-suave)]">
+          <p className="mx-auto mt-3 max-w-xl text-[0.92rem] leading-relaxed text-[var(--dg-texto-suave)]">
             {ficha.descripcion}
           </p>
+
+          <div className="mt-6 flex flex-wrap justify-center gap-2 text-[0.68rem] font-semibold tracking-[0.12em] uppercase">
+            <span className="rounded-full border border-[var(--dg-borde)] bg-[var(--dg-superficie)] px-3 py-1.5 text-[var(--dg-texto-suave)]">
+              7 respuestas analizadas
+            </span>
+            <span className="rounded-full border border-[var(--dg-borde-vivo)] bg-[var(--dg-superficie-viva)] px-3 py-1.5 text-[var(--dg-acento-vivo)]">
+              Diagnóstico listo
+            </span>
+          </div>
+        </div>
+          </div>
         </div>
       </section>
 
@@ -219,12 +212,29 @@ export function VistaResultado() {
           página pase a 64rem para que quepan la medición y el diagnóstico, un
           párrafo de aviso a ese ancho se lee mal: la línea se hace tan larga
           que el ojo pierde el renglón al volver. */}
-      <div className="mx-auto max-w-2xl">
+      <div
+        className={cn(
+          "mx-auto mt-6 grid w-full gap-5 sm:mt-8",
+          hayReparto
+            ? "max-w-5xl lg:grid-cols-[minmax(18rem,0.92fr)_minmax(0,1.08fr)] lg:items-start"
+            : "max-w-2xl",
+        )}
+      >
+        {hayReparto && (
+          <section className="rounded-3xl border border-[var(--dg-borde)] bg-[color-mix(in_srgb,var(--dg-fondo-alto)_82%,transparent)] p-5 shadow-[0_24px_70px_-52px_rgba(0,0,0,0.95)] sm:p-6">
+            <MedicionFrecuencias
+              porcentajes={porcentajes}
+              dominante={frecuencia}
+            />
+          </section>
+        )}
+
+        <div className="grid gap-5">
         {/* ── El aviso del email ──
           Va en su propia caja, separado del diagnóstico: es una instrucción
           ("andá a revisar tu casilla"), no parte del resultado, y mezclarlos
           hace que se lea por encima. */}
-        <section className="mt-9 rounded-2xl border border-[var(--dg-borde)] bg-[var(--dg-fondo-alto)] p-5 sm:p-6">
+        <section className="rounded-3xl border border-[var(--dg-borde)] bg-[color-mix(in_srgb,var(--dg-fondo-alto)_86%,transparent)] p-5 shadow-[0_24px_70px_-52px_rgba(0,0,0,0.95)] sm:p-6">
           <div className="flex items-start gap-3.5">
             <span
               aria-hidden
@@ -267,7 +277,7 @@ export function VistaResultado() {
         </section>
 
         {/* ═════════ PASO 2 — la comunidad ═════════ */}
-        <section className="mt-6 rounded-2xl border border-[var(--dg-acento)]/25 bg-[var(--dg-fondo-alto)] p-6 text-center sm:p-7">
+        <section className="rounded-3xl border border-[var(--dg-acento)]/30 bg-[color-mix(in_srgb,var(--dg-superficie-viva)_70%,var(--dg-fondo-alto))] p-6 text-center shadow-[0_24px_70px_-48px_var(--dg-brillo-medio)] sm:p-7">
           {/* El latido y no el barrido: el nombre de la frecuencia está en
               esta misma pantalla, y repetir el mismo recurso a dos palmos haría
               que ninguno de los dos señalara nada. */}
@@ -311,6 +321,7 @@ export function VistaResultado() {
               enlace, es mejor un botón que no lleva a ningún sitio que uno que
               lleva a un enlace roto. Que esté apagado ya lo cuenta todo. */}
         </section>
+        </div>
       </div>
     </div>
   );

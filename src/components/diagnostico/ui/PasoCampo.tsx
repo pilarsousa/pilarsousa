@@ -30,12 +30,18 @@ import { WhatsAppIcon } from "@/components/lista-de-espera/ui/WhatsAppIcon";
   idioma del sistema y con un tono que no es el de la página. La validación la
   hace el componente padre, que es quien sabe qué se está pidiendo.
 
-  ── EL TEXTO VA ALINEADO A LA IZQUIERDA ──
+  ── EL TEXTO VA CENTRADO, LOS CAMPOS NO ──
 
-  Estuvo centrado mientras la tarjeta era una columna estrecha, y ahí era lo
-  correcto. Ahora la tarjeta tiene la ilustración al lado: el contenido ocupa
-  una columna con su propio margen, y centrarlo dentro de ella lo dejaría
-  flotando respecto del campo y del botón, que sí ocupan el ancho completo.
+  Estuvo alineado a la izquierda mientras la tarjeta tuvo la ilustración al
+  lado: el contenido ocupaba una columna estrecha y centrarlo dentro de ella lo
+  dejaba flotando respecto del campo. Retirada la ilustración de escritorio, la
+  tarjeta vuelve a ser una columna sola y el centrado es lo que pide — y lo que
+  pidió el feedback para toda la landing.
+
+  LOS CAMPOS SE QUEDAN A LA IZQUIERDA, y no es una incoherencia. Un input lleva
+  su icono pegado al margen izquierdo, y el del teléfono la bandera con el
+  prefijo: con el texto centrado, lo que se escribe se despega de su icono y
+  cada tecla lo mueve de sitio. Se escribe contra un canto; se lee centrado.
 
   ── EL FOCO SE PONE SOLO, PERO NO SIEMPRE ──
 
@@ -137,7 +143,11 @@ export function PasoCampo({
   const idError = `${campo}-error`;
 
   return (
-    <form noValidate onSubmit={(e) => { e.preventDefault(); onEnviar(); }}>
+    <form
+      noValidate
+      onSubmit={(e) => { e.preventDefault(); onEnviar(); }}
+      className="text-center"
+    >
       {/* ── EL DISTINTIVO ──
 
           Dice para qué se pide este dato antes de pedirlo, que es lo que quita
@@ -150,7 +160,7 @@ export function PasoCampo({
           es un componente propio que sólo acepta className, así que pasarle
           atributos sueltos no compila. Envolverlo funciona igual y sirve para
           los tres. */}
-      <p className="flex items-center gap-2 text-[0.7rem] font-semibold tracking-[0.16em] text-[var(--dg-acento)] uppercase">
+      <p className="flex items-center justify-center gap-2 text-[0.7rem] font-semibold tracking-[0.16em] text-[var(--dg-acento)] uppercase">
         <span aria-hidden className="flex shrink-0">
           <Icono className="size-4" />
         </span>
@@ -180,7 +190,7 @@ export function PasoCampo({
         {etiqueta}
       </label>
 
-      <p className="mt-2 max-w-sm text-[0.85rem] leading-relaxed text-[var(--dg-texto-suave)]">
+      <p className="mx-auto mt-2 max-w-sm text-[0.85rem] leading-relaxed text-[var(--dg-texto-suave)]">
         {ayuda}
       </p>
 
@@ -193,7 +203,9 @@ export function PasoCampo({
 
           pointer-events-none: está encima del campo, y sin esto un clic sobre
           el icono no llegaría al input y no enfocaría nada. */}
-      <div className="relative mt-5">
+      {/* `text-left` devuelve la alineación a los dos campos: el <form> va
+          centrado y sin esto lo que se teclea se despegaría del icono. */}
+      <div className="relative mt-5 text-left">
         {esTelefono ? (
           /* ── EL TELÉFONO LLEVA SELECTOR DE PREFIJO ──
 

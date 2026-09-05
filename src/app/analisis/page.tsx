@@ -1,5 +1,7 @@
-import Image from "next/image";
 import { ArranqueDiagnostico } from "@/components/diagnostico/ArranqueDiagnostico";
+import { MagicRings } from "@/components/diagnostico/ui/MagicRings";
+import { PruebaSocialDg } from "@/components/diagnostico/ui/PruebaSocialDg";
+import { SeparadorDg } from "@/components/diagnostico/ui/SeparadorDg";
 import { VistaPreviaVideo } from "@/components/diagnostico/ui/VistaPreviaVideo";
 import { LANDING } from "@/components/diagnostico/contenido";
 
@@ -8,34 +10,26 @@ import { LANDING } from "@/components/diagnostico/contenido";
   LANDING DE PROMESA — /analisis
   ═══════════════════════════════════════════════════════════════════════════
 
-    nav → hero (imagen + promesa) → FORMULARIO → vista previa del video → pie
+    hero (anillos + promesa) → FORMULARIO → vista previa del video → pie
 
-  ── EL HERO: LA IMAGEN A LA IZQUIERDA Y EL TEXTO ENCIMA DE SU MITAD DERECHA ──
+  ── EL HERO: ANILLOS DE FONDO Y LA PROMESA CENTRADA ENCIMA ──
 
-  Se monta con una rejilla de 12 columnas en la que los dos bloques ocupan la
-  MISMA FILA y se solapan:
+  Llevaba una fotografía a la izquierda y el titular montado sobre su mitad
+  derecha, en una rejilla de doce columnas. Se retiró: la foto tenía un motivo
+  —una mujer frente a un arco— que obligaba a reservarle su mitad, y de ahí la
+  rejilla.
 
-      imagen   columnas 1 → 8    (66,7% del ancho)
-      texto    columnas 5 → 12   (empieza en el 33,3%)
+  Los anillos no tienen sujeto. Son atmósfera y salen del centro, así que el
+  montaje que piden es el contrario: texto en medio y animación alrededor. Con
+  eso se va también la rejilla, y con ella el apaño del redondeo que tapaba las
+  esquinas blancas quemadas en aquel archivo.
 
-  El 33,3% es exactamente la mitad de la imagen, que es donde tiene que
-  arrancar el titular. No se usa `absolute` para la imagen —que sería lo
-  primero que uno prueba— porque entonces habría que darle `object-cover` para
-  llenar el alto, y recortar esta imagen le comería las esquinas redondeadas
-  que trae quemadas, dejando tiras blancas en los bordes. En rejilla conserva
-  su proporción y las esquinas quedan donde las espera el redondeo.
+  ── NO HAY LOGO EN NINGUNA DE LAS TRES PANTALLAS ──
 
-  ⚠️ EL REDONDEO NO ES DECORATIVO: TAPA UN DEFECTO DEL ARCHIVO.
-
-  img-hero.png viene con las esquinas redondeadas dibujadas SOBRE BLANCO, con
-  un radio de 42 px sobre 1672 de ancho (2,51%). Sin redondear, se ven cuatro
-  triángulos blancos en las esquinas.
-
-  `rounded-3xl` son 24 px fijos, así que sólo tapa el defecto mientras la
-  imagen se dibuje por debajo de unos 955 px de ancho (24 ÷ 0,0251). Con la
-  rejilla actual son 683 px a 1024 de contenedor, o sea que sobra margen — pero
-  SI ALGUIEN ENSANCHA EL HERO, hay que subir el redondeo con él o volverán a
-  asomar las esquinas.
+  Estaba superpuesto sobre la foto del hero, y en /encuesta y /resultado en una
+  franja propia. Se retiró por decisión de diseño mientras no esté cerrado el
+  branding. La pieza sigue en el proyecto (ui/Marca.tsx) y volver a montarla es
+  una línea en cada página.
 
   ── EL FORMULARIO ESTÁ EN LA PÁGINA, NO DETRÁS DE UN BOTÓN ──
 
@@ -44,8 +38,8 @@ import { LANDING } from "@/components/diagnostico/contenido";
 
   ── SIGUE SIENDO UN COMPONENTE DE SERVIDOR ──
 
-  Sólo se hidratan la caja del formulario y la vista previa del video. El
-  titular, la imagen y el pie se sirven como HTML.
+  Se hidratan tres piezas: los anillos del hero, la caja del formulario y la
+  vista previa del video. El titular, el texto y el pie se sirven como HTML.
 
   ── LA PRUEBA SOCIAL ESTÁ BLOQUEADA A PROPÓSITO ──
 
@@ -59,118 +53,121 @@ export default function DiagnosticoPage() {
   const hayTestimonios = LANDING.testimonios.length > 0;
 
   return (
-    <div className="flex min-h-svh flex-col">
-      {/* ⚠️ ESTA PÁGINA NO TIENE CABECERA, y no falta nada: el logo va
-          superpuesto sobre la imagen del hero, unas líneas más abajo. Una
-          franja propia encima sólo servía para sostener el logo y la frase, y
-          la frase se mudó al pie. /test y /resultado sí la llevan (Marca),
-          porque allí no hay ninguna imagen sobre la que apoyar el logo. */}
-      {/* El relleno superior es MAYOR EN MÓVIL que en escritorio, al revés de lo
-          normal, y no es un descuido: en móvil el logo sobresale 24 px por
-          encima de la imagen del hero, y sin ese aire tocaría el canto de la
-          pantalla. En escritorio el logo va dentro, en la esquina, y no hace
-          falta reservar nada.
+    <div className="dg-landing flex min-h-svh flex-col">
+      {/* EL <main> NO LLEVA RELLENO LATERAL. Lo lleva cada bloque por su
+          cuenta, porque el hero tiene que sangrar de canto a canto: una banda
+          con fondo propio que no llegue a los bordes se lee como una tarjeta
+          enorme, no como una sección.
 
-          El corte va en `md:` y no en `sm:` porque es justo donde el logo
-          cambia de sitio. */}
-      <main className="flex-1 px-5 pt-12 pb-16 md:pt-8">
-        {/* ══════════════ HERO ══════════════ */}
-        <section className="mx-auto max-w-5xl md:grid md:grid-cols-12 md:items-center">
-          {/* LA IMAGEN.
+          Tampoco lleva relleno superior: el hero empieza en el borde de la
+          ventana. Llegó a tener más en móvil para dejarle sitio al logo, que
+          sobresalía por encima de la imagen; sin logo y sin imagen, esa reserva
+          no protege nada. */}
+      <main className="flex-1 pb-16">
+        {/* ══════════════ HERO ══════════════
 
-              alt vacío: es atmósfera, no información. Quien no la ve tiene el
-              titular justo al lado diciendo lo mismo que ella sugiere, y
-              describirla ("mujer meditando frente a un mandala") sólo añadiría
-              ruido antes de la promesa.
+            ── SE FUE LA FOTOGRAFÍA Y ENTRARON LOS ANILLOS ──
 
-              priority: es la imagen más grande por encima del pliegue y la
-              candidata a marcar el LCP. Sin esto Next la carga en diferido y
-              el hero aparece vacío durante el primer instante.
+            El hero llevaba una imagen a la izquierda con el titular montado
+            sobre su mitad derecha. Ahora el fondo es una animación de anillos
+            concéntricos que crecen y se desvanecen, y el titular va CENTRADO
+            encima.
 
-              quality 90: es un degradado oscuro enorme, justo el material donde
-              la compresión deja bandas visibles. next.config sólo admite 75 y
-              90 — cualquier otro valor se ignora en silencio. */}
-          <div className="relative md:col-start-1 md:col-end-9 md:row-start-1">
-            <Image
-              src={LANDING.heroImagen}
-              alt={LANDING.heroImagenAlt}
-              width={1672}
-              height={941}
-              priority
-              quality={90}
-              sizes="(min-width: 768px) 44rem, 92vw"
-              className="dg-hero-imagen w-full rounded-3xl"
-            />
+            El cambio de composición no es un capricho: la foto tenía un motivo
+            —la mujer, el arco— que obligaba a dejarle su mitad libre, y de ahí
+            la rejilla de doce columnas. Los anillos no tienen sujeto, son
+            atmósfera pura y salen del centro, así que lo que pide el montaje es
+            justo lo contrario: texto en medio y animación alrededor.
 
-            {/* ── EL LOGO, DENTRO DE LA IMAGEN ──
+            ── EL FONDO VA PRIMERO EN EL DOCUMENTO, SIN z-index NEGATIVO ──
 
-                Cambia de sitio con el ancho, y las dos posiciones responden a
-                dónde está el contenido:
+            El texto viene después y lleva `relative`, así que gana el orden de
+            pintado sin más. Un `-z-10` en el fondo parecería lo natural y es
+            frágil: en cuanto un ancestro cree un contexto de apilado, el
+            elemento se va DETRÁS del fondo de la página y desaparece sin que se
+            entienda por qué.
 
-                · En MÓVIL va centrado arriba. La imagen ocupa el ancho entero
-                  y el titular viene debajo, así que el eje de la página es el
-                  centro y el logo tiene que estar en él.
-                · Desde md: va a la esquina superior IZQUIERDA. Ahí el titular
-                  arranca a la mitad de la imagen, y un logo centrado caería
-                  justo encima de la primera línea.
+            ── EL ALTO MÍNIMO ES LO QUE LE DA SITIO A LA ANIMACIÓN ──
 
-                `-translate-x-1/2` sólo por debajo de md, y anulado con
-                `md:translate-x-0`: el desplazamiento es lo que centra de
-                verdad —`left-1/2` solo dejaría el borde izquierdo en el
-                centro— y si se quedara puesto en escritorio correría el logo
-                media anchura hacia la izquierda, fuera de la imagen.
+            El canvas se dimensiona con el alto de su contenedor, y ese alto lo
+            fija el texto. Sin un mínimo, en escritorio quedaría una banda de
+            unos 200 px y los anillos saldrían aplastados contra los bordes. */}
+        <section className="relative flex w-full items-center justify-center overflow-hidden bg-[var(--dg-hero-fondo)] px-5 pt-16 pb-20 sm:pt-20 sm:pb-24 md:min-h-[34rem] md:pt-24 md:pb-28">
+          {/* LOS ANILLOS.
 
-                Se apoya sobre la zona más oscura de la foto en las dos
-                posiciones, así que el nombre en blanco del disco se lee sin
-                necesidad de ponerle ningún velo debajo.
+              Se desbordan del bloque de texto por los cuatro lados para que los
+              aros más grandes no queden cortados justo donde empieza la
+              promesa.
 
-                ── EN MÓVIL SOBRESALE POR ARRIBA ──
+              Los aros van del verde 2 al blanco: los de dentro entran verdes y
+              los de fuera se apagan en luz. El verde parece demasiado oscuro
+              para verse sobre un fondo casi del mismo tono, y no lo es — el
+              shader trabaja en modo "luminance", que normaliza el color a
+              brillo pleno y usa el brillo original como opacidad, así que
+              #084A2C entra como un verde vivo al 29%: atmósfera, no manchas.
 
-                `-top-6` lo saca 24 px de los 56 que mide, o sea que casi la
-                mitad del disco queda FUERA de la imagen. Deja de leerse como
-                un logo pegado dentro de la foto y pasa a ser una chapa apoyada
-                sobre ella — que es lo que hace que se despegue del fondo sin
-                tener que añadirle ningún halo.
+              aria-hidden y pointer-events-none: es decoración, y no puede
+              interceptar la selección del texto que tiene encima. */}
+          <div
+            aria-hidden
+            className="dg-anillos-fundidos pointer-events-none absolute inset-0 select-none"
+          >
+            {/* ── EL MODO DE ALFA ES EL POR DEFECTO ("luminance") ──
 
-                ⚠️ ESTO DEPENDE DEL RELLENO SUPERIOR DEL <main>, que es de 48 px
-                en móvil justamente para dejarle sitio: sin él, el disco tocaría
-                el canto de la pantalla. Y de que ningún ancestro recorte —hoy
-                ninguno lleva overflow— o el trozo que sobresale desaparecería
-                sin aviso. */}
-            <Image
-              src={LANDING.logo}
-              alt="Volver al Origen"
-              width={1254}
-              height={1254}
-              priority
-              quality={90}
-              sizes="72px"
-              className="absolute -top-6 left-1/2 size-14 -translate-x-1/2 sm:size-16 md:top-6 md:left-6 md:translate-x-0"
+                Normaliza el color a brillo pleno y usa el brillo original como
+                opacidad. Sobre este fondo oscuro es justo lo que hace falta:
+                los anillos entran como luz, no como pintura.
+
+                Llegó a estar en "coverage" mientras el hero fue crema —allí
+                hacía falta el color real para que se leyeran como líneas— y se
+                retiró al volver al verde. Si alguna vez esta sección vuelve a
+                ser clara, hay que devolverlo.
+
+                El lienzo es transparente en los dos modos: se ve el fondo de la
+                página a través de él. Lo que cambia es qué se pinta donde hay
+                anillo, no si se rellena el vacío. */}
+            <MagicRings
+              color="#084A2C"
+              colorTwo="#ffffff"
+              ringCount={6}
+              speed={1}
+              attenuation={10}
+              lineThickness={2}
+              baseRadius={0.35}
+              radiusStep={0.1}
+              scaleRate={0.1}
+              opacity={1}
+              blur={0}
+              noiseAmount={0.1}
+              rotation={0}
+              ringGap={1.5}
+              fadeIn={0.7}
+              fadeOut={0.5}
+              followMouse={false}
+              mouseInfluence={0.2}
+              hoverScale={1.2}
+              parallax={0.05}
+              clickBurst={false}
             />
           </div>
 
-          {/* EL TEXTO.
-
-              En móvil sube con un margen negativo para meterse dentro del
-              fundido inferior de la imagen; si no, quedaría por debajo del
-              rectángulo con una franja de fondo vacío en medio y el fundido no
-              serviría de nada.
+          {/* EL TEXTO, centrado sobre los anillos.
 
               `relative` sin z-index: al venir después en el documento y estar
-              posicionado, gana el orden de pintado sobre la imagen. */}
-          <div className="relative -mt-6 md:col-start-5 md:col-end-13 md:row-start-1 md:mt-0">
+              posicionado, gana el orden de pintado sobre el fondo. */}
+          <div className="relative mx-auto max-w-2xl text-center">
             {/* El titular va en tres tramos porque el del medio —lo que de
                 verdad promete— tiene que destacarse del resto. Partirlo en
                 tres cadenas permite que el acento cambie de línea sin
                 arrastrar el ritmo de la frase. */}
-            <h1 className="dg-titulo text-center text-[1.7rem] leading-[1.25] text-balance sm:text-[2.1rem] sm:leading-[1.2] md:text-left md:text-[2.5rem]">
+            <h1 className="dg-titulo text-center text-[1.7rem] leading-[1.25] text-balance sm:text-[2.1rem] sm:leading-[1.2] md:text-[2.6rem]">
               <span className="text-[var(--dg-texto)]">{LANDING.titulo}</span>{" "}
               {/* ⚠️ SIN CLASE DE COLOR, y no es un olvido: .dg-luz-texto pinta
                   estas palabras con un degradado recortado a las letras y el
                   color en transparente. Un `text-[...]` aquí ganaría en la
                   hoja, devolvería el color plano y el barrido desaparecería —
                   sin romper nada y sin que se entienda por qué. */}
-              <span className="dg-luz-texto font-bold">
+              <span className="dg-luz-texto dg-luz-oro font-bold">
                 {LANDING.tituloAcento}
               </span>{" "}
               <span className="text-[var(--dg-texto)]">
@@ -178,134 +175,172 @@ export default function DiagnosticoPage() {
               </span>
             </h1>
 
-            <p className="mx-auto mt-5 max-w-xl text-center text-[0.98rem] leading-relaxed text-[var(--dg-texto-suave)] sm:text-lg md:mx-0 md:text-left">
+            <p className="mx-auto mt-5 max-w-xl text-center text-[0.98rem] leading-relaxed text-[var(--dg-texto-suave)] sm:text-lg">
               {LANDING.subtitulo}
             </p>
+
+            {/* ── LA PRUEBA SOCIAL, DEBAJO DE LA PROMESA ──
+
+                Es el sitio que pidió el feedback y es el que le corresponde: el
+                titular dice qué vas a conseguir, el subtítulo cómo, y esto —lo
+                último antes de bajar al formulario— que no serías el primero.
+                Más arriba interrumpiría la promesa antes de haberla hecho.
+
+                Las caras son las de perfil de reseñas reales de Volver al
+                Origen, las mismas de los carruseles de las otras landings. La
+                frase invita en vez de contar: no hay recuento de quién ha hecho
+                el diagnóstico y el documento prohíbe inventarlo. El detalle,
+                en contenido.ts. */}
+            <PruebaSocialDg className="mt-7" />
           </div>
+
+          {/* ── EL FUNDIDO QUE EMPALMA LAS DOS SECCIONES ──
+
+              El hero está un tono por DEBAJO del resto de la página, y entre
+              los dos sólo hay 1,23:1. A esa distancia un canto recto no se lee
+              como una decisión sino como una línea sucia o un fallo de recorte.
+
+              Disolviendo el último tramo, el cambio de plano se lee como lo que
+              es. Va como ÚLTIMO HIJO para pintar por encima de los anillos.
+
+              ⚠️ MIDE EXACTAMENTE LO QUE EL RELLENO INFERIOR DE LA BANDA —
+              h-20/24/28 contra pb-20/24/28— y no es coincidencia: el fundido
+              vive dentro del relleno, así que si crece más que él empieza a
+              oscurecer la fila de avatares, que es lo último que hay encima.
+
+              Son TRES números que se mueven juntos: este alto, el `pb-*` del
+              hero y el `mt-*` del formulario. Los dos últimos son los que
+              dejan el filete separador centrado en su propio hueco.
+
+              El color de destino es el fondo de la página, no un negro ni un
+              transparente: tiene que llegar exactamente al tono con el que
+              empalma o quedaría una franja de un tercer color entre las dos. */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-[linear-gradient(180deg,transparent_0%,var(--dg-fondo)_100%)] sm:h-24 md:h-28"
+          />
         </section>
+
+        {/* ── EL SEPARADOR ──
+
+            El corte entre el hero y lo que sigue lo marcan cuatro cosas, y cada
+            una hace algo que las otras no:
+
+            · el CAMBIO DE TONO — el hero va un escalón por debajo y lo de
+              abajo asciende al verde de marca;
+            · el FUNDIDO empalma esos dos tonos para que el canto no se lea como
+              una línea sucia;
+            · los ANILLOS SE DISUELVEN en el 72% de la banda, muy por encima del
+              final, para que el arco del aro exterior no cruce la sección como
+              una raya clara;
+            · y este FILETE pone el punto exacto donde el hero termina.
+
+            El degradado dice "esto se está acabando" y el filete dice "aquí".
+            Sin filete el final queda difuso; sin fundido, el filete parece una
+            raya puesta encima de dos colores que chocan.
+
+            ── EL MISMO AIRE ARRIBA Y ABAJO ──
+
+            El filete llevaba `-mt-4` para meterse dentro del hero, y así el
+            hueco de arriba (todo el relleno inferior de la banda) era más del
+            doble que el de abajo. Sin ese tirón la cuenta sale sola: por arriba
+            hay `pb-*` del hero y por abajo el `mt-*` del formulario, y con
+            los dos iguales el filete queda centrado en su propio espacio.
+
+            ⚠️ SI ALGUIEN VUELVE A SOLAPARLO CON EL HERO —un margen negativo—,
+            hace falta `relative` en este contenedor. El fundido inferior del
+            hero es un absoluto casi opaco y los absolutos se pintan DESPUÉS del
+            contenido normal: taparía el filete sin que nada fallara ni avisara.
+            Ya pasó. */}
+        <div className="px-5">
+          <SeparadorDg className="mx-auto max-w-5xl" />
+        </div>
 
         {/* ══════════════ EL FORMULARIO ══════════════
 
-            ⚠️ ES MÁS ANCHO QUE EL RESTO DEL CONTENIDO, y por un motivo
-            concreto: "¿A qué email te lo envío?" es el más largo de los tres
-            titulares y a 48rem se partía en dos renglones. Como los otros dos
-            caben en uno, la tarjeta crecía de alto sólo en ese paso y todo lo
-            que hay debajo pegaba un salto al pulsar "continuar".
+            ── EL MARGEN SUPERIOR VA EMPAREJADO CON EL `pb-*` DEL HERO ──
 
-            Se resuelve dando ancho en vez de encogiendo la letra: bajar el
-            cuerpo del titular hasta que quepa lo dejaría notablemente más
-            pequeño que el del hero, y el titular es lo que sostiene la
-            tarjeta.
+            mt-20/24/28 contra pb-20/24/28. Son los dos huecos que rodean al
+            filete separador, y tienen que medir lo mismo o la línea se lee
+            colgada de este bloque en vez de marcando dónde acaba el hero.
 
-            La escala queda descendente y ordenada: hero 64rem, formulario
-            56rem, el resto 48rem.
+            ⚠️ SI SE TOCA EL RELLENO INFERIOR DEL HERO, hay que tocar esto — y
+            también el alto del fundido, que va con ellos. Los tres números son
+            el mismo número.
+
+            ── ERA LO MÁS ANCHO DE LA PÁGINA Y AHORA ES LO MÁS ESTRECHO ──
+
+            Medía 56rem, y no por gusto: eran dos columnas —contenido e
+            ilustración— y "¿A qué email te lo envío?", el más largo de los tres
+            titulares, se partía en dos renglones si la de contenido se
+            estrechaba. La tarjeta crecía de alto sólo en ese paso y todo lo de
+            debajo pegaba un salto al pulsar "continuar".
+
+            Retirada la ilustración de escritorio, ese ancho no defiende nada: la
+            columna de contenido pasa a ser la tarjeta entera, así que el titular
+            entra de sobra, y 56rem sólo servían para dejar un campo de nombre de
+            casi 900 px. A 36rem vuelve a leerse como un formulario.
+
+            La escala queda: un ancho maestro de 64rem para separador, recurso
+            y pie, con hero y formulario más angostos por legibilidad. Todo
+            centrado, que es lo que pidió el feedback.
 
             El id es el destino de los enlaces que suben hasta aquí — hoy, el
             del mensaje de la vista previa del video. Va en la sección y no en
             el primer campo: al saltar tiene que quedar a la vista la tarjeta
             entera, no un campo suelto pegado al borde de la ventana.
 
-            La tarjeta —marco, fondo, las dos columnas y la ilustración— la
-            dibuja el propio formulario. Ya no lleva cabecera: cada paso trae su
-            distintivo ("Aviso por WhatsApp", "Te llega por mail"), que dice lo
-            mismo que decía aquel título fijo pero cambiando con lo que se
-            está pidiendo. */}
-        <section
-          id="empezar"
-          aria-label="Formulario del diagnóstico"
-          className="mx-auto mt-10 max-w-4xl scroll-mt-8 sm:mt-12"
-        >
-          <ArranqueDiagnostico />
-        </section>
-
-        <div className="mx-auto max-w-3xl">
-          {/* LAS TRES SEÑALES SON HECHOS DEL TEST, no autoridad prestada:
-              cuántas preguntas son, cuánto tarda y cuándo llega el resultado.
-              Van DEBAJO del formulario porque ahí responden a la duda que
-              aparece justo al ver un campo de email. */}
-          {/* ── SON PÍLDORAS, NO TEXTO SUELTO ──
-
-              Eran tres frases con un punto delante, separadas por aire, y se
-              leían como una nota al pie del formulario. Con contorno y fondo
-              propio se leen como tres piezas —tres cosas que el test cumple— y
-              eso es lo que son.
-
-              El texto sube de tinte terciario a secundario: no compiten con la
-              promesa, pero tampoco tienen que costar esfuerzo. */}
-          <ul className="mt-7 flex flex-wrap items-center justify-center gap-2.5 text-[0.8rem]">
-            {/* CADA PÍLDORA CRECE MEDIO SEGUNDO DESPUÉS DE LA ANTERIOR, así que
-                el zoom recorre la fila como una ola en vez de latir todo el
-                bloque a la vez. El solape es deliberado: la segunda empieza
-                antes de que la primera haya vuelto, y sin él se leerían como
-                tres golpes sueltos.
-
-                El retardo va en estilo en línea porque Tailwind no genera
-                clases con un valor calculado en ejecución: se escribiría en el
-                HTML sin producir ninguna regla, y fallaría en silencio. */}
-            {LANDING.señales.map((señal, i) => (
-              <li
-                key={señal}
-                style={{ animationDelay: `${i * 0.5}s` }}
-                className="dg-zoom flex items-center gap-2 rounded-full border border-[var(--dg-borde)] bg-[var(--dg-fondo-alto)] px-3.5 py-1.5 text-[var(--dg-texto-suave)]"
-              >
-                <span
-                  aria-hidden
-                  className="size-1.5 shrink-0 rounded-full bg-[var(--dg-acento)]"
-                />
-                {señal}
-              </li>
-            ))}
-          </ul>
-
-          {/* ── TESTIMONIOS — sólo si son reales. Ver la nota de arriba. ── */}
-          {hayTestimonios && (
-            <section aria-label="Testimonios" className="mt-14">
-              <ul className="grid gap-4 sm:grid-cols-2">
-                {LANDING.testimonios.map((t) => (
-                  <li
-                    key={t.nombre}
-                    className="rounded-2xl border border-[var(--dg-borde)] bg-[var(--dg-fondo-alto)] p-5"
-                  >
-                    <p className="text-sm leading-relaxed text-[var(--dg-texto)]">
-                      {t.texto}
-                    </p>
-                    <p className="mt-3 text-xs tracking-wide text-[var(--dg-texto-tenue)] uppercase">
-                      {t.nombre}
-                    </p>
-                  </li>
-                ))}
-              </ul>
+            La tarjeta —marco, fondo y, en móvil, la ilustración— la dibuja el
+            propio formulario. Ya no lleva cabecera: cada paso trae su distintivo
+            ("Aviso por WhatsApp", "Te llega por mail"), que dice lo mismo que
+            decía aquel título fijo pero cambiando con lo que se está pidiendo. */}
+        <div className="px-5">
+          <div className="mx-auto max-w-5xl">
+            <section
+              id="empezar"
+              aria-label="Formulario del diagnóstico"
+              className="mx-auto mt-20 max-w-xl scroll-mt-8 sm:mt-24 md:mt-28"
+            >
+              <ArranqueDiagnostico />
             </section>
-          )}
 
-          {/* ══════════════ LO QUE VAS A RECIBIR ══════════════
+            {/* ⚠️ AQUÍ IBAN LAS TRES PÍLDORAS — "7 preguntas", "Menos de 60
+              segundos", "Resultado al instante". Se retiraron por el feedback
+              de la primera entrega: "no van por ahora".
 
-              El reproductor va DESPUÉS del texto en el orden del DOM aunque en
-              escritorio se vea a la izquierda: quien usa lector de pantalla oye
-              primero qué es y después llega al control. El orden visual lo
-              invierte `sm:order-first`, que no afecta al de lectura. */}
-          <section
-            aria-labelledby="regalo-titulo"
-            className="mt-14 rounded-3xl border border-[var(--dg-borde)] bg-[var(--dg-fondo-alto)] p-6 sm:mt-16 sm:p-8"
-          >
-            <div className="grid items-center gap-7 sm:grid-cols-2 sm:gap-9">
-              <div>
-                <h2
-                  id="regalo-titulo"
-                  className="dg-titulo text-xl text-[var(--dg-texto)] sm:text-2xl"
-                >
-                  {LANDING.regaloTitulo}
-                </h2>
-                <p className="mt-3 text-[0.95rem] leading-relaxed text-[var(--dg-texto-suave)]">
-                  {LANDING.regaloTexto}
-                </p>
-              </div>
+              El texto sigue en contenido.ts (`LANDING.señales`) y la animación
+              de entrada también (.dg-zoom), así que devolverlas es volver a
+              montar la lista. Ver la nota junto al campo. */}
 
-              <div className="sm:order-first">
-                <VistaPreviaVideo />
-              </div>
-            </div>
-          </section>
+            {/* ── TESTIMONIOS — sólo si son reales. Ver la nota de arriba. ── */}
+            {hayTestimonios && (
+              <section aria-label="Testimonios" className="mt-14">
+                <ul className="grid gap-4 sm:grid-cols-2">
+                  {LANDING.testimonios.map((t) => (
+                    <li
+                      key={t.nombre}
+                      className="rounded-2xl border border-[var(--dg-borde)] bg-[var(--dg-fondo-alto)] p-5"
+                    >
+                      <p className="text-sm leading-relaxed text-[var(--dg-texto)]">
+                        {t.texto}
+                      </p>
+                      <p className="mt-3 text-xs tracking-wide text-[var(--dg-texto-tenue)] uppercase">
+                        {t.nombre}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {/* ══════════════ LO QUE VAS A RECIBIR ══════════════
+
+              El componente dibuja la card completa: texto, mockup y bloqueo.
+              Tiene que vivir al ancho de la landing para que el recurso pese
+              igual que el cierre, no como una tarjeta chica pegada debajo del
+              formulario. */}
+            <VistaPreviaVideo />
+          </div>
         </div>
       </main>
 

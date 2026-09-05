@@ -83,6 +83,7 @@ function contactoInicial(): { paso: number; datos: DatosContacto } {
 
 export function FormularioContacto({
   onCompleto,
+  transicionActiva = false,
   /* Ver el comentario de `enfocarAlMontar` en PasoCampo: en la landing no se
      roba el foco al cargar; en la página del test, donde el formulario es lo
      único que hay, sí. */
@@ -90,6 +91,7 @@ export function FormularioContacto({
   className,
 }: {
   onCompleto: (datos: DatosContacto) => void;
+  transicionActiva?: boolean;
   enfocarPrimerCampo?: boolean;
   className?: string;
 }) {
@@ -125,6 +127,10 @@ export function FormularioContacto({
   }, [onCompleto]);
 
   const continuar = useCallback(() => {
+    if (transicionActiva) {
+      return;
+    }
+
     const problema = validarCampo(definicion.campo, datos[definicion.campo]);
     if (problema) {
       setError(problema);
@@ -163,7 +169,7 @@ export function FormularioContacto({
     guardarEstado({ datos: limpios, respuestas: {} });
 
     alCompletar.current(limpios);
-  }, [definicion, datos, paso, total]);
+  }, [definicion, datos, paso, total, transicionActiva]);
 
   /*
     ── LO QUE SE PINTA DURANTE LA HIDRATACIÓN ──
@@ -199,31 +205,41 @@ export function FormularioContacto({
     <div
       className={cn("dg-borde-giro rounded-[calc(1.5rem+1px)] p-px", className)}
     >
-      <div className="overflow-hidden rounded-3xl bg-[var(--dg-fondo-alto)] shadow-[0_24px_60px_-40px_rgba(0,0,0,0.9)]">
-        {/* La columna de la imagen es más estrecha que la del contenido: el
-          formulario es lo que hay que rellenar y la ilustración acompaña. A
-          partes iguales competirían.
+      <div
+        aria-busy={transicionActiva}
+        className="relative overflow-hidden rounded-3xl bg-[var(--dg-fondo-alto)] shadow-[0_24px_60px_-40px_rgba(0,0,0,0.9)]"
+      >
+        {/* ── EN ESCRITORIO YA NO HAY DOS COLUMNAS ──
 
-          ── EL SUELO DE ALTURA ES UN SEGURO, NO UN CAPRICHO ──
+          La tarjeta llevaba la ilustración del paso a la derecha. Se retiró de
+          escritorio por el feedback de la primera entrega —"sin fondo, no usar
+          esa imagen"— y ahí queda una sola columna centrada.
 
-          `md:min-h-[23rem]` está un poco por encima de lo que mide la tarjeta
-          hoy con sus tres pasos. Ese margen es lo que absorbe que un texto
+          EN MÓVIL SE QUEDA, y es una decisión explícita: la ilustración va
+          arriba, a lo ancho, y el contenido debajo. Por eso la imagen lleva
+          `md:hidden` y no se borró.
+
+          ── EL SUELO DE ALTURA SIGUE HACIENDO FALTA ──
+
+          `md:min-h-[23rem]` está un poco por encima de lo que mide hoy la
+          tarjeta con sus tres pasos. Ese margen es lo que absorbe que un texto
           crezca un renglón sin que la tarjeta cambie de alto y todo lo que hay
           debajo dé un salto.
 
           Ya pasó una vez —"¿A qué email te lo envío?" se partía en dos— y se
-          arregló ensanchando la tarjeta. Pero el ancho sólo resuelve los
-          textos de HOY: en cuanto Laureano cambie una línea, vuelve. El suelo
-          de altura hace que ese cambio sea invisible, y con el contenido
-          centrado en vertical el aire sobrante se reparte arriba y abajo en
+          arregló ensanchando la tarjeta. Pero el ancho sólo resuelve los textos
+          de HOY: en cuanto Laureano cambie una línea, vuelve. Con el contenido
+          centrado en vertical, el aire sobrante se reparte arriba y abajo en
           vez de acumularse al final. */}
-        <div className="grid md:min-h-[23rem] md:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)]">
+        <div className="grid md:min-h-[23rem]">
           {/* ══ CONTENIDO ══
-            En móvil va SEGUNDO (debajo de la imagen) y en escritorio primero.
-            El margen negativo lo mete dentro del fundido inferior de la
-            ilustración; sin él quedaría por debajo del rectángulo con una
-            franja de fondo vacío en medio. */}
-          <div className="order-2 -mt-6 px-6 pt-0 pb-7 sm:px-8 sm:pb-8 md:order-1 md:mt-0 md:flex md:flex-col md:justify-center md:py-9">
+            En móvil va SEGUNDO, debajo de la ilustración. El margen negativo lo
+            mete dentro del fundido inferior de ésta; sin él quedaría por debajo
+            del rectángulo con una franja de fondo vacío en medio.
+
+            En escritorio no hay ilustración, así que `md:mt-0` cancela ese
+            tirón y la columna recupera su relleno completo. */}
+          <div className="order-2 -mt-6 px-6 pt-0 pb-7 sm:px-8 sm:pb-8 md:mt-0 md:flex md:flex-col md:justify-center md:py-9">
             {/* La clave cambia con el paso para que el bloque se remonte y la
               animación de entrada vuelva a correr; si no, los tres campos se
               sucederían con un corte seco en el mismo sitio. */}
@@ -308,22 +324,21 @@ export function FormularioContacto({
             </div>
           </div>
 
-          {/* ══ ILUSTRACIÓN ══
+          {/* ══ ILUSTRACIÓN — SÓLO EN MÓVIL ══
 
-            En escritorio se coloca en absoluto para LLENAR EL ALTO de la
-            columna, que lo fija el contenido de al lado. Con la imagen en el
-            flujo, la tarjeta mediría lo que midiera la imagen y quedaría un
-            hueco muerto debajo del botón o al revés.
+            `md:hidden` la retira en escritorio, que es lo que pidió el
+            feedback. En móvil se queda tal cual: arriba, a lo ancho y en 16:9,
+            que es la proporción del archivo, así que no se recorta nada.
 
-            `md:aspect-auto` anula la proporción fija: en escritorio manda el
-            alto de la columna y `object-cover` recorta lo que sobre. En móvil
-            sí se respeta 16:9, que es la proporción del archivo, y no se
-            recorta nada.
+            Ya no hay variante de escritorio: se fueron el `absolute` que le
+            hacía llenar el alto de la columna de al lado y el `aspect-auto`
+            que anulaba la proporción. Sin segunda columna no hay alto que
+            llenar.
 
             La clave la remonta en cada paso para que entre con la misma
             animación que el texto — si no, el texto aparecería y la imagen
             saltaría de golpe. */}
-          <div className="relative order-1 md:order-2">
+          <div className="order-1 md:hidden">
             <Image
               key={vDefinicion.campo}
               src={vDefinicion.imagen}
@@ -331,11 +346,34 @@ export function FormularioContacto({
               width={1672}
               height={941}
               quality={90}
-              sizes="(min-width: 768px) 26rem, 100vw"
-              className="dg-imagen-formulario dg-entra aspect-video w-full object-cover md:absolute md:inset-0 md:aspect-auto md:h-full"
+              sizes="(min-width: 640px) 36rem, 100vw"
+              className="dg-imagen-formulario dg-entra aspect-video w-full object-cover"
             />
           </div>
         </div>
+
+        {transicionActiva && (
+          <div
+            role="status"
+            aria-live="polite"
+            className="dg-entra absolute inset-0 z-20 flex items-center justify-center bg-[var(--dg-fondo-alto)] px-6 text-center"
+          >
+            <div className="max-w-sm">
+              <p className="text-[0.72rem] font-semibold tracking-[0.16em] text-[var(--dg-acento)] uppercase">
+                Datos listos
+              </p>
+              <p className="dg-titulo mt-3 text-[1.35rem] leading-tight text-balance text-[var(--dg-texto)] sm:text-[1.55rem]">
+                Preparando tus preguntas
+              </p>
+              <div
+                aria-hidden
+                className="mx-auto mt-6 h-1 w-44 overflow-hidden rounded-full bg-[var(--dg-borde)]"
+              >
+                <span className="dg-puente-carga block h-full w-1/2 rounded-full bg-[var(--dg-acento)] shadow-[0_0_18px_var(--dg-brillo-medio)]" />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
