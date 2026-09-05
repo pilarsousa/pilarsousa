@@ -207,7 +207,7 @@ export function FormularioContacto({
     >
       <div
         aria-busy={transicionActiva}
-        className="relative overflow-hidden rounded-3xl bg-[var(--dg-fondo-alto)] shadow-[0_24px_60px_-40px_rgba(0,0,0,0.9)]"
+        className="dg-relieve relative overflow-hidden rounded-3xl bg-[var(--dg-fondo-alto)]"
       >
         {/* ── EN ESCRITORIO YA NO HAY DOS COLUMNAS ──
 
@@ -238,8 +238,19 @@ export function FormularioContacto({
             del rectángulo con una franja de fondo vacío en medio.
 
             En escritorio no hay ilustración, así que `md:mt-0` cancela ese
-            tirón y la columna recupera su relleno completo. */}
-          <div className="order-2 -mt-6 px-6 pt-0 pb-7 sm:px-8 sm:pb-8 md:mt-0 md:flex md:flex-col md:justify-center md:py-9">
+            tirón y la columna recupera su relleno completo.
+
+            ── EL TOPE DE 36rem ES LO QUE SALVA A LOS CAMPOS ──
+
+            La tarjeta mide 64rem para igualar a la del recurso, pero el
+            formulario NO puede medir eso: un campo de nombre de 960 px deja de
+            leerse como un campo y pasa a leerse como una barra, y el ojo tiene
+            que recorrer casi un metro de pantalla entre el rótulo y el final del
+            recuadro.
+
+            Con el tope, lo que crece es el marco y el aire; el formulario se
+            queda en la medida en la que se rellena cómodo. */}
+          <div className="order-2 mx-auto -mt-6 w-full max-w-xl px-6 pt-0 pb-7 sm:px-8 sm:pb-8 md:mt-0 md:flex md:flex-col md:justify-center md:py-9">
             {/* La clave cambia con el paso para que el bloque se remonte y la
               animación de entrada vuelva a correr; si no, los tres campos se
               sucederían con un corte seco en el mismo sitio. */}

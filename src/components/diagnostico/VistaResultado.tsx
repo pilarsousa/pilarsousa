@@ -142,9 +142,22 @@ export function VistaResultado() {
 
   return (
     <div className="mx-auto w-full max-w-5xl px-5 py-10 sm:py-14">
-      <section className="dg-entra mx-auto max-w-3xl text-center">
+      {/* ── LA TARJETA DEL DIAGNÓSTICO MIDE LO MISMO QUE LAS DE ABAJO ──
+
+          Iba a 48rem centrada mientras el resto de la pantalla iba a 64rem, y
+          eso era el desorden: cuatro tarjetas con tres cantos distintos: el de
+          esta, el de la columna izquierda y el de la derecha. Nada alineaba con
+          nada.
+
+          A 64rem las cuatro comparten los dos cantos verticales y la retícula
+          se lee de una pieza.
+
+          El texto no se estira con ella: los párrafos de dentro llevan su
+          propio `max-w-xl`, así que la línea sigue midiendo lo que se lee
+          cómodo. Lo que crece es la caja, no la medida del texto. */}
+      <section className="dg-entra text-center">
         <div className="dg-borde-giro rounded-[calc(2rem+1px)] p-px">
-          <div className="relative overflow-hidden rounded-[2rem] bg-[color-mix(in_srgb,var(--dg-fondo-alto)_88%,transparent)] px-5 py-8 shadow-[0_30px_80px_-48px_rgba(0,0,0,0.95)] sm:px-8 sm:py-10">
+          <div className="dg-relieve relative overflow-hidden rounded-[2rem] bg-[var(--dg-fondo-alto)] px-5 py-8 sm:px-8 sm:py-10">
             <span
               aria-hidden
               className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,var(--dg-brillo-suave)_0%,transparent_34%,transparent_72%,var(--dg-brillo-suave)_100%)]"
@@ -208,20 +221,46 @@ export function VistaResultado() {
         </div>
       </section>
 
-      {/* Las dos cajas de abajo NO se ensanchan con la cabecera. Aunque la
-          página pase a 64rem para que quepan la medición y el diagnóstico, un
-          párrafo de aviso a ese ancho se lee mal: la línea se hace tan larga
-          que el ojo pierde el renglón al volver. */}
+      {/* ── LAS CUATRO TARJETAS, EN RETÍCULA ──
+
+          Diagnóstico arriba a todo el ancho; debajo, dos columnas IGUALES: el
+          reparto a la izquierda y, apiladas a la derecha, el aviso del correo y
+          el cierre.
+
+          ── COLUMNAS 1fr Y 1fr, NO 0,92 Y 1,08 ──
+
+          Estaban desequilibradas para darle sitio al texto del aviso, y a
+          cambio ninguna de las dos coincidía con el eje de la tarjeta de
+          arriba. Iguales, la retícula tiene un solo eje central y las cuatro
+          piezas caen sobre él.
+
+          ── Y TERMINAN A LA MISMA ALTURA ──
+
+          Llevaba `items-start`, así que cada columna medía lo que midiera su
+          contenido y una acababa antes que la otra — el borde inferior en
+          diagonal era la mitad del desorden. Sin él, las dos se estiran hasta
+          la más alta.
+
+          El margen superior iguala al hueco de la retícula (mt-5 = gap-5): así
+          la separación entre la primera fila y la segunda es la misma que entre
+          las columnas, y el conjunto se lee como una sola pieza en vez de como
+          una tarjeta con dos cajas debajo. */}
       <div
         className={cn(
-          "mx-auto mt-6 grid w-full gap-5 sm:mt-8",
+          "mx-auto mt-5 grid w-full gap-5",
           hayReparto
-            ? "max-w-5xl lg:grid-cols-[minmax(18rem,0.92fr)_minmax(0,1.08fr)] lg:items-start"
+            ? "max-w-5xl lg:grid-cols-2"
             : "max-w-2xl",
         )}
       >
+        {/* Al estirarse hasta la altura de la columna de al lado le sobra
+            sitio, y `justify-center` reparte ese aire arriba y abajo en vez de
+            dejar las barras colgando del borde superior.
+
+            El comentario va FUERA del `&&`: dentro sería un segundo hijo en una
+            expresión que sólo admite uno, y no compila. */}
         {hayReparto && (
-          <section className="rounded-3xl border border-[var(--dg-borde)] bg-[color-mix(in_srgb,var(--dg-fondo-alto)_82%,transparent)] p-5 shadow-[0_24px_70px_-52px_rgba(0,0,0,0.95)] sm:p-6">
+          <section className="flex flex-col justify-center rounded-3xl border border-[var(--dg-borde)] bg-[color-mix(in_srgb,var(--dg-fondo-alto)_82%,transparent)] p-5 shadow-[0_24px_70px_-52px_rgba(0,0,0,0.95)] sm:p-6">
             <MedicionFrecuencias
               porcentajes={porcentajes}
               dominante={frecuencia}
@@ -229,7 +268,11 @@ export function VistaResultado() {
           </section>
         )}
 
-        <div className="grid gap-5">
+        {/* `auto 1fr`: el aviso del correo mide lo suyo y el cierre se queda
+            con lo que sobre. Sin esto, las dos tarjetas se repartirían el alto a
+            partes iguales y el aviso —que es dos renglones— quedaría con un
+            hueco enorme debajo. */}
+        <div className="grid gap-5 lg:grid-rows-[auto_1fr]">
         {/* ── El aviso del email ──
           Va en su propia caja, separado del diagnóstico: es una instrucción
           ("andá a revisar tu casilla"), no parte del resultado, y mezclarlos
@@ -281,7 +324,9 @@ export function VistaResultado() {
           {/* El latido y no el barrido: el nombre de la frecuencia está en
               esta misma pantalla, y repetir el mismo recurso a dos palmos haría
               que ninguno de los dos señalara nada. */}
-          <h2 className="dg-titulo dg-latido text-[1.15rem] text-[var(--dg-texto)] sm:text-[1.3rem]">
+          {/* Sin .dg-latido: el titular se queda quieto. Ver la nota del pulso
+              del botón, aquí debajo. */}
+          <h2 className="dg-titulo text-[1.15rem] text-[var(--dg-texto)] sm:text-[1.3rem]">
             {RESULTADO.comunidadTitulo}
           </h2>
           <p className="mx-auto mt-2.5 max-w-md text-[0.93rem] leading-relaxed text-[var(--dg-texto-suave)]">
@@ -292,10 +337,11 @@ export function VistaResultado() {
             {hayWhatsapp ? (
               <BotonDg
                 href={RESULTADO.whatsappUrl}
-                /* El pulso vive en un ::after del botón, no en su box-shadow:
-                   animar esa propiedad aquí sustituiría el brillo interior y la
-                   sombra que le dan cuerpo. Ver .dg-pulso. */
-                className="dg-pulso sm:min-w-[18rem]"
+                /* ⚠️ SIN .dg-pulso, y no sólo por quitar adorno: ese pulso vivía
+                   en un ::after del botón, y BotonDg usa ahora ::before y ::after
+                   para su propio latido. Las dos reglas se peleaban por la misma
+                   capa. El botón ya late por su cuenta, igual que en la landing. */
+                className="sm:min-w-[18rem]"
               >
                 <span className="inline-flex items-center justify-center gap-2.5">
                   <WhatsAppIcon className="size-5 shrink-0" />

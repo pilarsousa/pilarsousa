@@ -128,6 +128,42 @@
   */
   --dg-hero-fondo: color-mix(in srgb, var(--dg-verde) 55%, #000);
 
+  /*
+    ── EL PANEL CLARO: TODO LO QUE HAY DEBAJO DEL HERO ──
+
+    La landing deja de ser oscura de arriba abajo. El hero se queda en verde
+    profundo y a partir de ahí la página se levanta sobre un panel crema con las
+    esquinas superiores redondeadas, encima del cual van las tarjetas —que
+    siguen siendo verde oscuro—.
+
+    ⚠️ EL CREMA ESTÁ MUESTREADO DEL PROPIO ARCHIVO DE FONDO (#fff8ef), y no es
+    --dg-crema (#fff8f0). Se llevan un punto en el azul, invisible, pero el
+    relleno tiene que ser EXACTO: el archivo sólo cubre la parte de arriba y de
+    ahí abajo pinta este color. Un punto de diferencia se vería como una banda
+    horizontal justo donde acaba la imagen.
+
+    SI SE CAMBIA EL ARCHIVO DE FONDO, hay que volver a muestrearlo.
+
+    ── Y LA TINTA QUE VA ENCIMA ──
+
+    ⚠️ HOY NO LA USA NADIE, y no es un descuido: sobre el panel no hay ni una
+    línea de texto suelta. Todo lo que va encima vive dentro de una tarjeta
+    verde oscuro, con su propia tinta crema, y el pie volvió a ser oscuro.
+
+    Se quedan porque son la respuesta ya medida al día que haga falta poner
+    algo directamente sobre el crema — un titular de sección, una nota al pie
+    de una tarjeta— y porque calcularlas otra vez cuesta más que leerlas.
+    Medidas sobre #fff8ef: 14,1:1 el principal, 9,8:1 el suave y 5,7:1 el tenue.
+  */
+  --dg-panel: #fff8ef;
+  --dg-panel-texto: var(--dg-verde); /* 14,1:1 sobre el panel */
+  --dg-panel-texto-suave: var(--dg-verde-2); /* 9,8:1 */
+  --dg-panel-texto-tenue: color-mix(
+    in srgb,
+    var(--dg-verde) 70%,
+    var(--dg-panel)
+  ); /* 5,7:1 */
+
   /* El velo que se pone sobre una imagen para que se lea el texto encima. Es
      el verde de marca casi opaco, no un negro: un negro sobre este fondo se
      vería como una mancha gris de otro sitio. */
@@ -154,6 +190,84 @@
   font-family: var(--dg-fuente-titulo);
 }
 
+/*
+  ═══════════════════════════════════════════════════════════════════════════
+  EL BOTÓN DE LLAMADA A LA ACCIÓN
+  ═══════════════════════════════════════════════════════════════════════════
+
+  Tres cosas, tomadas de la referencia de Uiverse y traducidas a un botón
+  CLARO — el original es negro con brillo azul:
+
+    · el RELIEVE POR CAPAS, cinco sombras encajadas y cinco proyectadas;
+    · el OLEAJE DE LETRAS, que se encienden una tras otra en bucle;
+    · el HALO, que aparece al pasar por encima.
+
+  ── LA TRADUCCIÓN NO ES CAMBIAR EL AZUL POR BLANCO ──
+
+  En el original el relieve son luces BLANCAS por dentro: sobre un relleno
+  negro, una luz interior es lo que da volumen. Sobre nuestro crema una luz
+  blanca no existe, así que el volumen lo tiene que dar la sombra: filo claro
+  de 1 px arriba y sombras verdes subiendo desde el borde inferior. Es el mismo
+  relieve, leído del otro lado.
+
+  Lo que sí se mantiene literal es el ESCALONADO 1-2-4-8-16 px, que es lo que
+  hace que la sombra se vea difusa y no como un contorno.
+
+  ── EL HALO SALE FUERA, NO DENTRO ──
+
+  En el original el resplandor sube por dentro desde el borde inferior, porque
+  el botón es oscuro y ahí cabe luz. El nuestro ya es lo más claro de la
+  pantalla: por dentro no hay a dónde subir. El halo va por fuera, en crema,
+  contra la tarjeta oscura que lo rodea.
+
+  ── SUSTITUYE AL LATIDO ──
+
+  El botón tenía un velo y un halo que latían solos. Se retiran: el oleaje de
+  letras ya aporta el movimiento, y dos resplandores en la misma pieza se
+  pelean. Volver atrás es cambiar una clase.
+*/
+.dg-boton-cta {
+  --dg-cta-halo: var(--dg-brillo-fuerte);
+
+  position: relative;
+  isolation: isolate;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(0, 47, 1, 0.18),
+    inset 0 -4px 4px -4px rgba(0, 47, 1, 0.22),
+    inset 0 -8px 8px -8px rgba(0, 47, 1, 0.26),
+    inset 0 -16px 16px -12px rgba(0, 47, 1, 0.2),
+    0 1px 1px rgba(0, 0, 0, 0.1),
+    0 2px 2px rgba(0, 0, 0, 0.08),
+    0 4px 4px rgba(0, 0, 0, 0.06),
+    0 8px 8px -4px rgba(0, 0, 0, 0.05),
+    0 16px 16px -8px rgba(0, 0, 0, 0.05);
+
+  /* ⚠️ LA TRANSICIÓN NO VA AQUÍ, va en la utilidad de BotonDg. `transition`
+     es una sola propiedad: declararla en esta clase y en una utilidad de
+     Tailwind no las suma, una pisa a la otra, y la que perdiera se llevaría
+     por delante el fundido del color de fondo o el del halo. */
+}
+
+.dg-boton-cta:is(:hover, :focus-visible) {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(0, 47, 1, 0.18),
+    inset 0 -4px 4px -4px rgba(0, 47, 1, 0.22),
+    inset 0 -8px 8px -8px rgba(0, 47, 1, 0.26),
+    inset 0 -16px 16px -12px rgba(0, 47, 1, 0.2),
+    0 1px 1px rgba(0, 0, 0, 0.1),
+    0 2px 2px rgba(0, 0, 0, 0.08),
+    0 4px 4px rgba(0, 0, 0, 0.06),
+    0 10px 34px -8px var(--dg-cta-halo);
+}
+
+/* El secundario es un contorno sobre el fondo de la página: un halo en crema
+   no tendría ahí contra qué verse, así que se queda sin él. */
+.dg-boton-cta--secundario {
+  --dg-cta-halo: transparent;
+}
+
 .dg-landing button:not(:disabled),
 .dg-landing a[href],
 .dg-landing [role="button"]:not([aria-disabled="true"]) {
@@ -161,48 +275,43 @@
 }
 
 /*
-  /analisis/encuesta vuelve a la paleta anterior: fondo casi negro y acento
-  lima. El resto de /analisis puede seguir usando los tokens nuevos del layout.
+  ═══════════════════════════════════════════════════════════════════════════
+  EL FONDO ANIMADO DE /encuesta Y /resultado
+  ═══════════════════════════════════════════════════════════════════════════
+
+  Un lienzo de cuadrados que se mueven despacio, con un velo encima que lo
+  hunde hacia los bordes y le deja el peso en el centro.
+
+  ── LOS COLORES SON LOS DE LA MARCA, Y ANTES NO ──
+
+  Nació con la paleta anterior: casi negro (#080d04) de base y lima (#d4ef7a)
+  en el resplandor. Al pasar el embudo entero a la paleta de la landing, ese
+  fondo era lo único que seguía delatando de dónde venía — un halo lima sobre
+  tres pantallas verdes.
+
+  La traducción es directa, tono por tono:
+
+    base       #080d04  ->  --dg-fondo    (#002f01)
+    intermedio #1a2a0a  ->  --dg-verde-2  (#084a2c)
+    destello   #d4ef7a  ->  --dg-crema    (#fff8f0)
+
+  ⚠️ LOS TRES VIVEN EN AcidSquaresFondo.tsx, NO AQUÍ. El lienzo es un canvas y
+  sus colores son props del componente, así que no se pueden pasar por CSS. Si
+  se cambia la paleta, hay que tocar los dos sitios.
+
+  ── EL VELO VA EN EL VERDE DE MARCA ──
+
+  Y no en un negro: el lienzo es verde, y oscurecerlo con negro neutro lo
+  apagaría hacia el gris en vez de hacia el fondo de la página. El destello del
+  centro baja de 0,12 a 0,10 porque el crema pesa más sobre verde que el lima
+  sobre negro.
 */
-.dg-encuesta-tema-anterior {
-  --dg-fondo: #080d04;
-  --dg-fondo-alto: #0d1406;
-  --dg-superficie: #121b08;
-  --dg-superficie-viva: #1a2a0a;
-  --dg-borde: #2a3d13;
-  --dg-borde-vivo: #5c8419;
-  --dg-texto: #f2efe4;
-  --dg-texto-suave: #b6bda6;
-  --dg-texto-tenue: #7d876c;
-  --dg-acento: #a3ca23;
-  --dg-acento-vivo: #d4ef7a;
-  --dg-acento-oscuro: #3d5410;
-  --dg-brillo-fuerte: rgba(163, 202, 35, 0.85);
-  --dg-brillo-medio: rgba(163, 202, 35, 0.45);
-  --dg-brillo-suave: rgba(212, 239, 122, 0.14);
-  --dg-velo: rgba(4, 8, 2, 0.88);
-  --dg-velo-medio: rgba(4, 8, 2, 0.58);
-  --dg-velo-leve: rgba(4, 8, 2, 0.34);
-  --dg-velo-nulo: rgba(4, 8, 2, 0);
-
-  background-color: var(--dg-fondo);
-  color: var(--dg-texto);
-  overflow-x: hidden;
-  overflow-x: clip;
-}
-
-.dg-encuesta-tema-anterior button:not(:disabled),
-.dg-encuesta-tema-anterior a[href],
-.dg-encuesta-tema-anterior [role="button"]:not([aria-disabled="true"]) {
-  cursor: pointer;
-}
-
 .dg-acid-fondo {
   position: absolute;
   inset: 0;
   z-index: 0;
   overflow: hidden;
-  background: #080d04;
+  background: var(--dg-fondo);
 }
 
 .dg-acid-fondo::after {
@@ -213,14 +322,14 @@
   background:
     radial-gradient(
       circle at 50% 32%,
-      rgba(212, 239, 122, 0.12),
+      rgba(255, 248, 240, 0.1),
       transparent 42%
     ),
     linear-gradient(
       180deg,
-      rgba(8, 13, 4, 0.06) 0%,
-      rgba(8, 13, 4, 0.38) 48%,
-      rgba(4, 8, 2, 0.72) 100%
+      rgba(0, 47, 1, 0.06) 0%,
+      rgba(0, 47, 1, 0.38) 48%,
+      rgba(0, 26, 1, 0.72) 100%
     );
 }
 
@@ -260,6 +369,61 @@
   :focus-visible y no :focus: así el anillo aparece al tabular pero no al
   hacer clic con el ratón, que es el comportamiento que la gente espera.
 */
+/*
+  ═══════════════════════════════════════════════════════════════════════════
+  EL GRANO DE PELÍCULA
+  ═══════════════════════════════════════════════════════════════════════════
+
+  Una trama de puntos de 1 px repetida por toda la pantalla. Sin imagen y sin
+  SVG: un degradado radial con un solo punto, y background-size lo tesela.
+
+  ── ⚠️ VA EN .dg-scope Y NO EN body ──
+
+  La receta pedía "body::after", y aquí eso sería un error: este archivo lo
+  carga sólo /analisis, pero el <body> es el del proyecto ENTERO. El grano se
+  colaría en las otras seis landings —volver-al-origen, bootcamp, ventas,
+  mision-origen, el juego— sin que nadie lo hubiera pedido ni supiera de dónde
+  salió.
+
+  Colgado del contenedor de la ruta hace exactamente lo mismo y no sale de
+  aquí. "position: fixed" sigue midiéndose contra la ventana, así que cubre la
+  pantalla igual y el grano NO se mueve al hacer scroll — que es como se
+  comporta el grano de una película, y no como una textura pegada al papel.
+
+  ── LAS DOS PIEZAS QUE HACEN QUE NO ESTORBE ──
+
+  "pointer-events: none" es lo que deja pasar los clics: sin él, una capa fija
+  con z-index 9999 se traga el formulario entero. Va con !important porque un
+  fallo aquí NO SE VE —la capa es invisible— y se manifiesta como "la página no
+  responde", que es de las cosas más caras de diagnosticar.
+
+  "plus-lighter" hace que los puntos SUMEN luz en vez de taparla. Donde no esté
+  soportado, el navegador ignora esa línea y quedan puntos blancos al 8%: se
+  degrada a lo mismo, algo más plano.
+
+  ── PARA REGULARLO ──
+
+  "background-size" entre 2px y 4px —cuanto mayor, más separado y más visible
+  el punto— y "opacity" entre 0,05 y 0,12. Éstos son los valores de partida.
+
+  Sobre el panel crema de la landing se nota menos que sobre el verde, y no es
+  un fallo: el grano suma luz, y sobre algo casi blanco no queda a dónde sumar.
+*/
+.dg-scope::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  pointer-events: none !important;
+  background-image: radial-gradient(at 20% 80%, #fff 1px, transparent 0px);
+  background-size: 2px 2px;
+  opacity: 0.08;
+  mix-blend-mode: plus-lighter;
+}
+
 .dg-scope :focus-visible {
   outline: 2px solid var(--dg-acento-vivo);
   outline-offset: 3px;
@@ -485,18 +649,99 @@
   }
 }
 
+/*
+  ── LOS DOS COLORES SON TOKENS, Y LA RAZÓN ES QUE HAY DOS FONDOS ──
+
+  Este filete lo llevan cinco tarjetas y NO todas viven sobre el mismo color:
+  el formulario y el recurso están sobre el panel crema de la landing, y el
+  formulario de respaldo, la espera y el resultado están sobre fondo oscuro.
+
+  Con los colores escritos a pelo servían para uno solo. Sobre el crema, el
+  destello blanco desaparecía y lo que se veía era un contorno oscuro con un
+  HUECO dándole vueltas: el efecto al revés.
+
+  Los valores de aquí son los del fondo oscuro —base apagada, destello claro—.
+  El panel crema los sobrescribe más abajo, y como las variables heredan, basta
+  con declararlos en él para que los cambien todas las tarjetas que tenga
+  dentro.
+*/
 .dg-borde-giro {
+  --dg-giro-base: var(--dg-borde);
+  --dg-giro-luz: var(--dg-acento-vivo);
+
   background-image: conic-gradient(
     from var(--dg-giro),
-    var(--dg-borde) 0deg,
-    var(--dg-acento-vivo) 20deg,
-    var(--dg-borde) 45deg,
-    var(--dg-borde) 180deg,
-    var(--dg-acento-vivo) 200deg,
-    var(--dg-borde) 225deg,
-    var(--dg-borde) 360deg
+    var(--dg-giro-base) 0deg,
+    var(--dg-giro-luz) 20deg,
+    var(--dg-giro-base) 45deg,
+    var(--dg-giro-base) 180deg,
+    var(--dg-giro-luz) 200deg,
+    var(--dg-giro-base) 225deg,
+    var(--dg-giro-base) 360deg
   );
   animation: dg-giro 7s linear infinite;
+}
+
+/*
+  ═══════════════════════════════════════════════════════════════════════════
+  EL RELIEVE DE LAS TARJETAS — luz arriba, sombra abajo
+  ═══════════════════════════════════════════════════════════════════════════
+
+  Cuatro sombras internas y una proyectada, y cada una hace algo distinto:
+
+    · un FILO CLARO de 1 px arriba — el canto que devuelve la luz;
+    · un FILO OSCURO de 1 px abajo — el canto que se hunde;
+    · una LUZ SUAVE que baja desde el borde superior;
+    · una SOMBRA SUAVE que sube desde el inferior;
+    · y la SOMBRA PROYECTADA, que separa la tarjeta del panel.
+
+  ── POR QUÉ UNA CLASE Y NO UNA UTILIDAD SUELTA ──
+
+  `box-shadow` es UNA propiedad: una utilidad de Tailwind con la sombra
+  proyectada y otra con las internas no se suman, la segunda pisa a la primera.
+  Como las tarjetas ya llevaban su sombra proyectada escrita a mano, todas las
+  capas tienen que declararse juntas. Aquí están, y las tarjetas dejan de llevar
+  la suya.
+
+  ── LOS FILOS VAN EN CREMA, NO EN BLANCO ──
+
+  Un blanco puro sobre el verde de las tarjetas se lee azulado. El crema de la
+  paleta ya está en la familia del fondo y el canto parece iluminado en vez de
+  pegado encima.
+
+  Los valores negativos de propagación son lo que mantiene las dos luces
+  metidas en su borde: sin ellos, el degradado cruzaría la tarjeta entera y lo
+  que se vería no sería un relieve sino un fondo distinto.
+*/
+.dg-relieve {
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 248, 240, 0.16),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.45),
+    inset 0 24px 32px -28px rgba(255, 248, 240, 0.55),
+    inset 0 -28px 36px -30px rgba(0, 0, 0, 0.85),
+    0 26px 70px -44px rgba(0, 0, 0, 0.9);
+}
+
+/*
+  ── SOBRE EL PANEL CREMA EL FILETE SE INVIERTE ──
+
+  El destello pasa a ser el verde 2 (#084A2C, 9,8:1 sobre el crema) y la base se
+  apaga casi hasta el propio panel (1,4:1). Es al revés que sobre oscuro y por
+  el mismo motivo: lo que tiene que RECORRER el contorno es lo que contrasta con
+  el fondo, y aquí lo que contrasta es lo oscuro.
+
+  La base no desaparece del todo a propósito. A cero, el filete sólo existiría
+  mientras pasa el destello y la tarjeta parecería perder el borde tres cuartos
+  de cada vuelta; a 1,4:1 hay un contorno insinuado sobre el que la luz corre.
+
+  ⚠️ VA EN .dg-panel-crema Y NO EN LAS TARJETAS. Las variables heredan, así que
+  cualquier tarjeta que se meta dentro del panel coge el par verde sola. Si
+  alguna vez una tarjeta clara vive fuera del panel, hay que repetir estas dos
+  líneas en ella.
+*/
+.dg-panel-crema {
+  --dg-giro-base: color-mix(in srgb, var(--dg-verde-2) 25%, var(--dg-panel));
+  --dg-giro-luz: var(--dg-verde-2);
 }
 
 /* Sin movimiento, el filete se queda quieto con un claro arriba: el mismo
@@ -542,6 +787,52 @@
     rgba(0, 0, 0, 0.3) 80%,
     transparent 100%
   );
+}
+
+/*
+  ═══════════════════════════════════════════════════════════════════════════
+  EL PANEL CREMA — el fondo de todo lo que hay debajo del hero
+  ═══════════════════════════════════════════════════════════════════════════
+
+  Dos capas y en este orden importa cuál va debajo:
+
+    · la IMAGEN, que trae la retícula tenue de los bordes y se ancla arriba;
+    · el COLOR, que rellena todo lo que la imagen no alcanza a cubrir.
+
+  ── LA IMAGEN NO DIBUJA LAS ESQUINAS, LAS DIBUJA EL BORDE ──
+
+  El archivo trae sus propias esquinas redondeadas con el exterior en
+  transparente (176 px de radio en el de escritorio, 137 en el de móvil). No se
+  usan: como el elemento lleva `background-color`, ese color RELLENA los picos
+  transparentes del archivo y lo único que se ve es el redondeo del propio
+  elemento, que se declara en la página con `rounded-t-*`.
+
+  Eso es deliberado. El radio del archivo escala con el ancho —un 9% en
+  escritorio, un 14% en móvil— y a 2560 px habría dado una curva enorme. Con el
+  borde del elemento, el radio es el que se decide y no depende del zoom.
+
+  ── DOS ARCHIVOS Y NO UNO ESCALADO ──
+
+  El de móvil (960x2500) es mucho más alto en proporción y tiene la retícula en
+  otras esquinas. Estirar el de escritorio en un teléfono dejaría las líneas
+  aplastadas y concentradas en la franja de arriba.
+
+  `background-size: 100% auto` ata la imagen al ancho: la retícula conserva su
+  proporción y lo que sobra por abajo lo pinta el color liso. Como el dibujo se
+  desvanece hacia el centro, el empalme no se ve.
+*/
+.dg-panel-crema {
+  background-color: var(--dg-panel);
+  background-image: url("/diagnostico/contenido/main/fondo-mobile-white.webp");
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: 100% auto;
+}
+
+@media (min-width: 768px) {
+  .dg-panel-crema {
+    background-image: url("/diagnostico/contenido/main/fondo-white.webp");
+  }
 }
 
 /*
@@ -1253,6 +1544,13 @@
     opacity: 1;
     transform: none;
   }
+
+  /* EL BOTÓN SE QUEDA QUIETO CON LA LUZ PUESTA EN UNA ESQUINA: el remate que
+     tendría si nunca hubiera girado. El destello y el resplandor de dentro se
+     apagan del todo — sin movimiento no significan nada y sólo ensucian. */
+  /* El botón no tiene nada que animar: el relieve es estático y el halo sólo
+     aparece al pasar por encima, que es una respuesta y no un movimiento. */
+
   .dg-respira {
     animation: none;
     opacity: 0.42;

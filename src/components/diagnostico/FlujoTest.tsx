@@ -446,7 +446,7 @@ export function FlujoTest() {
           {enIntro && (
             <div className="dg-onboarding-fondo dg-entra mx-auto max-w-xl">
               <div className="dg-borde-giro rounded-[calc(1.5rem+1px)] p-px">
-                <div className="relative overflow-hidden rounded-3xl bg-[var(--dg-fondo-alto)] px-6 py-8 text-center shadow-[0_24px_60px_-40px_rgba(0,0,0,0.9)] sm:px-8 sm:py-10">
+                <div className="dg-relieve relative overflow-hidden rounded-3xl bg-[var(--dg-fondo-alto)] px-6 py-8 text-center sm:px-8 sm:py-10">
                   <span
                     aria-hidden
                     className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,var(--dg-brillo-suave)_0%,transparent_32%,transparent_70%,var(--dg-brillo-suave)_100%)]"

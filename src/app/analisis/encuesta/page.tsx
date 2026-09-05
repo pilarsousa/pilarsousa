@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { FlujoTest } from "@/components/diagnostico/FlujoTest";
 import { AcidSquaresFondo } from "@/components/diagnostico/ui/AcidSquaresFondo";
+import { FlujoTest } from "@/components/diagnostico/FlujoTest";
 
 /*
   /analisis/encuesta — el formulario y las 7 preguntas.
@@ -25,7 +25,22 @@ export const metadata: Metadata = {
 
 export default function TestPage() {
   return (
-    <div className="dg-encuesta-tema-anterior relative isolate flex min-h-svh flex-col">
+    /* MISMA PALETA QUE LA LANDING, Y FONDO PROPIO.
+
+       Esta pantalla corría con la paleta anterior —lima sobre casi negro—. Eso
+       se retiró al pedir que la landing fuera la referencia de estilo: el
+       recorrido pasaba por tres pantallas con tres aspectos, y el cambio de
+       paleta a mitad de camino se leía como haber saltado a otro sitio.
+
+       EL FONDO ANIMADO SE QUEDA, repintado con los colores de la marca. Es lo
+       que separa esta pantalla de un formulario cualquiera, y en la landing
+       hace el mismo papel la animación de anillos del hero: las dos pantallas
+       tienen atmósfera, sólo que distinta.
+
+       `isolate` y el z-10 del <main> son lo que deja el contenido por encima
+       del lienzo: sin ellos, el canvas —que es un absoluto— se pintaría encima
+       de las preguntas. */
+    <div className="relative isolate flex min-h-svh flex-col">
       <AcidSquaresFondo />
       <main className="relative z-10 flex-1">
         <FlujoTest />

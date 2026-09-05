@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { VistaResultado } from "@/components/diagnostico/VistaResultado";
 import { AcidSquaresFondo } from "@/components/diagnostico/ui/AcidSquaresFondo";
+import { VistaResultado } from "@/components/diagnostico/VistaResultado";
 
 /*
   /analisis/resultado — la página de gracias.
@@ -22,6 +22,8 @@ export const metadata: Metadata = {
 
 export default function ResultadoPage() {
   return (
+    /* Mismo fondo animado que /encuesta, con los colores de la marca. Ver la
+       nota de encuesta/page.tsx. */
     <div className="relative isolate flex min-h-svh flex-col">
       <AcidSquaresFondo />
       <main className="relative z-10 flex-1">

@@ -24,6 +24,16 @@ import { LANDING } from "@/components/diagnostico/contenido";
   Un hueco a `null` pinta una silueta: sirve para ver el montaje antes de
   tener todas las fotos, y para que un archivo que falte no deje un agujero.
 
+  ── LA FILA SE ABRE AL PASAR EL RATÓN ──
+
+  En reposo los círculos se solapan y cada uno tapa media cara del anterior.
+  Con el ratón encima se separan y las cuatro quedan enteras. Es la fila
+  contando lo mismo de dos maneras: cerrada dice "son varios", abierta dice
+  "son éstos".
+
+  Se abre entera y no de a uno: separar sólo el que está bajo el cursor movería
+  a los demás de sitio, y eso se lee como que la fila se rompe.
+
   ── EL ANILLO ES DEL COLOR DEL HERO, NO UN BLANCO ──
 
   Cada círculo lleva un aro del fondo de la sección para recortarse del que
@@ -47,14 +57,33 @@ export function PruebaSocialDg({ className }: { className?: string }) {
   if (!texto || avatares.length === 0) return null;
 
   return (
+    /* `group` es lo que deja que el ratón sobre CUALQUIER punto de la fila abra
+       todos los círculos a la vez. Puestos a reaccionar uno por uno, separar
+       sólo el que está debajo del cursor movería a los demás de sitio y la fila
+       se leería como algo que se rompe, no como algo que se abre. */
     <div
-      className={cn("flex items-center justify-center gap-3", className)}
+      className={cn("group flex items-center justify-center gap-3", className)}
     >
-      <ul aria-hidden className="flex items-center -space-x-3 sm:-space-x-4">
+      <ul aria-hidden className="flex items-center">
         {avatares.map((foto, i) => (
+          /* ── LOS CÍRCULOS SE SOLAPAN, Y AL PASAR EL RATÓN SE SEPARAN ──
+
+             En reposo cada uno se monta sobre el anterior y tapa media cara.
+             Al abrirse, el margen negativo pasa a positivo y las cuatro caras
+             quedan enteras a la vista: eso es el "mostrar más contenido".
+
+             ⚠️ EL MARGEN VA EN CADA <li> Y NO CON `-space-x-*`. La utilidad de
+             Tailwind aplica el margen desde un `:where(... > :not(:last-child))`
+             cuya especificidad es cero, y encima cuelga del CONTENEDOR: no hay
+             forma de pasarle un `group-hover` al hijo. Declarándolo aquí, el
+             mismo elemento tiene el valor en reposo, el de apertura y la
+             transición.
+
+             `first:ml-0` deja el primero en su sitio para que la fila crezca
+             hacia la derecha y no se desplace entera. */
           <li
             key={foto ?? i}
-            className="size-9 overflow-hidden rounded-full border border-[var(--dg-borde-vivo)] ring-2 ring-[var(--dg-hero-fondo)] sm:size-11"
+            className="-ml-3 size-9 overflow-hidden rounded-full border border-[var(--dg-borde-vivo)] ring-2 ring-[var(--dg-hero-fondo)] transition-[margin,transform] duration-500 ease-out first:ml-0 group-hover:ml-1 group-hover:scale-105 sm:-ml-4 sm:size-11 sm:group-hover:ml-1.5"
           >
             {foto ? (
               /* 73px ES EL TAMAÑO REAL DEL ARCHIVO, y por eso está escrito así
@@ -84,7 +113,10 @@ export function PruebaSocialDg({ className }: { className?: string }) {
       {/* A LA IZQUIERDA Y NO CENTRADA, aunque el hero vaya centrado: son dos
           renglones cortos pegados a la fila de caras, y centrarlos dejaría el
           bloque con cuatro cantos distintos. El conjunto sí va centrado. */}
-      <p className="max-w-[12rem] text-left text-[0.8rem] leading-snug text-[var(--dg-texto-suave)] sm:max-w-[14rem] sm:text-[0.85rem]">
+      {/* EN LA TINTA PRINCIPAL, por lo mismo que el subtítulo del hero: sobre
+          este verde, el crema rebajado se lee gris en vez de secundario. 17,4:1
+          contra los 9,7:1 que medía antes. */}
+      <p className="max-w-[12rem] text-left text-[0.8rem] leading-snug text-[var(--dg-texto)] sm:max-w-[14rem] sm:text-[0.85rem]">
         {texto}
       </p>
     </div>

@@ -129,26 +129,14 @@ export function PasoPregunta({
 
       {/* ── LA ESCENA: la ilustración y su atmósfera ── */}
       <div className="relative">
-        {/* EL HALO QUE RESPIRA.
+        {/* ⚠️ AQUÍ IBA UN HALO QUE RESPIRABA detrás de la ilustración: un
+            resplandor desenfocado en mix-blend-screen que crecía y se apagaba.
+            Se retiró al tomar la landing como referencia de estilo — allí la
+            única atmósfera son los anillos del hero, y repetir un resplandor
+            en cada una de las siete preguntas era el adorno que hacía que esta
+            pantalla se leyera más cargada que aquélla.
 
-            Se desborda de la ilustración por los cuatro lados —de ahí los
-            valores negativos— porque la imagen es opaca y si quedara justo
-            debajo no se vería nada. Lo que se percibe es un aura alrededor del
-            dibujo, y por el borde inferior, donde la imagen se disuelve, se
-            cuela hacia dentro.
-
-            mix-blend-screen no puede oscurecer: sobre el verde oscuro del
-            fondo suma luz y sobre la propia ilustración no hace nada, así que
-            por mucho que crezca no ensucia el dibujo.
-
-            Va ANTES que la imagen en el documento y la imagen lleva
-            `relative`: así el orden de pintado deja el halo detrás sin
-            necesidad de z-index negativos, que se comportan de forma rara en
-            cuanto algún ancestro crea un contexto de apilado. */}
-        <div
-          aria-hidden
-          className="dg-respira pointer-events-none absolute -inset-x-[7%] -inset-y-[11%] bg-[radial-gradient(50%_50%_at_50%_50%,var(--dg-brillo-medio)_0%,var(--dg-brillo-suave)_45%,transparent_72%)] blur-[2.5vw] mix-blend-screen"
-        />
+            La animación .dg-respira sigue en la hoja por si vuelve. */}
 
         {/* ── LA ILUSTRACIÓN ──
 

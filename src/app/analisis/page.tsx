@@ -1,7 +1,6 @@
 import { ArranqueDiagnostico } from "@/components/diagnostico/ArranqueDiagnostico";
 import { MagicRings } from "@/components/diagnostico/ui/MagicRings";
 import { PruebaSocialDg } from "@/components/diagnostico/ui/PruebaSocialDg";
-import { SeparadorDg } from "@/components/diagnostico/ui/SeparadorDg";
 import { VistaPreviaVideo } from "@/components/diagnostico/ui/VistaPreviaVideo";
 import { LANDING } from "@/components/diagnostico/contenido";
 
@@ -52,8 +51,15 @@ import { LANDING } from "@/components/diagnostico/contenido";
 export default function DiagnosticoPage() {
   const hayTestimonios = LANDING.testimonios.length > 0;
 
+  /* EL ENVOLTORIO PINTA EL VERDE DEL HERO, y no es decoración: el panel crema
+     de abajo lleva las esquinas superiores redondeadas y por esos dos picos se
+     ve lo que haya detrás. Sin esto se vería el fondo de la página —el verde de
+     marca, un tono más claro— y las esquinas quedarían con un cerco alrededor.
+
+     Va como comentario de JS y no como {/* … *&#47;} dentro del return: ahí
+     serían dos hijos en la raíz, y un return devuelve una sola expresión. */
   return (
-    <div className="dg-landing flex min-h-svh flex-col">
+    <div className="dg-landing flex min-h-svh flex-col bg-[var(--dg-hero-fondo)]">
       {/* EL <main> NO LLEVA RELLENO LATERAL. Lo lleva cada bloque por su
           cuenta, porque el hero tiene que sangrar de canto a canto: una banda
           con fondo propio que no llegue a los bordes se lee como una tarjeta
@@ -63,7 +69,11 @@ export default function DiagnosticoPage() {
           ventana. Llegó a tener más en móvil para dejarle sitio al logo, que
           sobresalía por encima de la imagen; sin logo y sin imagen, esa reserva
           no protege nada. */}
-      <main className="flex-1 pb-16">
+      {/* COLUMNA FLEX PARA QUE EL PANEL CREZCA. En una pantalla muy alta con
+          poco contenido, <main> se estira por el flex-1 y el panel —un bloque
+          normal— no: quedaría una franja del verde del envoltorio entre el panel
+          y el pie. Con la columna y el grow de abajo, el crema llega siempre. */}
+      <main className="flex flex-1 flex-col">
         {/* ══════════════ HERO ══════════════
 
             ── SE FUE LA FOTOGRAFÍA Y ENTRARON LOS ANILLOS ──
@@ -175,7 +185,17 @@ export default function DiagnosticoPage() {
               </span>
             </h1>
 
-            <p className="mx-auto mt-5 max-w-xl text-center text-[0.98rem] leading-relaxed text-[var(--dg-texto-suave)] sm:text-lg">
+            {/* ── EN LA TINTA PRINCIPAL, NO EN LA SUAVE ──
+
+                Iba en --dg-texto-suave, que es el crema rebajado con el verde
+                del fondo: 9,7:1 sobre el hero, de sobra para leerse, pero al
+                lado de un titular en crema pleno se lee GRIS. Sobre un fondo
+                tan oscuro, "más apagado" acaba pareciendo "descolorido".
+
+                En la tinta principal sube a 17,4:1. No compite con el titular
+                porque la jerarquía ya la marcan el cuerpo, la tipografía y las
+                versalitas — no hacía falta apagarlo también de color. */}
+            <p className="mx-auto mt-5 max-w-xl text-center text-[0.98rem] leading-relaxed text-[var(--dg-texto)] sm:text-lg">
               {LANDING.subtitulo}
             </p>
 
@@ -194,112 +214,90 @@ export default function DiagnosticoPage() {
             <PruebaSocialDg className="mt-7" />
           </div>
 
-          {/* ── EL FUNDIDO QUE EMPALMA LAS DOS SECCIONES ──
+          {/* ⚠️ AQUÍ IBA EL FUNDIDO QUE EMPALMABA LAS DOS SECCIONES.
 
-              El hero está un tono por DEBAJO del resto de la página, y entre
-              los dos sólo hay 1,23:1. A esa distancia un canto recto no se lee
-              como una decisión sino como una línea sucia o un fallo de recorte.
+              Era un degradado hasta --dg-fondo para que el canto entre el hero y
+              lo de abajo —dos verdes a 1,23:1— no se leyera como una raya sucia.
+              Ya no hace falta: debajo no hay otro verde, hay el panel crema, y
+              el corte lo marca su propio borde redondeado.
 
-              Disolviendo el último tramo, el cambio de plano se lee como lo que
-              es. Va como ÚLTIMO HIJO para pintar por encima de los anillos.
-
-              ⚠️ MIDE EXACTAMENTE LO QUE EL RELLENO INFERIOR DE LA BANDA —
-              h-20/24/28 contra pb-20/24/28— y no es coincidencia: el fundido
-              vive dentro del relleno, así que si crece más que él empieza a
-              oscurecer la fila de avatares, que es lo último que hay encima.
-
-              Son TRES números que se mueven juntos: este alto, el `pb-*` del
-              hero y el `mt-*` del formulario. Los dos últimos son los que
-              dejan el filete separador centrado en su propio hueco.
-
-              El color de destino es el fondo de la página, no un negro ni un
-              transparente: tiene que llegar exactamente al tono con el que
-              empalma o quedaría una franja de un tercer color entre las dos. */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-[linear-gradient(180deg,transparent_0%,var(--dg-fondo)_100%)] sm:h-24 md:h-28"
-          />
+              Dejarlo sería peor que quitarlo: un degradado al verde de marca
+              metería una franja de un TERCER color entre el hero y el crema. */}
         </section>
 
-        {/* ── EL SEPARADOR ──
+        {/* ══════════════ EL PANEL CREMA ══════════════
 
-            El corte entre el hero y lo que sigue lo marcan cuatro cosas, y cada
-            una hace algo que las otras no:
+            La página deja de ser oscura de arriba abajo: el hero se queda en
+            verde profundo y de ahí para abajo se levanta un panel crema con las
+            esquinas superiores redondeadas. Las tarjetas que van encima siguen
+            siendo verde oscuro, así que ningún texto cambia de color — lo que
+            cambia es el aire que las rodea.
 
-            · el CAMBIO DE TONO — el hero va un escalón por debajo y lo de
-              abajo asciende al verde de marca;
-            · el FUNDIDO empalma esos dos tonos para que el canto no se lea como
-              una línea sucia;
-            · los ANILLOS SE DISUELVEN en el 72% de la banda, muy por encima del
-              final, para que el arco del aro exterior no cruce la sección como
-              una raya clara;
-            · y este FILETE pone el punto exacto donde el hero termina.
+            ── LO QUE SE FUE CON ESTE CAMBIO ──
 
-            El degradado dice "esto se está acabando" y el filete dice "aquí".
-            Sin filete el final queda difuso; sin fundido, el filete parece una
-            raya puesta encima de dos colores que chocan.
+            · EL FILETE SEPARADOR (el ✦ entre dos líneas). El corte entre el hero
+              y lo que sigue ya no necesita una línea que lo marque: lo marca el
+              borde del panel, que además cambia de color. Un filete claro sobre
+              el crema no se vería, y uno oscuro sería un adorno que el diseño no
+              pide. El componente sigue en ui/SeparadorDg.tsx.
+            · EL FUNDIDO INFERIOR DEL HERO, por lo mismo (ver arriba).
 
-            ── EL MISMO AIRE ARRIBA Y ABAJO ──
+            ⚠️ SI ALGUNA VEZ SE VUELVE A UN FONDO OSCURO ABAJO, hay que devolver
+            los dos: sin ellos, dos verdes a 1,23:1 chocan en seco.
 
-            El filete llevaba `-mt-4` para meterse dentro del hero, y así el
-            hueco de arriba (todo el relleno inferior de la banda) era más del
-            doble que el de abajo. Sin ese tirón la cuenta sale sola: por arriba
-            hay `pb-*` del hero y por abajo el `mt-*` del formulario, y con
-            los dos iguales el filete queda centrado en su propio espacio.
+            ── EL RELLENO ES EL AIRE DE LA CURVA ──
 
-            ⚠️ SI ALGUIEN VUELVE A SOLAPARLO CON EL HERO —un margen negativo—,
-            hace falta `relative` en este contenedor. El fundido inferior del
-            hero es un absoluto casi opaco y los absolutos se pintan DESPUÉS del
-            contenido normal: taparía el filete sin que nada fallara ni avisara.
-            Ya pasó. */}
-        <div className="px-5">
-          <SeparadorDg className="mx-auto max-w-5xl" />
-        </div>
+            pt-16/24 es lo que separa el borde redondeado de la primera tarjeta.
+            Con menos, la tarjeta se mete dentro de la curva; con más, el panel
+            parece vacío por arriba.
 
-        {/* ══════════════ EL FORMULARIO ══════════════
+            EL REDONDEO VA AQUÍ Y NO EN LA IMAGEN. El archivo de fondo trae el
+            suyo, pero es un porcentaje del ancho —9% en escritorio, 14% en
+            móvil— y a 2560 px daba una curva enorme. Ver .dg-panel-crema. */}
+        <div className="dg-panel-crema relative grow rounded-t-[2.5rem] px-5 pt-16 pb-28 md:rounded-t-[5rem] md:pt-24 md:pb-36">
+          {/* ══════════════ EL FORMULARIO ══════════════
 
-            ── EL MARGEN SUPERIOR VA EMPAREJADO CON EL `pb-*` DEL HERO ──
+              ── YA NO SEPARA NADA POR SU CUENTA ──
 
-            mt-20/24/28 contra pb-20/24/28. Son los dos huecos que rodean al
-            filete separador, y tienen que medir lo mismo o la línea se lee
-            colgada de este bloque en vez de marcando dónde acaba el hero.
+              Llevaba un mt-20/24/28 emparejado con el relleno inferior del hero,
+              porque entre los dos iba el filete separador y los dos huecos
+              tenían que medir lo mismo. Sin filete, ese emparejamiento no
+              defiende nada: la distancia hasta el hero la pone ahora el relleno
+              superior del panel.
 
-            ⚠️ SI SE TOCA EL RELLENO INFERIOR DEL HERO, hay que tocar esto — y
-            también el alto del fundido, que va con ellos. Los tres números son
-            el mismo número.
+              ── LA TARJETA MIDE LO MISMO QUE LA DEL RECURSO ──
 
-            ── ERA LO MÁS ANCHO DE LA PÁGINA Y AHORA ES LO MÁS ESTRECHO ──
+              Las dos a 64rem. Son las dos únicas piezas que hay sobre el panel
+              crema, y con anchos distintos el panel se leía descuadrado: una
+              caja estrecha flotando encima de una ancha.
 
-            Medía 56rem, y no por gusto: eran dos columnas —contenido e
-            ilustración— y "¿A qué email te lo envío?", el más largo de los tres
-            titulares, se partía en dos renglones si la de contenido se
-            estrechaba. La tarjeta crecía de alto sólo en ese paso y todo lo de
-            debajo pegaba un salto al pulsar "continuar".
+              ⚠️ EL ANCHO ES DE LA TARJETA, NO DEL FORMULARIO. Los campos siguen
+              a 36rem centrados dentro de ella (ver FormularioContacto): un
+              campo de nombre de 960 px no se lee como un formulario, se lee como
+              una barra. Lo que crece es el marco y el aire de alrededor.
 
-            Retirada la ilustración de escritorio, ese ancho no defiende nada: la
-            columna de contenido pasa a ser la tarjeta entera, así que el titular
-            entra de sobra, y 56rem sólo servían para dejar un campo de nombre de
-            casi 900 px. A 36rem vuelve a leerse como un formulario.
+              Llegó a medir 56rem por otro motivo, ya muerto: eran dos columnas
+              —contenido e ilustración— y "¿A qué email te lo envío?" se partía
+              en dos renglones si la de contenido se estrechaba, con lo que la
+              tarjeta cambiaba de alto en ese paso y todo lo de abajo saltaba.
+              Sin ilustración en escritorio, ese riesgo lo cubre ahora el suelo
+              de altura de la propia tarjeta.
 
-            La escala queda: un ancho maestro de 64rem para separador, recurso
-            y pie, con hero y formulario más angostos por legibilidad. Todo
-            centrado, que es lo que pidió el feedback.
+              El id es el destino de los enlaces que suben hasta aquí — hoy, el
+              del mensaje de la vista previa del video. Va en la sección y no en
+              el primer campo: al saltar tiene que quedar a la vista la tarjeta
+              entera, no un campo suelto pegado al borde de la ventana.
 
-            El id es el destino de los enlaces que suben hasta aquí — hoy, el
-            del mensaje de la vista previa del video. Va en la sección y no en
-            el primer campo: al saltar tiene que quedar a la vista la tarjeta
-            entera, no un campo suelto pegado al borde de la ventana.
-
-            La tarjeta —marco, fondo y, en móvil, la ilustración— la dibuja el
-            propio formulario. Ya no lleva cabecera: cada paso trae su distintivo
-            ("Aviso por WhatsApp", "Te llega por mail"), que dice lo mismo que
-            decía aquel título fijo pero cambiando con lo que se está pidiendo. */}
-        <div className="px-5">
+              La tarjeta —marco, fondo y, en móvil, la ilustración— la dibuja el
+              propio formulario. Ya no lleva cabecera: cada paso trae su
+              distintivo ("Aviso por WhatsApp", "Te llega por mail"), que dice lo
+              mismo que decía aquel título fijo pero cambiando con lo que se está
+              pidiendo. */}
           <div className="mx-auto max-w-5xl">
             <section
               id="empezar"
               aria-label="Formulario del diagnóstico"
-              className="mx-auto mt-20 max-w-xl scroll-mt-8 sm:mt-24 md:mt-28"
+              className="scroll-mt-8"
             >
               <ArranqueDiagnostico />
             </section>
@@ -341,6 +339,32 @@ export default function DiagnosticoPage() {
               formulario. */}
             <VistaPreviaVideo />
           </div>
+
+          {/* ── EL FUNDIDO QUE DEVUELVE EL PANEL AL VERDE DEL PIE ──
+
+              El panel es crema y el pie vuelve a ser verde oscuro. Sin nada en
+              medio, el canto entre los dos es el contraste más duro de la
+              página entera —14:1— y se lee como un corte, no como un final.
+
+              Disolviendo el último tramo, el crema se apaga hacia el color con
+              el que empalma y el pie aparece en vez de empezar.
+
+              ⚠️ EL COLOR DE DESTINO ES --dg-fondo Y TIENE QUE SER EXACTAMENTE
+              EL DEL PIE. No sirve un negro ni el verde del envoltorio (que es
+              --dg-hero-fondo, más oscuro): quedaría una franja de un tercer
+              color justo en la junta, que es peor que el corte que se está
+              arreglando.
+
+              Va como ÚLTIMO HIJO y en absoluto, y el relleno inferior del panel
+              (pb-28 y más) le deja su sitio: sin ese aire se comería la tarjeta
+              del video.
+
+              El panel no necesita overflow-hidden: el fundido va abajo, donde no
+              hay redondeo, y su caja no se sale de la del panel. */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(180deg,transparent_0%,var(--dg-fondo)_100%)] md:h-28"
+          />
         </div>
       </main>
 
@@ -361,7 +385,25 @@ export default function DiagnosticoPage() {
           Va en la tipografía de titulares y en versalitas: es una firma, no un
           párrafo, y necesita distinguirse del aviso de copyright que tiene
           debajo. */}
-      <footer className="border-t border-[var(--dg-borde)] px-5 py-10">
+      {/* ⚠️ EL FONDO VA DECLARADO Y NO HEREDADO, que es lo que hacía antes.
+
+          El pie es verde oscuro como siempre, pero ahora el envoltorio de la
+          página pinta --dg-hero-fondo (un tono por debajo) para que se vea por
+          las esquinas redondeadas del panel. Heredando, el pie saldría de ese
+          verde más oscuro y el fundido de arriba —que termina en --dg-fondo— no
+          empalmaría con él: quedaría un escalón justo en la junta.
+
+          Los tokens de texto son los de la página (crema), no los del panel:
+          aquí volvemos a estar sobre oscuro.
+
+          ── Y SIN BORDE SUPERIOR ──
+
+          Lo llevaba cuando encima había otra superficie oscura y la línea decía
+          dónde empezaba el pie. Ahora encima hay un degradado que disuelve el
+          crema en este mismo verde: el borde ponía un canto duro justo en el
+          punto que el fundido existe para suavizar. Las dos cosas a la vez, en
+          el mismo píxel. */}
+      <footer className="bg-[var(--dg-fondo)] px-5 py-10">
         <div className="mx-auto max-w-5xl text-center">
           <p className="dg-titulo text-[0.95rem] leading-snug tracking-[0.14em] text-balance text-[var(--dg-texto-suave)] uppercase sm:text-[1.05rem]">
             {LANDING.tagline}

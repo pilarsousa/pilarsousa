@@ -10,10 +10,16 @@ type AcidSquaresFondoProps = {
 export function AcidSquaresFondo({ className }: AcidSquaresFondoProps) {
   return (
     <div className={cn("dg-acid-fondo", className)} aria-hidden>
+      {/* ⚠️ LOS COLORES VAN AQUÍ Y NO EN EL CSS: el fondo es un canvas y los
+          recibe como props, así que .dg-acid-fondo no puede tocarlos.
+
+          Son los tres de la marca —verde, verde 2 y crema— traducidos uno a uno
+          desde la paleta anterior, que era casi negro, oliva y lima. Si cambia
+          la paleta hay que tocar este archivo Y la regla del CSS. */}
       <AcidSquares
-        color1="#080D04"
-        color2="#1A2A0A"
-        color3="#D4EF7A"
+        color1="#002F01"
+        color2="#084A2C"
+        color3="#FFF8F0"
         detail="medium"
         speed={0.75}
         waveDepth={1}

@@ -90,7 +90,7 @@ export function VistaPreviaVideo() {
       aria-busy={bloqueado}
       className="dg-borde-giro relative mt-14 w-full rounded-[calc(1.5rem+1px)] p-px sm:mt-16"
     >
-      <div className="relative overflow-hidden rounded-3xl bg-[var(--dg-fondo-alto)] p-5 shadow-[0_28px_90px_-50px_rgba(0,0,0,0.95)] sm:p-7 lg:p-8">
+      <div className="dg-relieve relative overflow-hidden rounded-3xl bg-[var(--dg-fondo-alto)] p-5 sm:p-7 lg:p-8">
         <span
           aria-hidden
           className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,var(--dg-brillo-suave)_0%,transparent_28%,transparent_68%,var(--dg-brillo-suave)_100%)]"
@@ -123,9 +123,25 @@ export function VistaPreviaVideo() {
                 const Icono = ICONOS_REGALO[indice] ?? BadgeCheck;
 
                 return (
+                  /* ── VIDRIO ESMERILADO, Y EL TEXTO EN BLANCO ──
+
+                     Un blanco translúcido sobre el verde de la tarjeta, con el
+                     fondo desenfocado por detrás y un filo claro de 1 px arriba
+                     que remata el canto. La píldora deja de ser una caja pintada
+                     y pasa a ser una lámina.
+
+                     ⚠️ EL COLOR DE RESPALDO NO ES OPCIONAL. `backdrop-blur` no
+                     existe en Firefox con la aceleración desactivada ni en
+                     navegadores viejos, y ahí lo único que queda es el
+                     `bg-white/10`: con eso solo, la píldora sigue leyéndose.
+                     Si el fondo fuera transparente del todo, en esos
+                     navegadores desaparecería.
+
+                     El blanco a 12% sobre el verde de la tarjeta deja el texto
+                     en 15,8:1 — más que de sobra. */
                   <li
                     key={punto}
-                    className="flex items-start gap-3 rounded-2xl border border-[var(--dg-borde)] bg-[color-mix(in_srgb,var(--dg-superficie)_72%,transparent)] px-3.5 py-3 text-sm leading-snug text-[var(--dg-texto)]"
+                    className="flex items-start gap-3 rounded-2xl border border-white/15 bg-white/10 px-3.5 py-3 text-sm leading-snug text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.18)] backdrop-blur-md"
                   >
                     <span
                       aria-hidden

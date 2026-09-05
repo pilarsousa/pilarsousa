@@ -63,8 +63,28 @@ type Props = {
   sinRelleno?: boolean;
 };
 
+/*
+  ⚠️ AQUÍ HUBO UN TROCEADO DEL RÓTULO EN LETRAS, para que se encendieran una
+  tras otra como en la referencia de Uiverse. Se retiró porque ROMPÍA LOS
+  BOTONES, y el motivo merece quedar escrito.
+
+  Este botón es `inline-flex` con `gap-2`. Las letras iban en spans dentro de
+  un envoltorio con `display: contents`, que precisamente NO crea caja: sus
+  hijos suben a ser hijos directos del flex. O sea que cada letra pasaba a ser
+  un elemento de la fila y el gap de 8 px se metía ENTRE CADA LETRA.
+
+  SI SE VUELVE A INTENTAR, el rótulo tiene que ir dentro de un span con caja
+  propia —`inline-block`, no `contents`— para que el gap del botón siga
+  separando el icono del texto y no una letra de la siguiente.
+
+  El relieve y el halo de esa misma referencia sí se quedan: viven en
+  .dg-boton-cta y no tocan el contenido.
+*/
+
+/* dg-boton-cta pone el relieve, el halo/* dg-boton-cta pone el relieve, el halo y los tonos del oleaje; el aspecto del
+   botón —fondo y tinta— lo siguen poniendo las variantes de aquí abajo. */
 const BASE =
-  "inline-flex min-h-[3em] cursor-pointer items-center justify-center gap-2 rounded-full text-center text-[0.95rem] font-semibold leading-tight transition-[background-color,border-color,color,opacity,transform] duration-200 active:scale-[0.985] disabled:pointer-events-none disabled:opacity-45 sm:text-base";
+  "dg-boton-cta inline-flex min-h-[3em] cursor-pointer items-center justify-center gap-2 rounded-full text-center text-[0.95rem] font-semibold leading-tight transition-[background-color,border-color,box-shadow,color,opacity,transform] duration-200 active:scale-[0.985] disabled:pointer-events-none disabled:opacity-45 sm:text-base";
 
 /* El relleno va aparte del BASE porque el botón de icono lo anula: con
    px-[1.6em] no puede ser cuadrado. */
@@ -77,12 +97,13 @@ const ANCHOS = {
 } as const;
 
 const VARIANTES = {
+  /* ⚠️ SIN UTILIDAD DE SOMBRA. box-shadow es UNA propiedad: un `shadow-[…]`
+     aquí no se sumaría al relieve de .dg-boton-cta, lo sustituiría entero. Las
+     diez capas se declaran juntas allí. */
   principal:
-    /* El brillo interior baja de 0,28 a 0,14: sobre un botón crema, un
-       reflejo blanco al 28% no se ve y sólo lava el borde superior. */
-    "bg-[var(--dg-acento)] text-[var(--dg-acento-oscuro)] shadow-[0_1px_0_0_rgba(255,255,255,0.14)_inset,0_10px_28px_-12px_var(--dg-brillo-fuerte)] hover:bg-[var(--dg-acento-vivo)]",
+    "bg-[var(--dg-acento)] text-[var(--dg-acento-oscuro)] hover:bg-[var(--dg-acento-vivo)]",
   secundario:
-    "border border-[var(--dg-borde)] bg-transparent text-[var(--dg-texto-suave)] hover:border-[var(--dg-borde-vivo)] hover:text-[var(--dg-texto)]",
+    "dg-boton-cta--secundario border border-[var(--dg-borde)] bg-transparent text-[var(--dg-texto-suave)] hover:border-[var(--dg-borde-vivo)] hover:text-[var(--dg-texto)]",
 } as const;
 
 export function BotonDg({
