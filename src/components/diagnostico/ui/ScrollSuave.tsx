@@ -52,7 +52,41 @@ export function ScrollSuave() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const lenis = new Lenis({ duration: 1.6, anchors: true });
+    /*
+      ── `duration: 2`, EL MISMO VALOR QUE LAS OTRAS LANDINGS ──
+
+      Estuvo en 1,6 y se notaba poco: con la página midiendo unas dos pantallas,
+      cualquier gesto llega casi al final y la inercia no tiene recorrido donde
+      lucirse. Medido, el desplazamiento se asentaba en ~200 ms frente a los
+      ~700 ms de /lista-de-espera — técnicamente había suavizado, pero a esa
+      velocidad se percibe como un salto.
+
+      Igualarlo también evita que el sitio tenga dos tactos distintos según la
+      landing en la que caiga el visitante.
+
+      ── EL PROBLEMA DE VERDAD ERA EL ALTO DE LA PÁGINA ──
+
+      Y conviene dejarlo escrito, porque no se ve en el código. Esta landing
+      mide unas dos pantallas (≈1900 px); /lista-de-espera mide ocho (≈7900).
+      Con `duration: 2` en las dos, tres golpes de rueda dejaban esta página a
+      mitad de recorrido y aquélla en el 11%: aquí la inercia se agota enseguida
+      porque no queda página por delante, no porque esté mal configurada.
+
+      De ahí `wheelMultiplier`. Es la única palanca que compensa un documento
+      corto: acorta lo que avanza CADA golpe, así que hacen falta más gestos
+      para recorrer lo mismo y cada uno conserva trayecto que suavizar. A 1 —el
+      valor por defecto— un solo golpe se plantaba casi en el pie.
+
+      ⚠️ NO SUBIRLO PARA "QUE VAYA MÁS RÁPIDO". Si algún día esta página crece
+      —más secciones, testimonios— hay que devolverlo hacia 1: con documento
+      largo, un multiplicador bajo obliga a rodar de más para llegar abajo, que
+      es el defecto contrario y se nota igual de mal.
+    */
+    const lenis = new Lenis({
+      duration: 2,
+      wheelMultiplier: 0.65,
+      anchors: true,
+    });
 
     let frame = 0;
     const loop = (time: number) => {
