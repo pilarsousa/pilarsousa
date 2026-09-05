@@ -179,16 +179,24 @@ export default function DiagnosticoPage() {
               linesColor="#5b9800"
               scanColor="#f5f5f5"
               sensitivity={0.55}
-              /* Grosor 1,4 y no 1: el hero es el plano más oscuro de la página
-                 (--dg-hero-fondo, el verde de marca rebajado hacia el negro), y
-                 una línea de un píxel en verde medio sobre ese fondo se pierde.
-                 Sobre el gris del ejemplo de React Bits, 1 basta. */
-              lineThickness={1.4}
+              /* ── EL GROSOR SE AJUSTÓ DOS VECES, Y CONVIENE SABER POR QUÉ ──
+
+                 Empezó en 1 —el valor del ejemplo de React Bits, pensado para
+                 un fondo gris— y ahí se perdía: el hero es el plano más oscuro
+                 de la página (--dg-hero-fondo, el verde de marca rebajado hacia
+                 el negro) y una línea de un píxel en verde medio no llega.
+
+                 Subió a 1,4 a la vez que se abría la máscara de arriba y abajo,
+                 y los dos cambios juntos se pasaron: el fondo dejó de ser
+                 atmósfera y empezó a competir con la promesa. 1,2 es el punto
+                 en el que las líneas se leen sin reclamar la mirada. */
+              lineThickness={1.2}
               gridScale={0.1}
-              /* El barrido sube a 0,55 por lo mismo: es lo único que se mueve
-                 de verdad y lo que hace que el fondo se lea como una medición y
-                 no como una textura quieta. */
-              scanOpacity={0.55}
+              /* El barrido se queda por encima del grosor: es lo único que se
+                 mueve de verdad, y es lo que hace que el fondo se lea como una
+                 medición y no como una textura quieta. Bajarlo con las líneas
+                 dejaría el hero sin el gesto que justifica ponerlo aquí. */
+              scanOpacity={0.5}
               enablePost
               bloomIntensity={0.6}
               /* ⚠️ LA ABERRACIÓN CROMÁTICA VA EN CERO, Y NO ES UN DESCUIDO.

@@ -942,11 +942,19 @@
   justo a la altura de los avatares —medido, caían en el 73,8%— y la sección
   parecía cortada por una sombra a media altura.
 
-  Ahora empieza antes (6%) y termina casi al final (96%), con tramos de fundido
-  cortos en los dos cantos. Lo justo para que las líneas no choquen en seco
-  contra los bordes, sin dejar media sección vacía.
+  ── Y DESPUÉS HUBO QUE VOLVER UN PASO ATRÁS ──
 
-  ⚠️ NO SUBIRLO AL 100%: ahí la rejilla terminaría a filo con el degradado que
+  El primer arreglo lo abrió de 6% a 96%, y con eso el fondo dejó de cortarse
+  pero empezó a competir con la promesa: la rejilla pasó de atmósfera a asunto
+  de la sección. No fue sólo la máscara — a la vez se subieron el grosor de
+  línea y la opacidad del barrido, y los tres cambios juntos se notaron.
+
+  12%–80% (con el fundido acabando en 92%) es el punto intermedio: la rejilla
+  llega holgadamente por debajo de los avatares —que están en el 73,8%, que era
+  el problema original— y los cantos vuelven a tener un fundido de verdad en vez
+  de un filo.
+
+  ⚠️ NO LLEVARLO AL 100%: ahí la rejilla terminaría a filo con el degradado que
   empalma el hero con el panel crema, y las dos transiciones se pisarían en el
   mismo píxel.
 */
@@ -974,14 +982,14 @@
     linear-gradient(
       to bottom,
       transparent 0%,
-      #000 6%,
-      #000 88%,
-      transparent 96%
+      #000 12%,
+      #000 80%,
+      transparent 92%
     ),
     radial-gradient(
-      ellipse 52% 40% at 50% 41%,
-      rgba(0, 0, 0, 0.06) 0%,
-      rgba(0, 0, 0, 0.45) 58%,
+      ellipse 58% 44% at 50% 41%,
+      rgba(0, 0, 0, 0.04) 0%,
+      rgba(0, 0, 0, 0.5) 60%,
       #000 100%
     );
   -webkit-mask-composite: source-in;
@@ -989,14 +997,14 @@
     linear-gradient(
       to bottom,
       transparent 0%,
-      #000 6%,
-      #000 88%,
-      transparent 96%
+      #000 12%,
+      #000 80%,
+      transparent 92%
     ),
     radial-gradient(
-      ellipse 52% 40% at 50% 41%,
-      rgba(0, 0, 0, 0.06) 0%,
-      rgba(0, 0, 0, 0.45) 58%,
+      ellipse 58% 44% at 50% 41%,
+      rgba(0, 0, 0, 0.04) 0%,
+      rgba(0, 0, 0, 0.5) 60%,
       #000 100%
     );
   mask-composite: intersect;
