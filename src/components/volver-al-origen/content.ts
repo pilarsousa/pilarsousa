@@ -127,6 +127,93 @@ export const FEATURED_TESTIMONIALS = FEATURED.map((i) => TESTIMONIALS[i]).filter
   Boolean,
 );
 
+/*
+  ──────────────────── La historia de Volver al Origen ───────────────────────
+
+  ⚠️ NO CONFUNDIR CON `QUE_ES`, QUE ESTÁ UNAS LÍNEAS MÁS ARRIBA.
+
+  Las dos responden a "¿qué es Volver al Origen?" y son cosas distintas:
+
+    · QUE_ES  — QUÉ INCLUYE el programa: seis puntos sueltos (las 6 semanas,
+                las 13 mentorías, el acompañamiento). Es la ficha. Su sección
+                (sections/QueEs.tsx) existe pero hoy NO está montada en la
+                página.
+    · ORIGEN  — este bloque: POR QUÉ EXISTE. El relato en primera persona de
+                Pilar, de dónde sale el método y qué lo diferencia.
+
+  Van seguidas en la página y por eso el título de ésta no repite la pregunta
+  entera: si algún día se monta también QueEs, dos secciones consecutivas
+  preguntando lo mismo se leen como un error.
+
+  Texto del cliente, íntegro y sin recortar. Lo que sí hace este archivo es
+  ORDENARLO EN BLOQUES, porque son unas 450 palabras y once párrafos: volcados
+  como un muro seguido, en una landing de captación no los lee nadie.
+
+  La estructura sigue el arco del propio texto:
+
+    1. `problema`   — de qué se dio cuenta (el "entretenimiento espiritual")
+    2. `giro`       — la frase que hace bisagra, destacada aparte
+    3. `origen`     — su parte en ese mundo y el propósito que encontró
+    4. `sistema`    — los 13 Códigos y qué NO es esto
+    5. `prueba`     — las dos ediciones y los 350 alumnos
+    6. `cierre`     — la misión y la frase final
+
+  ⚠️ `giro` y `cierre` SE PINTAN DISTINTO, más grandes y en verde. No es
+  decoración: son las dos frases que cargan el argumento —"saber más no
+  significa tener mejores resultados" y "recordar quién eras"— y en un bloque
+  de este largo hacen de asidero para quien escanea en vez de leer.
+
+  Las cifras (10 años, 13 códigos, 2 ediciones, 350 alumnos) salen aparte en
+  `datos` y se pintan como marcadores. Son lo único verificable del bloque y
+  perdidas dentro de un párrafo no las ve nadie.
+*/
+export const ORIGEN = {
+  title: "¿Qué es",
+  titleAccent: "Volver al Origen",
+
+  problema: [
+    "Volver al Origen nace al darme cuenta de que el mundo de la espiritualidad en redes sociales se estaba convirtiendo en una especie de «entretenimiento espiritual».",
+    "Cada vez había más técnicas, teorías, conceptos y contenido compitiendo por nuestra atención. Muchísimas personas sabían cada vez más sobre espiritualidad, metafísica o leyes universales, pero seguían sin ver ese conocimiento reflejado en resultados tangibles en su vida.",
+  ],
+
+  /* La bisagra del texto. Va sola y destacada. */
+  giro: "Porque saber más no significa tener mejores resultados. Si no lo aplicas, nada cambia.",
+
+  origen: [
+    "Y yo también formaba parte de ese mundo. Creaba muchísimo contenido que ayudaba a muchas personas, pero entendí que quería ir mucho más allá. No quería simplemente compartir información o llegar a millones de personas. Quería impactar de forma real y crear algo capaz de generar transformaciones extraordinarias.",
+    "Ahí encontré una parte mucho más profunda de mi propósito.",
+    "Después de más de 10 años estudiando, experimentando y aplicando estos principios en mi propia vida, decidí ordenarlos y sistematizarlos de una forma sencilla y práctica.",
+  ],
+
+  sistema: [
+    "Así nacieron los 13 Códigos Originales de la manifestación y, con ellos, Volver al Origen.",
+    "Principios que yo no he inventado, sino que llevo años estudiando y aplicando, y que he ordenado para que cualquier persona comprometida con su transformación pueda llevarlos a la práctica y transformar su realidad.",
+    "Aquí no buscamos darte más información. Buscamos que puedas aplicar estos principios de una manera sencilla y práctica hasta ver resultados en tu propia vida.",
+  ],
+
+  prueba: [
+    "Ya han sido dos ediciones de Volver al Origen. Más de 350 alumnos han pasado por este entrenamiento y cientos de personas están utilizando sus principios para transformar sus vidas.",
+    "Mi misión es llevar este movimiento educativo a miles y millones de personas, para que puedan comprender cómo funciona la realidad y utilizar estos principios para vivir una vida más próspera, abundante y feliz.",
+  ],
+
+  /* La frase con la que cierra el cliente, emoji incluido. */
+  cierre:
+    "Porque Volver al Origen no trata de convertirte en alguien nuevo o en alguien que no eres, sino de recordar quién eras antes de olvidar quién eres y empezar a vivir desde ahí cada día de tu vida.",
+
+  /*
+    ⚠️ CIFRAS REALES, TODAS SACADAS DEL TEXTO DEL CLIENTE. No se inventa
+    ninguna ni se redondea al alza: "más de 350 alumnos" es lo que él escribe,
+    y por eso el "+". Si mañana cambia el copy hay que cambiarlas aquí también,
+    porque quedarían contradiciendo al párrafo que tienen al lado.
+  */
+  datos: [
+    { cifra: "+10", etiqueta: "años de estudio" },
+    { cifra: "13", etiqueta: "Códigos Originales" },
+    { cifra: "2", etiqueta: "ediciones" },
+    { cifra: "+350", etiqueta: "alumnos" },
+  ],
+};
+
 export const PILAR = {
   title: "¿Quién es",
   titleAccent: "Pilar Sousa",
