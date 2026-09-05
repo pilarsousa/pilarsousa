@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { BadgeCheck, Lock, MailCheck, Play, Sparkles, Target } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { LANDING } from "@/components/diagnostico/contenido";
+import { AvisoFlotante } from "@/components/diagnostico/ui/AvisoFlotante";
 
 /*
   ═══════════════════════════════════════════════════════════════════════════
@@ -57,6 +58,13 @@ const ICONOS_REGALO = [Target, BadgeCheck, MailCheck] as const;
 
 export function VistaPreviaVideo() {
   const [bloqueado, setBloqueado] = useState(false);
+  /* ── EL AVISO VA EN SU PROPIO ESTADO, NO ATADO A `bloqueado` ──
+
+     Los dos empiezan a la vez, pero no duran lo mismo: el aviso se va a los 3 s
+     —cuando lleva al formulario— y el candado se queda 7. Con una sola bandera,
+     o el candado se iría antes de tiempo o el aviso se quedaría flotando sobre
+     el formulario mientras se escribe en él. */
+  const [avisoVisible, setAvisoVisible] = useState(false);
   const temporizador = useRef<number | null>(null);
 
   /* Un temporizador pendiente al desmontar intentaría escribir estado sobre un
@@ -69,12 +77,18 @@ export function VistaPreviaVideo() {
     };
   }, []);
 
+  /* useCallback porque se pasa como prop al aviso, que lo tiene en las
+     dependencias de su efecto: una función nueva en cada render reiniciaría su
+     temporizador en cada render y el salto no llegaría nunca. */
+  const cerrarAviso = useCallback(() => setAvisoVisible(false), []);
+
   function alPulsar() {
     if (bloqueado) {
       return;
     }
 
     setBloqueado(true);
+    setAvisoVisible(true);
     if (temporizador.current !== null) {
       window.clearTimeout(temporizador.current);
     }
@@ -123,29 +137,40 @@ export function VistaPreviaVideo() {
                 const Icono = ICONOS_REGALO[indice] ?? BadgeCheck;
 
                 return (
-                  /* ── VIDRIO ESMERILADO, Y EL TEXTO EN BLANCO ──
+                  /* ── DE VIDRIO ESMERILADO A LÁMINA SÓLIDA ──
 
-                     Un blanco translúcido sobre el verde de la tarjeta, con el
-                     fondo desenfocado por detrás y un filo claro de 1 px arriba
-                     que remata el canto. La píldora deja de ser una caja pintada
-                     y pasa a ser una lámina.
+                     Era un blanco al 10% con el fondo desenfocado por detrás.
+                     Ahora es crema opaco con el relieve de las tarjetas claras:
+                     luz arriba, sombra abajo. Ver .dg-claro y .dg-relieve-claro
+                     en diagnostico.css.
 
-                     ⚠️ EL COLOR DE RESPALDO NO ES OPCIONAL. `backdrop-blur` no
-                     existe en Firefox con la aceleración desactivada ni en
-                     navegadores viejos, y ahí lo único que queda es el
-                     `bg-white/10`: con eso solo, la píldora sigue leyéndose.
-                     Si el fondo fuera transparente del todo, en esos
-                     navegadores desaparecería.
+                     El translúcido dependía de que hubiera algo interesante
+                     detrás, y detrás sólo hay el verde plano de la tarjeta: el
+                     desenfoque no desenfocaba nada y lo único que quedaba era un
+                     gris lavado. En sólido, las tres píldoras son la pieza más
+                     clara de la sección y se leen antes que el texto de arriba
+                     — que es lo que tiene que pasar con la lista de lo que se
+                     recibe.
 
-                     El blanco a 12% sobre el verde de la tarjeta deja el texto
-                     en 15,8:1 — más que de sobra. */
+                     .dg-claro les da la vuelta a los tokens, así que el disco
+                     del icono se invierte solo: pasa a verde con el símbolo en
+                     crema, sin tocar sus clases.
+
+                     ── `items-center` Y NO `items-start` ──
+
+                     Con el texto arriba, un punto de una sola línea dejaba el
+                     icono y la frase pegados al canto superior y un hueco debajo:
+                     la píldora se veía descolgada. Centrados, los dos comparten
+                     eje sea cual sea el número de renglones — y por eso también
+                     se va el `mt-0.5` del disco, que existía para compensar a
+                     ojo la primera línea del texto. */
                   <li
                     key={punto}
-                    className="flex items-start gap-3 rounded-2xl border border-white/15 bg-white/10 px-3.5 py-3 text-sm leading-snug text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.18)] backdrop-blur-md"
+                    className="dg-claro dg-relieve-claro flex items-center gap-3 rounded-2xl px-3.5 py-3 text-sm leading-snug text-[var(--dg-texto)]"
                   >
                     <span
                       aria-hidden
-                      className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-[var(--dg-acento)] text-[var(--dg-acento-oscuro)]"
+                      className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[var(--dg-acento)] text-[var(--dg-acento-oscuro)]"
                     >
                       <Icono className="size-3.5" strokeWidth={1.9} />
                     </span>
@@ -298,6 +323,27 @@ export function VistaPreviaVideo() {
           />
         )}
       </div>
+
+      {/* ── EL AVISO QUE SUBE Y LLEVA AL FORMULARIO ──
+
+          El candado explica que el video está bloqueado, pero no dice qué hacer
+          para desbloquearlo — y quien acaba de pulsar "reproducir" es
+          exactamente quien más cerca está de hacerlo.
+
+          El aviso lo dice y, a los 3 segundos, lo hace: sube a la tarjeta del
+          formulario. Ver AvisoFlotante para el detalle del temporizador y de la
+          salida.
+
+          `#empezar` es el id de la sección del formulario, puesto en page.tsx.
+          Va sin la almohadilla porque el componente resuelve con
+          getElementById, no con un selector. */}
+      {avisoVisible && (
+        <AvisoFlotante
+          texto={LANDING.regaloAvisoTexto}
+          destino="empezar"
+          alCerrar={cerrarAviso}
+        />
+      )}
     </section>
   );
 }

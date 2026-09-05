@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import "./analisis.css";
+import "./diagnostico.css";
 
 /*
-  Diagnóstico de frecuencia — el lead magnet, servido en /analisis.
+  Diagnóstico de frecuencia — el lead magnet, servido en /diagnostico.
 
   TRES RUTAS, UN SOLO EMBUDO:
-    /analisis            landing de promesa
-    /analisis/encuesta       formulario (3 pasos) + las 7 preguntas
-    /analisis/resultado  frecuencia dominante + comunidad de WhatsApp
+    /diagnostico            landing de promesa
+    /diagnostico/encuesta       formulario (3 pasos) + las 7 preguntas
+    /diagnostico/resultado  frecuencia dominante + comunidad de WhatsApp
 
   ── POR QUÉ ESTE LAYOUT ESTÁ VACÍO ──
 
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   /*
     Favicon propio de esta ruta, con el logotipo nuevo de Pilar. El layout raíz
     emite el favicon.ico del sitio para todas las páginas; declararlo aquí es lo
-    que hace que en /analisis gane éste.
+    que hace que en /diagnostico gane éste.
 
     ⚠️ NO APUNTA AL ORIGINAL, sino a una copia de 128x128 (10 KB frente a los
     120 del archivo de 1254x1254). Un favicon se pide en cada página y Next NO

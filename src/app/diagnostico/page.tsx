@@ -6,7 +6,7 @@ import { LANDING } from "@/components/diagnostico/contenido";
 
 /*
   ═══════════════════════════════════════════════════════════════════════════
-  LANDING DE PROMESA — /analisis
+  LANDING DE PROMESA — /diagnostico
   ═══════════════════════════════════════════════════════════════════════════
 
     hero (anillos + promesa) → FORMULARIO → vista previa del video → pie

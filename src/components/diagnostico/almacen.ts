@@ -152,7 +152,7 @@ export function limpiarEstado(): void {
 
    Se guarda con su propia clave y no dentro del estado del test, porque tiene
    otra vida: el borrador del test se borra al terminar, y el resultado tiene
-   que sobrevivir a la navegación hacia /analisis/resultado y a una recarga
+   que sobrevivir a la navegación hacia /diagnostico/resultado y a una recarga
    de esa página. */
 const CLAVE_RESULTADO = "vo-diagnostico-resultado-v1";
 

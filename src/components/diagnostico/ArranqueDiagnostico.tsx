@@ -34,7 +34,7 @@ export function ArranqueDiagnostico({ className }: { className?: string }) {
   const temporizador = useRef<number | null>(null);
 
   useEffect(() => {
-    router.prefetch("/analisis/encuesta");
+    router.prefetch("/diagnostico/encuesta");
   }, [router]);
 
   useEffect(() => {
@@ -58,7 +58,7 @@ export function ArranqueDiagnostico({ className }: { className?: string }) {
       }
 
       temporizador.current = window.setTimeout(() => {
-        router.push("/analisis/encuesta");
+        router.push("/diagnostico/encuesta");
       }, DURACION_PUENTE_FORMULARIO);
     },
     [router],

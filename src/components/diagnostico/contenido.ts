@@ -487,6 +487,18 @@ export const LANDING = {
      párrafo de al lado, y repetirlo encima de la imagen sería decirlo dos
      veces en la misma pantalla. */
   regaloBloqueadoRotulo: "Bloqueado",
+
+  /* EL AVISO QUE SUBE AL INTENTAR REPRODUCIR.
+
+     El candado dice que está bloqueado; esto dice cómo se abre. Son dos cosas
+     distintas y por eso no se repiten: encima de la imagen va el estado, y aquí
+     la salida.
+
+     Está escrito para que se lea entero en los 3 segundos que tarda en llevar
+     al formulario — de ahí que sea una sola frase. Si crece, hay que subir la
+     espera en AvisoFlotante o el salto llegará a media lectura. */
+  regaloAvisoTexto:
+    "El video se desbloquea con tu diagnóstico. Te llevo al formulario para empezarlo.",
 };
 
 /* ──────────────────── Formulario previo (3 pasos) ──────────────────────────
@@ -526,7 +538,16 @@ export const FORMULARIO = {
       icono: "usuario" as const,
       distintivo: "Empezá tu diagnóstico",
       etiqueta: "¿Cómo te llamás?",
-      ayuda: "Tu nombre, para que el video vaya dirigido a vos.",
+      /* ⚠️ SIN AYUDA, Y ES DELIBERADO. Decía "Tu nombre, para que el video vaya
+         dirigido a vos" y se retiró: es el primer campo que ve el visitante y
+         "¿Cómo te llamás?" no necesita que nadie lo explique. El renglón sólo
+         metía texto entre el titular y el campo.
+
+         Los otros dos pasos sí la conservan porque ahí sí hay algo que decir:
+         dónde llega el video, y para qué se pide el teléfono.
+
+         El campo es opcional en PasoCampo, así que quitarlo no deja hueco: el
+         párrafo no se pinta. */
       placeholder: "Escribí tu nombre",
       tipo: "text",
       autoComplete: "given-name",
@@ -600,6 +621,13 @@ export const RESULTADO = {
   emailNota:
     "Si no lo ves en unos minutos, mirá en spam o en la pestaña de promociones.",
 
+  /* EL TÍTULO DEL DESPLEGABLE DEL REPARTO.
+
+     Tiene que decir qué hay dentro, y no "Ver detalle": un desplegable que no
+     cuenta qué esconde no lo abre nadie. Nombrando las 7 respuestas se apoya
+     además en algo que la persona acaba de hacer y recuerda. */
+  repartoTitulo: "Cómo se repartieron tus 7 respuestas",
+
   /* PASO 2 — WhatsApp. El botón está confirmado en el documento. */
   comunidadTitulo: "Un último paso",
   comunidadTexto:
@@ -619,7 +647,7 @@ export const RESULTADO = {
   mostrarBotonMail: false,
   mailCta: "Abrir mi correo",
 
-  /* Estado para quien llega a /analisis/resultado sin haber hecho el test
+  /* Estado para quien llega a /diagnostico/resultado sin haber hecho el test
      (un enlace compartido, una recarga después de limpiar la sesión). */
   sinResultadoTitulo: "Todavía no tenemos tu diagnóstico",
   sinResultadoTexto:

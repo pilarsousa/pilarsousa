@@ -31,7 +31,7 @@ import { GenerandoDiagnostico } from "@/components/diagnostico/ui/GenerandoDiagn
 
 /*
   ═══════════════════════════════════════════════════════════════════════════
-  LAS 7 PREGUNTAS — /analisis/encuesta
+  LAS 7 PREGUNTAS — /diagnostico/encuesta
   ═══════════════════════════════════════════════════════════════════════════
 
   El formulario de contacto YA NO ESTÁ AQUÍ: se rellena en la propia landing,
@@ -205,7 +205,7 @@ export function FlujoTest() {
     if (!almacenDisponible()) return;
     /* `replace` y no `push`: esta URL no debe quedar en el historial, o el
        "atrás" desde la landing volvería a traer aquí. */
-    router.replace("/analisis");
+    router.replace("/diagnostico");
   }, [faltanDatos, router]);
 
   const irA = useCallback((destino: number) => {
@@ -264,14 +264,14 @@ export function FlujoTest() {
 
         El test ya está hecho: volver a él no tiene sentido, y con `push` la
         entrada del cuestionario se quedaba en el historial. Al pulsar "atrás"
-        desde los resultados se aterrizaba en /analisis/encuesta — sin datos,
+        desde los resultados se aterrizaba en /diagnostico/encuesta — sin datos,
         porque se acaban de borrar— y aparecía el formulario en blanco, como si
         hubiera que empezar de cero.
 
         Con `replace`, la página de resultados OCUPA el sitio de la última
         entrada del test en vez de añadirse detrás.
       */
-      router.replace(`/analisis/resultado?f=${diagnostico.dominante}`);
+      router.replace(`/diagnostico/resultado?f=${diagnostico.dominante}`);
     },
     [datos, irA, router],
   );

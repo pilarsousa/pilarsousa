@@ -3,7 +3,7 @@ import { AcidSquaresFondo } from "@/components/diagnostico/ui/AcidSquaresFondo";
 import { VistaResultado } from "@/components/diagnostico/VistaResultado";
 
 /*
-  /analisis/resultado — la página de gracias.
+  /diagnostico/resultado — la página de gracias.
 
   El resultado se resuelve en el navegador (sessionStorage, o el parámetro `f`
   como red), así que esta página no recibe searchParams ni necesita ser

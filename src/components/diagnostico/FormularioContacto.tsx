@@ -48,7 +48,7 @@ import { PasoCampo } from "@/components/diagnostico/ui/PasoCampo";
   ALTURA entre pasos y nada de lo que hay debajo en la landing se mueve
   mientras se rellena.
 
-  ── LO REUTILIZA /analisis/encuesta ──
+  ── LO REUTILIZA /diagnostico/encuesta ──
 
   Si alguien abre el test directamente —un enlace compartido, una recarga con
   el almacenamiento bloqueado— no hay datos de contacto, y esa página monta

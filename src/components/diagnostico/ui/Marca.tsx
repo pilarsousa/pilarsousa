@@ -2,7 +2,7 @@ import Image from "next/image";
 import { LANDING } from "@/components/diagnostico/contenido";
 
 /*
-  La cabecera de /analisis/encuesta y /analisis/resultado: el logo y nada más.
+  La cabecera de /diagnostico/encuesta y /diagnostico/resultado: el logo y nada más.
 
   ── EN LA LANDING NO SE USA ──
 

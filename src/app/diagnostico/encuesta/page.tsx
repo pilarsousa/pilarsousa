@@ -3,7 +3,7 @@ import { AcidSquaresFondo } from "@/components/diagnostico/ui/AcidSquaresFondo";
 import { FlujoTest } from "@/components/diagnostico/FlujoTest";
 
 /*
-  /analisis/encuesta — el formulario y las 7 preguntas.
+  /diagnostico/encuesta — el formulario y las 7 preguntas.
 
   La página es de servidor y sólo coloca la cabecera; todo el estado vive en
   FlujoTest, que es el único componente de cliente del embudo.

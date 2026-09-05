@@ -31,7 +31,7 @@ import {
 
   Cada barra crece desde cero con un retardo respecto de la anterior. Es lo que
   convierte cuatro cifras impresas en una medición: algo que se ha calculado
-  delante de ti. Los detalles del cómo, en .dg-carga (analisis.css).
+  delante de ti. Los detalles del cómo, en .dg-carga (diagnostico.css).
 
   ── EL RETARDO VA EN ESTILO EN LÍNEA ──
 
@@ -72,11 +72,19 @@ export function MedicionFrecuencias({
   );
 
   return (
-    <figure className={cn("w-full", className)}>
-      <figcaption className="mb-5 text-[0.7rem] tracking-[0.16em] text-[var(--dg-texto-tenue)] uppercase">
-        Cómo se repartieron tus 7 respuestas
-      </figcaption>
+    /* ── SIN <figcaption>, Y NO ES UN OLVIDO ──
 
+       Decía "Cómo se repartieron tus 7 respuestas", que es exactamente lo que
+       dice ahora el botón del desplegable donde vive esto (ver
+       RepartoDesplegable). Con los dos, el mismo renglón aparecía dos veces
+       seguidas al abrir el panel.
+
+       El título se queda en el botón y no aquí porque plegado tiene que
+       seguirse leyendo: es lo único que dice qué hay dentro.
+
+       ⚠️ SI ESTE COMPONENTE SE MONTA ALGÚN DÍA FUERA DEL DESPLEGABLE, hay que
+       devolverle un encabezado: cuatro barras sin rótulo no dicen de qué son. */
+    <figure className={cn("w-full", className)}>
       {/* Una lista ORDENADA porque el orden es la información: la primera es la
           dominante. Un <ul> diría que da igual cuál va antes. */}
       <ol className="flex flex-col gap-4">

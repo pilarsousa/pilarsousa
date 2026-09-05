@@ -100,6 +100,43 @@ const nextConfig: NextConfig = {
         destination: "/bootcamp/gracias",
         permanent: false,
       },
+
+      /* ── EL DIAGNÓSTICO SE LLAMABA /analisis ──
+
+         Se renombró a /diagnostico, que es como se le llama en el copy, en el
+         email y en el documento del cliente: la URL decía una palabra y la
+         página otra.
+
+         Estas dos reglas son la red para lo que ya salió con la URL vieja —un
+         enlace compartido, un marcador, lo que tenga cableado GoHighLevel en la
+         automatización del email—. Sin ellas, todo eso es un 404 justo en el
+         embudo de captación.
+
+         ── LAS DOS REGLAS, Y EN ESTE ORDEN ──
+
+         `:ruta*` casa con uno o más segmentos, pero NO con ninguno: sólo con esa
+         regla, /analisis a secas —que es la que se comparte— seguiría rota. La
+         primera cubre la raíz y la segunda todo lo que cuelga: /analisis/encuesta
+         y /analisis/resultado, con sus parámetros, que Next conserva solo.
+
+         ── `permanent: false` (307), NO 308 ──
+
+         Un permanente se queda cacheado en el navegador de quien lo reciba y ya
+         no hay forma de retirarlo desde el servidor. Mientras la ruta lleve
+         noindex y el copy siga siendo un borrador, conviene poder deshacer esto
+         sin dejar a nadie con un salto pegado. Cuando el embudo esté cerrado y
+         se retire el noindex, esto pasa a `true` para que los buscadores
+         traspasen la autoridad. */
+      {
+        source: "/analisis",
+        destination: "/diagnostico",
+        permanent: false,
+      },
+      {
+        source: "/analisis/:ruta*",
+        destination: "/diagnostico/:ruta*",
+        permanent: false,
+      },
     ];
   },
 };

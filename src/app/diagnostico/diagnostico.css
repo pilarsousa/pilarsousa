@@ -1,6 +1,6 @@
 /*
   ═══════════════════════════════════════════════════════════════════════════
-  TOKENS DEL ANÁLISIS — /analisis
+  TOKENS DEL DIAGNÓSTICO — /diagnostico
   ═══════════════════════════════════════════════════════════════════════════
 
   LOS COLORES SON LOS DE LA MARCA — verde #002F01, verde 2 #084A2C y crema
@@ -16,7 +16,7 @@
   todas las demás — con el riesgo de romper una landing en producción por un
   cambio de esta.
 
-  Como archivo aparte, importado sólo desde el layout de /analisis, el
+  Como archivo aparte, importado sólo desde el layout de /diagnostico, el
   rediseño de marca es reemplazar este archivo y nada más.
 
   Se declaran como variables CSS sobre .dg-scope y se usan desde las clases con
@@ -380,7 +380,7 @@
   ── ⚠️ VA EN .dg-scope Y NO EN body ──
 
   La receta pedía "body::after", y aquí eso sería un error: este archivo lo
-  carga sólo /analisis, pero el <body> es el del proyecto ENTERO. El grano se
+  carga sólo /diagnostico, pero el <body> es el del proyecto ENTERO. El grano se
   colaría en las otras seis landings —volver-al-origen, bootcamp, ventas,
   mision-origen, el juego— sin que nadie lo hubiera pedido ni supiera de dónde
   salió.
@@ -1226,6 +1226,36 @@
 }
 
 /*
+  ── LA VARIANTE PARA FONDO CLARO ──
+
+  El barrido de arriba está construido con cremas: sobre la tarjeta crema del
+  resultado, las letras se volverían invisibles. Aquí se le da la vuelta —tinta
+  verde, con la banda subiendo hacia el verde 2 y un pico casi negro— y la
+  animación, el recorte y el tamaño se heredan.
+
+  ⚠️ NO ES UN VALLE COMO LA CLARA, ES UN PICO. Allí el texto ya está en el tono
+  más brillante disponible y la luz tiene que oscurecer alrededor para leerse.
+  Aquí la tinta es oscura y sí queda recorrido hacia abajo, así que la banda
+  hace lo natural: la letra se hunde donde pasa la luz.
+
+  Va DESPUÉS de .dg-luz-texto y con la misma especificidad, así que gana por
+  orden. Se aplica junto a ella, no en su lugar: la clase base sigue aportando
+  el recorte, el tamaño del fondo y la animación.
+*/
+.dg-luz-texto.dg-luz-oscura {
+  background-image: linear-gradient(
+    100deg,
+    var(--dg-verde-2) 0%,
+    var(--dg-verde-2) 38%,
+    var(--dg-verde) 45%,
+    #001a00 50%,
+    var(--dg-verde) 55%,
+    var(--dg-verde-2) 62%,
+    var(--dg-verde-2) 100%
+  );
+}
+
+/*
   EL ZOOM DE LAS SEÑALES — las tres píldoras crecen por turnos.
 
   Va en los tres distintivos de debajo del formulario ("7 preguntas", "Menos de
@@ -1529,6 +1559,277 @@
   display: none;
 }
 
+/*
+  ═══════════════════════════════════════════════════════════════════════════
+  EL TEMA CLARO — .dg-claro
+  ═══════════════════════════════════════════════════════════════════════════
+
+  Una tarjeta crema sobre el verde oscuro de la página. Se usa en /diagnostico
+  /resultado, donde el fondo ya es verde profundo y las tarjetas oscuras sobre
+  oscuro no destacaban lo suficiente para lo único que importa: el resultado.
+
+  ── NO PINTA COLORES: REDEFINE LOS TOKENS ──
+
+  Y eso es lo que hace que funcione. El markup de dentro sigue escrito contra
+  --dg-texto, --dg-acento y --dg-borde exactamente igual que antes; lo que
+  cambia es a qué apuntan esas variables dentro de esta caja.
+
+  La alternativa —ir clase por clase cambiando `text-[var(--dg-texto)]` por un
+  `text-[var(--dg-panel-texto)]`— obliga a tocar cada nodo, se olvida siempre
+  alguno, y deja el componente imposible de devolver a oscuro. Redefiniendo la
+  raíz, invertir una tarjeta es añadir una clase y quitarla es borrarla.
+
+  ⚠️ POR ESO NO SE PONE NINGÚN `text-*` DE TAILWIND DENTRO. Una utilidad con
+  color literal gana a la variable y se queda crema sobre crema: invisible.
+
+  ── DE DÓNDE SALEN LOS VALORES ──
+
+  De --dg-panel y su tinta, que ya estaban medidos en la cabecera de este
+  archivo para el panel de la landing (14,1:1 el principal, 9,8:1 el suave,
+  5,7:1 el tenue). No se inventa ningún color nuevo: es la misma familia de
+  superficies claras que ya usa el embudo, así que las dos pantallas se leen
+  como el mismo sistema.
+
+  ── EL ACENTO SE DA LA VUELTA ──
+
+  Arriba el acento es el crema porque sobre verde oscuro el verde 2 daría
+  1,44:1. Aquí pasa lo contrario: sobre el crema, el crema no existe, y el
+  verde 2 sube a 9,8:1. Los brillos bajan a alfas verdes por lo mismo — un halo
+  crema sobre una superficie crema no se ve.
+*/
+.dg-claro {
+  --dg-fondo: var(--dg-panel);
+  --dg-fondo-alto: var(--dg-panel);
+  --dg-superficie: color-mix(in srgb, var(--dg-verde-2) 7%, var(--dg-panel));
+  --dg-superficie-viva: color-mix(
+    in srgb,
+    var(--dg-verde-2) 13%,
+    var(--dg-panel)
+  );
+  --dg-borde: color-mix(in srgb, var(--dg-verde-2) 18%, var(--dg-panel));
+  --dg-borde-vivo: color-mix(in srgb, var(--dg-verde-2) 42%, var(--dg-panel));
+
+  --dg-texto: var(--dg-panel-texto);
+  --dg-texto-suave: var(--dg-panel-texto-suave);
+  --dg-texto-tenue: var(--dg-panel-texto-tenue);
+
+  --dg-acento: var(--dg-verde-2);
+  --dg-acento-vivo: var(--dg-verde);
+  --dg-acento-oscuro: var(--dg-panel);
+
+  --dg-brillo-fuerte: rgba(8, 74, 44, 0.4);
+  --dg-brillo-medio: rgba(8, 74, 44, 0.22);
+  --dg-brillo-suave: rgba(8, 74, 44, 0.08);
+
+  background-color: var(--dg-panel);
+  color: var(--dg-texto);
+}
+
+/*
+  EL RELIEVE DE LAS TARJETAS CLARAS — luz arriba, sombra abajo.
+
+  Dos sombras INTERIORES: una línea blanca en el canto superior y una verde
+  muy diluida en el inferior. Es la convención de siempre —la luz viene de
+  arriba— y basta con un píxel de cada para que la superficie deje de ser un
+  rectángulo plano y se lea como una lámina levantada.
+
+  La tercera sombra es EXTERIOR y no decora: separa la tarjeta clara del verde
+  de la página. Sin ella, el crema flota recortado sobre el fondo.
+
+  ⚠️ LOS VALORES SON LITERALES Y NO TOKENS. Estas sombras sólo se usan sobre el
+  crema, donde el blanco y el verde son los que son; pasarlas por --dg-brillo-*
+  las volvería a atar a la paleta oscura y en la tarjeta clara se verían al
+  revés — el brillo crema es invisible sobre crema.
+*/
+.dg-relieve-claro {
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 0 rgba(8, 74, 44, 0.14),
+    0 22px 60px -38px rgba(0, 0, 0, 0.55);
+}
+
+/*
+  ═══════════════════════════════════════════════════════════════════════════
+  EL ACORDEÓN DEL REPARTO
+  ═══════════════════════════════════════════════════════════════════════════
+
+  ── SE ANIMA `grid-template-rows`, NO `height` ──
+
+  Y es la única forma de deslizar una caja cuya altura no se conoce. `height:
+  auto` no es un valor animable: el navegador no puede interpolar hacia algo
+  que aún no ha medido, así que la transición no arranca y la caja salta.
+
+  El apaño de siempre es un `max-height` grande a ojo, y tiene dos defectos que
+  se ven: si el contenido lo supera queda cortado, y si no llega, la animación
+  gasta su tiempo recorriendo un vacío — se abre con un tirón al principio y se
+  cierra con una pausa muerta al final.
+
+  Con la retícula sí se puede: `0fr` y `1fr` son dos valores concretos, el
+  navegador interpola entre ellos y la altura resultante es siempre la real.
+
+  ⚠️ EL HIJO NECESITA `min-height: 0`. Por defecto una pista de retícula no se
+  encoge por debajo del contenido mínimo de su hijo, y sin esto el panel se
+  queda con el alto puesto y no se cierra nunca.
+
+  ⚠️ Y EL `overflow: hidden` VA EN EL HIJO, no en el contenedor: es lo que
+  recorta el contenido mientras la pista mide menos de lo que ocupa.
+*/
+.dg-acordeon {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 460ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dg-acordeon[data-abierto="true"] {
+  grid-template-rows: 1fr;
+}
+
+.dg-acordeon > * {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* El contenido acompaña al despliegue en vez de aparecer de golpe cuando la
+   caja termina de abrirse. Sube un poco y se desvanece, con la transición algo
+   más corta que la del alto para que llegue antes: si acabaran a la vez, el
+   panel parecería seguir moviéndose después de estar abierto. */
+.dg-acordeon-cuerpo {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition:
+    opacity 300ms ease,
+    transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dg-acordeon[data-abierto="true"] .dg-acordeon-cuerpo {
+  opacity: 1;
+  transform: none;
+  transition-delay: 120ms;
+}
+
+/*
+  LA NOTIFICACIÓN QUE SUBE DESDE ABAJO.
+
+  Entra desplazada y con la escala un punto por debajo, y sale por donde vino.
+  La curva de entrada rebasa un poco el destino —es un `back` suave— para que
+  se sienta empujada y no colocada.
+*/
+@keyframes dg-aviso-entra {
+  from {
+    opacity: 0;
+    transform: translateY(120%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes dg-aviso-sale {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(120%) scale(0.96);
+  }
+}
+
+.dg-aviso {
+  animation: dg-aviso-entra 460ms cubic-bezier(0.34, 1.42, 0.64, 1) both;
+}
+
+.dg-aviso[data-saliendo="true"] {
+  animation: dg-aviso-sale 320ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+/* La barra que cuenta lo que falta para el salto. Es la misma información que
+   el temporizador de JS, dicha en la pantalla: sin ella el aviso desaparece de
+   golpe y el desplazamiento parece que lo provocó otra cosa.
+
+   La duración la pone el componente en línea, porque es el mismo valor que
+   usa el setTimeout y tenerlo escrito en dos sitios los deja desincronizados
+   al primer retoque. */
+@keyframes dg-aviso-barra {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+.dg-aviso-barra {
+  transform-origin: left center;
+  animation: dg-aviso-barra linear both;
+}
+
+/*
+  ═══════════════════════════════════════════════════════════════════════════
+  EL BORDE ANIMADO DEL CIERRE — .dg-borde-vivo-anim
+  ═══════════════════════════════════════════════════════════════════════════
+
+  Una luz que recorre el contorno de la tarjeta de WhatsApp. Es el último paso
+  del embudo y lo único que queda por hacer: necesita pesar más que las dos
+  tarjetas informativas que tiene al lado.
+
+  ── ES OTRA COSA QUE .dg-borde-giro ──
+
+  Aquél gira un degradado cónico entero y sirve para marcar una pieza. Éste
+  lleva un tramo corto de luz dando vueltas, que se lee como algo ACTIVO: no
+  dice "esto importa", dice "esto te está esperando".
+
+  ── EL TRUCO DEL RELLENO DE 1 PÍXEL ──
+
+  El degradado se pinta en el elemento exterior y el contenido va dentro con su
+  propio fondo, así que del degradado sólo se ve el píxel del borde. Un
+  `border-image` no admite redondeo, y cuatro `background` con `background-clip`
+  no se pueden animar.
+
+  ⚠️ EL REDONDEO DE FUERA ES EL DE DENTRO + 1px. Con el mismo valor, la curva
+  exterior queda por dentro de la interior y el borde se ve más fino en las
+  esquinas que en los lados.
+
+  ── @property ES LO QUE HACE QUE EL ÁNGULO SE PUEDA ANIMAR ──
+
+  Sin registrarlo, una variable CSS es una cadena de texto y el navegador no
+  interpola entre "0deg" y "360deg": el degradado salta. Ya está declarada más
+  arriba para .dg-borde-giro, y esta regla la reutiliza.
+*/
+.dg-borde-vivo-anim {
+  position: relative;
+  background:
+    conic-gradient(
+      from var(--dg-giro, 0deg),
+      transparent 0deg,
+      transparent 250deg,
+      var(--dg-acento) 320deg,
+      var(--dg-acento-vivo) 340deg,
+      var(--dg-acento) 356deg,
+      transparent 360deg
+    ),
+    var(--dg-borde-vivo);
+  animation: dg-giro 4.5s linear infinite;
+}
+
+/* El halo exterior, para que la luz del borde no termine en seco contra el
+   fondo. Va en un pseudoelemento por detrás y desenfocado: es el mismo
+   degradado, ampliado y difuminado.
+
+   `inherit` en el fondo evita repetir la declaración de arriba — y evita que
+   se queden desincronizados al retocar uno de los dos. */
+.dg-borde-vivo-anim::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  border-radius: inherit;
+  background: inherit;
+  filter: blur(9px);
+  opacity: 0.5;
+}
+
 /* Quien pide menos movimiento no recibe ninguno. Las animaciones se anulan del
    todo en vez de acortarse: es una preferencia del sistema operativo, no una
    sugerencia.
@@ -1589,6 +1890,13 @@
   .dg-luz-oro {
     color: #e2c27a;
   }
+  /* ⚠️ Y LA OSCURA, LO MISMO PERO AL REVÉS. La regla de .dg-luz-texto devuelve
+     el blanco del acento; sobre la tarjeta crema del resultado eso dejaría la
+     palabra invisible. Aquí el color plano es el verde 2 (9,8:1 sobre el
+     crema). */
+  .dg-luz-texto.dg-luz-oscura {
+    color: var(--dg-verde-2);
+  }
   /* El zoom se anula devolviendo la escala: la animacion no usa `both`,
      asi que sin ella la pildora se queda a su tamano normal — pero se declara
      igual para que no dependa de ese detalle. */
@@ -1620,5 +1928,64 @@
   }
   .dg-progreso-relleno {
     transition: none;
+  }
+
+  /* EL ACORDEÓN SIGUE ABRIENDO Y CERRANDO, PERO SIN DESLIZAR. Anular la
+     transición no rompe nada porque el estado abierto y el cerrado son dos
+     valores válidos de la retícula: se pasa de uno a otro en un fotograma.
+
+     El cuerpo sí necesita que se le devuelva la opacidad a mano: su estado de
+     reposo es `opacity: 0`, y quitar sólo la transición lo dejaría invisible
+     con el panel abierto. */
+  .dg-acordeon {
+    transition: none;
+  }
+  .dg-acordeon-cuerpo {
+    transition: none;
+  }
+  .dg-acordeon[data-abierto="true"] .dg-acordeon-cuerpo {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* El aviso aparece y desaparece sin desplazarse. La animación se anula con
+     el estado final puesto —usa `both`— porque si no se quedaría en su
+     fotograma inicial: fuera de la pantalla y transparente. */
+  .dg-aviso,
+  .dg-aviso[data-saliendo="true"] {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  /* La barra de cuenta atrás se queda llena. Sigue habiendo espera —la marca
+     el temporizador— pero sin nada moviéndose para contarla. */
+  .dg-aviso-barra {
+    animation: none;
+    transform: none;
+  }
+
+  /* El borde del cierre deja de girar y se queda con la luz puesta en una
+     esquina: el remate que tendría si nunca se hubiera movido. */
+  .dg-borde-vivo-anim {
+    animation: none;
+  }
+
+  /* Los avatares dejan de abrirse y de despintarse: el gesto entero es
+     movimiento, y sin él la fila se queda tal como entra. */
+  /* ⚠️ NO BASTA CON QUITAR LA TRANSICIÓN: sin ella, el círculo seguiría
+     creciendo, sólo que de golpe — que es exactamente el salto brusco que esta
+     preferencia existe para evitar.
+
+     Se anula el crecimiento y se deja el APAGADO de los hermanos, que es un
+     cambio de color y no movimiento: el gesto sigue diciendo cuál estás
+     mirando, sin que se mueva nada.
+
+     `scale: none` y no `transform`: en Tailwind 4 el crecimiento viene de la
+     propiedad `scale`. Ver la nota de PruebaSocialDg. */
+  .dg-avatar {
+    transition: none;
+  }
+  .dg-avatar:hover {
+    scale: none;
   }
 }

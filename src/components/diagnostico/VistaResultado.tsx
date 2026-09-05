@@ -6,13 +6,14 @@ import { cn } from "@/lib/cn";
 import {
   FICHA_FRECUENCIA,
   FRECUENCIAS,
+  LANDING,
   RESULTADO,
   type Frecuencia,
 } from "@/components/diagnostico/contenido";
 import { leerResultado } from "@/components/diagnostico/almacen";
 import { useHidratado } from "@/components/diagnostico/useHidratado";
 import { BotonDg } from "@/components/diagnostico/ui/BotonDg";
-import { MedicionFrecuencias } from "@/components/diagnostico/ui/MedicionFrecuencias";
+import { RepartoDesplegable } from "@/components/diagnostico/ui/RepartoDesplegable";
 import { WhatsAppIcon } from "@/components/lista-de-espera/ui/WhatsAppIcon";
 
 /*
@@ -123,7 +124,7 @@ export function VistaResultado() {
             {RESULTADO.sinResultadoTexto}
           </p>
           <div className="mt-8 flex justify-center">
-            <BotonDg href="/analisis/encuesta">
+            <BotonDg href="/diagnostico/encuesta">
               {RESULTADO.sinResultadoCta}
             </BotonDg>
           </div>
@@ -155,9 +156,26 @@ export function VistaResultado() {
           El texto no se estira con ella: los párrafos de dentro llevan su
           propio `max-w-xl`, así que la línea sigue midiendo lo que se lee
           cómodo. Lo que crece es la caja, no la medida del texto. */}
+      {/* ── LA TARJETA VA EN CLARO SOBRE EL VERDE DE LA PÁGINA ──
+
+          El fondo de esta ruta ya es verde profundo, y una tarjeta verde oscuro
+          encima se levantaba muy poco: el resultado —lo único que el visitante
+          vino a buscar— pesaba lo mismo que el aviso del correo.
+
+          En crema se despega del fondo sin necesidad de más adorno. Lo hace
+          .dg-claro, que NO pinta colores sino que redefine los tokens dentro de
+          la caja: el markup de dentro sigue escrito contra --dg-texto y
+          --dg-acento igual que antes, y son esas variables las que cambian de
+          valor. Ver diagnostico.css.
+
+          ⚠️ POR ESO NO SE PUEDE METER AQUÍ NINGÚN `text-*` LITERAL: una utilidad
+          con color propio gana a la variable y se quedaría crema sobre crema. */}
       <section className="dg-entra text-center">
         <div className="dg-borde-giro rounded-[calc(2rem+1px)] p-px">
-          <div className="dg-relieve relative overflow-hidden rounded-[2rem] bg-[var(--dg-fondo-alto)] px-5 py-8 sm:px-8 sm:py-10">
+          <div className="dg-claro dg-relieve-claro relative overflow-hidden rounded-[2rem] px-5 py-8 sm:px-8 sm:py-10">
+            {/* El barrido diagonal ahora es verde muy diluido, porque el token
+                del brillo se da la vuelta con el resto: un halo crema sobre una
+                superficie crema no se vería. */}
             <span
               aria-hidden
               className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,var(--dg-brillo-suave)_0%,transparent_34%,transparent_72%,var(--dg-brillo-suave)_100%)]"
@@ -171,8 +189,13 @@ export function VistaResultado() {
             aria-hidden
             /* El disco entra y el tilde se traza dentro, en ese orden. Es el
                único momento del embudo en que hay algo que confirmar, y un
-               tilde ya puesto se lo salta. Ver .dg-check en analisis.css. */
-            className="dg-check mx-auto flex size-14 items-center justify-center rounded-full border border-[var(--dg-acento)]/40 bg-[var(--dg-fondo-alto)] text-[var(--dg-acento-vivo)]"
+               tilde ya puesto se lo salta. Ver .dg-check en diagnostico.css. */
+            /* EL DISCO SE INVIERTE CON LA TARJETA: relleno verde y tilde crema.
+               Sobre el crema, un tilde en el acento —que aquí ya es verde—
+               dibujado sobre la propia superficie se leería, pero flojo. En
+               negativo es lo más contrastado de la caja después del nombre de
+               la frecuencia, que es la jerarquía que toca. */
+            className="dg-check mx-auto flex size-14 items-center justify-center rounded-full bg-[var(--dg-acento)] text-[var(--dg-acento-oscuro)] shadow-[0_10px_24px_-12px_var(--dg-brillo-fuerte)]"
           >
             <Check className="size-7" strokeWidth={2.6} />
           </span>
@@ -195,8 +218,14 @@ export function VistaResultado() {
           {/* ⚠️ SIN CLASE DE COLOR: .dg-luz-texto pinta la palabra con un
               degradado recortado a las letras y el color en transparente. Un
               `text-[...]` aquí ganaría en la hoja, devolvería el color plano y
-              el barrido desaparecería sin que se entienda por qué. */}
-          <p className="dg-titulo dg-luz-texto mt-2 text-[3rem] leading-none font-bold sm:text-[4.4rem]">
+              el barrido desaparecería sin que se entienda por qué.
+
+              .dg-luz-oscura es lo que lo hace posible sobre la tarjeta clara:
+              el barrido de serie está construido con cremas y aquí las letras
+              se habrían quedado invisibles. No sustituye a .dg-luz-texto, la
+              acompaña — de la base vienen el recorte y la animación, y de ésta
+              sólo el degradado. */}
+          <p className="dg-titulo dg-luz-texto dg-luz-oscura mt-2 text-[3rem] leading-none font-bold sm:text-[4.4rem]">
             {ficha.titulo}
           </p>
 
@@ -221,87 +250,107 @@ export function VistaResultado() {
         </div>
       </section>
 
-      {/* ── LAS CUATRO TARJETAS, EN RETÍCULA ──
+      {/* ── LA COMPOSICIÓN CAMBIÓ CON EL DESPLEGABLE ──
 
-          Diagnóstico arriba a todo el ancho; debajo, dos columnas IGUALES: el
-          reparto a la izquierda y, apiladas a la derecha, el aviso del correo y
-          el cierre.
+          Era una retícula de dos columnas: el reparto a la izquierda y, a la
+          derecha, el aviso del correo y el cierre apilados. Funcionaba mientras
+          el reparto eran cuatro barras siempre visibles, porque medía parecido
+          a la columna de al lado.
 
-          ── COLUMNAS 1fr Y 1fr, NO 0,92 Y 1,08 ──
+          Plegado mide 90 px, y esa columna pasó a ser una barra con medio metro
+          de vacío debajo. Peor: al desplegarse cambia de alto, así que NINGUNA
+          altura fija podía cuadrar los dos estados a la vez.
 
-          Estaban desequilibradas para darle sitio al texto del aviso, y a
-          cambio ninguna de las dos coincidía con el eje de la tarjeta de
-          arriba. Iguales, la retícula tiene un solo eje central y las cuatro
-          piezas caen sobre él.
+          Ahora manda la forma de cada pieza. El desplegable es una BANDA —ancha
+          y baja, con un botón que cruza de canto a canto— y va a todo el ancho,
+          debajo del diagnóstico. El aviso y el cierre, que sí son dos bloques de
+          tamaño parecido, se reparten las dos columnas de la fila siguiente.
 
-          ── Y TERMINAN A LA MISMA ALTURA ──
+          Y de paso el orden mejora: reparto (el detalle del resultado), luego
+          las dos cosas que quedan por hacer. Antes el cierre —lo único que hay
+          que pulsar— caía en la esquina inferior derecha, que es justo donde no
+          se mira.
 
-          Llevaba `items-start`, así que cada columna medía lo que midiera su
-          contenido y una acababa antes que la otra — el borde inferior en
-          diagonal era la mitad del desorden. Sin él, las dos se estiran hasta
-          la más alta.
+          El margen superior iguala al hueco de la retícula (mt-5 = gap-5) para
+          que todas las separaciones del bloque midan lo mismo. */}
+      <div className="mx-auto mt-5 flex w-full max-w-5xl flex-col gap-5">
+        {/* ── EL REPARTO YA NO ESTÁ A LA VISTA: SE DESPLIEGA ──
 
-          El margen superior iguala al hueco de la retícula (mt-5 = gap-5): así
-          la separación entre la primera fila y la segunda es la misma que entre
-          las columnas, y el conjunto se lee como una sola pieza en vez de como
-          una tarjeta con dos cajas debajo. */}
-      <div
-        className={cn(
-          "mx-auto mt-5 grid w-full gap-5",
-          hayReparto
-            ? "max-w-5xl lg:grid-cols-2"
-            : "max-w-2xl",
-        )}
-      >
-        {/* Al estirarse hasta la altura de la columna de al lado le sobra
-            sitio, y `justify-center` reparte ese aire arriba y abajo en vez de
-            dejar las barras colgando del borde superior.
+            Las cuatro barras competían con el nombre de la frecuencia a dos
+            palmos de él. El resultado es UNA palabra; el reparto es el detalle
+            de cómo se llegó a ella, y un detalle que se consulta no tiene por
+            qué ocupar media pantalla desde el principio.
 
             El comentario va FUERA del `&&`: dentro sería un segundo hijo en una
             expresión que sólo admite uno, y no compila. */}
         {hayReparto && (
-          <section className="flex flex-col justify-center rounded-3xl border border-[var(--dg-borde)] bg-[color-mix(in_srgb,var(--dg-fondo-alto)_82%,transparent)] p-5 shadow-[0_24px_70px_-52px_rgba(0,0,0,0.95)] sm:p-6">
-            <MedicionFrecuencias
-              porcentajes={porcentajes}
-              dominante={frecuencia}
-            />
-          </section>
+          <RepartoDesplegable
+            porcentajes={porcentajes}
+            dominante={frecuencia}
+            titulo={RESULTADO.repartoTitulo}
+          />
         )}
 
-        {/* `auto 1fr`: el aviso del correo mide lo suyo y el cierre se queda
-            con lo que sobre. Sin esto, las dos tarjetas se repartirían el alto a
-            partes iguales y el aviso —que es dos renglones— quedaría con un
-            hueco enorme debajo. */}
-        <div className="grid gap-5 lg:grid-rows-[auto_1fr]">
+        {/* ── LAS DOS TARJETAS QUE QUEDAN, A LA PAR ──
+
+            `items-stretch` (el valor por defecto de la retícula, escrito aquí
+            porque importa) es lo que las hace terminar a la misma altura: el
+            aviso son tres renglones y el cierre lleva botón, así que sin esto
+            una acabaría antes que la otra y el canto inferior quedaría en
+            diagonal.
+
+            En móvil se apilan, y ahí el orden es el que ya tenían: primero el
+            correo, después el grupo. */}
+        <div
+          className={cn(
+            "grid items-stretch gap-5",
+            /* A una sola columna cuando no hay reparto que enseñar: con la
+               página ya estrecha, dos tarjetas a la par se quedarían
+               demasiado justas. */
+            hayReparto ? "lg:grid-cols-2" : "mx-auto max-w-2xl",
+          )}
+        >
         {/* ── El aviso del email ──
           Va en su propia caja, separado del diagnóstico: es una instrucción
           ("andá a revisar tu casilla"), no parte del resultado, y mezclarlos
           hace que se lea por encima. */}
-        <section className="rounded-3xl border border-[var(--dg-borde)] bg-[color-mix(in_srgb,var(--dg-fondo-alto)_86%,transparent)] p-5 shadow-[0_24px_70px_-52px_rgba(0,0,0,0.95)] sm:p-6">
-          <div className="flex items-start gap-3.5">
-            <span
-              aria-hidden
-              className="mt-0.5 shrink-0 text-[var(--dg-acento)]"
-            >
-              <Mail className="size-5" />
-            </span>
-            <div className="min-w-0">
-              <p className="text-[0.95rem] leading-relaxed text-[var(--dg-texto)]">
-                {RESULTADO.emailAviso}
+        {/* ── EL ICONO ARRIBA Y EN UN DISCO, NO AL COSTADO ──
+
+            Iba suelto a la izquierda del texto, y eso lo dejaba en el papel de
+            viñeta: un adorno de 20 px pegado al margen del párrafo.
+
+            Centrado y sobre un disco de acento pasa a ser el encabezado de la
+            tarjeta — lo primero que se ve, y lo que dice de qué va la caja
+            antes de leer una palabra. De paso emparja con el disco del tilde de
+            arriba: los dos discos, misma familia. */}
+        {/* La columna en flex y centrada, por lo mismo que la tarjeta del
+            cierre: si ésta es la más corta de las dos, el aire sobrante se
+            reparte arriba y abajo en vez de dejar el texto colgando del borde
+            superior con un hueco debajo. */}
+        <section className="dg-claro dg-relieve-claro flex flex-col justify-center rounded-3xl p-5 text-center sm:p-6">
+          <span
+            aria-hidden
+            className="mx-auto flex size-12 items-center justify-center rounded-full bg-[var(--dg-acento)] text-[var(--dg-acento-oscuro)] shadow-[0_10px_24px_-12px_var(--dg-brillo-fuerte)]"
+          >
+            <Mail className="size-5" strokeWidth={1.9} />
+          </span>
+
+          <div className="mt-4">
+            <p className="mx-auto max-w-sm text-[0.95rem] leading-relaxed text-[var(--dg-texto)]">
+              {RESULTADO.emailAviso}
+            </p>
+            {/* El email, si lo tenemos, sirve para dos cosas a la vez: confirma
+              que se escribió bien y dice exactamente dónde mirar.
+              `break-words` porque un correo largo desborda la caja en un
+              móvil estrecho. */}
+            {email && (
+              <p className="mt-2 text-[0.85rem] font-semibold break-words text-[var(--dg-acento)]">
+                {email}
               </p>
-              {/* El email, si lo tenemos, sirve para dos cosas a la vez: confirma
-                que se escribió bien y dice exactamente dónde mirar.
-                `break-words` porque un correo largo desborda la caja en un
-                móvil estrecho. */}
-              {email && (
-                <p className="mt-1.5 text-[0.85rem] break-words text-[var(--dg-acento)]">
-                  {email}
-                </p>
-              )}
-              <p className="mt-2 text-[0.8rem] leading-relaxed text-[var(--dg-texto-tenue)]">
-                {RESULTADO.emailNota}
-              </p>
-            </div>
+            )}
+            <p className="mx-auto mt-2.5 max-w-sm text-[0.8rem] leading-relaxed text-[var(--dg-texto-tenue)]">
+              {RESULTADO.emailNota}
+            </p>
           </div>
 
           {/* ⚠️ SIN DECIDIR (sección 8 del documento): si va o no un botón que
@@ -319,8 +368,40 @@ export function VistaResultado() {
           )}
         </section>
 
-        {/* ═════════ PASO 2 — la comunidad ═════════ */}
-        <section className="rounded-3xl border border-[var(--dg-acento)]/30 bg-[color-mix(in_srgb,var(--dg-superficie-viva)_70%,var(--dg-fondo-alto))] p-6 text-center shadow-[0_24px_70px_-48px_var(--dg-brillo-medio)] sm:p-7">
+        {/* ═════════ PASO 2 — la comunidad ═════════
+
+            ── ES LO ÚNICO QUE QUEDA POR HACER, Y SE NOTA ──
+
+            Las otras dos tarjetas informan: aquí está tu resultado, mirá el
+            correo. Ésta pide una acción, y es la última del embudo entero — si
+            pesa lo mismo que las de al lado, se lee como un tercer apartado y
+            no como el final.
+
+            Se queda EN OSCURO mientras las otras dos van en crema, y ése es el
+            primer golpe: en una pantalla que ya se ha vuelto clara, la caja
+            oscura es la que resalta. Encima lleva el borde con la luz girando
+            (.dg-borde-vivo-anim), que es lo que la separa de "una tarjeta más
+            marcada": no dice "esto importa", dice "esto te está esperando".
+
+            ⚠️ EL REDONDEO DE FUERA ES EL DE DENTRO + 1px, que es el grosor del
+            borde. Con el mismo valor, la curva exterior cae por dentro de la
+            interior y el filo se ve más fino en las esquinas. */}
+        {/* `flex` en el marco y `w-full` + centrado en la tarjeta: es lo que
+            hace que el relleno de 1 px se estire a la altura de la columna y la
+            tarjeta de dentro con él. Sin el flex, la tarjeta mide su contenido y
+            el marco queda más alto que ella — con una franja del degradado
+            asomando por abajo.
+
+            El centrado vertical reparte el aire sobrante entre el titular y el
+            botón cuando esta tarjeta es la más corta de las dos. */}
+        <div className="dg-borde-vivo-anim flex rounded-[calc(1.5rem+1px)] p-px">
+          <section className="relative flex w-full flex-col justify-center overflow-hidden rounded-3xl bg-[var(--dg-fondo-alto)] p-6 text-center sm:p-7">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,var(--dg-brillo-suave)_0%,transparent_40%,transparent_60%,var(--dg-brillo-suave)_100%)]"
+            />
+
+            <div className="relative">
           {/* El latido y no el barrido: el nombre de la frecuencia está en
               esta misma pantalla, y repetir el mismo recurso a dos palmos haría
               que ninguno de los dos señalara nada. */}
@@ -366,9 +447,34 @@ export function VistaResultado() {
               El botón desactivado sí se queda: si algún día se vacía el
               enlace, es mejor un botón que no lleva a ningún sitio que uno que
               lleva a un enlace roto. Que esté apagado ya lo cuenta todo. */}
-        </section>
+            </div>
+          </section>
+          </div>
         </div>
       </div>
+
+      {/* ── EL PIE, QUE AQUÍ NO ESTABA ──
+
+          La landing lo tiene y esta pantalla no, y el corte se veía: la página
+          terminaba en el borde inferior de la última tarjeta, sin cerrar.
+
+          Es el mismo pie de la landing —la frase de marca en versalitas y el
+          aviso de copyright—, y va exactamente igual de escueto: sin enlaces,
+          por el mismo motivo por el que no hay menú. Cada enlace es una salida,
+          y aquí más que en ningún sitio: el visitante ya convirtió y lo único
+          que queda es que pulse el botón del grupo.
+
+          Va dentro del contenedor y no fuera porque esta vista se monta dentro
+          del <main> de la página; sacarlo de aquí obligaría a que resultado/
+          page.tsx supiera de la existencia del pie. */}
+      <footer className="mt-16 border-t border-[var(--dg-borde)]/50 pt-8 text-center">
+        <p className="dg-titulo text-[0.9rem] leading-snug tracking-[0.14em] text-balance text-[var(--dg-texto-suave)] uppercase">
+          {LANDING.tagline}
+        </p>
+        <p className="mt-3 text-xs text-[var(--dg-texto-tenue)]">
+          © {new Date().getFullYear()} Volver al Origen · Pilar Sousa
+        </p>
+      </footer>
     </div>
   );
 }

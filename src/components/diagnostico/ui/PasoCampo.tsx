@@ -90,7 +90,9 @@ export function PasoCampo({
   icono: NombreIcono;
   distintivo: string;
   etiqueta: string;
-  ayuda: string;
+  /* Opcional: un paso cuya etiqueta ya se explica sola no la lleva. Ver dónde
+     se pinta, más abajo. */
+  ayuda?: string;
   placeholder: string;
   tipo: string;
   autoComplete: string;
@@ -190,9 +192,18 @@ export function PasoCampo({
         {etiqueta}
       </label>
 
-      <p className="mx-auto mt-2 max-w-sm text-[0.85rem] leading-relaxed text-[var(--dg-texto-suave)]">
-        {ayuda}
-      </p>
+      {/* LA AYUDA ES OPCIONAL, y por eso se comprueba antes de pintarla: un
+          <p> vacío sigue ocupando su margen superior y su interlineado, así que
+          el paso sin ayuda quedaría con un hueco entre el titular y el campo
+          que nadie sabría de dónde sale.
+
+          El primer paso ya no la lleva: "¿Cómo te llamás?" no necesita que le
+          expliquen para qué sirve un nombre. */}
+      {ayuda && (
+        <p className="mx-auto mt-2 max-w-sm text-[0.85rem] leading-relaxed text-[var(--dg-texto-suave)]">
+          {ayuda}
+        </p>
+      )}
 
       {/* ── EL CAMPO, CON SU ICONO DENTRO ──
 
@@ -223,7 +234,7 @@ export function PasoCampo({
              y hace el mismo trabajo — decir de un vistazo qué se está
              pidiendo. Dos símbolos seguidos en la misma esquina compiten.
 
-             El aspecto vive en .dg-phone (analisis.css): la librería trae una
+             El aspecto vive en .dg-phone (diagnostico.css): la librería trae una
              hoja pensada para fondo claro y hay que repintarla entera. */
           <PhoneInput
             id={campo}

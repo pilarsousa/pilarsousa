@@ -24,15 +24,30 @@ import { LANDING } from "@/components/diagnostico/contenido";
   Un hueco a `null` pinta una silueta: sirve para ver el montaje antes de
   tener todas las fotos, y para que un archivo que falte no deje un agujero.
 
-  ── LA FILA SE ABRE AL PASAR EL RATÓN ──
+  ── SE DESTACA EL QUE SE TOCA, Y LOS DEMÁS SE APAGAN ──
 
-  En reposo los círculos se solapan y cada uno tapa media cara del anterior.
-  Con el ratón encima se separan y las cuatro quedan enteras. Es la fila
-  contando lo mismo de dos maneras: cerrada dice "son varios", abierta dice
-  "son éstos".
+  En reposo los círculos se solapan y cada uno tapa media cara del anterior. Al
+  apuntar a uno, ESE se adelanta —crece, sale del apilado y se pone al frente—
+  y los otros tres pierden el color y se oscurecen. La pila se queda quieta.
 
-  Se abre entera y no de a uno: separar sólo el que está bajo el cursor movería
-  a los demás de sitio, y eso se lee como que la fila se rompe.
+  ── ESTUVO AL REVÉS, Y ERA PEOR ──
+
+  Antes la fila entera se abría al pasar el ratón por cualquier punto: los
+  cuatro círculos se separaban a la vez. Movía cuatro elementos para responder a
+  un gesto dirigido a uno, y el bloque de al lado —el texto— saltaba de sitio
+  cada vez que el cursor rozaba la fila.
+
+  Ahora el gesto es dirigido. Y no mueve a nadie de su sitio: lo que hace el
+  destacado es `scale` y `z-index`, que no tocan la disposición. Los márgenes
+  negativos se quedan como están, así que la fila mide siempre lo mismo y el
+  texto de al lado no se entera.
+
+  ── EL APAGADO ES DEL HERMANO, NO DEL CONTENEDOR ──
+
+  `group-hover/fila:` apagaría también al que está debajo del cursor, porque
+  apuntar a un hijo es apuntar al grupo. Por eso el gris se aplica con el grupo
+  de la fila Y se cancela en el propio `:hover` del elemento: los tres que no
+  reciben el cursor se apagan, el que lo recibe se queda a todo color.
 
   ── EL ANILLO ES DEL COLOR DEL HERO, NO UN BLANCO ──
 
@@ -57,33 +72,64 @@ export function PruebaSocialDg({ className }: { className?: string }) {
   if (!texto || avatares.length === 0) return null;
 
   return (
-    /* `group` es lo que deja que el ratón sobre CUALQUIER punto de la fila abra
-       todos los círculos a la vez. Puestos a reaccionar uno por uno, separar
-       sólo el que está debajo del cursor movería a los demás de sitio y la fila
-       se leería como algo que se rompe, no como algo que se abre. */
+    /* El grupo se NOMBRA (`group/fila`) en vez de usar el `group` anónimo. Con
+       el anónimo, cualquier `group-hover:` de dentro se engancharía a éste, y
+       aquí hay dos niveles que responden al ratón a la vez: la fila —que apaga
+       a los que no reciben el cursor— y cada círculo por su cuenta. Nombrado,
+       cada regla dice a cuál de los dos escucha. */
     <div
-      className={cn("group flex items-center justify-center gap-3", className)}
+      className={cn(
+        "group/fila flex items-center justify-center gap-3",
+        className,
+      )}
     >
       <ul aria-hidden className="flex items-center">
         {avatares.map((foto, i) => (
-          /* ── LOS CÍRCULOS SE SOLAPAN, Y AL PASAR EL RATÓN SE SEPARAN ──
+          /* ── LOS CÍRCULOS SE SOLAPAN Y NO SE MUEVEN DE SITIO ──
 
-             En reposo cada uno se monta sobre el anterior y tapa media cara.
-             Al abrirse, el margen negativo pasa a positivo y las cuatro caras
-             quedan enteras a la vista: eso es el "mostrar más contenido".
+             Cada uno se monta sobre el anterior y tapa media cara. El margen
+             negativo se queda fijo: lo que responde al ratón es la escala y el
+             apilado, que no tocan la disposición.
+
+             ── EL DESTACADO SON TRES COSAS A LA VEZ ──
+
+             Crece (`scale-125`), se pone delante de sus vecinos (`z-10`) y
+             recupera el color mientras los otros lo pierden. Las tres hacen
+             falta: creciendo sin subir de capa, el círculo crece POR DEBAJO del
+             siguiente y se ve cortado por la mitad.
+
+             ── EL GRIS SE APLICA POR EL GRUPO Y SE CANCELA EN EL PROPIO HOVER ──
+
+             `group-hover/fila:grayscale` alcanza a los cuatro, incluido el que
+             tiene el cursor encima: apuntar a un hijo es apuntar al grupo. El
+             `hover:grayscale-0` que va detrás lo devuelve a color sólo en ése.
+             Esa pareja es lo que produce "uno vivo, tres apagados".
+
+             `cursor-pointer` porque el elemento responde al ratón. No navega a
+             ningún sitio, así que no lleva rol ni foco: es un adorno que
+             reacciona, y anunciarlo como un control sería mentir sobre lo que
+             hace.
 
              ⚠️ EL MARGEN VA EN CADA <li> Y NO CON `-space-x-*`. La utilidad de
              Tailwind aplica el margen desde un `:where(... > :not(:last-child))`
-             cuya especificidad es cero, y encima cuelga del CONTENEDOR: no hay
-             forma de pasarle un `group-hover` al hijo. Declarándolo aquí, el
-             mismo elemento tiene el valor en reposo, el de apertura y la
-             transición.
+             cuya especificidad es cero y cuelga del CONTENEDOR, así que no hay
+             forma de matizarlo desde el hijo.
 
-             `first:ml-0` deja el primero en su sitio para que la fila crezca
-             hacia la derecha y no se desplace entera. */
+             `first:ml-0` deja el primero pegado al margen para que la fila
+             empiece donde tiene que empezar. */
           <li
             key={foto ?? i}
-            className="-ml-3 size-9 overflow-hidden rounded-full border border-[var(--dg-borde-vivo)] ring-2 ring-[var(--dg-hero-fondo)] transition-[margin,transform] duration-500 ease-out first:ml-0 group-hover:ml-1 group-hover:scale-105 sm:-ml-4 sm:size-11 sm:group-hover:ml-1.5"
+            /* ⚠️ LA TRANSICIÓN ES DE `scale`, NO DE `transform`.
+
+               En Tailwind 4, `scale-125` ya NO emite un `transform: scale(…)`:
+               emite la propiedad CSS `scale`, que es independiente. Con
+               `transition-[transform,filter]` la variable se calculaba —
+               --tw-scale-x llegaba a 125%— pero `transform` seguía valiendo
+               `none` y el círculo no crecía ni un píxel. Fallaba en silencio,
+               que es lo peor que puede hacer un estilo.
+
+               Se comprueba mirando `getComputedStyle(el).scale`, no `.transform`. */
+            className="dg-avatar relative -ml-3 size-9 cursor-pointer overflow-hidden rounded-full border border-[var(--dg-borde-vivo)] ring-2 ring-[var(--dg-hero-fondo)] brightness-100 grayscale-0 transition-[scale,filter] duration-500 ease-out first:ml-0 hover:z-10 hover:scale-125 hover:brightness-100 hover:grayscale-0 group-hover/fila:brightness-[0.65] group-hover/fila:grayscale sm:-ml-4 sm:size-11"
           >
             {foto ? (
               /* 73px ES EL TAMAÑO REAL DEL ARCHIVO, y por eso está escrito así
