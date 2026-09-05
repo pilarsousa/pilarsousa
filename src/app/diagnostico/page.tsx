@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ArranqueDiagnostico } from "@/components/diagnostico/ArranqueDiagnostico";
+import { DesenfoqueInferior } from "@/components/diagnostico/ui/DesenfoqueInferior";
 import { GridScan } from "@/components/diagnostico/ui/GridScan";
 import { PruebaSocialDg } from "@/components/diagnostico/ui/PruebaSocialDg";
 import { ScrollSuave } from "@/components/diagnostico/ui/ScrollSuave";
@@ -78,6 +79,19 @@ export default function DiagnosticoPage() {
           ese foco— y a /resultado, que cabe casi entera. Aquí sí hay un
           recorrido de arriba abajo. Ver ScrollSuave. */}
       <ScrollSuave />
+
+      {/* EL DESENFOQUE DEL CANTO INFERIOR.
+
+          Una banda fija abajo de la ventana donde la página se va difuminando.
+          No tapa nada: lo que hay debajo sigue viéndose borroso, y eso hace que
+          el contenido se sienta continuando más allá del borde en vez de estar
+          cortado por él.
+
+          Va aquí, en el envoltorio de la landing y no dentro de una sección,
+          porque es del VIEWPORT: se queda mientras se hace scroll y funciona
+          igual sobre el verde del hero que sobre el panel crema. Ver
+          DesenfoqueInferior. */}
+      <DesenfoqueInferior />
       {/* EL <main> NO LLEVA RELLENO LATERAL. Lo lleva cada bloque por su
           cuenta, porque el hero tiene que sangrar de canto a canto: una banda
           con fondo propio que no llegue a los bordes se lee como una tarjeta
