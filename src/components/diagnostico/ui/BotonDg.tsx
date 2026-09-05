@@ -64,7 +64,7 @@ type Props = {
 };
 
 const BASE =
-  "inline-flex min-h-[3em] cursor-pointer items-center justify-center gap-2 rounded-full text-center text-[0.95rem] font-semibold leading-tight transition-[background-color,border-color,color,opacity,transform] duration-200 active:scale-[0.985] disabled:pointer-events-none disabled:opacity-45 sm:text-base";
+  "dg-boton-shiny inline-flex min-h-[3em] cursor-pointer items-center justify-center gap-2 rounded-full text-center text-[0.95rem] font-semibold leading-tight disabled:pointer-events-none disabled:opacity-45 sm:text-base";
 
 /* El relleno va aparte del BASE porque el botón de icono lo anula: con
    px-[1.6em] no puede ser cuadrado. */
@@ -77,12 +77,8 @@ const ANCHOS = {
 } as const;
 
 const VARIANTES = {
-  principal:
-    /* El brillo interior baja de 0,28 a 0,14: sobre un botón crema, un
-       reflejo blanco al 28% no se ve y sólo lava el borde superior. */
-    "bg-[var(--dg-acento)] text-[var(--dg-acento-oscuro)] shadow-[0_1px_0_0_rgba(255,255,255,0.14)_inset,0_10px_28px_-12px_var(--dg-brillo-fuerte)] hover:bg-[var(--dg-acento-vivo)]",
-  secundario:
-    "border border-[var(--dg-borde)] bg-transparent text-[var(--dg-texto-suave)] hover:border-[var(--dg-borde-vivo)] hover:text-[var(--dg-texto)]",
+  principal: "dg-boton-shiny--principal",
+  secundario: "dg-boton-shiny--secundario",
 } as const;
 
 export function BotonDg({
@@ -118,13 +114,13 @@ export function BotonDg({
           aria-label={ariaLabel}
           className={clases}
         >
-          {children}
+          <span className="dg-boton-shiny-contenido">{children}</span>
         </a>
       );
     }
     return (
       <Link href={href} aria-label={ariaLabel} className={clases}>
-        {children}
+        <span className="dg-boton-shiny-contenido">{children}</span>
       </Link>
     );
   }
@@ -137,7 +133,7 @@ export function BotonDg({
       aria-label={ariaLabel}
       className={clases}
     >
-      {children}
+      <span className="dg-boton-shiny-contenido">{children}</span>
     </button>
   );
 }

@@ -154,6 +154,242 @@
   font-family: var(--dg-fuente-titulo);
 }
 
+@property --dg-shiny-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@property --dg-shiny-angle-offset {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@property --dg-shiny-percent {
+  syntax: "<percentage>";
+  initial-value: 7%;
+  inherits: false;
+}
+
+@property --dg-shiny-shine {
+  syntax: "<color>";
+  initial-value: white;
+  inherits: false;
+}
+
+.dg-boton-shiny {
+  --dg-shiny-bg: var(--dg-acento);
+  --dg-shiny-bg-subtle: color-mix(
+    in srgb,
+    var(--dg-acento-oscuro) 24%,
+    transparent
+  );
+  --dg-shiny-fg: var(--dg-acento-oscuro);
+  --dg-shiny-highlight: color-mix(
+    in srgb,
+    var(--dg-acento-oscuro) 42%,
+    var(--dg-acento)
+  );
+  --dg-shiny-highlight-subtle: color-mix(
+    in srgb,
+    white 74%,
+    var(--dg-acento)
+  );
+  --dg-shiny-dot: color-mix(in srgb, white 76%, var(--dg-acento));
+  --dg-shiny-shadow: var(--dg-brillo-fuerte);
+  --dg-shiny-duration: 3.2s;
+  --dg-shiny-shadow-size: 2px;
+  --dg-shiny-transition: 700ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid transparent;
+  color: var(--dg-shiny-fg);
+  font-family: var(--dg-fuente-texto);
+  outline-offset: 4px;
+  background:
+    linear-gradient(var(--dg-shiny-bg), var(--dg-shiny-bg)) padding-box,
+    conic-gradient(
+        from calc(var(--dg-shiny-angle) - var(--dg-shiny-angle-offset)),
+        transparent,
+        var(--dg-shiny-highlight) var(--dg-shiny-percent),
+        var(--dg-shiny-shine) calc(var(--dg-shiny-percent) * 2),
+        var(--dg-shiny-highlight) calc(var(--dg-shiny-percent) * 3),
+        transparent calc(var(--dg-shiny-percent) * 4)
+      )
+      border-box;
+  box-shadow:
+    inset 0 0 0 1px var(--dg-shiny-bg-subtle),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 14px 34px -18px var(--dg-shiny-shadow);
+  transition:
+    color 180ms ease,
+    opacity 180ms ease,
+    transform 180ms ease,
+    box-shadow var(--dg-shiny-transition),
+    --dg-shiny-angle-offset var(--dg-shiny-transition),
+    --dg-shiny-percent var(--dg-shiny-transition),
+    --dg-shiny-shine var(--dg-shiny-transition);
+  animation: dg-shiny-gradient-angle var(--dg-shiny-duration) linear infinite;
+}
+
+.dg-boton-shiny::before,
+.dg-boton-shiny::after,
+.dg-boton-shiny-contenido::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 50%;
+  inset-block-start: 50%;
+  z-index: -1;
+  pointer-events: none;
+  translate: -50% -50%;
+}
+
+.dg-boton-shiny::before {
+  --size: calc(100% - var(--dg-shiny-shadow-size) * 3);
+  --position: 2px;
+  --space: calc(var(--position) * 2);
+
+  width: var(--size);
+  height: var(--size);
+  border-radius: inherit;
+  background: radial-gradient(
+      circle at var(--position) var(--position),
+      var(--dg-shiny-dot) calc(var(--position) / 4),
+      transparent 0
+    )
+    padding-box;
+  background-repeat: space;
+  background-size: var(--space) var(--space);
+  mask-image: conic-gradient(
+    from calc(var(--dg-shiny-angle) + 45deg),
+    black,
+    transparent 10% 90%,
+    black
+  );
+  opacity: 0.35;
+  animation: dg-shiny-gradient-angle var(--dg-shiny-duration) linear infinite;
+}
+
+.dg-boton-shiny::after {
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(
+    -50deg,
+    transparent,
+    var(--dg-shiny-highlight),
+    transparent
+  );
+  mask-image: radial-gradient(circle at bottom, transparent 42%, black);
+  opacity: 0.52;
+  animation: dg-shiny-shimmer calc(var(--dg-shiny-duration) * 2.4) linear
+    infinite paused;
+}
+
+.dg-boton-shiny-contenido {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  gap: inherit;
+}
+
+.dg-boton-shiny-contenido::before {
+  --size: calc(100% + 1rem);
+
+  width: var(--size);
+  height: var(--size);
+  border-radius: 999px;
+  box-shadow: inset 0 -1ex 2rem 4px var(--dg-shiny-highlight);
+  opacity: 0;
+  transition: opacity var(--dg-shiny-transition);
+  animation: dg-shiny-breathe calc(var(--dg-shiny-duration) * 1.5) linear
+    infinite;
+}
+
+.dg-boton-shiny:is(:hover, :focus-visible) {
+  --dg-shiny-angle-offset: 95deg;
+  --dg-shiny-percent: 20%;
+  --dg-shiny-shine: var(--dg-shiny-highlight-subtle);
+
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 0 0 1px var(--dg-shiny-bg-subtle),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    0 18px 44px -18px var(--dg-shiny-shadow);
+}
+
+.dg-boton-shiny:is(:hover, :focus-visible)::after {
+  animation-play-state: running;
+}
+
+.dg-boton-shiny:is(:hover, :focus-visible) .dg-boton-shiny-contenido::before {
+  opacity: 1;
+}
+
+.dg-boton-shiny:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.dg-boton-shiny--secundario {
+  --dg-shiny-bg: color-mix(
+    in srgb,
+    var(--dg-fondo-alto) 86%,
+    transparent
+  );
+  --dg-shiny-bg-subtle: var(--dg-borde);
+  --dg-shiny-fg: var(--dg-texto-suave);
+  --dg-shiny-highlight: var(--dg-borde-vivo);
+  --dg-shiny-highlight-subtle: var(--dg-acento);
+  --dg-shiny-dot: color-mix(in srgb, var(--dg-acento) 72%, transparent);
+  --dg-shiny-shadow: var(--dg-brillo-suave);
+}
+
+.dg-boton-shiny--secundario:is(:hover, :focus-visible) {
+  --dg-shiny-bg: color-mix(
+    in srgb,
+    var(--dg-superficie) 82%,
+    transparent
+  );
+
+  color: var(--dg-texto);
+}
+
+.dg-boton-shiny:disabled {
+  --dg-shiny-percent: 0%;
+
+  animation-play-state: paused;
+  filter: saturate(0.7);
+}
+
+.dg-boton-shiny:disabled::after,
+.dg-boton-shiny:disabled .dg-boton-shiny-contenido::before {
+  animation-play-state: paused;
+  opacity: 0;
+}
+
+@keyframes dg-shiny-gradient-angle {
+  to {
+    --dg-shiny-angle: 360deg;
+  }
+}
+
+@keyframes dg-shiny-shimmer {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes dg-shiny-breathe {
+  50% {
+    scale: 1.16;
+  }
+}
+
 .dg-landing button:not(:disabled),
 .dg-landing a[href],
 .dg-landing [role="button"]:not([aria-disabled="true"]) {
@@ -1267,6 +1503,21 @@
   .dg-puente-carga {
     animation: none;
     transform: none;
+  }
+  .dg-boton-shiny,
+  .dg-boton-shiny::before,
+  .dg-boton-shiny::after,
+  .dg-boton-shiny-contenido::before {
+    animation: none;
+    transform: none;
+  }
+  .dg-boton-shiny {
+    --dg-shiny-angle: 45deg;
+    --dg-shiny-angle-offset: 30deg;
+  }
+  .dg-boton-shiny::after,
+  .dg-boton-shiny-contenido::before {
+    opacity: 0;
   }
   .dg-diagnostico-medidor::before,
   .dg-diagnostico-medidor::after,
