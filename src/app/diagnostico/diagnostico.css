@@ -940,21 +940,56 @@
   que empalma los dos verdes (los últimos 128 px). Cada cosa ocurre en su
   tramo y ninguna deja canto.
 */
-.dg-anillos-fundidos {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    #000 18%,
-    #000 45%,
-    transparent 72%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    #000 18%,
-    #000 45%,
-    transparent 72%
-  );
+/*
+  ── Y UNA SEGUNDA MÁSCARA QUE ABRE EL CENTRO ──
+
+  La de arriba resuelve los cantos; ésta resuelve el texto. La rejilla es un
+  túnel con punto de fuga, y ese punto cae justo detrás del titular: la zona más
+  densa de líneas coincidía con la única frase que hay que leer.
+
+  Con un óvalo transparente en el medio, las líneas se apagan justo donde
+  empieza la promesa y vuelven hacia los bordes. El fondo sigue siendo un túnel
+  —la fuga se entiende igual— pero deja de pelearse con lo que tiene encima.
+
+  ⚠️ LAS DOS MÁSCARAS SE MULTIPLICAN (`mask-composite: intersect`). Es lo que
+  hace que un píxel tenga que pasar las dos para verse: el óvalo no puede
+  devolver opacidad donde el degradado vertical ya la quitó.
+
+  El radial va en porcentaje y no en píxeles a propósito: el hueco crece con la
+  sección, así que protege el mismo bloque de texto en móvil y en escritorio,
+  donde el titular ocupa proporciones parecidas.
+*/
+.dg-fondo-fundido {
+  -webkit-mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 18%,
+      #000 45%,
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 46% 34% at 50% 40%,
+      rgba(0, 0, 0, 0.12) 0%,
+      rgba(0, 0, 0, 0.55) 55%,
+      #000 100%
+    );
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 18%,
+      #000 45%,
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 46% 34% at 50% 40%,
+      rgba(0, 0, 0, 0.12) 0%,
+      rgba(0, 0, 0, 0.55) 55%,
+      #000 100%
+    );
+  mask-composite: intersect;
 }
 
 /*

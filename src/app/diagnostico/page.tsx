@@ -1,5 +1,5 @@
 import { ArranqueDiagnostico } from "@/components/diagnostico/ArranqueDiagnostico";
-import { MagicRings } from "@/components/diagnostico/ui/MagicRings";
+import { GridScan } from "@/components/diagnostico/ui/GridScan";
 import { PruebaSocialDg } from "@/components/diagnostico/ui/PruebaSocialDg";
 import { ScrollSuave } from "@/components/diagnostico/ui/ScrollSuave";
 import { VistaPreviaVideo } from "@/components/diagnostico/ui/VistaPreviaVideo";
@@ -10,19 +10,21 @@ import { LANDING } from "@/components/diagnostico/contenido";
   LANDING DE PROMESA — /diagnostico
   ═══════════════════════════════════════════════════════════════════════════
 
-    hero (anillos + promesa) → FORMULARIO → vista previa del video → pie
+    hero (rejilla + promesa) → FORMULARIO → vista previa del video → pie
 
-  ── EL HERO: ANILLOS DE FONDO Y LA PROMESA CENTRADA ENCIMA ──
+  ── EL HERO: LA REJILLA DE FONDO Y LA PROMESA CENTRADA ENCIMA ──
 
   Llevaba una fotografía a la izquierda y el titular montado sobre su mitad
-  derecha, en una rejilla de doce columnas. Se retiró: la foto tenía un motivo
+  derecha, en una retícula de doce columnas. Se retiró: la foto tenía un motivo
   —una mujer frente a un arco— que obligaba a reservarle su mitad, y de ahí la
-  rejilla.
+  retícula.
 
-  Los anillos no tienen sujeto. Son atmósfera y salen del centro, así que el
-  montaje que piden es el contrario: texto en medio y animación alrededor. Con
-  eso se va también la rejilla, y con ella el apaño del redondeo que tapaba las
-  esquinas blancas quemadas en aquel archivo.
+  Después vinieron los anillos concéntricos (ui/MagicRings.tsx), y ahora está
+  GridScan: un túnel de líneas en perspectiva con un haz que lo recorre. Los
+  tres montajes comparten el mismo criterio —el fondo no tiene sujeto, así que
+  el texto va en medio y la animación alrededor—, y el barrido añade algo que
+  los anillos no tenían: esta página es un DIAGNÓSTICO, y un haz recorriendo
+  una rejilla dice "esto te está midiendo" sin escribirlo.
 
   ── NO HAY LOGO EN NINGUNA DE LAS TRES PANTALLAS ──
 
@@ -38,8 +40,9 @@ import { LANDING } from "@/components/diagnostico/contenido";
 
   ── SIGUE SIENDO UN COMPONENTE DE SERVIDOR ──
 
-  Se hidratan tres piezas: los anillos del hero, la caja del formulario y la
-  vista previa del video. El titular, el texto y el pie se sirven como HTML.
+  Se hidratan cuatro piezas: la rejilla del hero, el suavizado del scroll, la
+  caja del formulario y la vista previa del video. El titular, el texto y el pie
+  se sirven como HTML.
 
   ── LA PRUEBA SOCIAL ESTÁ BLOQUEADA A PROPÓSITO ──
 
@@ -85,18 +88,16 @@ export default function DiagnosticoPage() {
       <main className="flex flex-1 flex-col">
         {/* ══════════════ HERO ══════════════
 
-            ── SE FUE LA FOTOGRAFÍA Y ENTRARON LOS ANILLOS ──
+            ── SE FUE LA FOTOGRAFÍA Y EL FONDO PASÓ A SER UNA ANIMACIÓN ──
 
             El hero llevaba una imagen a la izquierda con el titular montado
-            sobre su mitad derecha. Ahora el fondo es una animación de anillos
-            concéntricos que crecen y se desvanecen, y el titular va CENTRADO
-            encima.
+            sobre su mitad derecha. La foto tenía un motivo —la mujer, el arco—
+            que obligaba a dejarle su mitad libre, y de ahí la retícula de doce
+            columnas.
 
-            El cambio de composición no es un capricho: la foto tenía un motivo
-            —la mujer, el arco— que obligaba a dejarle su mitad libre, y de ahí
-            la rejilla de doce columnas. Los anillos no tienen sujeto, son
-            atmósfera pura y salen del centro, así que lo que pide el montaje es
-            justo lo contrario: texto en medio y animación alrededor.
+            El fondo de ahora no tiene sujeto, así que lo que pide el montaje es
+            justo lo contrario: texto en medio y animación alrededor. Eso vale
+            igual para los anillos que hubo antes y para la rejilla de ahora.
 
             ── EL FONDO VA PRIMERO EN EL DOCUMENTO, SIN z-index NEGATIVO ──
 
@@ -108,69 +109,92 @@ export default function DiagnosticoPage() {
 
             ── EL ALTO MÍNIMO ES LO QUE LE DA SITIO A LA ANIMACIÓN ──
 
-            El canvas se dimensiona con el alto de su contenedor, y ese alto lo
+            El lienzo se dimensiona con el alto de su contenedor, y ese alto lo
             fija el texto. Sin un mínimo, en escritorio quedaría una banda de
-            unos 200 px y los anillos saldrían aplastados contra los bordes. */}
+            unos 200 px y la rejilla saldría aplastada contra los bordes — con
+            un túnel en perspectiva se nota aún más que con los anillos, porque
+            la fuga necesita profundidad para leerse. */}
         <section className="relative flex w-full items-center justify-center overflow-hidden bg-[var(--dg-hero-fondo)] px-5 pt-16 pb-20 sm:pt-20 sm:pb-24 md:min-h-[34rem] md:pt-24 md:pb-28">
-          {/* LOS ANILLOS.
+          {/* ══ LA REJILLA DEL FONDO ══
 
-              Se desbordan del bloque de texto por los cuatro lados para que los
-              aros más grandes no queden cortados justo donde empieza la
-              promesa.
+              ── SUSTITUYE A LOS ANILLOS ──
 
-              Los aros van del verde 2 al blanco: los de dentro entran verdes y
-              los de fuera se apagan en luz. El verde parece demasiado oscuro
-              para verse sobre un fondo casi del mismo tono, y no lo es — el
-              shader trabaja en modo "luminance", que normaliza el color a
-              brillo pleno y usa el brillo original como opacidad, así que
-              #084A2C entra como un verde vivo al 29%: atmósfera, no manchas.
+              El hero llevaba MagicRings: aros concéntricos que crecían y se
+              desvanecían desde el centro. Ahora es GridScan, un túnel de líneas
+              en perspectiva que se pierde en el fondo, con un haz que lo
+              recorre a lo largo cada pocos segundos.
 
-              aria-hidden y pointer-events-none: es decoración, y no puede
-              interceptar la selección del texto que tiene encima. */}
+              Va SOLO, sin los anillos detrás: son dos lienzos WebGL a la vez
+              —dos contextos, dos bucles de animación— y visualmente dos motivos
+              que compiten. El fondo del hero es atmósfera; con dos animaciones
+              deja de serlo y pasa a ser el asunto de la sección.
+
+              El componente sigue en ui/MagicRings.tsx y devolverlo es volver a
+              montarlo aquí.
+
+              ── EL BARRIDO ES LO QUE HACE QUE ENCAJE ──
+
+              Esta página es un DIAGNÓSTICO: un haz que recorre una rejilla y
+              vuelve dice "esto te está midiendo" sin escribirlo en ninguna
+              parte. Los anillos eran atmósfera bonita y nada más.
+
+              ── LOS COLORES SON LOS DE LA MARCA ──
+
+              Líneas en verde y el haz en blanco roto. Un cambio de tono en la
+              rejilla se nota mucho más que en los anillos, porque son formas
+              nítidas y no manchas de luz.
+
+              aria-hidden y pointer-events-none: es decoración y no puede
+              interceptar la selección del texto que tiene encima.
+
+              ⚠️ pointer-events-none EN EL ENVOLTORIO NO IMPIDE QUE LA REJILLA
+              SIGA AL RATÓN. El componente escucha `mousemove` sobre su propio
+              elemento, y ese evento se sigue disparando en la sección: lo que
+              se anula es que el lienzo CAPTURE el clic o la selección. */}
           <div
             aria-hidden
-            className="dg-anillos-fundidos pointer-events-none absolute inset-0 select-none"
+            className="dg-fondo-fundido pointer-events-none absolute inset-0 select-none"
           >
-            {/* ── EL MODO DE ALFA ES EL POR DEFECTO ("luminance") ──
+            <GridScan
+              linesColor="#5b9800"
+              scanColor="#f5f5f5"
+              sensitivity={0.55}
+              /* Grosor 1,4 y no 1: el hero es el plano más oscuro de la página
+                 (--dg-hero-fondo, el verde de marca rebajado hacia el negro), y
+                 una línea de un píxel en verde medio sobre ese fondo se pierde.
+                 Sobre el gris del ejemplo de React Bits, 1 basta. */
+              lineThickness={1.4}
+              gridScale={0.1}
+              /* El barrido sube a 0,55 por lo mismo: es lo único que se mueve
+                 de verdad y lo que hace que el fondo se lea como una medición y
+                 no como una textura quieta. */
+              scanOpacity={0.55}
+              enablePost
+              bloomIntensity={0.6}
+              /* ⚠️ LA ABERRACIÓN CROMÁTICA VA EN CERO, Y NO ES UN DESCUIDO.
 
-                Normaliza el color a brillo pleno y usa el brillo original como
-                opacidad. Sobre este fondo oscuro es justo lo que hace falta:
-                los anillos entran como luz, no como pintura.
+                 El ejemplo de React Bits trae 0.002, y sobre esta rejilla eso
+                 no se lee como un efecto de lente: se lee como líneas de
+                 colores. El efecto separa los canales RGB, y sobre formas
+                 NÍTIDAS de un píxel cada canal cae en un píxel distinto — el
+                 borde se descompone en magenta y cian.
 
-                Llegó a estar en "coverage" mientras el hero fue crema —allí
-                hacía falta el color real para que se leyeran como líneas— y se
-                retiró al volver al verde. Si alguna vez esta sección vuelve a
-                ser clara, hay que devolverlo.
+                 Medido sobre el hero: el 2,9% de los píxeles quedaban con más
+                 rojo o azul que verde, y el peor daba rgb(54,56,119), un
+                 azul-violeta que no existe en esta paleta. Sobre los anillos
+                 —manchas difusas— el mismo valor era invisible; aquí ensucia.
 
-                El lienzo es transparente en los dos modos: se ve el fondo de la
-                página a través de él. Lo que cambia es qué se pinta donde hay
-                anillo, no si se rellena el vacío. */}
-            <MagicRings
-              color="#084A2C"
-              colorTwo="#ffffff"
-              ringCount={6}
-              speed={1}
-              attenuation={10}
-              lineThickness={2}
-              baseRadius={0.35}
-              radiusStep={0.1}
-              scaleRate={0.1}
-              opacity={1}
-              blur={0}
-              noiseAmount={0.1}
-              rotation={0}
-              ringGap={1.5}
-              fadeIn={0.7}
-              fadeOut={0.5}
-              followMouse={false}
-              mouseInfluence={0.2}
-              hoverScale={1.2}
-              parallax={0.05}
-              clickBurst={false}
+                 El bloom sí se queda: reparte luz sin separar canales, así que
+                 el resplandor de las líneas sigue siendo verde. */
+              chromaticAberration={0}
+              noiseIntensity={0.01}
+              /* En móvil no hay ratón: sin esto la rejilla se queda quieta y
+                 sólo se ve el barrido. */
+              enableGyro
             />
           </div>
 
-          {/* EL TEXTO, centrado sobre los anillos.
+          {/* EL TEXTO, centrado sobre la rejilla.
 
               `relative` sin z-index: al venir después en el documento y estar
               posicionado, gana el orden de pintado sobre el fondo. */}
