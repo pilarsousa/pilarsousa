@@ -33,7 +33,7 @@ export const HERO = {
   privacy: "Tu información está 100% protegida. No enviamos spam.",
   /* Texto del CTA del hero, que ahora abre el modal en vez de tener el
      formulario debajo. */
-  cta: "Quiero acceder a la lista de espera",
+  cta: "Quiero acceder a la lista",
 };
 
 /* Copy del modal del formulario. El badge y el aviso de privacidad se reutilizan
@@ -51,7 +51,7 @@ export const FORM = {
     telefono: "Tu número de WhatsApp",
     email: "Tu correo electrónico",
   },
-  submit: "Quiero acceder a la lista de espera",
+  submit: "Quiero acceder a la lista",
   submitting: "Registrando…",
   success: "¡Estás en la lista!",
   error: "No pudimos registrarte. Revisá tu conexión y probá de nuevo.",
@@ -79,7 +79,7 @@ export const BENEFICIOS = {
       text: "Recibe regalos y bonos exclusivos por formar parte de la lista de espera.",
     },
   ],
-  cta: "Quiero acceder",
+  cta: "Quiero acceder a la lista",
 };
 
 /* Sección 3 — Qué es el programa. Va después de las ventajas de la lista y
@@ -103,14 +103,14 @@ export const QUE_ES = {
     "Material de integración por cada código (Checkpoint del antivirus mental)",
     "Contexto elevado que te impulsa y sostiene",
   ],
-  cta: "Quiero acceder a la lista de espera",
+  cta: "Quiero acceder a la lista",
 };
 
 export const TESTIMONIOS = {
   title: "Lo que dicen quienes",
   titleAccent: "ya dieron el paso",
   subtitle: "Validado por quienes ya lo vivieron.",
-  cta: "Quiero acceder",
+  cta: "Quiero acceder a la lista",
 };
 
 /*
@@ -226,7 +226,7 @@ export const PILAR = {
     "Ese camino me llevó a escribir mi primer libro y a acompañar a cientos de personas en sus propios procesos de transformación.",
     "Hoy, después de haber compartido mis enseñanzas con una comunidad de más de 600.000 personas, Volver al Origen reúne todo aquello que he aprendido, vivido y aplicado durante estos años.",
   ],
-  cta: "Quiero acceder a la lista de espera",
+  cta: "Quiero acceder a la lista",
 };
 
 export const FOOTER = {

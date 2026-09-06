@@ -47,9 +47,30 @@ export default function VolverAlOrigenPage() {
     <>
       <main>
         <Hero />
-        <Beneficios />
-        {/* <QueEs /> — ver la nota de arriba */}
-        <Testimonios />
+
+        {/* ══ EL TRAMO CLARO ══
+
+            Las ventajas de la lista y los testimonios comparten un panel crema
+            con la retícula del embudo del diagnóstico. Es el tramo informativo
+            del recorrido —qué te llevas y quién lo avala—, y sacarlo del negro
+            lo separa del hero y de la historia que viene después sin necesidad
+            de filetes ni separadores.
+
+            EL ENVOLTORIO ES QUIEN LO PINTA, no cada sección: el fondo tiene que
+            ser CONTINUO entre las dos. Puesto en cada una por separado, la
+            imagen se repetiría desde el principio en la segunda y aparecería
+            una segunda retícula a media página.
+
+            ⚠️ Y ES TAMBIÉN QUIEN DA LA VUELTA A LA TINTA. Las dos secciones
+            están escritas contra `text-foreground` y `text-accent`, que aquí
+            son colores para fondo oscuro; .vo-panel-claro redefine esos tokens
+            y todo lo de dentro se invierte solo. Ver globals.css. */}
+        <div className="vo-panel-claro">
+          <Beneficios />
+          {/* <QueEs /> — ver la nota de arriba */}
+          <Testimonios />
+        </div>
+
         <Origen />
         <Pilar />
       </main>

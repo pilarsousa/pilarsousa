@@ -36,9 +36,9 @@ import {
   celda y aparecería scroll horizontal en la página.
 */
 
-/* Tinte de la sección. Literal y no var(--color-vo-sage) porque va dentro de un
-   radial-gradient() en un style inline. */
-const TINT = "#1f310c";
+/* ⚠️ AQUÍ VIVÍA `TINT` (#1f310c), el verde de esta sección. Se retira con el
+   paso a panel claro: ver la nota junto al fondo, más abajo. Si algún día vuelve
+   el fondo oscuro, hay que devolver la constante Y el degradado. */
 
 export function Testimonios() {
   return (
@@ -47,46 +47,42 @@ export function Testimonios() {
       /* El mínimo del clamp baja a 5rem: los 7rem anteriores eran un colchón
          desproporcionado en pantallas de móvil, donde el alto es el recurso
          escaso. En escritorio el máximo sigue igual. */
-      className="relative isolate bg-background py-[clamp(5rem,3rem+8vh,10rem)] text-foreground"
+      /* ⚠️ SIN `bg-background` NI `text-foreground`: los dos los pone ahora el
+         envoltorio .vo-panel-claro (ver page.tsx), que además da la vuelta a los
+         tokens para que el texto salga en verde oscuro. Un fondo propio aquí
+         taparía la retícula del panel. */
+      className="relative isolate py-[clamp(5rem,3rem+8vh,10rem)]"
     >
-      {/* Difuminado del tinte, de dentro hacia fuera.
+      {/* ⚠️ AQUÍ IBA EL TINTE VERDE (#1f310c) que separaba esta sección de sus
+          vecinas oscuras, difuminado por arriba y por abajo con un degradado
+          lineal.
 
-          LINEAL VERTICAL Y NO RADIAL, y el motivo es matemático, no estético.
-          En un radial los radios se miden sobre el tamaño de la caja, pero la
-          distancia del centro al borde es sólo la MITAD del alto. Con un radio
-          vertical del 72% —como estaba— el borde de la sección cae en el 69% del
-          recorrido del degradado, donde todavía queda un 44% de opacidad: el
-          color nunca llegaba a transparente dentro de la sección y en la juntura
-          aparecía un escalón. Ese era el corte que se veía.
+          Se retira con el cambio a panel claro: era un verde oscuro pensado
+          para leerse SOBRE negro, y sobre el crema se vería como una mancha
+          sucia en mitad del tramo. Y ya no separa nada — lo que distingue este
+          bloque de las secciones de alrededor es el propio panel.
 
-          En un lineal vertical el 0% y el 100% caen exactamente en los bordes
-          superior e inferior, así que el desvanecido completo está garantizado
-          sin depender del alto que acabe teniendo la sección.
-
-          Las paradas están en 35% y 65%: el tinte sólo es pleno en el tercio
-          central y dedica un 35% del alto a entrar y otro 35% a salir. Esa
-          transición larga es lo que hace que el paso entre el color de esta
-          sección y el de las vecinas se lea como una difuminación y no como un
-          cambio de bloque.
-
-          -z-10 lo mantiene por debajo del contenido: es un elemento posicionado
-          y sin esto pintaría por encima del texto. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          backgroundImage: `linear-gradient(to bottom, transparent 0%, ${TINT} 35%, ${TINT} 65%, transparent 100%)`,
-        }}
-      />
-
+          El motivo por el que aquel degradado era LINEAL y no radial sigue
+          siendo bueno por si vuelve: en un radial los radios se miden sobre la
+          caja, y del centro al borde sólo hay la mitad del alto, así que el
+          color no llegaba a transparente dentro de la sección y en la juntura
+          quedaba un escalón. En un lineal el 0% y el 100% caen justo en los
+          bordes. */}
 
       <VoContainer>
         <ScrollIn>
           <SectionTitle
             id="testimonios-title"
             accent={TESTIMONIOS.titleAccent}
-            /* Sin accentClassName: al volver el fondo a oscuro, el verde
-               luminoso por defecto vuelve a ser el acento correcto (10,6:1). */
+            /* `block` baja el acento a su propia línea, igual que en Beneficios:
+               los dos títulos de este tramo se leen en dos renglones y así
+               comparten el mismo ritmo.
+
+               ⚠️ HAY QUE REPETIR `text-accent`. El prop tiene ese valor por
+               defecto, y en cuanto se le pasa algo lo SUSTITUYE entero: con
+               sólo "block" el acento perdería el verde y se quedaría del color
+               del resto del título. */
+            accentClassName="block text-accent"
           >
             {TESTIMONIOS.title}
           </SectionTitle>

@@ -76,6 +76,20 @@ export function SectionTitle({
         revealDirection="start"
         animateOn="view"
       />
+      {/* ⚠️ EL `after` VA DENTRO DEL SPAN DEL ACENTO, NO DESPUÉS.
+
+          Fuera funcionaba mientras el acento era `inline`: el signo quedaba
+          pegado a la última palabra en el mismo renglón. En cuanto un título
+          pasa el acento a `block` para partirse en dos líneas —Beneficios y
+          Testimonios lo hacen—, el signo se queda fuera de ese bloque y cae
+          SOLO a una tercera línea. Se veía un "?" suelto y centrado bajo el
+          título.
+
+          Dentro del span acompaña siempre a la última palabra, se parta el
+          título donde se parta.
+
+          Va FUERA del <DecryptedText> a propósito: el signo no tiene que
+          descifrarse, sólo el texto. */}
       {accent && (
         <span className={accentClassName}>
           {" "}
@@ -87,9 +101,12 @@ export function SectionTitle({
             revealDirection="start"
             animateOn="view"
           />
+          {after}
         </span>
       )}
-      {after}
+
+      {/* Sin acento, el signo va suelto al final del título. */}
+      {!accent && after}
     </h2>
   );
 }

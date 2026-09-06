@@ -1237,7 +1237,24 @@
   el de esta landing no tiñe nada y hace desaparecer el panel de detrás. Aquí se
   pinta con el verde directo y opaco, que es lo único que se ve sobre #0b1502.
 */
+/*
+  ⚠️ LA CARD SE QUEDA OSCURA AUNQUE EL PANEL DE ALREDEDOR SEA CLARO.
+
+  Su fondo lo pinta la lluvia de código de dentro, que es verde profundo, así
+  que su texto tiene que seguir siendo claro. Sin esto, dentro de
+  .vo-panel-claro heredaría los tokens invertidos del panel y el título y el
+  párrafo saldrían en verde oscuro sobre verde oscuro — medido, invisibles.
+
+  Se devuelven los tres tokens Y el `color` heredado, por lo mismo que el panel
+  lo declara: `text-foreground` está aplicado más arriba en el árbol y lo que
+  baja es un color ya calculado.
+*/
 .vo-card {
+  --color-foreground: var(--color-vo-bone);
+  --color-accent: var(--color-vo-lumen);
+  --color-background: var(--color-vo-black);
+  color: var(--color-vo-bone);
+
   position: relative;
   isolation: isolate;
   border-radius: 1.5rem;
@@ -2858,6 +2875,213 @@ body {
 /* La zona del grupo no debe poder seleccionarse: con el imantado y la
    inclinación activos, arrastrar el cursor sobre las cards seleccionaba su
    texto y el gesto se convertía en un manchón azul. */
+/*
+  ═══════════════════════════════════════════════════════════════════════════
+  EL GRANO DE PELÍCULA DE /volver-al-origen
+  ═══════════════════════════════════════════════════════════════════════════
+
+  Puntos claros minúsculos y teselados sobre toda la ventana. Es el mismo
+  recurso que ya usa el embudo del diagnóstico: no se ve como "textura", se
+  percibe como que la imagen tiene cuerpo en vez de ser color plano.
+
+  ── ⚠️ CUELGA DE SU PROPIA CLASE, NO DE body NI DE .vo-scope ──
+
+  Este archivo es el global del proyecto ENTERO, así que un `body::after` metería
+  el grano en las otras seis landings —bootcamp, ventas, misión origen, el
+  juego— sin que nadie lo hubiera pedido ni supiera de dónde salió.
+
+  Colgado del contenedor de la ruta hace exactamente lo mismo y no sale de aquí.
+  `position: fixed` sigue midiéndose contra la ventana, así que cubre la
+  pantalla igual y el grano NO se mueve al hacer scroll — que es como se comporta
+  el grano de una película, y no como una textura pegada al papel.
+
+  ⚠️ Y TAMPOCO PUEDE COLGAR DE .vo-scope, que sería lo natural: esa clase está
+  puesta DOS VECES —en el envoltorio del layout y en el diálogo de registro, que
+  la necesita para heredar la paleta estando fuera del árbol de la página—. El
+  grano se pintaría dos veces, la segunda sobre el propio modal y con blend de
+  suma. De ahí una clase propia, aplicada sólo en el layout.
+
+  ── LAS DOS PIEZAS QUE HACEN QUE NO ESTORBE ──
+
+  `pointer-events: none` es lo que deja pasar los clics: sin él, una capa fija
+  con z-index alto se traga el formulario entero. Va con !important porque un
+  fallo aquí NO SE VE —la capa es invisible— y se manifiesta como "la página no
+  responde", que es de las cosas más caras de diagnosticar.
+
+  `plus-lighter` hace que los puntos SUMEN luz en vez de taparla. Donde no esté
+  soportado el navegador ignora esa línea y quedan puntos blancos al 7%: se
+  degrada a lo mismo, algo más plano.
+
+  ── EL z-index ES 60, NO 9999 ──
+
+  En el embudo del diagnóstico es 9999 porque allí no hay nada por encima. Aquí
+  sí: el modal de registro y su velo. Con 9999 el grano se pintaría SOBRE el
+  modal — sobre un diálogo abierto, y encima con blend de suma. 60 lo deja por
+  encima de la página y por debajo del modal.
+
+  ── SOBRE EL PANEL CREMA SE NOTA MENOS, Y NO ES UN FALLO ──
+
+  El grano suma luz, y sobre algo casi blanco no queda a dónde sumar.
+
+  Para regularlo: `background-size` entre 2px y 4px —cuanto mayor, más separado
+  y más visible el punto— y `opacity` entre 0,05 y 0,12.
+*/
+.vo-grano::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 60;
+  pointer-events: none !important;
+  background-image: radial-gradient(at 20% 80%, #fff 1px, transparent 0px);
+  background-size: 2px 2px;
+  opacity: 0.07;
+  mix-blend-mode: plus-lighter;
+}
+
+/*
+  ═══════════════════════════════════════════════════════════════════════════
+  EL ACORDEÓN DE LA SECCIÓN DE LA HISTORIA — .vo-acordeon
+  ═══════════════════════════════════════════════════════════════════════════
+
+  ── SE ANIMA `grid-template-rows`, NO `height` ──
+
+  Y es la única forma de deslizar una caja cuya altura no se conoce. `height:
+  auto` no es un valor animable: el navegador no puede interpolar hacia algo que
+  aún no ha medido, así que la transición no arranca y la caja salta.
+
+  El apaño de siempre es un `max-height` grande a ojo, y tiene dos defectos que
+  se ven: si el contenido lo supera queda cortado, y si no llega, la animación
+  gasta su tiempo recorriendo un vacío — se abre con un tirón y se cierra con
+  una pausa muerta.
+
+  Con la retícula sí se puede: `0fr` y `1fr` son dos valores concretos, el
+  navegador interpola entre ellos y la altura resultante es siempre la real.
+
+  ⚠️ EL HIJO NECESITA `min-height: 0`. Por defecto una pista de retícula no se
+  encoge por debajo del contenido mínimo de su hijo, y sin esto el panel se
+  queda con el alto puesto y no se cierra nunca.
+
+  ⚠️ Y EL `overflow: hidden` VA EN EL HIJO, no en el contenedor: es lo que
+  recorta el contenido mientras la pista mide menos de lo que ocupa.
+*/
+.vo-acordeon {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 460ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.vo-acordeon[data-abierto="true"] {
+  grid-template-rows: 1fr;
+}
+
+.vo-acordeon > * {
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Sigue abriendo y cerrando, pero sin deslizar: los dos estados son valores
+     válidos de la retícula, así que se pasa de uno a otro en un fotograma. */
+  .vo-acordeon {
+    transition: none;
+  }
+}
+
+/*
+  ═══════════════════════════════════════════════════════════════════════════
+  EL PANEL CLARO DE /volver-al-origen — .vo-panel-claro
+  ═══════════════════════════════════════════════════════════════════════════
+
+  Cubre las dos secciones que van debajo del hero: las ventajas de la lista y
+  los testimonios. La página es negra de arriba abajo y este tramo se levanta
+  en crema, así que el visitante entra en la parte "informativa" del recorrido
+  y sale de ella al llegar a la historia.
+
+  Es el MISMO recurso que .dg-panel-crema en el embudo del diagnóstico, con los
+  mismos archivos: una retícula clara que ocupa la parte de arriba y se
+  desvanece hacia el centro.
+
+  ── EL COLOR DE RESPALDO ES LO QUE HACE QUE FUNCIONE ──
+
+  La imagen mide unos 1200 px de alto y estas dos secciones juntas miden bastante
+  más. `background-size: 100% auto` ata el dibujo al ANCHO —conserva su
+  proporción y no se estira— y todo lo que sobra por debajo lo pinta el color
+  liso (#fff8ef, muestreado del propio archivo).
+
+  ⚠️ EL COLOR TIENE QUE SER EXACTAMENTE EL DEL ARCHIVO. Un blanco cualquiera
+  dejaría una banda horizontal justo donde termina la imagen, que es peor que no
+  poner fondo. Si se cambia el archivo, hay que volver a muestrearlo.
+
+  Como el dibujo se desvanece hacia abajo, el empalme entre la imagen y el color
+  liso no se ve.
+
+  ── DOS ARCHIVOS, UNO POR FORMA DE PANTALLA ──
+
+  El de móvil es más alto y estrecho: sobre una pantalla vertical, la versión de
+  escritorio se quedaría en una franja fina arriba. El navegador descarga sólo
+  el que aplica.
+*/
+.vo-panel-claro {
+  background-color: #fff8ef;
+  background-image: url("/diagnostico/contenido/main/fondo-mobile-white.webp");
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: 100% auto;
+
+  /*
+    ── LA TINTA SE DA LA VUELTA AQUÍ DENTRO, Y ESO ES LO QUE HACE QUE FUNCIONE ──
+
+    Las dos secciones que van dentro están escritas contra `text-foreground` y
+    `text-accent`, que en esta página son el crema y el verde luminoso: colores
+    para fondo oscuro. Sobre este crema serían invisibles.
+
+    Redefiniendo los TOKENS en el envoltorio, todo lo de dentro se invierte solo
+    —secciones, cards, iconos— sin tocar ni una clase. La alternativa era ir
+    componente por componente cambiando cada color, que obliga a editarlos
+    todos, se olvida siempre alguno y deja las piezas imposibles de devolver a
+    oscuro.
+
+    Es el mismo recurso que .dg-claro en el embudo del diagnóstico.
+
+    ⚠️ POR ESO NO SE PUEDE METER AHÍ DENTRO UN COLOR LITERAL: una utilidad como
+    `text-[#f6f6e5]` gana a la variable y se queda crema sobre crema.
+
+    Los valores son los del embudo del diagnóstico: verde de marca para el texto
+    (14,1:1 sobre este fondo) y verde 2 para el acento (9,8:1). El verde
+    luminoso de la página NO sirve aquí — sobre crema baja a 1,6:1.
+  */
+  --color-background: #fff8ef;
+  --color-foreground: #002f01;
+  --color-accent: #084a2c;
+
+  /*
+    ⚠️ REDEFINIR LOS TOKENS NO BASTA, Y ESTE ES EL MOTIVO.
+
+    El layout de la ruta aplica `text-foreground` en su envoltorio (línea 70 de
+    layout.tsx). Esa utilidad resuelve la variable ALLÍ, donde todavía vale
+    crema, y lo que baja por el árbol es un color ya calculado. Los tokens
+    nuevos sólo afectan a quien los lea DENTRO de este panel — y el título, que
+    no declara color propio, hereda el de arriba.
+
+    Medido: el título de Beneficios salía rgb(246,246,229) sobre este crema.
+    Invisible.
+
+    De ahí este `color` explícito: reinicia la herencia para todo el subárbol.
+    Lo que sí funciona son las utilidades escritas dentro (`text-accent`,
+    `text-foreground/85` en las cards), que leen los tokens de aquí.
+  */
+  color: #002f01;
+}
+
+@media (min-width: 768px) {
+  .vo-panel-claro {
+    background-image: url("/diagnostico/contenido/main/fondo-white.webp");
+  }
+}
+
 .le-bento-zona {
   user-select: none;
 }

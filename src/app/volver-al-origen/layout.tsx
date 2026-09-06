@@ -67,7 +67,7 @@ export default function VolverAlOrigenLayout({
       {/* overflow-x-clip: los halos y resplandores sangran fuera de sus
           secciones a propósito; esto evita que eso genere scroll horizontal en
           mobile. */}
-      <div className="vo-scope min-h-full overflow-x-clip bg-background text-foreground">
+      <div className="vo-scope vo-grano min-h-full overflow-x-clip bg-background text-foreground">
         {/* No pinta nada: sólo activa el scroll suave mientras se está en esta
             landing y lo apaga al salir. */}
         <SmoothScroll />

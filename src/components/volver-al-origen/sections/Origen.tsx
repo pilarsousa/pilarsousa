@@ -1,6 +1,6 @@
-import type { CSSProperties } from "react";
 import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
 import { ScrollIn } from "@/components/volver-al-origen/ui/ScrollIn";
+import { SectionTitle } from "@/components/volver-al-origen/ui/SectionTitle";
 import { OrigenCards } from "@/components/volver-al-origen/ui/OrigenCards";
 import { ORIGEN } from "@/components/volver-al-origen/content";
 
@@ -13,89 +13,67 @@ import { ORIGEN } from "@/components/volver-al-origen/content";
   los testimonios sería pedirle 450 palabras de lectura a alguien que todavía no
   tiene motivo para concederlas.
 
-  ── ES LA ÚNICA SECCIÓN CLARA DE LA PÁGINA, Y ESO ES EL RECURSO ──
+  ── DEVUELVE LA PÁGINA AL OSCURO ──
 
-  Toda la landing es negro profundo con tintes verdes. Ésta se levanta sobre el
-  crema del embudo del diagnóstico (--vo-origen-panel), y el corte es
-  deliberado: es el tramo más largo de leer, y sobre claro se lee mejor y se
-  distingue como "aquí se cuenta algo" en vez de ser un bloque más de la
-  sucesión oscura.
+  Encima queda el panel crema (Beneficios + Testimonios) y debajo el retrato de
+  Pilar sobre negro. Esta sección es la que cierra el tramo claro y devuelve el
+  recorrido a su fondo natural, y por eso lleva el banner de la lluvia de código
+  como fondo: es la textura de la marca y ata el bloque al resto de la página.
 
-  ⚠️ POR ESO TODO EL TEXTO DE DENTRO VA EN VERDE OSCURO. Las utilidades de la
-  página —text-foreground, text-vo-bone— son para fondo oscuro y aquí quedarían
-  crema sobre crema, invisibles. Los colores de esta sección salen de sus
-  propios tokens, definidos abajo.
+  ── EL BANNER TIENE UN PICO BLANCO ARRIBA, Y ESO NO ES UN DEFECTO ──
+
+  banner-3-web.webp trae recortada una uve invertida blanca en su borde
+  superior. Puesta debajo del panel crema, esa uve hace de empalme: el crema
+  entra en la sección por el pico y se disuelve en el negro sin necesidad de un
+  degradado. Por eso la imagen se ancla arriba (`bg-top`) y no se centra.
+
+  ⚠️ EL COLOR DE LA UVE TIENE QUE SER EL DEL PANEL DE ENCIMA. Hoy coincide
+  —blanco contra #fff8ef— y a esa escala la diferencia no se ve, pero si el
+  panel cambia de tono habrá que retocar el archivo o el empalme cantará.
 
   ── EL LARGO SIGUE SIENDO EL PROBLEMA A RESOLVER ──
 
   Son unas 450 palabras en once párrafos. En una landing de captación, donde se
   escanea más de lo que se lee, un muro así se salta entero — y con él se va el
-  único sitio donde se explica POR QUÉ existe esto.
-
-  De ahí que el relato esté partido en cards (ver OrigenCards) en vez de ser una
-  columna seguida: cada una es una parada con su propio asunto, y las dos frases
-  que cargan el argumento salen del cuerpo y se tratan aparte.
+  único sitio donde se explica POR QUÉ existe esto. Cómo se reparte el texto,
+  en OrigenCards.
 */
-
-/*
-  ── LA PALETA CLARA, TOMADA DEL EMBUDO DEL DIAGNÓSTICO ──
-
-  Son los mismos valores que /diagnostico usa en su panel crema y en .dg-claro:
-  el crema muestreado del fondo (#fff8ef), el verde de marca y el verde 2.
-
-  Van como variables en línea y NO como tokens en globals.css a propósito: sólo
-  las usa esta sección, y meterlas en la hoja global las convertiría en parte
-  del sistema de la página —que es oscuro— invitando a usarlas donde no
-  corresponde.
-
-  `--le-bento-rgb` es la que leen los efectos de las cards (BentoMagico) para
-  el foco del cursor, las partículas y el borde. Sin ella usarían el lima
-  #a3ca23 de la landing borrador, que sobre este crema no se ve.
-*/
-const PALETA = {
-  "--vo-origen-panel": "#fff8ef",
-  "--vo-origen-tinta": "#002f01",
-  "--vo-origen-tinta-suave": "#084a2c",
-  "--vo-origen-verde": "#084a2c",
-  "--le-bento-rgb": "8, 74, 44",
-} as CSSProperties;
-
 export function Origen() {
   return (
     <section
       aria-labelledby="origen-title"
-      style={PALETA}
-      /* `overflow-x-clip` y no `hidden`: las cards se inclinan con el cursor y
-         pueden asomar un par de píxeles por el canto, pero un `overflow:hidden`
-         crea un contexto de scroll que rompe el `position: sticky` de cualquier
-         cosa que se monte dentro más adelante. */
-      className="relative isolate overflow-x-clip bg-[var(--vo-origen-panel)] py-[clamp(4.5rem,3rem+7vh,8rem)] text-[var(--vo-origen-tinta)]"
+      /* `overflow-x-clip` y no `hidden`: recorta lo que asome por los lados sin
+         crear un contexto de scroll, que rompería cualquier `position: sticky`
+         que se monte dentro más adelante. */
+      className="relative isolate overflow-x-clip bg-background py-[clamp(4.5rem,3rem+7vh,8rem)] text-foreground"
     >
-      {/* ── LAS COSTURAS CON LAS SECCIONES VECINAS ──
+      {/* ── EL FONDO ──
 
-          Arriba y abajo hay negro profundo, y el salto a un crema pleno es el
-          contraste más duro de la página (14:1). Sin nada en medio se lee como
-          un corte de maqueta, no como un cambio de tono.
+          Va como imagen de fondo y no como <Image> a propósito: es una textura
+          que se repite hacia abajo, no una fotografía con motivo. Un <Image>
+          obligaría a fijarle alto y a decidir un recorte; así el navegador la
+          ancla arriba y el resto lo pinta el negro de la sección, que es el
+          mismo color en el que la imagen termina.
 
-          Los dos degradados van del color EXACTO del fondo general al
-          transparente. Tiene que ser exacto: un negro cualquiera o un verde
-          aproximado dejaría una franja de un tercer color justo en la junta,
-          que es peor que el corte que se está arreglando.
+          `bg-cover` en escritorio y `bg-contain` en móvil: la imagen es
+          apaisada, y en una pantalla vertical `cover` la ampliaría tanto que
+          sólo se vería un trozo del centro — con lo que el pico blanco de
+          arriba, que es lo que empalma con el panel, quedaría fuera de cuadro.
 
-          Son cortos (56 px) porque no están difuminando una imagen, sino
-          empalmando dos planos de color: con más, el crema tardaría demasiado
-          en llegar y la sección parecería empezar sucia. */}
+          La opacidad la baja a la mitad porque encima va texto: a plena
+          intensidad los dígitos verdes compiten con los párrafos. Lo que se
+          busca es que se intuya la textura, no leerla. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-14"
-        style={{
-          backgroundImage:
-            "linear-gradient(to bottom, var(--color-vo-black), transparent)",
-        }}
+        className="pointer-events-none absolute inset-0 -z-10 bg-[url('/volver-origen/public/Recursos/generales/banner-3-web.webp')] bg-contain bg-top bg-no-repeat opacity-50 sm:bg-cover"
       />
+
+      {/* Fundido inferior: la imagen termina en su propio negro, pero si la
+          sección es más alta que ella el canto se nota. Este degradado lo
+          disuelve en el fondo antes de llegar al retrato de Pilar. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-14"
+        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-40"
         style={{
           backgroundImage:
             "linear-gradient(to top, var(--color-vo-black), transparent)",
@@ -104,26 +82,9 @@ export function Origen() {
 
       <VoContainer className="relative">
         <ScrollIn>
-          {/* ⚠️ NO USA <SectionTitle>, y no es un olvido.
-
-              Esa pieza trae el color del acento pensado para fondo oscuro —el
-              verde luminoso #b4e236, que sobre este crema baja a 1,6:1 y deja
-              de leerse— y además descifra el texto letra a letra sobre un
-              fondo que aquí no acompaña.
-
-              El título se compone a mano con la tipografía y las versalitas del
-              sistema, que es lo que lo mantiene reconocible como título de esta
-              página, y con la tinta de esta sección. */}
-          <h2
-            id="origen-title"
-            className="font-display text-center text-[1.6rem] leading-[1.2] tracking-[0.04em] text-balance uppercase sm:text-[2rem] md:text-[2.4rem]"
-          >
-            {ORIGEN.title}{" "}
-            <span className="text-[var(--vo-origen-verde)]">
-              {ORIGEN.titleAccent}
-            </span>
-            ?
-          </h2>
+          <SectionTitle id="origen-title" accent={ORIGEN.titleAccent} after="?">
+            {ORIGEN.title}
+          </SectionTitle>
         </ScrollIn>
 
         <OrigenCards />

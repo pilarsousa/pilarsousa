@@ -31,14 +31,33 @@ export function Beneficios() {
          ⚠️ EL HERO SIGUE APORTANDO SU PARTE por debajo del panel (64 px en
          móvil, 80 en escritorio). Si se toca su relleno inferior, hay que
          revisar este valor. */
-      className="bg-background pt-32 pb-[clamp(3.5rem,2rem+7vh,6rem)] lg:pt-28"
+      /* ⚠️ SIN `bg-background`: el fondo lo pinta el envoltorio .vo-panel-claro
+         (ver page.tsx), y tiene que ser continuo con Testimonios. Puesto aquí
+         taparía la retícula del panel justo en esta sección. */
+      className="pt-32 pb-[clamp(3.5rem,2rem+7vh,6rem)] lg:pt-28"
     >
       <VoContainer>
         <ScrollIn>
+          {/* EL ACENTO BAJA A SU PROPIA LÍNEA.
+
+              "¿Qué te llevarás por acceder a la lista de espera?" en un solo
+              renglón es demasiado largo: en escritorio ocupaba casi el ancho
+              del contenedor y el ojo tenía que recorrerlo entero para llegar al
+              signo de cierre.
+
+              Partido por el acento, la pregunta queda en dos líneas con el
+              corte donde lo pondría alguien al leerla en voz alta: el
+              planteamiento arriba, el sujeto abajo.
+
+              `block` en el acento y no un <br> en el copy: content.ts es texto
+              plano y no debe llevar marcado. Además el <span> ya existe —lo
+              crea SectionTitle para colorear el tramo—, así que sólo cambia
+              cómo se muestra. */}
           <SectionTitle
             id="beneficios-title"
             accent={BENEFICIOS.titleAccent}
             after="?"
+            accentClassName="block text-accent"
           >
             {BENEFICIOS.title}
           </SectionTitle>
