@@ -3053,6 +3053,27 @@ body {
     (14,1:1 sobre este fondo) y verde 2 para el acento (9,8:1). El verde
     luminoso de la página NO sirve aquí — sobre crema baja a 1,6:1.
   */
+  /*
+    ── EL REDONDEO SUPERIOR ──
+
+    El panel se levanta sobre el hero como una superficie que empieza, no como
+    un cambio de color a filo. Los dos picos que deja el redondeo dejan ver el
+    negro de debajo, que es justo lo que hace que se lea como un plano encima
+    de otro.
+
+    ⚠️ HACE FALTA `overflow: hidden`. La imagen de fondo se pinta contra la caja
+    del elemento, no contra su borde redondeado: sin recortar, sus dos esquinas
+    superiores sobresalen por fuera de la curva y se ve un canto recto asomando
+    justo donde tendría que estar el redondeo. Ese es el motivo de que "no se
+    vieran" los bordes.
+
+    El valor sube en escritorio porque la curva se mide contra el ancho de la
+    ventana: 2rem en una pantalla ancha apenas se percibe.
+  */
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+  overflow: hidden;
+
   --color-background: #fff8ef;
   --color-foreground: #002f01;
   --color-accent: #084a2c;
@@ -3079,7 +3100,37 @@ body {
 @media (min-width: 768px) {
   .vo-panel-claro {
     background-image: url("/diagnostico/contenido/main/fondo-white.webp");
+    border-top-left-radius: 3.5rem;
+    border-top-right-radius: 3.5rem;
   }
+}
+
+/*
+  ═══════════════════════════════════════════════════════════════════════════
+  UN ÁMBITO OSCURO DENTRO DEL PANEL CLARO — .vo-ambito-oscuro
+  ═══════════════════════════════════════════════════════════════════════════
+
+  Para las piezas que se quedan en verde profundo aunque el panel de alrededor
+  sea claro: hoy, el carrusel de reseñas, cuyas cards tienen su propio fondo
+  oscuro con texto claro.
+
+  Sin esto heredarían los tokens invertidos del panel y su texto saldría verde
+  sobre verde — es exactamente el fallo que dejó ilegible el panel de Trustpilot
+  y las cards de testimonios.
+
+  ⚠️ SE DEVUELVEN LOS TOKENS **Y** EL `color`. Redefinir las variables no basta:
+  `text-foreground` está aplicado más arriba en el árbol (el envoltorio del
+  layout) y lo que baja es un color YA CALCULADO, así que quien no declare color
+  propio hereda el de arriba. El `color` explícito reinicia esa herencia para
+  todo el subárbol.
+
+  Es el mismo remedio que lleva .vo-card, y por el mismo motivo.
+*/
+.vo-ambito-oscuro {
+  --color-foreground: var(--color-vo-bone);
+  --color-accent: var(--color-vo-lumen);
+  --color-background: var(--color-vo-black);
+  color: var(--color-vo-bone);
 }
 
 .le-bento-zona {

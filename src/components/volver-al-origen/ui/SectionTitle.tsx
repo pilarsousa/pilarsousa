@@ -64,7 +64,14 @@ export function SectionTitle({
     <h2
       id={id}
       className={cn(
-        "text-center font-display text-2xl uppercase leading-[1.3] tracking-[0.06em] sm:text-3xl md:text-[2.15rem]",
+        /* ── EN NEGRITA, TODOS ──
+
+           Trajan sólo tiene dos pesos, regular y bold, así que el salto es
+           notable: en regular los titulares se leían livianos frente al cuerpo
+           de texto y frente a las piezas que traen su propia tipografía en
+           negro —el sello de Trustpilot es el caso claro—. Con el bold
+           recuperan la jerarquía que les toca. */
+        "text-center font-display text-2xl font-bold uppercase leading-[1.3] tracking-[0.06em] sm:text-3xl md:text-[2.15rem]",
         className,
       )}
     >

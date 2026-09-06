@@ -326,7 +326,10 @@ export function Hero() {
               en la pieza que tiene que convertir. */}
           <h1
             id="registro"
-            className="mt-[clamp(0.4rem,1.8vw,0.625rem)] scroll-mt-8 font-display uppercase leading-[1.08]"
+            /* En negrita, como el resto de titulares de la página (ver
+               SectionTitle): Trajan sólo tiene dos pesos y el regular se lee
+               liviano a este cuerpo. */
+            className="mt-[clamp(0.4rem,1.8vw,0.625rem)] scroll-mt-8 font-display font-bold uppercase leading-[1.08]"
           >
             <span className="block text-[clamp(0.85rem,3.8vw,1.125rem)] tracking-[0.14em] text-foreground/85 sm:text-xl">
               {HERO.titleTop}

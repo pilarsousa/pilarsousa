@@ -107,8 +107,8 @@ export const QUE_ES = {
 };
 
 export const TESTIMONIOS = {
-  title: "Lo que dicen quienes",
-  titleAccent: "ya dieron el paso",
+  title: "Lo que dicen quienes ya",
+  titleAccent: "volvieron al origen",
   subtitle: "Validado por quienes ya lo vivieron.",
   cta: "Quiero acceder a la lista",
 };

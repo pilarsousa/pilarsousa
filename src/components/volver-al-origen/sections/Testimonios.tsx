@@ -1,135 +1,148 @@
-import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
+import Image from "next/image";
 import { ScrollIn } from "@/components/volver-al-origen/ui/ScrollIn";
-import { SectionTitle } from "@/components/volver-al-origen/ui/SectionTitle";
-import { TrustScore } from "@/components/volver-al-origen/ui/TrustScore";
-import { TestimonialCarousel } from "@/components/volver-al-origen/ui/TestimonialCarousel";
 import { WaitlistCta } from "@/components/volver-al-origen/ui/WaitlistCta";
+import { TestimonialCarousel } from "@/components/lista-de-espera/ui/TestimonialCarousel";
 import {
-  FEATURED_TESTIMONIALS,
   TESTIMONIOS,
+  FEATURED_TESTIMONIALS,
 } from "@/components/volver-al-origen/content";
+import trustpilot from "@/../public/volver-origen/public/Recursos/generales/trutspilot.png";
+import trustpilotMovil from "@/../public/volver-origen/public/Recursos/mobile/testimonio-mobile.jpeg";
 
 /*
-  Sección 3 — Prueba social.
+  Sección 3 — Lo que dicen quienes ya volvieron al origen.
 
-  El fondo es casi el mismo negro profundo que el resto de la página, apenas
-  levantado por un verde algo más vivo (--color-vo-sage). No busca separar el
-  bloque por contraste, sino insinuarlo: se nota que hay una zona distinta sin
-  que aparezca un rectángulo con bordes.
+  ── QUÉ SE FUE, Y POR QUÉ ──
 
-  El degradado va de DENTRO hacia FUERA: el tinte es pleno en el tercio central
-  de la sección y se desvanece hacia arriba y hacia abajo hasta desaparecer por
-  completo en los bordes, de modo que el paso al color de las secciones vecinas
-  es una difuminación larga y no una juntura.
+  Esta sección tenía el panel de TrustScore: un bloque que redibujaba en HTML la
+  nota de Trustpilot, sus barras de reparto y las estrellas. Se retira, y hay dos
+  motivos:
 
-  Es lo contrario del primer planteo, donde el color de las secciones vecinas
-  entraba en franjas por los bordes: aquel dibujaba dos bandas con principio y
-  fin.
+  1. AL PASAR EL TRAMO A PANEL CLARO SE VOLVIÓ ILEGIBLE. Estaba escrito contra
+     `text-foreground` sobre `bg-vo-forest`, y con los tokens invertidos del
+     panel el texto quedaba verde oscuro sobre verde oscuro.
 
-  Al ser un fondo oscuro, los textos van en claro y el acento recupera el verde
-  luminoso, que sobre este tinte da 10,6:1 de contraste.
+  2. EL PROBLEMA DE FONDO ES OTRO, y por eso no se arregló sino que se cambió:
+     una nota media redibujada en HTML es una nota que se puede retocar desde el
+     CSS, y eso deja de ser una prueba. El sello de Trustpilot es la valoración
+     de un tercero y su aspecto es suyo.
 
-  Layout en desktop: la nota global de Trustpilot a la izquierda y la cinta de
-  reseñas en movimiento a la derecha, separadas 224 px y con la fila en su
-  propio ancho (ver más abajo). minmax(0,1fr) en la columna derecha, y no 1fr a
-  secas: sin el mínimo en 0 una pista más ancha que la pantalla estiraría la
-  celda y aparecería scroll horizontal en la página.
+  Ahora entra como IMAGEN, que es como ya lo resolvía la landing borrador.
+
+  ── LA CABECERA VA EN RETÍCULA Y EL CARRUSEL NO ──
+
+  La fila de reseñas ocupa el ancho completo de la ventana y se desvanece por los
+  cantos: eso es lo que cuenta que hay más de las que caben. Metida dentro del
+  contenedor, terminaría en un borde limpio y se leería como una lista de cinco,
+  no como un carrusel.
+
+  Por eso la sección no lleva un contenedor común — la cabecera se coloca a un
+  lado y la pista al otro.
+
+  ⚠️ EL CARRUSEL SE REUTILIZA DE /lista-de-espera, NO SE COPIA. Son 349 líneas
+  con el diálogo de "ver más", el scroll de la pista y el duplicado para el
+  bucle; duplicarlas dejaría dos copias que se separan a la primera corrección.
+  Sus dependencias (StarTiles, el tipo Testimonial) ya son autónomas.
+
+  Si algún día se borra esa landing, la pieza tendría que mudarse a un sitio
+  común antes — no copiarse aquí.
 */
-
-/* ⚠️ AQUÍ VIVÍA `TINT` (#1f310c), el verde de esta sección. Se retira con el
-   paso a panel claro: ver la nota junto al fondo, más abajo. Si algún día vuelve
-   el fondo oscuro, hay que devolver la constante Y el degradado. */
-
 export function Testimonios() {
   return (
     <section
       aria-labelledby="testimonios-title"
-      /* El mínimo del clamp baja a 5rem: los 7rem anteriores eran un colchón
-         desproporcionado en pantallas de móvil, donde el alto es el recurso
-         escaso. En escritorio el máximo sigue igual. */
-      /* ⚠️ SIN `bg-background` NI `text-foreground`: los dos los pone ahora el
-         envoltorio .vo-panel-claro (ver page.tsx), que además da la vuelta a los
-         tokens para que el texto salga en verde oscuro. Un fondo propio aquí
-         taparía la retícula del panel. */
-      className="relative isolate py-[clamp(5rem,3rem+8vh,10rem)]"
+      /* Sin fondo propio: lo pinta el panel claro que envuelve esta sección y
+         la de Beneficios (ver page.tsx), y tiene que ser continuo entre las
+         dos. */
+      className="relative py-[clamp(3rem,2rem+5vh,5rem)]"
     >
-      {/* ⚠️ AQUÍ IBA EL TINTE VERDE (#1f310c) que separaba esta sección de sus
-          vecinas oscuras, difuminado por arriba y por abajo con un degradado
-          lineal.
+      {/* El 86%/59% viene de la retícula de la landing borrador, de donde sale
+          esta cabecera. Es más estrecha que el contenedor de las otras
+          secciones a propósito: el titular y el sello son dos piezas que se
+          miran entre sí, y a 1140 px quedarían en dos extremos sin relación. */}
+      <div className="mx-auto w-[86%] sm:w-[59%]">
+        {/* Los dos filetes encierran la cabecera. Sobre el panel claro hacen de
+            marco de un bloque que, si no, flotaría entre dos zonas de aire. */}
+        <div className="border-t-[max(0.05vw,1px)] border-[color-mix(in_srgb,var(--color-vo-black)_15%,transparent)]" />
 
-          Se retira con el cambio a panel claro: era un verde oscuro pensado
-          para leerse SOBRE negro, y sobre el crema se vería como una mancha
-          sucia en mitad del tramo. Y ya no separa nada — lo que distingue este
-          bloque de las secciones de alrededor es el propio panel.
-
-          El motivo por el que aquel degradado era LINEAL y no radial sigue
-          siendo bueno por si vuelve: en un radial los radios se miden sobre la
-          caja, y del centro al borde sólo hay la mitad del alto, así que el
-          color no llegaba a transparente dentro de la sección y en la juntura
-          quedaba un escalón. En un lineal el 0% y el 100% caen justo en los
-          bordes. */}
-
-      <VoContainer>
         <ScrollIn>
-          <SectionTitle
-            id="testimonios-title"
-            accent={TESTIMONIOS.titleAccent}
-            /* `block` baja el acento a su propia línea, igual que en Beneficios:
-               los dos títulos de este tramo se leen en dos renglones y así
-               comparten el mismo ritmo.
+          <div className="flex flex-col items-start gap-4 py-5 sm:flex-row sm:items-end sm:justify-between sm:gap-[2vw] sm:py-[1.4vw]">
+            {/* ⚠️ NO USA <SectionTitle>, y no es un olvido.
 
-               ⚠️ HAY QUE REPETIR `text-accent`. El prop tiene ese valor por
-               defecto, y en cuanto se le pasa algo lo SUSTITUYE entero: con
-               sólo "block" el acento perdería el verde y se quedaría del color
-               del resto del título. */
-            accentClassName="block text-accent"
-          >
-            {TESTIMONIOS.title}
-          </SectionTitle>
-        </ScrollIn>
-      </VoContainer>
+                Esa pieza descifra el texto letra a letra y trae el acento en
+                verde luminoso, que sobre este crema baja a 1,6:1. Aquí el
+                titular tiene que competir con un sello que trae su propia
+                tipografía en negro, así que va compuesto a mano, en bold y en la
+                tinta oscura del panel.
 
-      {/*
-        Esta fila SALE del ancho del Container (max-w-6xl) y usa uno propio, más
-        amplio. Es lo que permite que los dos bloques se alejen mutuamente del
-        centro —la card hacia la izquierda, la cinta hacia la derecha— dejando
-        hueco limpio en medio.
+                EL BOLD IMPORTA: Trajan sólo tiene dos pesos, y sobre blanco el
+                regular se leía liviano al lado de la cabecera de Trustpilot. */}
+            <h2
+              id="testimonios-title"
+              className="font-display text-[clamp(1rem,5vw,1.35rem)] leading-[1.25] font-bold text-[#141b0a] sm:text-[clamp(0.95rem,1.4583vw,1.9rem)] sm:leading-[1.3]"
+            >
+              {TESTIMONIOS.title}
+              {/* Dos líneas siempre. El punto de corte vive en el copy —ver
+                  TESTIMONIOS en content.ts— así que aquí sólo se respeta.
+                  Dejarlo partir solo lo cortaba por donde cayera según el
+                  ancho. */}
+              <br />
+              {TESTIMONIOS.titleAccent}
+            </h2>
 
-        Subiendo sólo el gap dentro del contenedor normal no se consigue el
-        mismo efecto: al no haber más ancho disponible, la cinta se comprimiría
-        en lugar de desplazarse hacia afuera.
+            {/* ── DOS SELLOS, UNO POR TAMAÑO ──
 
-        El título y el CTA se quedan en el Container normal para seguir
-        alineados con el resto de secciones de la página.
-      */}
-      <div className="mx-auto mt-12 w-full max-w-[86rem] px-6 sm:px-8">
-        <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:gap-56">
-          <ScrollIn delay={0.1}>
-            <TrustScore className="max-w-sm lg:max-w-none" />
-          </ScrollIn>
+                No es el mismo archivo reencuadrado. El de escritorio es la
+                insignia compacta —logo, estrellas y nota— y el de móvil es la
+                cabecera completa del perfil, que trae además el nombre y el
+                número de opiniones en grande.
 
-          {/* min-w-0: un hijo de grid tiene min-width auto por defecto y se
-              negaría a encogerse por debajo de su contenido, desbordando la
-              fila. */}
-          <div className="min-w-0">
-            <ScrollIn delay={0.15}>
-              <p className="text-center font-display text-xl uppercase tracking-[0.06em] sm:text-2xl lg:text-left">
-                {TESTIMONIOS.subtitle}
-              </p>
-            </ScrollIn>
+                En móvil hace falta esa versión: la insignia compacta se queda en
+                200 px junto a un titular que ocupa toda la columna, y a ese
+                tamaño las estrellas y el 4,8 son ilegibles.
 
-            <TestimonialCarousel items={FEATURED_TESTIMONIALS} />
+                El alt sólo va en uno: los dos dicen lo mismo, y quien no ve las
+                imágenes debe recibir la valoración una vez, no dos. */}
+            <Image
+              src={trustpilotMovil}
+              alt="Pilar Sousa — Volver al Origen en Trustpilot: 4,8 sobre 5 con 74 opiniones"
+              quality={90}
+              sizes="100vw"
+              className="h-auto w-full sm:hidden"
+            />
+            <Image
+              src={trustpilot}
+              alt=""
+              aria-hidden
+              quality={90}
+              sizes="280px"
+              className="hidden h-auto w-full shrink-0 sm:block sm:w-[13.75vw] sm:max-w-[280px] sm:min-w-[180px]"
+            />
           </div>
-        </div>
+        </ScrollIn>
+
+        <div className="border-t-[max(0.05vw,1px)] border-[color-mix(in_srgb,var(--color-vo-black)_15%,transparent)]" />
       </div>
 
-      <VoContainer>
-        <ScrollIn delay={0.2}>
-          <div className="mt-12 flex justify-center">
-            <WaitlistCta className="max-w-xs">{TESTIMONIOS.cta}</WaitlistCta>
-          </div>
-        </ScrollIn>
-      </VoContainer>
+      {/* ⚠️ EL CARRUSEL LLEVA SU PROPIO ÁMBITO OSCURO.
+
+          Sus cards son verde profundo con texto claro, y están escritas contra
+          `text-foreground` y `text-accent`. Dentro del panel esos tokens valen
+          verde oscuro, así que sin esto el texto de las reseñas saldría verde
+          sobre verde — el mismo fallo que tenía el TrustScore.
+
+          Se devuelven los tokens Y el `color` heredado, porque `text-foreground`
+          está aplicado más arriba en el árbol y lo que baja es un color ya
+          calculado. */}
+      <div className="vo-ambito-oscuro mt-4 sm:mt-[1.4vw]">
+        <TestimonialCarousel items={FEATURED_TESTIMONIALS} />
+      </div>
+
+      <ScrollIn delay={0.15}>
+        <div className="mt-10 flex justify-center px-6">
+          <WaitlistCta className="max-w-xs">{TESTIMONIOS.cta}</WaitlistCta>
+        </div>
+      </ScrollIn>
     </section>
   );
 }
