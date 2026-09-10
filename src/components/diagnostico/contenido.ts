@@ -691,13 +691,20 @@ export const RESULTADO = {
     "Si quieres seguir contenido como este y estar cerca de la comunidad, únete al grupo de WhatsApp de Origen.",
   comunidadCta: "Entrar a la comunidad",
 
-  /* EL MISMO GRUPO que usan las páginas de gracias de /volver-al-origen y
-     /lista-de-espera. Es una sola comunidad: un enlace distinto por embudo
-     repartiría a la misma gente en salas separadas.
+  /* ⚠️ GRUPO PROPIO DE ESTE EMBUDO.
 
-     Si algún día se vacía, el botón se dibuja desactivado en vez de mandar a
-     un enlace roto justo después de convertir. */
-  whatsappUrl: "https://chat.whatsapp.com/HMR8VTK4wFVHczUuCKc24u",
+     /volver-al-origen y /lista-de-espera comparten OTRO enlace entre ellas;
+     éste es sólo del diagnóstico. Llegó a ser el mismo para las tres bajo el
+     criterio de "una sola comunidad" y se separó a pedido: quien entra por
+     aquí llega con un contexto distinto —acaba de recibir su frecuencia
+     dominante y su video— y el grupo puede hablarle de eso desde el principio.
+
+     ⚠️ CAMBIAR ESTE NO CAMBIA LOS OTROS DOS. Si algún día se vuelve a unificar,
+     hay que tocar los tres archivos de contenido.
+
+     Si se vacía, el botón se dibuja desactivado en vez de mandar a un enlace
+     roto justo después de convertir. */
+  whatsappUrl: "https://chat.whatsapp.com/C7SkSLVt9Mm6RERJw30i6m",
 
   /* ⚠️ SIN DECIDIR (documento, sección 8): si va o no un botón directo al mail.
      En false no se muestra. Al ponerlo en true aparece, sin tocar el montaje. */
