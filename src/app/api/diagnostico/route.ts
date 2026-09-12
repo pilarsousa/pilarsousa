@@ -46,7 +46,7 @@
 
 import { saveLead, updateLeadStatus } from "@/lib/leads";
 import { calcularDiagnostico, type Respuestas } from "@/components/diagnostico/puntaje";
-import { FICHA_FRECUENCIA } from "@/components/diagnostico/contenido";
+import { FICHA_FRECUENCIA, PREGUNTAS } from "@/components/diagnostico/contenido";
 
 /* Mismas reglas que valida FlujoTest en el navegador. Se repiten aquí porque
    el cliente nunca es de fiar: una petición puede llegar sin pasar por la
@@ -65,6 +65,15 @@ type Envio = {
   telefono: string;
   respuestas: Respuestas;
   source: string;
+};
+
+type RespuestaDetallada = {
+  numero: number;
+  pregunta_id: string;
+  pregunta: string;
+  respuesta_id: string;
+  respuesta: string;
+  frecuencia: string;
 };
 
 function parsear(data: unknown): Envio | null {
@@ -109,6 +118,31 @@ function parsear(data: unknown): Envio | null {
     respuestas,
     source: source || "diagnostico",
   };
+}
+
+function detallarRespuestas(respuestas: Respuestas): RespuestaDetallada[] {
+  return PREGUNTAS.map((pregunta, i) => {
+    const respuestaId = respuestas[pregunta.id] ?? "";
+    const opcion = pregunta.opciones.find((o) => o.id === respuestaId);
+
+    return {
+      numero: i + 1,
+      pregunta_id: pregunta.id,
+      pregunta: pregunta.enunciado,
+      respuesta_id: respuestaId,
+      respuesta: opcion?.texto ?? "",
+      frecuencia: opcion?.frecuencia ?? "",
+    };
+  });
+}
+
+function formatearRespuestas(detalles: RespuestaDetallada[]) {
+  return detalles
+    .map(
+      (r) =>
+        `${r.numero}. ${r.pregunta}\nRespuesta: ${r.respuesta}\nFrecuencia: ${r.frecuencia}\nIDs: ${r.pregunta_id}:${r.respuesta_id}`,
+    )
+    .join("\n\n");
 }
 
 /* Red de emergencia: deja el lead en los logs con un prefijo fijo y grepeable.
@@ -224,10 +258,9 @@ export async function POST(request: Request) {
     personalizados; con un objeto anidado, el técnico del cliente no encuentra
     las claves en el desplegable y acaba mapeando mal.
 
-    Por eso las respuestas viajan como UNA CADENA ("p1:p1d|p2:p2a|…") en vez de
-    como objeto o array. Es fea de leer, pero cabe en un campo de texto de GHL,
-    se exporta bien a CSV y conserva la información completa para poder
-    recalcular el diagnóstico si algún día cambia el modelo de puntaje.
+    Por eso las respuestas viajan repetidas en formatos planos: un texto largo
+    legible, un resumen de IDs, campos individuales por situación y un JSON
+    serializado. Todo cabe en campos de texto de GHL y se exporta bien a CSV.
   */
   const carga: Record<string, unknown> = {
     etapa: envio.etapa,
@@ -239,8 +272,18 @@ export async function POST(request: Request) {
   };
 
   if (diagnostico) {
+    const respuestasDetalladas = detallarRespuestas(envio.respuestas);
+    const respuestasIds = respuestasDetalladas
+      .filter((r) => r.respuesta_id)
+      .map((r) => `${r.pregunta_id}:${r.respuesta_id}`)
+      .join("|");
+
     carga.frecuencia_dominante = diagnostico.dominante;
     carga.frecuencia_nombre = FICHA_FRECUENCIA[diagnostico.dominante].titulo;
+    carga.puntos_culpa = diagnostico.puntos.culpa;
+    carga.puntos_apatia = diagnostico.puntos.apatia;
+    carga.puntos_verguenza = diagnostico.puntos.verguenza;
+    carga.puntos_miedo = diagnostico.puntos.miedo;
     carga.pct_culpa = diagnostico.porcentajes.culpa;
     carga.pct_apatia = diagnostico.porcentajes.apatia;
     carga.pct_verguenza = diagnostico.porcentajes.verguenza;
@@ -249,9 +292,34 @@ export async function POST(request: Request) {
        casos llegan por esa vía. Si son demasiados, el cuestionario necesita
        más preguntas o pesos — y sin este dato no habría forma de saberlo. */
     carga.hubo_empate = diagnostico.huboEmpate;
-    carga.respuestas = Object.entries(envio.respuestas)
-      .map(([pregunta, opcion]) => `${pregunta}:${opcion}`)
-      .join("|");
+    carga.frecuencias_empatadas = diagnostico.empatadas.join("|");
+    carga.respuestas_diagnostico = formatearRespuestas(respuestasDetalladas);
+    carga.respuestas_diagnostico_ids = respuestasIds;
+    carga.respuestas_diagnostico_json = JSON.stringify({
+      contacto: {
+        nombre: envio.nombre,
+        email: envio.email,
+        telefono: envio.telefono,
+      },
+      diagnostico: {
+        frecuencia_dominante: diagnostico.dominante,
+        frecuencia_nombre: FICHA_FRECUENCIA[diagnostico.dominante].titulo,
+        puntos: diagnostico.puntos,
+        porcentajes: diagnostico.porcentajes,
+        hubo_empate: diagnostico.huboEmpate,
+        frecuencias_empatadas: diagnostico.empatadas,
+      },
+      respuestas: respuestasDetalladas,
+    });
+
+    for (const respuesta of respuestasDetalladas) {
+      const prefijo = `situacion_${respuesta.numero}`;
+      carga[`${prefijo}_id`] = respuesta.pregunta_id;
+      carga[`${prefijo}_pregunta`] = respuesta.pregunta;
+      carga[`${prefijo}_respuesta_id`] = respuesta.respuesta_id;
+      carga[`${prefijo}_respuesta`] = respuesta.respuesta;
+      carga[`${prefijo}_frecuencia`] = respuesta.frecuencia;
+    }
   }
 
   try {

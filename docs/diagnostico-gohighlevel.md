@@ -68,12 +68,31 @@ aparezcan directamente en el mapeador de campos de GHL.
 |---|---|---|---|
 | `frecuencia_dominante` | texto | `miedo` | **Este es el campo que decide qué video se envía.** |
 | `frecuencia_nombre` | texto | `Miedo` | El nombre para mostrar, si se quiere usar en el cuerpo del email |
+| `puntos_culpa` / `puntos_apatia` / `puntos_verguenza` / `puntos_miedo` | número | `1` | Puntos crudos por frecuencia |
 | `pct_culpa` | número | `14` | Porcentaje de esa frecuencia |
 | `pct_apatia` | número | `29` | |
 | `pct_verguenza` | número | `14` | |
 | `pct_miedo` | número | `43` | |
 | `hubo_empate` | booleano | `false` | Si el resultado salió de un desempate |
-| `respuestas` | texto | `p1:p1d\|p2:p2a\|p3:p3a\|...` | Las respuestas crudas |
+| `frecuencias_empatadas` | texto | `miedo\|culpa` | Frecuencias que empataron arriba, si aplica |
+| `respuestas_diagnostico` | texto largo | `1. Le escribes...` | Las 7 situaciones con pregunta, respuesta, frecuencia e IDs |
+| `respuestas_diagnostico_ids` | texto | `p1:p1d\|p2:p2a\|p3:p3a\|...` | Versión compacta para exportar o recalcular |
+| `respuestas_diagnostico_json` | texto largo | `{...}` | Contacto, diagnóstico y respuestas en JSON serializado |
+
+Además, el envío de resultado trae campos planos por cada situación:
+
+```
+situacion_1_id
+situacion_1_pregunta
+situacion_1_respuesta_id
+situacion_1_respuesta
+situacion_1_frecuencia
+
+...hasta situacion_7_*
+```
+
+Con eso GHL puede guardar las 7 respuestas una por una sin tener que leer ni
+parsear el campo largo.
 
 **Valores posibles de `frecuencia_dominante`** — son exactamente estos cuatro,
 siempre en minúsculas y sin tildes:
@@ -96,8 +115,13 @@ En **Settings → Custom Fields**, sobre el objeto Contacto:
 |---|---|---|
 | `frecuencia_dominante` | Texto (o Lista desplegable con los 4 valores) | **Sí** |
 | `respuestas_diagnostico` | Texto largo | Recomendado |
+| `respuestas_diagnostico_ids` | Texto corto | Opcional |
+| `respuestas_diagnostico_json` | Texto largo | Opcional |
 | `hubo_empate` | Casilla / Texto | Opcional |
+| `puntos_culpa`, `puntos_apatia`, `puntos_verguenza`, `puntos_miedo` | Número | Opcional |
 | `pct_culpa`, `pct_apatia`, `pct_verguenza`, `pct_miedo` | Número | Opcional |
+| `situacion_1_respuesta` ... `situacion_7_respuesta` | Texto largo | Opcional |
+| `situacion_1_frecuencia` ... `situacion_7_frecuencia` | Texto corto | Opcional |
 
 Con `frecuencia_dominante` solo ya se puede enviar el email correcto. Los demás
 sirven para segmentar y para poder recalcular el diagnóstico más adelante si
