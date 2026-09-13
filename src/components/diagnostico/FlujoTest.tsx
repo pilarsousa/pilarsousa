@@ -341,7 +341,7 @@ export function FlujoTest() {
     setEstado({ paso: IDX_INTRO, datos: nuevos, respuestas: {} });
   }, []);
 
-  const alEmailReconocido = useCallback(
+  const alResultadoExistente = useCallback(
     async (nuevos: DatosContacto) => {
       const resultado = await buscarResultadoPorEmail(nuevos.email);
       if (!resultado) return false;
@@ -395,7 +395,7 @@ export function FlujoTest() {
               pantalla, así que no le quita el sitio a nada y ahorra un toque. */}
           <FormularioContacto
             onCompleto={alCompletarContacto}
-            onEmailReconocido={alEmailReconocido}
+            onResultadoExistente={alResultadoExistente}
             enfocarPrimerCampo
           />
         </div>

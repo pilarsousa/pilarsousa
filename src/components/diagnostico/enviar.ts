@@ -74,10 +74,14 @@ export async function buscarResultadoPorEmail(
     };
   }
 
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), 1200);
+
   try {
     const res = await fetch(`/api/diagnostico?${params.toString()}`, {
       method: "GET",
       cache: "no-store",
+      signal: controller.signal,
     });
     if (!res.ok) return null;
 
@@ -90,6 +94,8 @@ export async function buscarResultadoPorEmail(
     };
   } catch {
     return null;
+  } finally {
+    window.clearTimeout(timeout);
   }
 }
 

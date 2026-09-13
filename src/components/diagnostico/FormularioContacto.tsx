@@ -83,7 +83,7 @@ function contactoInicial(): { paso: number; datos: DatosContacto } {
 
 export function FormularioContacto({
   onCompleto,
-  onEmailReconocido,
+  onResultadoExistente,
   transicionActiva = false,
   /* Ver el comentario de `enfocarAlMontar` en PasoCampo: en la landing no se
      roba el foco al cargar; en la página del test, donde el formulario es lo
@@ -92,7 +92,7 @@ export function FormularioContacto({
   className,
 }: {
   onCompleto: (datos: DatosContacto) => void;
-  onEmailReconocido?: (datos: DatosContacto) => boolean | Promise<boolean>;
+  onResultadoExistente?: (datos: DatosContacto) => boolean | Promise<boolean>;
   transicionActiva?: boolean;
   enfocarPrimerCampo?: boolean;
   className?: string;
@@ -100,14 +100,14 @@ export function FormularioContacto({
   const hidratado = useHidratado();
   const [estado, setEstado] = useState(contactoInicial);
   const [error, setError] = useState<string | null>(null);
-  const [verificandoEmail, setVerificandoEmail] = useState(false);
+  const [verificandoResultado, setVerificandoResultado] = useState(false);
 
   /* Los manejadores trabajan siempre sobre el estado real; sólo lo que se
      PINTA pasa por el filtro de la hidratación, más abajo. Como los
      manejadores no pueden dispararse antes de hidratar, los dos coinciden en
      todo momento en que importa. */
   const { paso, datos } = estado;
-  const ocupado = transicionActiva || verificandoEmail;
+  const ocupado = transicionActiva || verificandoResultado;
 
   /* Guarda los datos para que sobrevivan a la navegación hacia las preguntas y
      a una recarga. NO se guarda en qué paso va: quien lea el borrador deduce
@@ -142,26 +142,6 @@ export function FormularioContacto({
     }
     setError(null);
 
-    if (definicion.campo === "email" && onEmailReconocido) {
-      const limpios = {
-        nombre: datos.nombre.trim(),
-        email: datos.email.trim(),
-        telefono: datos.telefono.trim(),
-      };
-
-      setVerificandoEmail(true);
-      let reconocido = false;
-      try {
-        reconocido = await onEmailReconocido(limpios);
-      } catch {
-        reconocido = false;
-      }
-      if (reconocido) {
-        return;
-      }
-      setVerificandoEmail(false);
-    }
-
     if (paso < total - 1) {
       setEstado((previo) => ({ ...previo, paso: paso + 1 }));
       return;
@@ -174,6 +154,20 @@ export function FormularioContacto({
       email: datos.email.trim(),
       telefono: datos.telefono.trim(),
     };
+
+    if (onResultadoExistente) {
+      setVerificandoResultado(true);
+      let reconocido = false;
+      try {
+        reconocido = await onResultadoExistente(limpios);
+      } catch {
+        reconocido = false;
+      }
+      if (reconocido) {
+        return;
+      }
+      setVerificandoResultado(false);
+    }
 
     /*
       ⚠️ COMPLETAR EL FORMULARIO EMPIEZA UN RECORRIDO NUEVO, Y ESO BORRA LAS
@@ -193,7 +187,7 @@ export function FormularioContacto({
     guardarEstado({ datos: limpios, respuestas: {} });
 
     alCompletar.current(limpios);
-  }, [definicion, datos, ocupado, onEmailReconocido, paso, total]);
+  }, [definicion, datos, ocupado, onResultadoExistente, paso, total]);
 
   /*
     ── LO QUE SE PINTA DURANTE LA HIDRATACIÓN ──
@@ -395,7 +389,7 @@ export function FormularioContacto({
           </div>
         </div>
 
-        {ocupado && (
+        {transicionActiva && (
           <div
             role="status"
             aria-live="polite"
@@ -403,12 +397,10 @@ export function FormularioContacto({
           >
             <div className="max-w-sm">
               <p className="text-[0.72rem] font-semibold tracking-[0.16em] text-[var(--dg-acento)] uppercase">
-                {verificandoEmail ? "Revisando tu email" : "Datos listos"}
+                Datos listos
               </p>
               <p className="dg-titulo mt-3 text-[1.35rem] leading-tight text-balance text-[var(--dg-texto)] sm:text-[1.55rem]">
-                {verificandoEmail
-                  ? "Buscando si ya tienes un resultado"
-                  : "Preparando tus preguntas"}
+                Preparando tus preguntas
               </p>
               <div
                 aria-hidden

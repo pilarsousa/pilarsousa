@@ -71,7 +71,7 @@ export function ArranqueDiagnostico({ className }: { className?: string }) {
     [router],
   );
 
-  const alEmailReconocido = useCallback(
+  const alResultadoExistente = useCallback(
     async (datos: DatosContacto) => {
       const resultado = await buscarResultadoPorEmail(datos.email);
       if (!resultado) return false;
@@ -92,7 +92,7 @@ export function ArranqueDiagnostico({ className }: { className?: string }) {
   return (
     <FormularioContacto
       onCompleto={alCompletar}
-      onEmailReconocido={alEmailReconocido}
+      onResultadoExistente={alResultadoExistente}
       className={className}
       transicionActiva={preparandoPreguntas}
     />
