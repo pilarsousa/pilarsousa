@@ -26,6 +26,17 @@ export type LeadRecord = {
   source: string;
 };
 
+export type CompletedDiagnosticoLead = LeadRecord & {
+  detail: string | null;
+};
+
+const DIAGNOSTICO_RESULT_SOURCES = [
+  "diagnostico:culpa",
+  "diagnostico:apatia",
+  "diagnostico:verguenza",
+  "diagnostico:miedo",
+] as const;
+
 /* Cliente perezoso: si las variables no están cargadas no se rompe el import,
    sólo se desactiva el respaldo (y se avisa en los logs). Eso mantiene el
    formulario funcionando aunque Supabase todavía no esté configurado. */
@@ -101,12 +112,54 @@ export async function updateLeadStatus(
   if (!supabase) return;
 
   try {
+    const update: { status: LeadStatus; detail?: string } = { status };
+    if (detail !== undefined) update.detail = detail;
+
     const { error } = await supabase
       .from("leads")
-      .update({ status, detail: detail ?? null })
+      .update(update)
       .eq("id", id);
     if (error) console.error("Supabase update failed:", error.message);
   } catch (err) {
     console.error("Supabase update threw:", err);
+  }
+}
+
+export async function findCompletedDiagnosticoLead(
+  email: string,
+): Promise<CompletedDiagnosticoLead | null> {
+  const supabase = getClient();
+  if (!supabase) return null;
+
+  const normalized = email.trim().toLowerCase();
+  if (!normalized) return null;
+
+  try {
+    const { data, error } = await supabase
+      .from("leads")
+      .select("nombre,email,telefono,source,detail")
+      .eq("email", normalized)
+      .in("source", DIAGNOSTICO_RESULT_SOURCES)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error) {
+      console.error("Supabase completed diagnostic lookup failed:", error.message);
+      return null;
+    }
+
+    if (!data) return null;
+
+    return {
+      nombre: String(data.nombre ?? ""),
+      email: String(data.email ?? normalized),
+      telefono: String(data.telefono ?? ""),
+      source: String(data.source ?? ""),
+      detail: typeof data.detail === "string" ? data.detail : null,
+    };
+  } catch (err) {
+    console.error("Supabase completed diagnostic lookup threw:", err);
+    return null;
   }
 }

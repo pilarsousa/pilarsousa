@@ -17,7 +17,11 @@ import {
   limpiarEstado,
   type DatosContacto,
 } from "@/components/diagnostico/almacen";
-import { enviarFormulario, enviarResultado } from "@/components/diagnostico/enviar";
+import {
+  buscarResultadoPorEmail,
+  enviarFormulario,
+  enviarResultado,
+} from "@/components/diagnostico/enviar";
 import {
   datosCompletos,
   preguntasRespondidasSeguidas,
@@ -337,6 +341,24 @@ export function FlujoTest() {
     setEstado({ paso: IDX_INTRO, datos: nuevos, respuestas: {} });
   }, []);
 
+  const alEmailReconocido = useCallback(
+    async (nuevos: DatosContacto) => {
+      const resultado = await buscarResultadoPorEmail(nuevos.email);
+      if (!resultado) return false;
+
+      limpiarEstado();
+      guardarResultado({
+        frecuencia: resultado.frecuencia,
+        nombre: nuevos.nombre.trim(),
+        email: nuevos.email.trim().toLowerCase(),
+        porcentajes: resultado.porcentajes,
+      });
+      router.replace(`/diagnostico/resultado?f=${resultado.frecuencia}`);
+      return true;
+    },
+    [router],
+  );
+
   /* Durante la hidratación no se pinta el contenido: el estado ya viene
      sembrado del borrador y sería distinto del HTML que mandó el servidor. El
      hueco ocupa el alto de la pantalla para que no haya salto al aparecer. */
@@ -371,7 +393,11 @@ export function FlujoTest() {
         <div className="relative z-10 mx-auto w-full max-w-md">
           {/* Aquí el formulario SÍ se enfoca solo: es lo único que hay en la
               pantalla, así que no le quita el sitio a nada y ahorra un toque. */}
-          <FormularioContacto onCompleto={alCompletarContacto} enfocarPrimerCampo />
+          <FormularioContacto
+            onCompleto={alCompletarContacto}
+            onEmailReconocido={alEmailReconocido}
+            enfocarPrimerCampo
+          />
         </div>
       </div>
     );

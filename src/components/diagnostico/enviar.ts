@@ -36,6 +36,52 @@ function postear(cuerpo: Record<string, unknown>) {
   });
 }
 
+export type ResultadoExistente = {
+  frecuencia: string;
+  porcentajes: Record<string, number>;
+};
+
+function esResultadoExistente(data: unknown): data is {
+  existe: true;
+  resultado: ResultadoExistente;
+} {
+  if (typeof data !== "object" || data === null) return false;
+  const d = data as Record<string, unknown>;
+  if (d.existe !== true) return false;
+  if (typeof d.resultado !== "object" || d.resultado === null) return false;
+
+  const resultado = d.resultado as Record<string, unknown>;
+  return (
+    typeof resultado.frecuencia === "string" &&
+    typeof resultado.porcentajes === "object" &&
+    resultado.porcentajes !== null
+  );
+}
+
+export async function buscarResultadoPorEmail(
+  email: string,
+): Promise<ResultadoExistente | null> {
+  const params = new URLSearchParams({ email: email.trim().toLowerCase() });
+
+  try {
+    const res = await fetch(`/api/diagnostico?${params.toString()}`, {
+      method: "GET",
+      cache: "no-store",
+    });
+    if (!res.ok) return null;
+
+    const data = (await res.json()) as unknown;
+    if (!esResultadoExistente(data)) return null;
+
+    return {
+      frecuencia: data.resultado.frecuencia,
+      porcentajes: data.resultado.porcentajes,
+    };
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Primer envío: el contacto, en cuanto está completo y ANTES del test.
  *

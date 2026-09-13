@@ -44,9 +44,22 @@
   instrucciones para su técnico (docs/diagnostico-gohighlevel.md).
 */
 
-import { saveLead, updateLeadStatus } from "@/lib/leads";
-import { calcularDiagnostico, type Respuestas } from "@/components/diagnostico/puntaje";
-import { FICHA_FRECUENCIA, PREGUNTAS } from "@/components/diagnostico/contenido";
+import {
+  findCompletedDiagnosticoLead,
+  saveLead,
+  updateLeadStatus,
+} from "@/lib/leads";
+import {
+  calcularDiagnostico,
+  type Diagnostico,
+  type Respuestas,
+} from "@/components/diagnostico/puntaje";
+import {
+  FICHA_FRECUENCIA,
+  FRECUENCIAS,
+  PREGUNTAS,
+  type Frecuencia,
+} from "@/components/diagnostico/contenido";
 
 /* Mismas reglas que valida FlujoTest en el navegador. Se repiten aquí porque
    el cliente nunca es de fiar: una petición puede llegar sin pasar por la
@@ -74,6 +87,23 @@ type RespuestaDetallada = {
   respuesta_id: string;
   respuesta: string;
   frecuencia: string;
+};
+
+type DetalleResultado = {
+  contacto: {
+    nombre: string;
+    email: string;
+    telefono: string;
+  };
+  diagnostico: {
+    frecuencia_dominante: Frecuencia;
+    frecuencia_nombre: string;
+    puntos: Record<Frecuencia, number>;
+    porcentajes: Record<Frecuencia, number>;
+    hubo_empate: boolean;
+    frecuencias_empatadas: Frecuencia[];
+  };
+  respuestas: RespuestaDetallada[];
 };
 
 function parsear(data: unknown): Envio | null {
@@ -145,6 +175,70 @@ function formatearRespuestas(detalles: RespuestaDetallada[]) {
     .join("\n\n");
 }
 
+function crearDetalleResultado(
+  envio: Envio,
+  diagnostico: Diagnostico,
+  respuestas: RespuestaDetallada[],
+): DetalleResultado {
+  return {
+    contacto: {
+      nombre: envio.nombre,
+      email: envio.email,
+      telefono: envio.telefono,
+    },
+    diagnostico: {
+      frecuencia_dominante: diagnostico.dominante,
+      frecuencia_nombre: FICHA_FRECUENCIA[diagnostico.dominante].titulo,
+      puntos: diagnostico.puntos,
+      porcentajes: diagnostico.porcentajes,
+      hubo_empate: diagnostico.huboEmpate,
+      frecuencias_empatadas: diagnostico.empatadas,
+    },
+    respuestas,
+  };
+}
+
+function esFrecuencia(valor: string): valor is Frecuencia {
+  return (FRECUENCIAS as readonly string[]).includes(valor);
+}
+
+function frecuenciaDesdeSource(source: string): Frecuencia | null {
+  const frecuencia = source.split(":")[1];
+  return frecuencia && esFrecuencia(frecuencia) ? frecuencia : null;
+}
+
+function leerDetalleResultado(detail: string | null): DetalleResultado | null {
+  if (!detail) return null;
+  try {
+    const data = JSON.parse(detail) as Partial<DetalleResultado>;
+    if (
+      typeof data !== "object" ||
+      data === null ||
+      typeof data.diagnostico !== "object" ||
+      data.diagnostico === null
+    ) {
+      return null;
+    }
+    return data as DetalleResultado;
+  } catch {
+    return null;
+  }
+}
+
+function porcentajesValidos(valor: unknown): Record<string, number> {
+  if (typeof valor !== "object" || valor === null) return {};
+
+  const fuente = valor as Record<string, unknown>;
+  const porcentajes: Record<string, number> = {};
+  for (const frecuencia of FRECUENCIAS) {
+    const porcentaje = fuente[frecuencia];
+    if (typeof porcentaje === "number" && Number.isFinite(porcentaje)) {
+      porcentajes[frecuencia] = porcentaje;
+    }
+  }
+  return porcentajes;
+}
+
 /* Red de emergencia: deja el lead en los logs con un prefijo fijo y grepeable.
    Se busca "LEAD_FALLBACK" en Vercel → Logs y se carga a mano en el CRM.
 
@@ -175,6 +269,39 @@ async function marcar(
   }
 }
 
+export async function GET(request: Request) {
+  const url = new URL(request.url);
+  const email = (url.searchParams.get("email") ?? "").trim().toLowerCase();
+  const headers = { "Cache-Control": "no-store" };
+
+  if (!EMAIL_RE.test(email)) {
+    return Response.json(
+      { ok: false, existe: false, error: "Email invalido." },
+      { status: 400, headers },
+    );
+  }
+
+  const lead = await findCompletedDiagnosticoLead(email);
+  const frecuencia = lead ? frecuenciaDesdeSource(lead.source) : null;
+  if (!lead || !frecuencia) {
+    return Response.json({ ok: true, existe: false }, { headers });
+  }
+
+  const detalle = leerDetalleResultado(lead.detail);
+
+  return Response.json(
+    {
+      ok: true,
+      existe: true,
+      resultado: {
+        frecuencia,
+        porcentajes: porcentajesValidos(detalle?.diagnostico.porcentajes),
+      },
+    },
+    { headers },
+  );
+}
+
 export async function POST(request: Request) {
   let cuerpo: unknown;
   try {
@@ -202,6 +329,13 @@ export async function POST(request: Request) {
     envio.etapa === "resultado"
       ? calcularDiagnostico(envio.respuestas)
       : null;
+  const respuestasDetalladas = diagnostico
+    ? detallarRespuestas(envio.respuestas)
+    : null;
+  const detalleResultado =
+    diagnostico && respuestasDetalladas
+      ? JSON.stringify(crearDetalleResultado(envio, diagnostico, respuestasDetalladas))
+      : undefined;
 
   /*
     RESPALDO EN SUPABASE.
@@ -226,6 +360,7 @@ export async function POST(request: Request) {
         source,
       },
       "pending",
+      detalleResultado,
     );
   } catch (err) {
     /* Blindado: el respaldo es un extra, nunca un motivo para perder el lead. */
@@ -271,8 +406,7 @@ export async function POST(request: Request) {
     enviado_en: new Date().toISOString(),
   };
 
-  if (diagnostico) {
-    const respuestasDetalladas = detallarRespuestas(envio.respuestas);
+  if (diagnostico && respuestasDetalladas) {
     const respuestasIds = respuestasDetalladas
       .filter((r) => r.respuesta_id)
       .map((r) => `${r.pregunta_id}:${r.respuesta_id}`)
@@ -295,22 +429,7 @@ export async function POST(request: Request) {
     carga.frecuencias_empatadas = diagnostico.empatadas.join("|");
     carga.respuestas_diagnostico = formatearRespuestas(respuestasDetalladas);
     carga.respuestas_diagnostico_ids = respuestasIds;
-    carga.respuestas_diagnostico_json = JSON.stringify({
-      contacto: {
-        nombre: envio.nombre,
-        email: envio.email,
-        telefono: envio.telefono,
-      },
-      diagnostico: {
-        frecuencia_dominante: diagnostico.dominante,
-        frecuencia_nombre: FICHA_FRECUENCIA[diagnostico.dominante].titulo,
-        puntos: diagnostico.puntos,
-        porcentajes: diagnostico.porcentajes,
-        hubo_empate: diagnostico.huboEmpate,
-        frecuencias_empatadas: diagnostico.empatadas,
-      },
-      respuestas: respuestasDetalladas,
-    });
+    carga.respuestas_diagnostico_json = detalleResultado;
 
     for (const respuesta of respuestasDetalladas) {
       const prefijo = `situacion_${respuesta.numero}`;

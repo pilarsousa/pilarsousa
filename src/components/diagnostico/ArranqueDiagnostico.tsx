@@ -3,8 +3,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FormularioContacto } from "@/components/diagnostico/FormularioContacto";
-import { enviarFormulario } from "@/components/diagnostico/enviar";
-import type { DatosContacto } from "@/components/diagnostico/almacen";
+import {
+  buscarResultadoPorEmail,
+  enviarFormulario,
+} from "@/components/diagnostico/enviar";
+import {
+  guardarResultado,
+  limpiarEstado,
+  type DatosContacto,
+} from "@/components/diagnostico/almacen";
 
 /*
   El formulario tal como aparece EN LA LANDING.
@@ -64,9 +71,28 @@ export function ArranqueDiagnostico({ className }: { className?: string }) {
     [router],
   );
 
+  const alEmailReconocido = useCallback(
+    async (datos: DatosContacto) => {
+      const resultado = await buscarResultadoPorEmail(datos.email);
+      if (!resultado) return false;
+
+      limpiarEstado();
+      guardarResultado({
+        frecuencia: resultado.frecuencia,
+        nombre: datos.nombre.trim(),
+        email: datos.email.trim().toLowerCase(),
+        porcentajes: resultado.porcentajes,
+      });
+      router.replace(`/diagnostico/resultado?f=${resultado.frecuencia}`);
+      return true;
+    },
+    [router],
+  );
+
   return (
     <FormularioContacto
       onCompleto={alCompletar}
+      onEmailReconocido={alEmailReconocido}
       className={className}
       transicionActiva={preparandoPreguntas}
     />
