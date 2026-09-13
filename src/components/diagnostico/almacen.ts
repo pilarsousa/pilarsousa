@@ -155,6 +155,7 @@ export function limpiarEstado(): void {
    que sobrevivir a la navegación hacia /diagnostico/resultado y a una recarga
    de esa página. */
 const CLAVE_RESULTADO = "vo-diagnostico-resultado-v1";
+const CLAVE_RESULTADOS_POR_EMAIL = "vo-diagnostico-resultados-por-email-v1";
 
 export type ResultadoGuardado = {
   frecuencia: string;
@@ -163,6 +164,81 @@ export type ResultadoGuardado = {
   porcentajes: Record<string, number>;
 };
 
+function emailNormalizado(email: string): string {
+  return email.trim().toLowerCase();
+}
+
+function normalizarResultadoGuardado(
+  resultado: Partial<ResultadoGuardado>,
+  exigirEmail: boolean,
+): ResultadoGuardado | null {
+  if (typeof resultado.frecuencia !== "string" || resultado.frecuencia === "") {
+    return null;
+  }
+
+  const email = emailNormalizado(String(resultado.email ?? ""));
+  if (exigirEmail && !email) return null;
+
+  return {
+    frecuencia: resultado.frecuencia,
+    nombre: String(resultado.nombre ?? ""),
+    email,
+    porcentajes:
+      typeof resultado.porcentajes === "object" &&
+      resultado.porcentajes !== null
+        ? (resultado.porcentajes as Record<string, number>)
+        : {},
+  };
+}
+
+function leerResultadosPorEmail(): Record<string, ResultadoGuardado> {
+  try {
+    const crudo = localStorage.getItem(CLAVE_RESULTADOS_POR_EMAIL);
+    if (!crudo) return {};
+
+    const data = JSON.parse(crudo) as unknown;
+    if (typeof data !== "object" || data === null) return {};
+
+    const resultados: Record<string, ResultadoGuardado> = {};
+    for (const [email, valor] of Object.entries(data)) {
+      if (typeof valor !== "object" || valor === null) continue;
+      const normalizado = emailNormalizado(email);
+      const resultado = normalizarResultadoGuardado(
+        {
+          ...(valor as Partial<ResultadoGuardado>),
+          email:
+            typeof (valor as Partial<ResultadoGuardado>).email === "string"
+              ? (valor as Partial<ResultadoGuardado>).email
+              : normalizado,
+        },
+        true,
+      );
+      if (normalizado && resultado) {
+        resultados[normalizado] = { ...resultado, email: normalizado };
+      }
+    }
+    return resultados;
+  } catch {
+    return {};
+  }
+}
+
+function guardarResultadoPorEmail(resultado: ResultadoGuardado): void {
+  const email = emailNormalizado(resultado.email);
+  if (!email) return;
+
+  try {
+    const resultados = leerResultadosPorEmail();
+    resultados[email] = { ...resultado, email };
+    localStorage.setItem(
+      CLAVE_RESULTADOS_POR_EMAIL,
+      JSON.stringify(resultados),
+    );
+  } catch {
+    /* Igual que sessionStorage: si el navegador lo bloquea, el test sigue. */
+  }
+}
+
 export function guardarResultado(resultado: ResultadoGuardado): void {
   try {
     sessionStorage.setItem(CLAVE_RESULTADO, JSON.stringify(resultado));
@@ -170,6 +246,7 @@ export function guardarResultado(resultado: ResultadoGuardado): void {
     /* Si no se puede guardar, la página de resultados tira del parámetro `f`
        de la URL, que es justo la red para este caso. */
   }
+  guardarResultadoPorEmail(resultado);
 }
 
 export function leerResultado(): ResultadoGuardado | null {
@@ -177,17 +254,20 @@ export function leerResultado(): ResultadoGuardado | null {
     const crudo = sessionStorage.getItem(CLAVE_RESULTADO);
     if (!crudo) return null;
     const d = JSON.parse(crudo) as Partial<ResultadoGuardado>;
-    if (typeof d.frecuencia !== "string" || d.frecuencia === "") return null;
-    return {
-      frecuencia: d.frecuencia,
-      nombre: String(d.nombre ?? ""),
-      email: String(d.email ?? ""),
-      porcentajes:
-        typeof d.porcentajes === "object" && d.porcentajes !== null
-          ? (d.porcentajes as Record<string, number>)
-          : {},
-    };
+    return normalizarResultadoGuardado(d, false);
   } catch {
     return null;
   }
+}
+
+export function leerResultadoPorEmail(email: string): ResultadoGuardado | null {
+  const normalizado = emailNormalizado(email);
+  if (!normalizado) return null;
+
+  const actual = leerResultado();
+  if (actual && emailNormalizado(actual.email) === normalizado) {
+    return { ...actual, email: normalizado };
+  }
+
+  return leerResultadosPorEmail()[normalizado] ?? null;
 }

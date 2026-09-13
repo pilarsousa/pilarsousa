@@ -1,4 +1,7 @@
-import type { DatosContacto } from "@/components/diagnostico/almacen";
+import {
+  leerResultadoPorEmail,
+  type DatosContacto,
+} from "@/components/diagnostico/almacen";
 import type { Respuestas } from "@/components/diagnostico/puntaje";
 
 /*
@@ -62,6 +65,14 @@ export async function buscarResultadoPorEmail(
   email: string,
 ): Promise<ResultadoExistente | null> {
   const params = new URLSearchParams({ email: email.trim().toLowerCase() });
+  const guardado = leerResultadoPorEmail(email);
+
+  if (guardado) {
+    return {
+      frecuencia: guardado.frecuencia,
+      porcentajes: guardado.porcentajes,
+    };
+  }
 
   try {
     const res = await fetch(`/api/diagnostico?${params.toString()}`, {
