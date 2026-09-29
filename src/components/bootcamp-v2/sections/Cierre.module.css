@@ -1,0 +1,86 @@
+/*
+  Art Deco corner frame for the final CTA panel.
+
+  Only the border treatment is borrowed: four right-angle corner brackets that
+  sit just outside a thin gold rule, giving a ceremonial "portal" frame. Pure
+  static borders (no animation, no perf cost), recolored to the brand gold.
+  The panel itself must use square corners (no border-radius) and must NOT clip
+  overflow, since the brackets extend beyond its edges.
+*/
+
+.frame {
+  --deco: var(--color-gold);
+  position: relative;
+  border: 1px solid color-mix(in oklab, var(--deco) 45%, transparent);
+}
+
+.corner {
+  width: 0.5rem;
+  height: 0.5rem;
+  border: 1px solid var(--deco);
+  position: absolute;
+}
+
+.corner::after,
+.corner::before {
+  content: "";
+  position: absolute;
+}
+
+.corner::after {
+  width: 2rem;
+  height: calc(1rem - 1px);
+}
+
+.corner::before {
+  width: calc(1rem - 1px);
+  height: 2rem;
+}
+
+.left {
+  left: -0.5rem;
+}
+.left::after {
+  left: calc(-2px + 1rem);
+  border-left: 1px solid var(--deco);
+}
+.left::before {
+  left: -1px;
+  border-left: 1px solid var(--deco);
+}
+
+.right {
+  right: -0.5rem;
+}
+.right::after {
+  right: calc(-2px + 1rem);
+  border-right: 1px solid var(--deco);
+}
+.right::before {
+  right: -1px;
+  border-right: 1px solid var(--deco);
+}
+
+.top {
+  top: -0.5rem;
+}
+.top::after {
+  top: -1px;
+  border-top: 1px solid var(--deco);
+}
+.top::before {
+  top: calc(-2px + 1rem);
+  border-top: 1px solid var(--deco);
+}
+
+.bottom {
+  bottom: -0.5rem;
+}
+.bottom::after {
+  bottom: -1px;
+  border-bottom: 1px solid var(--deco);
+}
+.bottom::before {
+  bottom: calc(-2px + 1rem);
+  border-bottom: 1px solid var(--deco);
+}

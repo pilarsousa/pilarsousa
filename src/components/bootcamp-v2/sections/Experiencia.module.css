@@ -1,0 +1,92 @@
+/*
+  Premium gold border for the day cards.
+
+  A conic gold gradient sits behind the card and is clipped to a 1px ring via
+  the mask trick (paint the padding box, punch out the content box). It's
+  invisible at rest and fades + slowly rotates on hover — sober "presence"
+  without the cost or noise of an animated SVG turbulence border.
+*/
+
+.card {
+  position: relative;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--angle, 0deg),
+    transparent 0deg,
+    var(--bc2-crema) 60deg,
+    #ffffff 110deg,
+    var(--bc2-crema) 160deg,
+    transparent 220deg,
+    transparent 360deg
+  );
+  /* Clip the fill to a 1px ring so only the border shows. */
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.card:hover::before {
+  opacity: 1;
+  animation: border-rotate 5s linear infinite;
+}
+
+/* --angle must be registered for it to animate (Houdini). */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes border-rotate {
+  to {
+    --angle: 360deg;
+  }
+}
+
+/*
+  Luminous top border — a partial gold bar centered on the card's top edge,
+  fading out at both ends (not full width). Lit on hover.
+*/
+.card::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--bc2-crema) 30%,
+    #ffffff 50%,
+    var(--bc2-crema) 70%,
+    transparent
+  );
+  box-shadow: 0 0 12px 1px var(--bc2-brillo-medio);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.card:hover::after,
+.card.lit::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card:hover::before {
+    animation: none;
+  }
+}

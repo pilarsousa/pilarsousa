@@ -8,7 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { MatrixRain } from "@/components/bootcamp/ui/MatrixRain";
+import { MatrixRain } from "@/components/bootcamp-v1/ui/MatrixRain";
 import { ModalLaser } from "@/components/volver-al-origen/ui/ModalLaser";
 import { LogoVao } from "@/components/volver-al-origen/ui/LogoVao";
 import { MovingBorder } from "@/components/volver-al-origen/ui/MovingBorder";

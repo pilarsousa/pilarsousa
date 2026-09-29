@@ -1,0 +1,236 @@
+/*
+  ═══════════════════════════════════════════════════════════════════════════
+  PALETA DEL BOOTCAMP V2 — /bootcamp
+  ═══════════════════════════════════════════════════════════════════════════
+
+  Es el Bootcamp con la identidad del Diagnóstico. El copy, la estructura y la
+  funcionalidad son los de la V1 —que sigue viva en /bootcamp-v1— y lo único
+  que cambia es esto: los colores y las dos familias tipográficas.
+
+  Los tres colores de marca son los mismos que los de /diagnostico —verde
+  #002F01, verde 2 #084A2C y crema #FFF8F0— y todo lo demás sale de ellos con
+  color-mix, igual que allí. Cambiarlos repinta la ruta entera manteniendo las
+  relaciones entre tonos.
+
+  ── POR QUÉ NO SE IMPORTA diagnostico.css ──
+
+  Sería la tentación evidente y no funciona: aquel archivo declara sus tokens
+  con el prefijo --dg-* sobre .dg-scope, y lo que esta landing necesita no es
+  un juego de tokens nuevo sino REDEFINIR LOS ALIAS DE TAILWIND que sus clases
+  ya usan —bg-background, text-accent, bg-cream—. Son dos problemas distintos:
+  el Diagnóstico estrena una paleta, el Bootcamp V2 repinta la que tiene.
+
+  Los valores sí están duplicados a propósito. Si mañana cambia la marca hay
+  que tocar los dos archivos, y es preferible a que el rediseño de una landing
+  arrastre a la otra sin avisar.
+
+  ── POR QUÉ NO ESTÁ EN globals.css ──
+
+  El mismo motivo que da diagnostico.css: ahí viven los tokens que comparten
+  las siete landings del proyecto, en un @theme global con un único :root.
+  Como archivo aparte, importado sólo desde el layout de /bootcamp, esta
+  paleta no puede romper ninguna otra ruta.
+
+  ── CÓMO FUNCIONA EL REPINTADO ──
+
+  Tailwind v4 compila las utilidades a var(--token) en vez de incrustar el
+  valor, así que bg-background dentro de este subárbol resuelve al verde y
+  fuera sigue resolviendo a la tinta del :root. Por eso basta con redefinir
+  los tokens aquí: NO hay que tocar las clases de los componentes, y los
+  modificadores de opacidad —bg-ink/45— siguen funcionando porque compilan a
+  color-mix sobre la misma variable.
+*/
+
+.bc2-scope {
+  /* ── LOS TRES COLORES DE MARCA ── */
+  --bc2-verde: #002f01;
+  --bc2-verde-2: #084a2c;
+  --bc2-crema: #fff8f0;
+
+  /* ── Superficies ──
+     Escalones hacia el verde 2 desde el fondo, con los mismos porcentajes que
+     el Diagnóstico: cada capa se distingue de la anterior sin competir con el
+     texto que lleva encima. */
+  --bc2-fondo: var(--bc2-verde);
+  --bc2-fondo-alto: color-mix(
+    in srgb,
+    var(--bc2-verde-2) 30%,
+    var(--bc2-verde)
+  ); /* tarjetas */
+  --bc2-superficie: color-mix(
+    in srgb,
+    var(--bc2-verde-2) 55%,
+    var(--bc2-verde)
+  ); /* bloques levantados */
+
+  /* El plano más profundo: el verde de marca rebajado hacia el negro. Sustituye
+     al #0A0908 que la V1 usaba para hundir el hero y la sección del manifiesto
+     por debajo del resto. Sobre él el texto principal mide 17,4:1. */
+  --bc2-hondo: color-mix(in srgb, var(--bc2-verde) 55%, #000);
+
+  /* ── Tinta ── */
+  --bc2-texto-suave: color-mix(
+    in srgb,
+    var(--bc2-crema) 72%,
+    var(--bc2-verde)
+  ); /* 7,95:1 */
+  --bc2-texto-tenue: color-mix(
+    in srgb,
+    var(--bc2-crema) 50%,
+    var(--bc2-verde)
+  ); /* 4,57:1 */
+
+  /*
+    ── EL PANEL CLARO ──
+
+    El Bootcamp alterna secciones oscuras con secciones claras —el Patrón, las
+    FAQ, las tarjetas de testimonio y la de Trustpilot—. Ese crema pasa a ser
+    el mismo panel del Diagnóstico, con su tinta ya medida encima.
+  */
+  --bc2-panel: #fff8ef;
+  --bc2-panel-texto: var(--bc2-verde); /* 14,1:1 sobre el panel */
+  --bc2-panel-texto-suave: var(--bc2-verde-2); /* 9,8:1 */
+
+  /*
+    ── LOS BRILLOS, CON SU ALFA YA PUESTA ──
+
+    En la V1 los resplandores eran dorados escritos a mano por media docena de
+    archivos —rgba(200,164,90,…) y rgba(243,226,176,…) repetidos—. Aquí son
+    tokens: se retocan en un sitio. Van con alfa porque un resplandor opaco no
+    es un resplandor.
+  */
+  --bc2-brillo-fuerte: rgba(255, 248, 240, 0.85);
+  --bc2-brillo-medio: rgba(255, 248, 240, 0.45);
+  --bc2-brillo-suave: rgba(255, 248, 240, 0.16);
+
+  /* El velo que se pone sobre una imagen o bajo una sombra para que se lea lo
+     que va encima. Es el verde de marca, no un negro: un negro sobre este
+     fondo se vería como una mancha gris de otro sitio. */
+  --bc2-velo: rgba(0, 47, 1, 0.88);
+  --bc2-velo-medio: rgba(0, 47, 1, 0.58);
+  --bc2-velo-leve: rgba(0, 47, 1, 0.34);
+
+  /*
+    ═════════════════════════════════════════════════════════════════════════
+    LOS ALIAS SEMÁNTICOS DE TAILWIND
+    ═════════════════════════════════════════════════════════════════════════
+
+    Lo que hace el trabajo. Cada uno lo declara el @theme de globals.css con
+    el valor del Bootcamp original; aquí se repinta con su equivalente de esta
+    paleta, respetando el rol: fondo→fondo, superficie→superficie, acento→acento.
+  */
+  --color-background: var(--bc2-fondo);
+  --color-surface: var(--bc2-fondo-alto);
+  --color-surface-alt: var(--bc2-superficie);
+  --color-foreground: var(--bc2-crema); /* 14,17:1 sobre el fondo */
+  --color-muted: var(--bc2-texto-tenue);
+
+  /*
+    ── EL ACENTO ES EL CREMA, NO UN VERDE ──
+
+    Es el mismo razonamiento que documenta diagnostico.css, y conviene tenerlo
+    a mano porque es lo que más desconcierta de esta paleta: #084A2C sobre
+    #002F01 da 1,44:1. Hacen falta 3:1 para que una forma se distinga del
+    fondo, así que un botón o un filete en verde 2 sería invisible. El crema da
+    14,17:1.
+
+    El verde 2 sí funciona —y es donde se usa— como SUPERFICIE.
+
+    Para el Bootcamp la traducción sale redonda: su acento ya era un dorado
+    CLARO sobre fondo oscuro, con la etiqueta del CTA en tinta oscura. El crema
+    ocupa exactamente ese hueco. Lo que se pierde es el metal, no el contraste.
+  */
+  --color-accent: var(--bc2-crema);
+  --color-accent-soft: var(--bc2-texto-suave);
+
+  /*
+    ── Y LOS TOKENS CRUDOS QUE LAS CLASES NOMBRAN DIRECTAMENTE ──
+
+    No basta con los alias: hay clases que llaman al color por su nombre de
+    paleta —bg-ink, bg-cream, text-forest-900, text-cream-gold—. Si se dejan
+    sin redefinir, se quedan con el dorado y el negro de la V1 y aparecen como
+    manchas sueltas sobre el verde.
+  */
+
+  /* bg-ink y sus opacidades: el plano hundido. */
+  --color-ink: var(--bc2-hondo);
+
+  /* bg-cream: SIEMPRE es una superficie clara —secciones y tarjetas—, nunca
+     texto. La tinta clara es --color-foreground, que va aparte. */
+  --color-cream: var(--bc2-panel);
+
+  /* text-forest-900 y border-forest-900: SIEMPRE van sobre el panel claro.
+     Por eso apunta a la tinta del panel y no a una superficie oscura, que es
+     lo que el nombre sugiere y sería un error. */
+  --color-forest-900: var(--bc2-panel-texto);
+  --color-forest-700: var(--bc2-verde-2);
+
+  /* text-earth-gold y border-earth-gold: los detalles del panel claro. */
+  --color-earth-gold: var(--bc2-panel-texto-suave);
+
+  /* El núcleo claro de los barridos y los degradados cónicos que giran por el
+     borde de las tarjetas. Va a blanco puro: es el punto más alto del brillo,
+     y con el crema de fondo tiene que quedarle un escalón por encima. */
+  --color-gold: var(--bc2-crema);
+  --color-gold-soft: #ffffff;
+  --color-cream-gold: #ffffff;
+
+  /*
+    ── TIPOGRAFÍA ──
+
+    Las dos familias de la identidad del Diagnóstico. El layout raíz ya las
+    carga para otras rutas, así que esta no descarga ni una fuente más.
+
+    ⚠️ TRAJAN NO TIENE CAJA BAJA: sus minúsculas son versalitas. Sirve para
+    titulares y para nada más — no para texto corrido ni para campos.
+
+    Cinzel se queda detrás como respaldo (es su pariente más cercano en Google
+    Fonts) por si falla la carga del archivo local.
+
+    --font-accent NO se toca. Es la Cormorant itálica de los énfasis cortos, y
+    la identidad del Diagnóstico no trae una itálica que la sustituya: cambiarla
+    por Montserrat itálica dejaría los énfasis indistinguibles del texto.
+  */
+  --font-display: var(--font-trajan), var(--font-cinzel), Georgia, serif;
+  --font-sans: var(--font-montserrat), system-ui, sans-serif;
+
+  /* El <body> queda FUERA de este ámbito, así que sigue pintado con el negro
+     del :root. Sin esto, el rebote del scroll y cualquier hueco entre secciones
+     enseñarían ese negro por debajo del verde. */
+  background-color: var(--bc2-fondo);
+  color: var(--bc2-crema);
+}
+
+/*
+  ═══════════════════════════════════════════════════════════════════════════
+  EL TITULAR METÁLICO DEL MANIFIESTO
+  ═══════════════════════════════════════════════════════════════════════════
+
+  .moving-gold-title vive en globals.css con el degradado dorado incrustado, y
+  lo usa el Manifiesto de las dos versiones. No se puede parametrizar allí sin
+  tocar la V1, así que se redefine aquí dentro del ámbito.
+
+  Se mantienen el recorte sobre el texto, el tamaño del fondo y la animación
+  gold-drift —que es lo que hace que el brillo viaje—; lo único que cambia son
+  las paradas del degradado, que pasan de oro a crema con el núcleo en blanco.
+  El relieve se lee igual: sigue habiendo un punto alto y dos bajos.
+
+  La especificidad de .bc2-scope .moving-gold-title (0,2,0) gana a la de
+  .moving-gold-title (0,1,0) sin necesidad de !important ni de vigilar en qué
+  orden se cargan los dos archivos.
+*/
+.bc2-scope .moving-gold-title,
+.bc2-scope .moving-gold-title .mf-word {
+  background-image: linear-gradient(
+    110deg,
+    var(--bc2-texto-suave) 0%,
+    var(--bc2-crema) 24%,
+    #ffffff 45%,
+    var(--bc2-crema) 62%,
+    var(--bc2-texto-suave) 100%
+  );
+}
+
+.bc2-scope .moving-gold-title {
+  filter: drop-shadow(0 0 12px var(--bc2-brillo-medio));
+}

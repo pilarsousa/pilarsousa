@@ -3,7 +3,7 @@
 import Image, { type StaticImageData } from "next/image";
 import { motion, type Variants } from "framer-motion";
 import { Container } from "@/components/shared/Container";
-import { SectionTitle } from "@/components/bootcamp/ui/SectionTitle";
+import { SectionTitle } from "@/components/bootcamp-v2/ui/SectionTitle";
 import { cn } from "@/lib/cn";
 import styles from "./Experiencia.module.css";
 import img1 from "@/../public/bootcamp-landing/img1-pilar.jpg";

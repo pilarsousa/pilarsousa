@@ -1,5 +1,5 @@
 import { Clock, Gift, Tag, type LucideIcon } from "lucide-react";
-import { MatrixRain } from "@/components/bootcamp/ui/MatrixRain";
+import { MatrixRain } from "@/components/bootcamp-v1/ui/MatrixRain";
 
 /*
   Una de las tres ventajas de apuntarse a la lista.

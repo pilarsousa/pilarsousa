@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { Container } from "@/components/shared/Container";
-import { Reveal } from "@/components/bootcamp-v2/ui/Reveal";
-import { GoldText } from "@/components/bootcamp-v2/ui/GoldText";
+import { Reveal } from "@/components/bootcamp-v1/ui/Reveal";
+import { GoldText } from "@/components/bootcamp-v1/ui/GoldText";
 import { WHATSAPP_GROUP_URL, WHATSAPP_SUPPORT_URL } from "@/lib/links";
 import bgDesktop from "@/../public/bootcamp-landing/bg-pilarsousa.jpg";
 import bgMobile from "@/../public/bootcamp-landing/bg-pilarsousa-mobile.jpg";
-import logo from "@/../public/bootcamp-v2/LOGO.png";
+import logo from "@/../public/bootcamp-landing/LOGO.png";
 
 export const metadata: Metadata = {
   title: "¡Bienvenida! — Bootcamp RESET IDENTIDAD",

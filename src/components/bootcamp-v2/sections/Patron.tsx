@@ -10,7 +10,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Container } from "@/components/shared/Container";
-import { SectionTitle } from "@/components/bootcamp/ui/SectionTitle";
+import { SectionTitle } from "@/components/bootcamp-v2/ui/SectionTitle";
 
 // Five recognizable pain points for the right-fit audience. Icons stay
 // symbolic: each one reinforces the pattern without turning the card into a
@@ -86,10 +86,13 @@ export function Patron() {
               key={text}
               variants={card}
               whileTap={{ scale: 0.97 }}
-              className="group relative flex items-start gap-4 rounded-2xl border border-earth-gold/20 bg-white/50 p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.8),inset_0_0_24px_0_rgba(122,100,66,0.07)] transition-all duration-300 hover:border-earth-gold/45 active:border-earth-gold/60 active:bg-white/70 active:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.9),0_8px_24px_-12px_rgba(122,100,66,0.5)]"
+              className="group relative flex items-start gap-4 rounded-2xl border border-earth-gold/20 bg-white/50 p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.8),inset_0_0_24px_0_rgba(0,47,1,0.07)] transition-all duration-300 hover:border-earth-gold/45 active:border-earth-gold/60 active:bg-white/70 active:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.9),0_8px_24px_-12px_rgba(0,47,1,0.5)]"
             >
-              {/* Icon medallion beside the text — carved seal that warms on tap. */}
-              <span className="flex size-11 shrink-0 items-center justify-center rounded-full border border-earth-gold/30 bg-cream text-earth-gold shadow-[inset_0_0_12px_0_rgba(122,100,66,0.12)] transition-colors duration-300 group-active:border-earth-gold/60 group-active:bg-cream-gold/40">
+              {/* Icon medallion beside the text — carved seal that greens on tap.
+                  V1 warmed it with a gold tint; here the tap tint is the brand
+                  green, which is what its border already does and the only
+                  thing that reads as a change against the cream panel. */}
+              <span className="flex size-11 shrink-0 items-center justify-center rounded-full border border-earth-gold/30 bg-cream text-earth-gold shadow-[inset_0_0_12px_0_rgba(0,47,1,0.12)] transition-colors duration-300 group-active:border-earth-gold/60 group-active:bg-forest-700/10">
                 <Icon size={20} strokeWidth={1.5} />
               </span>
               <p className="text-base leading-relaxed text-forest-900/85">

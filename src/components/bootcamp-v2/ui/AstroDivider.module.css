@@ -1,0 +1,83 @@
+/*
+  AstroDivider — a luxury section separator.
+
+  A thin gold hairline with a soft glow, broken in the center by a circular
+  medallion holding a star glyph (✶). Adapted from a generic "astro divider"
+  to the brand's gold-on-ink universe. Two subtle, premium micro-animations:
+   - the hairline glow breathes (pulse),
+   - the star slowly rotates a full turn.
+  Both are disabled under prefers-reduced-motion.
+*/
+
+.divider {
+  margin: 0 auto;
+  width: 1140px;
+  max-width: 100%;
+  position: relative;
+}
+
+/* The hairline lives in a clipped strip so only its glowing lower edge shows. */
+.mask {
+  overflow: hidden;
+  height: 20px;
+}
+
+.mask::after {
+  content: "";
+  display: block;
+  margin: -25px auto 0;
+  width: 100%;
+  height: 25px;
+  border-radius: 125px / 12px;
+  box-shadow: 0 0 8px var(--color-accent);
+  animation: divider-glow 5s ease-in-out infinite;
+}
+
+/* Circular medallion that sits centered over the line. */
+.badge {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  bottom: 100%;
+  margin-bottom: -25px;
+  left: 50%;
+  margin-left: -25px;
+  border-radius: 100%;
+  box-shadow: 0 2px 4px color-mix(in oklab, var(--color-accent) 60%, transparent);
+  background: var(--color-ink);
+}
+
+.badge i {
+  position: absolute;
+  inset: 4px;
+  border-radius: 100%;
+  border: 1px dashed color-mix(in oklab, var(--color-accent-soft) 70%, transparent);
+  text-align: center;
+  line-height: 40px;
+  font-style: normal;
+  color: var(--color-accent);
+  animation: divider-spin 22s linear infinite;
+}
+
+@keyframes divider-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 6px color-mix(in oklab, var(--color-accent) 70%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 14px var(--color-accent);
+  }
+}
+
+@keyframes divider-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mask::after,
+  .badge i {
+    animation: none;
+  }
+}

@@ -1,0 +1,176 @@
+/*
+  Reactive cream CTA.
+
+  Adapted from a "galaxy button": we keep ONLY its soul — a single --active
+  custom property (0 → 1 on hover/focus) that drives a glow radiating from the
+  corner, a faint scale-up, and inner-edge highlights. Everything else (stars,
+  shooting stars, spinning galaxy, violet) is dropped to stay sober and
+  on-brand. Pure CSS, no styled-components.
+
+  ── LA TRADUCCIÓN DEL ORO AL CREMA ──
+
+  El botón de la V1 era un metal DORADO: su relieve salía de que el oro tiene
+  recorrido —de #c8a45a a #f3e2b0 hay un salto de luminosidad que se ve—. El
+  crema no lo tiene: es lo más claro de la página y por arriba no queda sitio.
+
+  Así que el recorrido se construye HACIA ABAJO. --crema-hondo es el crema
+  mezclado con el verde de marca: el lado en sombra del metal. El degradado va
+  de ahí al blanco puro, que es el mismo mecanismo de siempre —un núcleo claro
+  entre dos extremos oscuros— leído del otro lado.
+
+  Es la misma conclusión a la que llega el botón de /diagnostico, y por eso las
+  mezclas son de crema con verde y no de crema con gris: un gris sobre este
+  fondo se ve como una mancha de otra paleta.
+*/
+
+.button {
+  --active: 0;
+
+  /* Como tripletas HSL sin envolver, para poder darles alfa con la sintaxis
+     hsl(var(--x) / α) más abajo. */
+  --crema: 32 100% 97%; /* #fff8f0 — el crema de marca */
+  --crema-viva: 0 0% 100%; /* blanco — el núcleo del brillo */
+  --verde: 121 100% 9%; /* #002f01 — la tinta de la etiqueta y la sombra */
+
+  /* El lado en sombra del metal. Derivado, no escrito a mano: si cambia el
+     crema o el verde, el relieve se recalcula solo. */
+  --crema-hondo: color-mix(in srgb, var(--bc2-crema) 90%, var(--bc2-verde));
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  /* Fluid horizontal padding: tight on small phones, roomy on desktop. */
+  padding: 1rem clamp(1.5rem, 0.5rem + 6vw, 3rem);
+  max-width: 100%; /* never exceed the viewport */
+  border: 0;
+  border-radius: 9999px;
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+
+  font-family: var(--font-display), serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  /* Fluid tracking: less on narrow screens so the label fits. */
+  letter-spacing: clamp(0.12em, 0.05em + 0.4vw, 0.25em);
+  text-transform: uppercase;
+  /* Etiqueta en el verde de marca, que se hunde un punto al activarse — el
+     mismo gesto que hacía la tinta oscura de la V1. */
+  color: hsl(121 100% calc(9% - (var(--active) * 3%)));
+
+  /* Layered background: a radial glow that grows with --active, over the
+     cream metal. The glow origin sits in the bottom-right corner. */
+  background:
+    radial-gradient(
+        120% 120% at 115% 115%,
+        hsl(var(--crema-viva) / var(--active)) 0%,
+        transparent 55%
+      )
+      no-repeat,
+    linear-gradient(
+      110deg,
+      var(--crema-hondo) 0%,
+      #ffffff 45%,
+      var(--bc2-crema) 55%,
+      var(--crema-hondo) 100%
+    );
+
+  /* Glow halo + inner edge highlights, all scaled by --active. */
+  box-shadow:
+    0 0 calc(var(--active) * 4em) calc(var(--active) * 1.2em)
+      hsl(var(--crema) / 0.45),
+    0 0.05em 0 0 hsl(var(--crema-viva) / calc(var(--active) * 0.9)) inset,
+    0 -0.05em 0 0 hsl(var(--verde) / calc(var(--active) * 0.5)) inset,
+    0 10px 30px -10px hsl(var(--verde) / 0.6);
+
+  scale: calc(1 + (var(--active) * 0.04));
+
+  transition:
+    background 0.35s ease-out,
+    box-shadow 0.35s ease-out,
+    scale 0.25s ease-out,
+    color 0.35s ease-out;
+}
+
+/*
+  Continuous sheen — a soft light reflection that sweeps across the button on a
+  loop, like light catching polished metal. Diagonal and sober.
+
+  ⚠️ SIN mix-blend-mode: overlay, que es lo que llevaba la V1.
+
+  Overlay aclara mezclando con lo que hay debajo, y debajo hay un crema al 97%
+  de luminosidad: no queda margen para aclarar y el barrido desaparecía. En
+  blanco opaco sobre el degradado sí se ve — se nota al pasar por los extremos
+  en sombra y se funde en el centro, que es justo como se comporta un reflejo
+  de verdad sobre una superficie pálida.
+*/
+.button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    110deg,
+    transparent 25%,
+    hsl(var(--crema-viva) / 0.55) 48%,
+    hsl(var(--crema-viva) / 0.7) 50%,
+    hsl(var(--crema-viva) / 0.55) 52%,
+    transparent 75%
+  );
+  background-size: 250% 100%;
+  background-repeat: no-repeat;
+  background-position: 150% center;
+  pointer-events: none;
+  z-index: 1;
+  animation: sheen-sweep 4.5s ease-in-out infinite;
+}
+
+/* Keep the label above the sheen. */
+.button > * {
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes sheen-sweep {
+  0% {
+    background-position: 150% center;
+  }
+  /* sweep happens in the first ~35%, then a long pause before repeating */
+  35%,
+  100% {
+    background-position: -50% center;
+  }
+}
+
+.button:hover,
+.button:focus-visible {
+  --active: 1;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+.button:active {
+  scale: 1;
+}
+
+.button.block {
+  display: flex;
+  width: 100%;
+}
+
+/* Honor reduced-motion: keep the glow, drop the movement. */
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: background 0.35s ease-out, box-shadow 0.35s ease-out;
+    scale: 1 !important;
+  }
+  .button::before {
+    animation: none;
+    opacity: 0;
+  }
+}

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Container } from "@/components/shared/Container";
-import { Reveal } from "@/components/bootcamp/ui/Reveal";
+import { Reveal } from "@/components/bootcamp-v1/ui/Reveal";
 import bgDesktop from "@/../public/bootcamp-landing/banner-pilar.jpg";
 import bgMobile from "@/../public/bootcamp-landing/banner-pilar-mobile2.jpg";
 

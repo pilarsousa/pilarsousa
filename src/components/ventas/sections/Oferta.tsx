@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Container } from "@/components/shared/Container";
 import { NeonText } from "@/components/mision-origen/ui/NeonText";
 import { Reveal } from "@/components/mision-origen/ui/Reveal";
-import { MatrixRain } from "@/components/bootcamp/ui/MatrixRain";
+import { MatrixRain } from "@/components/bootcamp-v1/ui/MatrixRain";
 import { VENTAS_CHECKOUT_URL } from "@/lib/links";
 import mockup from "@/../public/mision-origen-venta/mockup1.webp";
 /* Versión recortada: el PNG original trae ~30% de margen transparente alrededor

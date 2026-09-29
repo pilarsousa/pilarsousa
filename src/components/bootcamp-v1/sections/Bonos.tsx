@@ -9,8 +9,8 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Container } from "@/components/shared/Container";
-import { SectionTitle } from "@/components/bootcamp/ui/SectionTitle";
-import { CtaButton } from "@/components/bootcamp/ui/CtaButton";
+import { SectionTitle } from "@/components/bootcamp-v1/ui/SectionTitle";
+import { CtaButton } from "@/components/bootcamp-v1/ui/CtaButton";
 import { CHECKOUT_URL } from "@/lib/links";
 import banner from "@/../public/bootcamp-landing/banner-web-bonos.jpg";
 import bannerMobile from "@/../public/bootcamp-landing/banner-web-bonos-mobile.jpg";

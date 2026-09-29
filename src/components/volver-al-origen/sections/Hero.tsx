@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { MatrixRain } from "@/components/bootcamp/ui/MatrixRain";
+import { MatrixRain } from "@/components/bootcamp-v1/ui/MatrixRain";
 import { VoContainer } from "@/components/volver-al-origen/ui/VoContainer";
 import { LogoVao } from "@/components/volver-al-origen/ui/LogoVao";
 import { SparkDivider } from "@/components/volver-al-origen/ui/SparkDivider";

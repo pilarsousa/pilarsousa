@@ -2,10 +2,10 @@
 
 import { motion } from "framer-motion";
 import { Container } from "@/components/shared/Container";
-import { SectionTitle } from "@/components/bootcamp/ui/SectionTitle";
-import { GoldText } from "@/components/bootcamp/ui/GoldText";
-import { TestimonialCarousel } from "@/components/bootcamp/ui/TestimonialCarousel";
-import { TrustScoreCard } from "@/components/bootcamp/ui/TrustScoreCard";
+import { SectionTitle } from "@/components/bootcamp-v2/ui/SectionTitle";
+import { GoldText } from "@/components/bootcamp-v2/ui/GoldText";
+import { TestimonialCarousel } from "@/components/bootcamp-v2/ui/TestimonialCarousel";
+import { TrustScoreCard } from "@/components/bootcamp-v2/ui/TrustScoreCard";
 // New testimonials — IMG_5250 leads, then the rest, ahead of the originals.
 import img5250 from "@/../public/Testimonios/IMG_5250.png";
 import img5243 from "@/../public/Testimonios/IMG_5243.png";

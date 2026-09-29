@@ -1,10 +1,10 @@
 import Image from "next/image";
 import { Container } from "@/components/shared/Container";
-import { Reveal } from "@/components/bootcamp/ui/Reveal";
-import { CtaButton } from "@/components/bootcamp/ui/CtaButton";
-import { GoldText } from "@/components/bootcamp/ui/GoldText";
-import { ScheduleReferenceCard } from "@/components/bootcamp/ui/ScheduleReferenceCard";
-import { SideRays } from "@/components/bootcamp/ui/SideRays";
+import { Reveal } from "@/components/bootcamp-v1/ui/Reveal";
+import { CtaButton } from "@/components/bootcamp-v1/ui/CtaButton";
+import { GoldText } from "@/components/bootcamp-v1/ui/GoldText";
+import { ScheduleReferenceCard } from "@/components/bootcamp-v1/ui/ScheduleReferenceCard";
+import { SideRays } from "@/components/bootcamp-v1/ui/SideRays";
 import { CHECKOUT_URL } from "@/lib/links";
 import bgDesktop from "@/../public/bootcamp-landing/bg-pilarsousa.jpg";
 import bgMobile from "@/../public/bootcamp-landing/bg-pilarsousa-mobile.jpg";
