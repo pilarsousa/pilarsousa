@@ -194,11 +194,95 @@
   --font-display: var(--font-trajan), var(--font-cinzel), Georgia, serif;
   --font-sans: var(--font-montserrat), system-ui, sans-serif;
 
+  /*
+    ── LA REJILLA DE LAS TARJETAS ──
+
+    Un cuadriculado finísimo que va DENTRO de la tarjeta, no detrás. El paso y
+    la opacidad están puestos para que se intuya y no se lea: a 22px la
+    cuadrícula queda por debajo del tamaño de un párrafo, y al 7% una línea de
+    1px sobre el crema apenas se separa del fondo — está ahí, pero no compite
+    con el texto ni aparece como papel milimetrado en una captura.
+
+    Empezó en el 9% y se bajó: sobre las caras claras grandes —la caja del
+    contador, las tarjetas de bonos— la cuadrícula se leía antes que su
+    contenido. En las piezas pequeñas daba igual; manda la superficie mayor.
+
+    El crema sobre verde aguanta un punto más que el verde sobre crema: la
+    cara verde es más oscura y la línea clara se apaga contra ella.
+
+    ⚠️ SI SE SUBE LA OPACIDAD, el texto encima empieza a montarse sobre las
+    líneas y se lee peor en pantallas sin densidad extra.
+  */
+  --bc2-rejilla-paso: 22px;
+  --bc2-rejilla-verde: color-mix(in srgb, var(--bc2-verde) 7%, transparent);
+  --bc2-rejilla-crema: color-mix(in srgb, var(--bc2-crema) 8%, transparent);
+
   /* El <body> queda FUERA de este ámbito, así que sigue pintado con el negro
      del :root. Sin esto, el rebote del scroll y cualquier hueco entre secciones
      enseñarían ese negro por debajo del verde. */
   background-color: var(--bc2-fondo);
   color: var(--bc2-crema);
+}
+
+/*
+  ═══════════════════════════════════════════════════════════════════════════
+  LAS DOS CARAS DE TARJETA
+  ═══════════════════════════════════════════════════════════════════════════
+
+  La página alterna secciones oscuras y claras, y hasta ahora las tarjetas
+  seguían el tono de su sección: cajas oscuras sobre fondo oscuro, claras sobre
+  claro. Se invierte — la tarjeta CONTRASTA con su sección:
+
+    · sobre las secciones verdes, cara clara  → .bc2-carta-clara
+    · sobre la sección crema,    cara verde   → .bc2-carta-verde
+
+  Así una tarjeta se lee como un objeto apoyado encima y no como un recuadro
+  dibujado sobre el mismo plano.
+
+  ── POR QUÉ LA REJILLA VA EN background-image Y NO EN UN ::before ──
+
+  Sería lo natural y aquí rompe. Estas tarjetas ya llevan hijos absolutos
+  —filos, barridos, anillos que giran— y varias son overflow-hidden con su
+  propio contexto de apilado. Un pseudoelemento a pantalla completa se mete en
+  medio de ese orden y hay que ir componiendo z-index en cada sitio.
+
+  Como capa de fondo del propio elemento no existe para el apilado: se pinta
+  bajo todo el contenido sin tocar una sola regla de posicionamiento.
+
+  ── EL RELIEVE ──
+
+  Es el mismo de /diagnostico, leído del mismo lado: sobre una cara clara la
+  luz interior no existe, así que el volumen lo da la SOMBRA. Filo blanco de
+  1px arriba, contorno interior fino, y una sombra verde que sube desde el
+  borde inferior. El escalonado grande de la proyectada es lo que despega la
+  tarjeta del fondo sin dibujarle un contorno duro.
+*/
+.bc2-carta-clara {
+  background-color: var(--bc2-panel);
+  background-image:
+    linear-gradient(to right, var(--bc2-rejilla-verde) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--bc2-rejilla-verde) 1px, transparent 1px);
+  background-size: var(--bc2-rejilla-paso) var(--bc2-rejilla-paso);
+  color: var(--bc2-panel-texto);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 0 1px rgba(0, 47, 1, 0.06),
+    inset 0 -20px 30px -24px rgba(0, 47, 1, 0.35),
+    0 16px 36px -20px rgba(0, 47, 1, 0.5);
+}
+
+.bc2-carta-verde {
+  background-color: var(--bc2-fondo-alto);
+  background-image:
+    linear-gradient(to right, var(--bc2-rejilla-crema) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--bc2-rejilla-crema) 1px, transparent 1px);
+  background-size: var(--bc2-rejilla-paso) var(--bc2-rejilla-paso);
+  color: var(--bc2-crema);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 248, 240, 0.14),
+    inset 0 0 0 1px rgba(255, 248, 240, 0.08),
+    inset 0 -20px 30px -24px rgba(0, 0, 0, 0.45),
+    0 16px 36px -22px rgba(0, 47, 1, 0.45);
 }
 
 /*

@@ -120,25 +120,25 @@ export function Bonos() {
           {BONUSES.map(({ title, description, icon: Icon }) => (
             <li
               key={title}
-              className="relative rounded-2xl p-px bg-[conic-gradient(from_var(--border-angle),transparent_0%,transparent_8%,var(--color-gold)_13%,var(--color-gold-soft)_17%,transparent_24%,transparent_100%)] shadow-[0_18px_45px_-32px_rgba(0,0,0,0.9)] animate-border-spin"
+              className="relative rounded-2xl p-px bg-[conic-gradient(from_var(--border-angle),transparent_0%,transparent_8%,var(--bc2-verde-2)_13%,var(--bc2-crema)_17%,transparent_24%,transparent_100%)] shadow-[0_18px_45px_-32px_rgba(0,0,0,0.9)] animate-border-spin"
             >
-              {/* Opaque face — must fully hide the conic gradient behind it so
-                  only the 1px ring at the edge reads as a moving gold border,
-                  not a glow bleeding through the card's center. */}
-              <div className="relative h-full overflow-hidden rounded-[calc(1rem-1px)] bg-ink p-4 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+              {/* Cara opaca: tiene que tapar del todo el degradado cónico de detrás
+                  para que sólo se lea el filo de 1px girando por el borde y no
+                  un resplandor colándose por el centro de la tarjeta. */}
+              <div className="bc2-carta-clara relative h-full overflow-hidden rounded-[calc(1rem-1px)] p-4 text-left">
                 <span
                   aria-hidden="true"
-                  className="pointer-events-none absolute inset-px rounded-[calc(1rem-2px)] border border-white/8"
+                  className="pointer-events-none absolute inset-px rounded-[calc(1rem-2px)] border border-forest-900/8"
                 />
                 <div className="relative mb-2 flex items-center gap-2.5">
-                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full border border-accent/40 bg-accent/15 text-accent">
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-forest-700 text-cream shadow-[inset_0_-3px_6px_-4px_rgba(0,0,0,0.7)]">
                     <Icon size={16} strokeWidth={1.75} />
                   </span>
-                  <h3 className="font-display text-sm font-semibold text-foreground sm:text-base">
+                  <h3 className="font-display text-sm font-semibold text-forest-900 sm:text-base">
                     {title}
                   </h3>
                 </div>
-                <p className="relative font-sans text-[0.82rem] leading-relaxed text-foreground/68">
+                <p className="relative font-sans text-[0.82rem] leading-relaxed text-forest-900/75">
                   {description}
                 </p>
               </div>

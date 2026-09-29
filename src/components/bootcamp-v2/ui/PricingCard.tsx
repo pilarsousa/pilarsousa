@@ -76,8 +76,8 @@ export function PricingCard() {
 
         {/* Countdown to the bootcamp start — drives urgency. Given its own
             padded box so the unit tiles breathe instead of hugging the edges. */}
-        <div className="mt-9 rounded-2xl border border-accent/15 bg-ink/30 px-4 py-6 sm:px-6">
-          <p className="mb-5 text-center font-display text-[0.7rem] uppercase tracking-[0.3em] text-foreground/85">
+        <div className="bc2-carta-clara mt-9 rounded-2xl px-4 py-6 sm:px-6">
+          <p className="mb-5 text-center font-display text-[0.7rem] uppercase tracking-[0.3em] text-forest-900/85">
             La experiencia comienza en
           </p>
           <Countdown target={BOOTCAMP_START} />

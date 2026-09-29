@@ -68,7 +68,7 @@ export function Countdown({ target, className }: CountdownProps) {
     return (
       <p
         className={cn(
-          "text-center font-display text-sm uppercase tracking-[0.25em] text-accent-soft",
+          "text-center font-display text-sm uppercase tracking-[0.25em] text-forest-900/85",
           className,
         )}
       >
@@ -89,12 +89,12 @@ export function Countdown({ target, className }: CountdownProps) {
       {UNITS.map(({ key, label }) => (
         <div
           key={key}
-          className="flex flex-col items-center rounded-xl border border-accent/20 bg-ink/40 py-3 backdrop-blur-sm"
+          className="flex flex-col items-center rounded-xl bg-forest-900/6 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),inset_0_0_0_1px_rgba(0,47,1,0.07),inset_0_-8px_12px_-10px_rgba(0,47,1,0.35)]"
         >
-          <span className="font-display text-2xl font-semibold leading-none text-foreground tabular-nums sm:text-3xl">
+          <span className="font-display text-2xl font-semibold leading-none text-forest-900 tabular-nums sm:text-3xl">
             {String(time[key]).padStart(2, "0")}
           </span>
-          <span className="mt-1.5 text-[0.6rem] uppercase tracking-[0.15em] text-accent/80">
+          <span className="mt-1.5 text-[0.6rem] uppercase tracking-[0.15em] text-forest-700">
             {label}
           </span>
         </div>

@@ -73,7 +73,8 @@ export function Patron() {
           </em>
         </SectionTitle>
 
-        {/* Pain points as carved cards — inset shadows on a light face. */}
+        {/* Las tarjetas CONTRASTAN con su sección: la sección es crema, así que
+            la cara va en verde. El relieve y la rejilla los pone .bc2-carta-verde. */}
         <motion.ul
           variants={container}
           initial="hidden"
@@ -86,16 +87,15 @@ export function Patron() {
               key={text}
               variants={card}
               whileTap={{ scale: 0.97 }}
-              className="group relative flex items-start gap-4 rounded-2xl border border-earth-gold/20 bg-white/50 p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.8),inset_0_0_24px_0_rgba(0,47,1,0.07)] transition-all duration-300 hover:border-earth-gold/45 active:border-earth-gold/60 active:bg-white/70 active:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.9),0_8px_24px_-12px_rgba(0,47,1,0.5)]"
+              className="bc2-carta-verde group relative flex items-start gap-4 rounded-2xl p-6 transition-all duration-300 hover:brightness-115 active:brightness-125"
             >
-              {/* Icon medallion beside the text — carved seal that greens on tap.
-                  V1 warmed it with a gold tint; here the tap tint is the brand
-                  green, which is what its border already does and the only
-                  thing that reads as a change against the cream panel. */}
-              <span className="flex size-11 shrink-0 items-center justify-center rounded-full border border-earth-gold/30 bg-cream text-earth-gold shadow-[inset_0_0_12px_0_rgba(0,47,1,0.12)] transition-colors duration-300 group-active:border-earth-gold/60 group-active:bg-forest-700/10">
+              {/* El medallón se invierte con la tarjeta: sobre la cara verde pasa a
+                  ser un disco crema con el icono en verde. Es la única pieza
+                  clara de la tarjeta, así que marca dónde empieza a leerse. */}
+              <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-cream text-forest-900 shadow-[inset_0_-4px_8px_-6px_rgba(0,47,1,0.5),0_2px_8px_-2px_rgba(0,0,0,0.45)] transition-transform duration-300 group-active:scale-95">
                 <Icon size={20} strokeWidth={1.5} />
               </span>
-              <p className="text-base leading-relaxed text-forest-900/85">
+              <p className="text-base leading-relaxed text-foreground/90">
                 {text}
               </p>
             </motion.li>
