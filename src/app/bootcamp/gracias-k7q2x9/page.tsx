@@ -121,11 +121,43 @@ export default function GraciasPage() {
               focus over the grid instead of floating text. */}
           <Reveal delay={0.26}>
             <div className="mx-auto mt-9 max-w-xl rounded-3xl border border-foreground/15 bg-ink/55 px-4 py-6 shadow-[0_30px_70px_-30px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,248,240,0.1)] backdrop-blur-md sm:p-8">
-              <span className="bc2-carta-clara inline-flex items-center rounded-full px-3 py-1 text-[0.7rem] font-bold uppercase tracking-[0.16em] text-forest-900">
-                Último paso
-              </span>
+              {/*
+                ── "ÚLTIMO PASO" ES EL TITULAR DEL PANEL, NO UNA ETIQUETA ──
 
-              <p className="mt-4 text-base leading-[1.8] text-foreground sm:text-lg">
+                Era una pastilla de 11px y se leía como decoración. Es lo más
+                importante de la página —la compra está hecha, falta esto—, así
+                que pasa a ser el encabezado: disco numerado con el anillo que
+                late (el mismo gesto del "en vivo" del hero, que atrae la vista
+                antes que el texto), "Paso 2 de 2" para que se entienda de un
+                vistazo que el pago ya cuenta como el primero, y el rótulo en
+                grande y en negrita.
+              */}
+              <div className="flex items-center justify-center gap-3.5">
+                <span className="relative flex size-12 shrink-0 items-center justify-center">
+                  <span
+                    aria-hidden
+                    className="absolute inset-0 animate-ping rounded-full bg-cream/30 motion-reduce:animate-none"
+                  />
+                  <span className="bc2-carta-clara relative flex size-12 items-center justify-center rounded-full text-xl font-bold text-forest-900">
+                    2
+                  </span>
+                </span>
+                <div className="text-left">
+                  <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-foreground/70">
+                    Paso 2 de 2
+                  </p>
+                  <h2 className="text-2xl font-bold leading-tight text-foreground sm:text-[1.75rem]">
+                    Último paso
+                  </h2>
+                </div>
+              </div>
+
+              <div
+                aria-hidden
+                className="mx-auto mt-5 h-px w-2/3 bg-[linear-gradient(to_right,transparent,var(--color-foreground),transparent)] opacity-25"
+              />
+
+              <p className="mt-5 text-base leading-[1.8] text-foreground sm:text-lg">
                 Diste el primer paso. Ahora únete al{" "}
                 <span className="bc2-realce whitespace-nowrap">
                   grupo privado de WhatsApp
