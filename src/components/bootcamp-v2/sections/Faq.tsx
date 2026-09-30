@@ -46,7 +46,7 @@ const FAQS: Array<{ q: string; a: string }> = [
   },
   {
     q: "¿Cuánto tiempo tengo para inscribirme?",
-    a: "Las inscripciones están abiertas hasta el 9 de octubre a las 23:59.",
+    a: "Las inscripciones están abiertas hasta el 8 de octubre a las 23:59.",
   },
 ];
 

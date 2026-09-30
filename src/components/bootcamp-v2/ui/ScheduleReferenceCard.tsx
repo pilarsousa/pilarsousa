@@ -7,7 +7,7 @@ type ScheduleReferenceCardProps = {
 };
 
 const PILLS = [
-  { icon: CalendarDays, label: "10, 11 y 12 de octubre" },
+  { icon: CalendarDays, label: "9, 10 y 11 de octubre" },
   { icon: Radio, label: "3 días en vivo" },
   { icon: Compass, label: "Metafísica práctica" },
 ];
