@@ -39,15 +39,15 @@ export const VENTAS_WHATSAPP_EQUIPO_URL = "https://wa.link/90avqa";
 // Volver al Origen — WhatsApp community (post-registration thank-you page).
 export const MO_WHATSAPP_COMMUNITY_URL = "https://chat.whatsapp.com/FBFK1l0bsHW4pmbqVi2Z6u";
 
-/* Bootcamp start — the countdown target. 10 de octubre de 2026, 19:00 hora de
+/* Bootcamp start — the countdown target. 10 de octubre de 2026, 18:00 hora de
    España, que es la referencia que se le da al público hispanohablante.
 
-   ⚠️ TIENE QUE CUADRAR CON LA FECHA ESCRITA en la pastilla del hero y en la
-   tarjeta de horario ("10, 11 y 12 de octubre"). Si sólo se cambia una de las
-   dos, el contador acaba diciendo "el bootcamp ha comenzado" debajo de un
-   texto que anuncia una fecha futura.
+   ⚠️ TIENE QUE CUADRAR CON LA FECHA Y LA HORA ESCRITAS en la tarjeta de
+   horario ("10, 11 y 12 de octubre" y "18:00 · España"). Si sólo se cambia
+   una de las dos, el contador acaba diciendo "el bootcamp ha comenzado"
+   debajo de un texto que anuncia una fecha futura.
 
    +02:00 es CEST y es correcto para esta fecha: el horario de verano en España
    no termina hasta el último domingo de octubre. Una fecha de noviembre en
    adelante iría en +01:00. */
-export const BOOTCAMP_START = "2026-10-10T19:00:00+02:00";
+export const BOOTCAMP_START = "2026-10-10T18:00:00+02:00";

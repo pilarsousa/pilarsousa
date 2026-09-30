@@ -101,7 +101,7 @@ export function ScheduleReferenceCard({
             </p>
             <p className="mt-1.5 font-semibold leading-none text-forest-900">
               <span className="text-[1.6rem] tabular-nums tracking-tight">
-                19:00
+                18:00
               </span>
               <span className="ml-1.5 text-[1.05rem] tracking-tight">
                 · España

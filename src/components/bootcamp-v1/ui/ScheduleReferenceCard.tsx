@@ -63,7 +63,7 @@ export function ScheduleReferenceCard({
               Horario de referencia
             </p>
             <p className="mt-1 font-display text-[clamp(1.35rem,1.05rem+1vw,1.7rem)] uppercase leading-none tracking-[0.08em] text-foreground drop-shadow-[0_0_10px_rgba(243,226,176,0.18)]">
-              19:00 · España
+              18:00 · España
             </p>
           </div>
         </div>
