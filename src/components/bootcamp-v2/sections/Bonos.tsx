@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import {
-  CalendarCheck2,
   ClipboardCheck,
   Layers,
   Route,
@@ -20,12 +19,6 @@ const BONUSES: Array<{
   description: string;
   icon: LucideIcon;
 }> = [
-  {
-    title: "Entregables diarios",
-    description:
-      "Ejercicios por clase para pasar la teoría a acciones concretas.",
-    icon: CalendarCheck2,
-  },
   {
     title: "Sistema paso a paso",
     description:
@@ -103,9 +96,10 @@ export function Bonos() {
 
           <div className="absolute inset-x-0 bottom-0 z-10 px-5 py-7 text-center sm:px-10 sm:py-9">
             <p className="mx-auto max-w-3xl font-sans text-base font-medium leading-relaxed text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.9)] sm:text-lg">
-              En cada clase recibirás ejercicios concretos y un plan diario
-              para identificar el patrón que te limita, decidir desde tu nueva
-              identidad y sostenerla en el siguiente paso.
+              En cada clase recibirás ejercicios prácticos y, al terminar,
+              saldrás con un plan de acción claro y concreto para romper los
+              patrones de tu vieja identidad y actuar desde la persona que es
+              capaz de manifestar la vida que deseas.
             </p>
           </div>
         </motion.div>
@@ -115,7 +109,7 @@ export function Bonos() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="mx-auto mt-4 grid max-w-285 gap-3 sm:mt-5 sm:grid-cols-2 lg:grid-cols-4"
+          className="mx-auto mt-4 grid max-w-285 gap-3 sm:mt-5 md:grid-cols-3"
         >
           {BONUSES.map(({ title, description, icon: Icon }) => (
             <li

@@ -3,7 +3,8 @@ import "./bootcamp-v2.css";
 
 /*
   Bootcamp Reset Identidad V2 — la versión principal del Bootcamp, servida en
-  /bootcamp. page.tsx es /bootcamp y gracias/page.tsx es /bootcamp/gracias.
+  /bootcamp. page.tsx es /bootcamp y la gracias vive en
+  acceso-k7q2x9/page.tsx, con una ruta que no se deduce (ver su cabecera).
 
   ⚠️ LA RAÍZ DEL DOMINIO DE PAUTA NO ES ÉSTA. lp.pilarsousa.es/ sigue sirviendo
   la lista de espera, por el rewrite de next.config.ts, y así se queda por

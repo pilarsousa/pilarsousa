@@ -9,6 +9,8 @@ type TactileCtaButtonProps = {
   block?: boolean;
   /** Opens in a new tab with safe rel — use for external checkout links. */
   external?: boolean;
+  /** "cream" is the landing's CTA; "whatsapp" the green one for joining the group. */
+  tone?: "cream" | "whatsapp";
 };
 
 /**
@@ -38,13 +40,19 @@ export function TactileCtaButton({
   className,
   block,
   external,
+  tone = "cream",
 }: TactileCtaButtonProps) {
   return (
     <a
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
-      className={cn(styles.cta, block && styles.block, className)}
+      className={cn(
+        styles.cta,
+        block && styles.block,
+        tone === "whatsapp" && styles.whatsapp,
+        className,
+      )}
     >
       <span aria-hidden className={cn(styles.label, styles.sizer)}>
         {children}

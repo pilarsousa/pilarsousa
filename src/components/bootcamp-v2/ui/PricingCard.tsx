@@ -42,7 +42,7 @@ export function PricingCard() {
         </div>
 
         {/* Price — the visual peak. Radial halo behind a large GoldText number.
-            Anchor (397 €) sits beside the hero price, struck through and clearly
+            Anchor (117 €) sits beside the hero price, struck through and clearly
             visible, so 44 € reads as a real discount against a real reference. */}
         <div className="relative mt-8 text-center">
           <div
@@ -54,7 +54,7 @@ export function PricingCard() {
             {/* Struck-through anchor above the hero price, centered, brighter so
                 it reads clearly (no dim gray). */}
             <span className="font-display text-2xl font-medium text-foreground/85 line-through decoration-accent decoration-2 sm:text-3xl">
-              397 €
+              117 €
             </span>
             <span className="mt-1 font-display text-[clamp(3.75rem,2rem+9vw,5.5rem)] font-bold leading-none">
               <GoldText>44</GoldText>

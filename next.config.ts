@@ -91,13 +91,24 @@ const nextConfig: NextConfig = {
          a la lista de espera: mantenerlo habría mandado a quien buscara la
          página de venta a un formulario de espera, y habría dejado esa landing
          inalcanzable en ese dominio. Ahora /ventas la sirve directamente. */
-      /* La gracias del Bootcamp se movió a /bootcamp/gracias. El checkout de
-         Stripe todavía puede apuntar a /gracias: esta red de seguridad evita
-         que el comprador caiga en un 404 tras pagar. Quitar una vez que la URL
-         de éxito del checkout esté actualizada a /bootcamp/gracias. */
+      /* ── LA GRACIAS DEL BOOTCAMP ESTÁ EN /bootcamp/acceso-k7q2x9 ──
+
+         Salió de /bootcamp/gracias para que no se pueda adivinar. Estas dos
+         reglas son la red para el checkout, que todavía puede apuntar a
+         cualquiera de las dos rutas viejas: sin ellas, el comprador caería en
+         un 404 justo después de pagar.
+
+         ⚠️ SON TEMPORALES. Mientras existan, la ruta vieja sigue llevando a la
+         página y ocultarla no sirve de nada. Quitarlas en cuanto la URL de
+         éxito del checkout apunte a /bootcamp/acceso-k7q2x9. */
       {
         source: "/gracias",
-        destination: "/bootcamp/gracias",
+        destination: "/bootcamp/acceso-k7q2x9",
+        permanent: false,
+      },
+      {
+        source: "/bootcamp/gracias",
+        destination: "/bootcamp/acceso-k7q2x9",
         permanent: false,
       },
 
