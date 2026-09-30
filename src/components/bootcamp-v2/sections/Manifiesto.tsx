@@ -92,7 +92,20 @@ export function Manifiesto() {
         <h2
           className="mx-auto max-w-6xl font-sans text-[1.15rem] font-normal leading-tight text-foreground sm:text-[clamp(1.55rem,1rem+2.3vw,2.65rem)]"
         >
-          <span data-line="1" className="block">
+          {/* ── UNA SOLA LÍNEA DESDE TABLET ──
+
+              La frase mide 25,8em de ancho natural. Con el tamaño del h2
+              (2.65rem) medía 1093px en una caja de 1088: "podcasts…" caía
+              sola a la segunda línea en todos los anchos de escritorio.
+
+              Desde sm va en nowrap y con un tamaño atado al viewport (3.3vw)
+              que siempre deja la frase por debajo del ancho de la caja, con
+              tope en 2.55rem. En móvil entrar en una línea exigiría ~12px, que
+              ya no es un titular: ahí se queda en dos, equilibradas. */}
+          <span
+            data-line="1"
+            className="block text-balance sm:whitespace-nowrap sm:text-[clamp(1.1rem,3.3vw,2.55rem)]"
+          >
             Has leído libros, visto vídeos y escuchado podcasts…
           </span>
 

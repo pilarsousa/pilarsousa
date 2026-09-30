@@ -23,6 +23,14 @@ type TactileCtaButtonProps = {
  * y quedaban por ENCIMA de él, tapando el 80% de su superficie: un click en
  * los costados caía en un div vacío y no hacía nada. Aquí son hijas del <a>,
  * así que cualquier punto del botón sigue siendo el enlace.
+ *
+ * ── EL ANCHO LO DA EL TEXTO ──
+ *
+ * La cara es absoluta —tiene que poder inclinarse sin mover lo de alrededor—
+ * y por eso no empuja el tamaño del enlace. El .sizer es una copia invisible
+ * de la etiqueta, en el flujo, que sí lo hace: el botón crece con su texto
+ * ("Quiero acceder al bootcamp" no cabe en un ancho fijo) y nunca baja del
+ * mínimo. Va aria-hidden para que el lector de pantalla no lo lea dos veces.
  */
 export function TactileCtaButton({
   href,
@@ -38,6 +46,9 @@ export function TactileCtaButton({
       rel={external ? "noopener noreferrer" : undefined}
       className={cn(styles.cta, block && styles.block, className)}
     >
+      <span aria-hidden className={cn(styles.label, styles.sizer)}>
+        {children}
+      </span>
       <span aria-hidden className={cn(styles.zone, styles.zoneLeft)} />
       <span aria-hidden className={cn(styles.zone, styles.zoneRight)} />
       <span className={styles.face}>

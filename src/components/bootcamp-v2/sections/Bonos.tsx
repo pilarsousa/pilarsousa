@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/shared/Container";
 import { SectionTitle } from "@/components/bootcamp-v2/ui/SectionTitle";
-import { CtaButton } from "@/components/bootcamp-v2/ui/CtaButton";
+import { TactileCtaButton } from "@/components/bootcamp-v2/ui/TactileCtaButton";
 import { CHECKOUT_URL } from "@/lib/links";
 import banner from "@/../public/bootcamp-landing/banner-web-bonos.jpg";
 import bannerMobile from "@/../public/bootcamp-landing/banner-web-bonos-mobile.jpg";
@@ -157,9 +157,9 @@ export function Bonos() {
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="mt-10 flex justify-center"
         >
-          <CtaButton href={CHECKOUT_URL} external>
+          <TactileCtaButton href={CHECKOUT_URL} external>
             Quiero acceder al bootcamp
-          </CtaButton>
+          </TactileCtaButton>
         </motion.div>
       </Container>
     </section>

@@ -1,5 +1,5 @@
 import { Sparkles } from "lucide-react";
-import { CtaButton } from "@/components/bootcamp-v2/ui/CtaButton";
+import { TactileCtaButton } from "@/components/bootcamp-v2/ui/TactileCtaButton";
 import { GoldText } from "@/components/bootcamp-v2/ui/GoldText";
 import { GlowBadge } from "@/components/bootcamp-v2/ui/GlowBadge";
 import { Countdown } from "@/components/bootcamp-v2/ui/Countdown";
@@ -12,7 +12,7 @@ import { CHECKOUT_URL, BOOTCAMP_START } from "@/lib/links";
  * Not a generic SaaS pricing box. It speaks the landing's own language:
  * gold hairlines (border-image), a radial gold halo behind the price,
  * GoldText shimmer on the number, FactBadges for the concrete facts, and
- * the primary CtaButton. Corner accents and a limited-time pill push the
+ * the primary TactileCtaButton. Corner accents and a limited-time pill push the
  * brand vocabulary one notch further than it appears anywhere else on the
  * page — breaking the pattern WITHOUT breaking the coherence.
  *
@@ -30,7 +30,7 @@ export function PricingCard() {
 
       {/* Volume simulated by stacked radial lights (forest/gold tint) instead
           of a flat shadow — gives the card real depth on its top-left. */}
-      <div className="relative isolate overflow-hidden rounded-3xl border border-accent/20 bg-[radial-gradient(105%_80%_at_50%_140%,color-mix(in_oklab,var(--color-forest-700)_55%,transparent)_0%,transparent_100%),radial-gradient(71%_56%_at_40%_8%,color-mix(in_oklab,var(--color-forest-700)_35%,transparent)_0%,transparent_100%),linear-gradient(to_bottom,color-mix(in_oklab,var(--color-cream-gold)_10%,transparent)_0%,var(--color-ink)_70%)] px-8 py-10 backdrop-blur-sm">
+      <div className="relative isolate overflow-hidden rounded-3xl border border-accent/20 bg-[radial-gradient(105%_80%_at_50%_140%,color-mix(in_oklab,var(--color-forest-700)_55%,transparent)_0%,transparent_100%),radial-gradient(71%_56%_at_40%_8%,color-mix(in_oklab,var(--color-forest-700)_35%,transparent)_0%,transparent_100%),linear-gradient(to_bottom,color-mix(in_oklab,var(--color-cream-gold)_10%,transparent)_0%,var(--color-ink)_70%)] px-5 py-10 backdrop-blur-sm sm:px-8">
         {/* Corner accents — thin gold brackets on all four corners. */}
         <span aria-hidden className="pointer-events-none absolute left-4 top-4 h-6 w-6 rounded-tl-lg border-l border-t border-accent/50" />
         <span aria-hidden className="pointer-events-none absolute right-4 top-4 h-6 w-6 rounded-tr-lg border-r border-t border-accent/50" />
@@ -77,7 +77,7 @@ export function PricingCard() {
         {/* Countdown to the bootcamp start — drives urgency. Given its own
             padded box so the unit tiles breathe instead of hugging the edges. */}
         <div className="bc2-carta-clara mt-9 rounded-2xl px-4 py-6 sm:px-6">
-          <p className="mb-5 text-center font-display text-[0.7rem] uppercase tracking-[0.3em] text-forest-900/85">
+          <p className="mb-5 text-balance text-center font-display text-[0.7rem] uppercase tracking-[0.3em] text-forest-900/85">
             La experiencia comienza en
           </p>
           <Countdown target={BOOTCAMP_START} />
@@ -85,9 +85,9 @@ export function PricingCard() {
 
         {/* Primary CTA — forced to a single line. */}
         <div className="mt-9 flex justify-center">
-          <CtaButton href={CHECKOUT_URL} external block>
+          <TactileCtaButton href={CHECKOUT_URL} external block>
             Acceder al bootcamp
-          </CtaButton>
+          </TactileCtaButton>
         </div>
       </div>
     </div>

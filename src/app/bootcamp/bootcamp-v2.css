@@ -88,6 +88,13 @@
     el mismo panel del Diagnóstico, con su tinta ya medida encima.
   */
   --bc2-panel: #fff8ef;
+
+  /* Los dos fondos de "Soy Pilar Sousa", medidos sobre las fotos nuevas: el
+     celeste del borde inferior de la de escritorio y el blanco roto de la de
+     móvil. La sección se pinta con ellos para que, si el texto es más alto que
+     la foto, la continuación no deje costura. */
+  --bc2-pilar-cielo: #c9e5f2;
+  --bc2-pilar-blanco: #fbfbfb;
   --bc2-panel-texto: var(--bc2-verde); /* 14,1:1 sobre el panel */
   --bc2-panel-texto-suave: var(--bc2-verde-2); /* 9,8:1 */
 
@@ -285,7 +292,7 @@
   En vez de ir componente por componente cambiando font-display por otra cosa,
   se redefinen aquí las tres variables. Todo lo que cuelga del hero —el
   titular, las pastillas, el rótulo del CTA, la letra pequeña— cae en DM Sans
-  sin tocar una sola línea de sus archivos, y el CtaButton sigue siendo el
+  sin tocar una sola línea de sus archivos, y el TactileCtaButton sigue siendo el
   mismo componente que se usa más abajo en Trajan.
 
   --font-accent apunta también a DM Sans a propósito: es la Cormorant itálica,
@@ -437,6 +444,36 @@
     ),
     radial-gradient(ellipse 70% 60% at 50% 50%, #000 40%, transparent 100%);
   mask-composite: intersect;
+}
+
+/*
+  ── EL FONDO DE "SOY PILAR SOUSA" ──
+
+  Las dos fotos traen arriba una franja TRANSPARENTE (alfa 0) que el pelo de
+  Pilar invade: la cabeza sobresale del panel. Para que eso se lea como un
+  recorte y no como una tira de otro tono, la franja se pinta con el verde de
+  la sección anterior (Bonos) y el panel empieza justo debajo.
+
+  Las alturas son las de cada imagen a su ancho: 68/960 en móvil (7,08vw) y
+  100/1920 en escritorio (5,21vw). Van en vw porque la foto escala con el
+  ancho de la pantalla, así que el corte cae siempre en el mismo sitio.
+*/
+.bc2-pilar {
+  background: linear-gradient(
+    to bottom,
+    var(--color-background) 7.08vw,
+    var(--bc2-pilar-blanco) 7.08vw
+  );
+}
+
+@media (width >= 64rem) {
+  .bc2-pilar {
+    background: linear-gradient(
+      to bottom,
+      var(--color-background) 5.21vw,
+      var(--bc2-pilar-cielo) 5.21vw
+    );
+  }
 }
 
 /*

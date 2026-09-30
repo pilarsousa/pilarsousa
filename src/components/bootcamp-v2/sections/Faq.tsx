@@ -61,7 +61,10 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
         aria-expanded={open}
         className="flex w-full cursor-pointer items-center justify-between gap-4 py-5 text-left"
       >
-        <span className="font-display text-base font-medium text-forest-900 sm:text-lg">
+        {/* Sans, not Trajan: Trajan has no lowercase, so a full question set in
+            it read as a wall of small caps. Semibold gives each question the
+            weight of a heading over the regular-weight answer below. */}
+        <span className="font-sans text-base font-semibold leading-snug text-forest-900 sm:text-lg">
           {q}
         </span>
         <span

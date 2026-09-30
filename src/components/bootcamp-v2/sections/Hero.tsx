@@ -30,7 +30,7 @@ import isotipo from "@/../public/diagnostico/contenido/logo/new-logo.png";
  * ── UNA SOLA TIPOGRAFÍA ──
  *
  * Todo el hero va en DM Sans. No se pide en ningún className: lo hace
- * .bc2-hero redefiniendo los tokens de fuente, así que hasta el CtaButton
+ * .bc2-hero redefiniendo los tokens de fuente, así que hasta el TactileCtaButton
  * —que más abajo en la página sale en Trajan— cae aquí en DM Sans.
  *
  * La única excepción es el rótulo del sello, en Trajan. Ver .bc2-sello.
