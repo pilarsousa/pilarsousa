@@ -1,29 +1,44 @@
 import Image from "next/image";
+import { Video } from "lucide-react";
 import { Container } from "@/components/shared/Container";
 import { Reveal } from "@/components/bootcamp-v2/ui/Reveal";
 import { CtaButton } from "@/components/bootcamp-v2/ui/CtaButton";
-import { GoldText } from "@/components/bootcamp-v2/ui/GoldText";
 import { ScheduleReferenceCard } from "@/components/bootcamp-v2/ui/ScheduleReferenceCard";
-import { SideRays } from "@/components/bootcamp-v2/ui/SideRays";
 import { CHECKOUT_URL } from "@/lib/links";
-import bgDesktop from "@/../public/bootcamp-landing/bg-pilarsousa.jpg";
-import bgMobile from "@/../public/bootcamp-landing/bg-pilarsousa-mobile.jpg";
-import logo from "@/../public/bootcamp-v2/LOGO.png";
+import bgDesktop from "@/../public/bootcamp-v2/banner-pilar.png";
+import bgMobile from "@/../public/bootcamp-v2/banner-pilarsousa-mobile.png";
+import isotipo from "@/../public/diagnostico/contenido/logo/new-logo.png";
 
 /**
  * Section 1 — Hero / Offer.
  *
- * Full-bleed background photo (Pilar on the right, looking left toward the
- * light). The photo is kept clean — no full overlay covering Pilar. A soft
- * gradient sits ONLY behind the left text column and fades all the way to
- * transparent before reaching her. Two responsive sources via <picture>.
+ * ── LA FOTO NUEVA CAMBIÓ EL PROBLEMA DE LEGIBILIDAD ──
+ *
+ * La anterior era un bosque oscuro y el texto se leía casi sin ayuda. Ésta es
+ * un interior claro, con Pilar a la derecha y pared blanca a la izquierda:
+ * justo donde va la columna de texto. Sin velo, el crema sobre blanco
+ * desaparece.
+ *
+ * Por eso el degradado de escritorio arranca en el verde OPACO —no en un
+ * velo— y no se abre hasta pasada la mitad. No es un oscurecido decorativo:
+ * es lo único que sostiene el contraste de todo el bloque.
+ *
+ * En móvil no hace falta tanto, porque la imagen YA VIENE con el degradado al
+ * verde integrado en su mitad inferior. Lo de aquí sólo remata el encuentro
+ * con la sección siguiente.
+ *
+ * ── UNA SOLA TIPOGRAFÍA ──
+ *
+ * Todo el hero va en DM Sans. No se pide en ningún className: lo hace
+ * .bc2-hero redefiniendo los tokens de fuente, así que hasta el CtaButton
+ * —que más abajo en la página sale en Trajan— cae aquí en DM Sans.
  */
 export function Hero() {
   return (
     <section
       id="hero"
       aria-labelledby="hero-title"
-      className="relative isolate flex min-h-[100svh] items-end overflow-hidden lg:max-h-200 lg:min-h-200 lg:items-center"
+      className="bc2-hero relative isolate flex min-h-[100svh] items-end overflow-hidden lg:max-h-200 lg:min-h-200 lg:items-center"
     >
       {/* Background photo as its own layer. Pilar stays uncovered. */}
       <div aria-hidden className="absolute inset-0 -z-10">
@@ -40,29 +55,10 @@ export function Hero() {
           />
         </picture>
 
-        {/* Readability gradient — eases fully to transparent (no visible
-            mid-point cut). Bottom variant on mobile, left on desktop. */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_top,var(--color-ink)_0%,color-mix(in_oklab,var(--color-ink)_55%,transparent)_30%,transparent_65%)] lg:bg-[linear-gradient(to_right,var(--color-ink)_0%,color-mix(in_oklab,var(--color-ink)_50%,transparent)_28%,transparent_55%)]" />
-
-        {/* Cream light rays sweeping in from the top-right ("the other side"),
-            crossing toward the copy. Sits over the photo, under the content.
-            On mobile the canvas is confined to the upper area (top ~45%) so the
-            rays stay near Pilar's head and don't run down to the text; on lg+
-            they fill the whole hero. The canvas itself is masked to fade at its
-            lower edge so the cropped bottom isn't a hard line. */}
-        <div className="absolute inset-x-0 top-0 z-1 h-[45%] opacity-20 mask-[linear-gradient(to_bottom,black_70%,transparent)] lg:bottom-0 lg:h-auto lg:opacity-100 lg:mask-none">
-          <SideRays
-            origin="top-right"
-            rayColor1="#fff8f0"
-            rayColor2="#ffffff"
-            intensity={1.6}
-            spread={2}
-            speed={2.2}
-            blend={0.4}
-            saturation={1.2}
-            opacity={0.85}
-          />
-        </div>
+        {/* Velo de legibilidad. Móvil: remate inferior sobre el degradado que
+            la propia imagen ya trae. Escritorio: barrido desde la izquierda,
+            opaco en el borde, que libera a Pilar a partir del 70%. */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_top,var(--bc2-fondo)_0%,var(--bc2-velo)_26%,transparent_64%)] lg:bg-[linear-gradient(to_right,var(--bc2-fondo)_0%,var(--bc2-velo)_32%,var(--bc2-velo-medio)_50%,transparent_72%)]" />
 
         {/* Bottom fade into the next section so the cut isn't abrupt. Both this
             and the Manifiesto behind it resolve to --color-ink, so the seam
@@ -70,81 +66,97 @@ export function Hero() {
         <div className="absolute inset-x-0 bottom-0 h-32 bg-[linear-gradient(to_bottom,transparent,var(--color-ink))]" />
       </div>
 
-      {/* Mobile pushes content down ~200px so Pilar's photo breathes at the
-          top; desktop uses a fluid vertical padding that stays compact on
-          short laptops (e.g. 1366×768) and only grows on tall screens. */}
       <Container className="pb-16 pt-[200px] lg:py-[clamp(2.5rem,1rem+5vh,7rem)]">
         <div className="max-w-2xl">
-          {/* Program logotype + format badge. */}
+          {/* 1 y 2 — el sello del programa y la modalidad. */}
           <Reveal>
-            <div className="mb-2 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-4">
-              <Image
-                src={logo}
-                alt="Volver al Origen — Bootcamp"
-                priority
-                sizes="(min-width: 1024px) 240px, 180px"
-                className="h-auto w-45 lg:w-60"
-              />
-              <span className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full border border-accent/60 bg-accent/20 px-3.5 py-2 font-display text-xs font-bold uppercase tracking-[0.15em] text-foreground shadow-[0_6px_24px_-4px_rgba(0,0,0,0.7)] backdrop-blur-md">
-                {/* Continuous light sheen sweeping across the badge. */}
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 bg-linear-to-r from-transparent via-cream-gold/40 to-transparent animate-sheen"
+            <div className="mb-5 flex flex-wrap items-center gap-2.5">
+              {/*
+                El sello. Es la pieza de identidad del evento, así que lleva la
+                cara clara de las tarjetas —no un contorno suelto— y el isotipo
+                va a sangre por la izquierda, como el troquel de un sello real.
+
+                El disco de marca es verde muy oscuro y aquí cae sobre crema,
+                que es donde mejor se separa: en la landing del diagnóstico va
+                sobre el fondo verde y se distingue sólo por el nombre blanco
+                de dentro.
+              */}
+              <span className="bc2-carta-clara inline-flex items-center gap-2.5 rounded-full py-1 pl-1 pr-4">
+                <Image
+                  src={isotipo}
+                  alt="Volver al Origen"
+                  width={1254}
+                  height={1254}
+                  priority
+                  quality={90}
+                  sizes="36px"
+                  className="size-9 shrink-0 rounded-full"
                 />
-                {/* Live "on air" dot: a pulsing core with an expanding ring. */}
-                <span aria-hidden className="relative flex size-2">
-                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-white/70" />
-                  <span className="relative inline-flex size-2 rounded-full bg-white shadow-[0_0_8px_2px_rgba(255,255,255,0.7)]" />
+                <span className="text-[0.72rem] font-bold uppercase leading-none tracking-[0.13em] text-forest-900">
+                  Metafísica Práctica
                 </span>
-                <span className="relative">
-                  Bootcamp <span className="text-white">Online</span>
+              </span>
+
+              <span className="inline-flex items-center gap-2 rounded-full border border-foreground/30 bg-foreground/10 px-3.5 py-2.5 backdrop-blur-md">
+                <Video size={14} strokeWidth={2.2} className="shrink-0 text-foreground" />
+                <span className="text-[0.72rem] font-semibold uppercase leading-none tracking-[0.13em] text-foreground">
+                  Evento en vivo
+                </span>
+                {/* Punto "al aire": núcleo fijo y anillo que se expande. */}
+                <span aria-hidden className="relative ml-0.5 flex size-1.5">
+                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-foreground/70" />
+                  <span className="relative inline-flex size-1.5 rounded-full bg-foreground" />
                 </span>
               </span>
             </div>
           </Reveal>
 
-          {/* Hook as the headline promise (>=32px). Light-gold animated
-              shimmer on the key phrase; body font for the lead-in. */}
+          {/* 3 — la promesa. Una sola familia y un solo color: el contraste lo
+              hace el peso, no un cambio de letra a mitad de frase. */}
           <Reveal delay={0.1}>
             <h1
               id="hero-title"
-              className="text-foreground text-[clamp(1.6rem,1rem+2.2vw,2.75rem)] leading-[1.15]"
+              className="max-w-xl text-[clamp(1.75rem,1.1rem+2.4vw,3rem)] font-medium leading-[1.12] tracking-[-0.025em] text-foreground"
             >
-              <span className="font-sans font-normal text-foreground">
-                Llevas años consumiendo espiritualidad.
-              </span>{" "}
-              <GoldText glow className="font-display font-bold">
+              Llevas años consumiendo espiritualidad.{" "}
+              <span className="font-bold">
                 Entonces, ¿por qué sigues repitiendo los mismos patrones?
-              </GoldText>
+              </span>
             </h1>
           </Reveal>
 
-          {/* Description — fluid 16→18px, brighter. */}
+          {/* 4 — la descripción, con lo que importa remarcado sobre crema para
+              que se pueda escanear sin leerla entera. */}
           <Reveal delay={0.2}>
-            <p className="mt-4 max-w-xl leading-relaxed text-foreground/95 text-[clamp(1rem,0.95rem+0.3vw,1.125rem)] sm:mt-5">
-              Un entrenamiento práctico de 3 días para romper el viejo patrón
-              que está creando tu realidad, salir del estancamiento y manifestar
-              resultados tangibles.
+            <p className="mt-5 max-w-xl text-[clamp(1rem,0.95rem+0.3vw,1.1rem)] leading-[1.75] text-foreground/90">
+              Un entrenamiento práctico de 3 días para romper{" "}
+              <span className="bc2-realce">el viejo patrón</span> que está
+              creando tu realidad, salir del estancamiento y manifestar{" "}
+              <span className="bc2-realce">resultados tangibles</span>.
             </p>
           </Reveal>
 
+          {/* 5 y 6 — los detalles. 540px es lo que hace que las tres pastillas
+              de formato entren en una sola fila. */}
           <Reveal delay={0.3}>
-            <ScheduleReferenceCard className="mt-4 sm:mt-8" />
+            <ScheduleReferenceCard className="mt-7 w-full max-w-[540px]" />
           </Reveal>
 
+          {/* 7 y 8 — el CTA y la inversión, centrada debajo.
+              La columna es w-fit en sm+ para que "centrada debajo del botón"
+              signifique respecto AL BOTÓN y no respecto a toda la página. */}
           <Reveal delay={0.4}>
-            {/* Full-width on mobile so the CTA fills the column; on sm+ it
-                shrinks to its content. Width is driven from the wrapper so it
-                beats the button's own inline-flex without fighting .block. */}
-            <div className="mt-4 w-full sm:mt-8 sm:w-fit">
-              <div className="[&>a]:flex [&>a]:w-full sm:[&>a]:w-fit">
+            <div className="mt-7 flex w-full flex-col items-center sm:w-fit">
+              <div className="w-full [&>a]:flex [&>a]:w-full sm:[&>a]:w-fit">
                 <CtaButton href={CHECKOUT_URL} external>
                   Acceder al Bootcamp
                 </CtaButton>
               </div>
-              <p className="mt-3 text-center text-sm font-medium tracking-wide text-foreground/85 sm:text-left">
+              <p className="mt-3.5 text-center text-[0.9rem] text-foreground/70">
                 Inversión de la experiencia:{" "}
-                <span className="font-display text-accent-soft">44 €</span>
+                <span className="font-semibold text-foreground underline decoration-foreground/35 decoration-1 underline-offset-[5px]">
+                  44 €
+                </span>
               </p>
             </div>
           </Reveal>

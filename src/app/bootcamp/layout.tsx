@@ -33,6 +33,19 @@ import "./bootcamp-v2.css";
 */
 
 export const metadata: Metadata = {
+  /*
+    El favicon de Volver al Origen, el mismo que sirve /diagnostico. El layout
+    raíz emite el favicon.ico del sitio para todas las páginas; declararlo aquí
+    es lo que hace que en /bootcamp gane éste, y que la pestaña diga la misma
+    marca que el sello del hero.
+
+    ⚠️ ES UNA COPIA de 128x128, no el logotipo original de 1254x1254. Un favicon
+    se pide en cada página y Next NO optimiza lo que se referencia desde
+    `metadata.icons`: se sirve tal cual desde /public. Si cambia el logotipo hay
+    que regenerarla —igual que la de /diagnostico, que se documenta en su
+    layout— porque no se entera sola.
+  */
+  icons: { icon: "/bootcamp-v2/favicon.png" },
   title: "Bootcamp Reset Identidad | Pilar Sousa",
   description:
     "No manifiestas lo que deseas. Manifiestas quien eres. Un campamento de metafísica práctica para resetear tu identidad y volver al origen.",

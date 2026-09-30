@@ -1,6 +1,6 @@
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
-import { Cinzel, Manrope, Cormorant_Garamond, Montserrat } from "next/font/google";
+import { Cinzel, Manrope, Cormorant_Garamond, Montserrat, DM_Sans } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -56,6 +56,25 @@ const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
+// ---- Bootcamp V2 ----
+
+/* La ÚNICA familia del hero de /bootcamp.
+
+   El hero mezclaba tres —Trajan en el titular, Montserrat en el cuerpo y
+   Cormorant en los énfasis— y con tres estilos distintos en media pantalla la
+   pieza se leía inquieta. DM Sans las sustituye a las tres ahí dentro: es
+   geométrica, tiene caja baja de verdad (Trajan no) y aguanta desde el titular
+   de 44px hasta la letra pequeña de una pastilla sin cambiar de carácter.
+
+   ⚠️ SÓLO EL HERO. El resto de la página sigue en Trajan + Montserrat: esto se
+   activa redefiniendo los tokens de fuente en .bc2-hero, no aquí. */
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -133,7 +152,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${cinzel.variable} ${trajan.variable} ${manrope.variable} ${cormorant.variable} ${montserrat.variable} ${zenDots.variable} ${jost.variable} ${pressStart2P.variable} ${pixelifySans.variable} h-full antialiased`}
+      className={`${cinzel.variable} ${trajan.variable} ${manrope.variable} ${cormorant.variable} ${montserrat.variable} ${dmSans.variable} ${zenDots.variable} ${jost.variable} ${pressStart2P.variable} ${pixelifySans.variable} h-full antialiased`}
     >
       {/* suppressHydrationWarning: browser extensions (e.g. ColorZilla) inject
           attributes like cz-shortcut-listen on <body> before React hydrates,

@@ -77,13 +77,42 @@
       var(--crema-hondo) 100%
     );
 
-  /* Glow halo + inner edge highlights, all scaled by --active. */
+  /*
+    ── EL RELIEVE ES PERMANENTE, NO SÓLO AL PASAR POR ENCIMA ──
+
+    Antes TODO el volumen iba multiplicado por --active: en reposo los cinco
+    valores valían cero y el botón era un rectángulo blanco plano con una
+    sombra suelta debajo. El relieve sólo existía mientras el cursor estaba
+    encima, que es justo cuando menos falta hace.
+
+    Ahora el volumen está siempre puesto y --active sólo AÑADE el halo. Son
+    dos grupos:
+
+      · cinco sombras ENCAJADAS que modelan la pieza — filo blanco arriba,
+        contorno fino, y tres capas verdes subiendo desde el borde inferior;
+      · cinco PROYECTADAS con el escalonado 1-2-4-8-16 px, que es lo que hace
+        que la sombra se lea difusa y no como un contorno duro.
+
+    Es el mismo relieve del botón de /diagnostico y por el mismo motivo: sobre
+    un relleno casi blanco una luz interior no existe, así que el volumen lo
+    tiene que dar la sombra.
+  */
   box-shadow:
+    /* el halo, lo único que sigue dependiendo de --active */
     0 0 calc(var(--active) * 4em) calc(var(--active) * 1.2em)
       hsl(var(--crema) / 0.45),
-    0 0.05em 0 0 hsl(var(--crema-viva) / calc(var(--active) * 0.9)) inset,
-    0 -0.05em 0 0 hsl(var(--verde) / calc(var(--active) * 0.5)) inset,
-    0 10px 30px -10px hsl(var(--verde) / 0.6);
+    /* relieve interior */
+    inset 0 1px 0 hsl(var(--crema-viva) / 0.95),
+    inset 0 0 0 1px hsl(var(--verde) / 0.08),
+    inset 0 -1px 0 hsl(var(--verde) / 0.18),
+    inset 0 -6px 8px -6px hsl(var(--verde) / 0.28),
+    inset 0 -14px 16px -12px hsl(var(--verde) / 0.22),
+    /* proyectada, escalonada */
+    0 1px 1px hsl(var(--verde) / 0.16),
+    0 2px 2px hsl(var(--verde) / 0.13),
+    0 4px 4px hsl(var(--verde) / 0.1),
+    0 8px 10px -4px hsl(var(--verde) / 0.16),
+    0 18px 26px -10px hsl(var(--verde) / 0.42);
 
   scale: calc(1 + (var(--active) * 0.04));
 
