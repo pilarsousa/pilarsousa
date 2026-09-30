@@ -1,0 +1,192 @@
+/*
+  CTA táctil — aro exterior + cara interior hundida.
+
+  ── DEL GRIS DE LA REFERENCIA AL CREMA DE LA MARCA ──
+
+  El diseño original es un metal gris (#e8e8e8 → #c8c8c8) con sombras negras.
+  Sobre este verde, un gris se lee como una pieza de otra paleta — es el mismo
+  problema que documenta CtaButton.module.css. Así que se conserva la FORMA
+  (aro, cara interior, inclinación, pulsado, barrido) y se traducen los tonos:
+
+    · el aro va del crema al crema rebajado con verde (--aro-*);
+    · la cara interior, del blanco al crema de marca;
+    · todas las sombras son verde de marca, nunca negro.
+*/
+
+.cta {
+  --aro-claro: color-mix(in srgb, var(--bc2-crema) 92%, var(--bc2-verde));
+  --aro-hondo: color-mix(in srgb, var(--bc2-crema) 76%, var(--bc2-verde));
+  --aro-filo: color-mix(in srgb, var(--bc2-crema) 58%, var(--bc2-verde));
+  --sombra: 0, 47, 1; /* el verde de marca, en canales para darle alfa */
+
+  position: relative;
+  display: inline-block;
+  width: 16.25rem;
+  max-width: 100%;
+  height: 5rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cta.block {
+  display: block;
+  width: 100%;
+}
+
+.cta:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 5px;
+}
+
+/* ── El aro exterior ── */
+.face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 3px solid var(--aro-filo);
+  border-radius: inherit;
+  background: linear-gradient(145deg, var(--aro-claro), var(--aro-hondo));
+  box-shadow:
+    0 8px 16px rgba(var(--sombra), 0.28),
+    inset 0 2px 4px rgba(255, 255, 255, 0.55),
+    inset 0 -2px 4px rgba(var(--sombra), 0.14);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+/* ── La cara interior ── */
+.face::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  z-index: 1;
+  border-radius: inherit;
+  background: linear-gradient(145deg, #ffffff, var(--bc2-crema));
+  box-shadow:
+    inset 0 1px 3px rgba(255, 255, 255, 0.9),
+    inset 0 -1px 3px rgba(var(--sombra), 0.16),
+    0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+/* ── El barrido de luz, que cruza al pasar por encima ── */
+.face::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.55),
+    transparent
+  );
+  transition: left 0.5s ease;
+  pointer-events: none;
+}
+
+.label {
+  position: relative;
+  z-index: 3;
+  font-family: var(--font-display), sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bc2-verde);
+  transition: transform 0.3s ease;
+  pointer-events: none;
+}
+
+/* ── Zonas invisibles de inclinación (40% por lado, el centro queda libre) ── */
+.zone {
+  position: absolute;
+  top: 0;
+  z-index: 15;
+  width: 40%;
+  height: 100%;
+}
+
+.zoneLeft {
+  left: 0;
+}
+
+.zoneRight {
+  right: 0;
+}
+
+/*
+  Sólo con puntero real. En táctil el :hover se queda "pegado" tras el toque y
+  el botón aparecería torcido hasta tocar otra cosa.
+*/
+@media (hover: hover) {
+  .cta:hover .face {
+    transform: translateY(-2px);
+    box-shadow:
+      0 12px 24px rgba(var(--sombra), 0.34),
+      inset 0 2px 4px rgba(255, 255, 255, 0.6),
+      inset 0 -2px 4px rgba(var(--sombra), 0.14);
+  }
+
+  .cta:hover .face::before {
+    left: 100%;
+  }
+
+  /* Van después de .cta:hover .face y con la misma especificidad: gana el
+     orden, así que la inclinación pisa al levantado simple del centro. */
+  .zoneLeft:hover ~ .face {
+    transform: translateY(-2px) rotate(-3deg);
+    transform-origin: center bottom;
+  }
+
+  .zoneRight:hover ~ .face {
+    transform: translateY(-2px) rotate(3deg);
+    transform-origin: center bottom;
+  }
+}
+
+.cta:focus-visible .face::before {
+  left: 100%;
+}
+
+/* ── Pulsado ── */
+.cta:active .face {
+  transform: scale(0.97) translateY(1px);
+  background: linear-gradient(145deg, var(--aro-hondo), var(--aro-claro));
+  box-shadow:
+    0 4px 8px rgba(var(--sombra), 0.3),
+    inset 0 4px 8px rgba(var(--sombra), 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.cta:active .face::after {
+  box-shadow:
+    inset 0 2px 6px rgba(var(--sombra), 0.3),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.2);
+}
+
+.cta:active .label {
+  transform: translateY(1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .face,
+  .face::before,
+  .label {
+    transition: none;
+  }
+
+  .cta .face,
+  .cta:hover .face,
+  .zoneLeft:hover ~ .face,
+  .zoneRight:hover ~ .face {
+    transform: none;
+  }
+}

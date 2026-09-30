@@ -49,13 +49,21 @@ export function Pilar() {
         {/* text-shadow on the whole column: the copy partly sits over the photo
             transition on mobile, so a soft ink shadow keeps it readable. */}
         <div className="max-w-xl [text-shadow:0_2px_16px_rgba(0,47,1,0.7)]">
-          {/* Name + opening line fused as one presentation block. */}
+          {/* Name + opening line fused as one presentation block.
+
+              Same pairing as every SectionTitle: sans at 400 for the lead-in,
+              the name in the Cormorant italic accent. The accent is bumped to
+              1.25em because its x-height is lower than the sans — without it
+              "Pilar Sousa" reads smaller than "Soy". */}
           <Reveal>
             <h2
               id="pilar-title"
-              className="font-display text-3xl font-semibold leading-tight text-foreground sm:text-4xl lg:text-5xl"
+              className="font-sans text-3xl font-normal leading-tight text-foreground sm:text-4xl lg:text-5xl"
             >
-              Soy <span className="text-accent">Pilar Sousa</span>
+              Soy{" "}
+              <em className="font-accent text-[1.25em] font-medium italic text-accent">
+                Pilar Sousa
+              </em>
             </h2>
           </Reveal>
 

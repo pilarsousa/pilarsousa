@@ -341,6 +341,105 @@
 }
 
 /*
+  ── EL AURA DE LA PREGUNTA DEL TITULAR ──
+
+  "Entonces, ¿por qué sigues repitiendo los mismos patrones?" lleva un reflejo
+  blanco que la recorre y un halo que se enciende a su paso.
+
+  ⚠️ LA BASE NO ES EL CREMA PLENO. El crema de marca está al 97% de luz y el
+  blanco al 100%: un barrido blanco sobre crema no se ve. Por eso la tinta en
+  reposo es el crema con un 14% de verde —sigue por encima de 10:1 sobre el
+  fondo— y el reflejo sube a blanco puro. El escalón es lo que se percibe como
+  brillo.
+
+  El degradado va recortado al texto (background-clip) y con el corte por
+  defecto (slice): en dos líneas el reflejo cruza la primera y sigue en la
+  segunda, como una sola pasada de luz.
+
+  El halo va en filter: drop-shadow y no en text-shadow, porque con la tinta
+  transparente que exige el recorte un text-shadow se vería A TRAVÉS de las
+  letras.
+*/
+.bc2-aura {
+  --aura-base: color-mix(in srgb, var(--bc2-crema) 86%, var(--bc2-verde));
+
+  background-image: linear-gradient(
+    100deg,
+    var(--aura-base) 0%,
+    var(--aura-base) 40%,
+    #ffffff 50%,
+    var(--aura-base) 60%,
+    var(--aura-base) 100%
+  );
+  background-size: 300% 100%;
+  background-position: 100% center;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.14));
+  animation: bc2-aura 5.5s ease-in-out infinite;
+}
+
+@keyframes bc2-aura {
+  0% {
+    background-position: 100% center;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.14));
+  }
+  /* A mitad de la pasada el halo está en su punto más alto. */
+  22% {
+    filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.38));
+  }
+  /* La pasada ocupa el primer 45%; el resto es pausa antes de repetir. */
+  45%,
+  100% {
+    background-position: 0% center;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.14));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bc2-aura {
+    animation: none;
+  }
+}
+
+/*
+  ── LA REJILLA DETRÁS DEL PRECIO ──
+
+  La máscara del GridScanBackdrop. La sección del precio va entre Experiencia y
+  Bonos, las tres en el mismo verde: si la rejilla llegase al borde, el corte
+  se vería como una franja pegada. Se funde a cero arriba y abajo, y en los
+  laterales con una elipse, para que la rejilla aparezca en el centro —detrás
+  de la tarjeta— y se pierda hacia los bordes.
+
+  Mismo mecanismo que .dg-fondo-fundido del Diagnóstico: dos máscaras que se
+  intersecan.
+*/
+.bc2-fondo-rejilla {
+  -webkit-mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 18%,
+      #000 82%,
+      transparent 100%
+    ),
+    radial-gradient(ellipse 70% 60% at 50% 50%, #000 40%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 18%,
+      #000 82%,
+      transparent 100%
+    ),
+    radial-gradient(ellipse 70% 60% at 50% 50%, #000 40%, transparent 100%);
+  mask-composite: intersect;
+}
+
+/*
   El rótulo del sello de marca.
 
   Es la ÚNICA excepción a la tipografía única del hero, y es deliberada: el

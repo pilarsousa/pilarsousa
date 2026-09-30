@@ -98,7 +98,7 @@ export function Cierre() {
             <p className="font-display text-sm uppercase tracking-[0.3em] text-accent">
               Validado por quienes ya lo vivieron
             </p>
-            <p className="mt-4 text-xl font-light leading-snug text-foreground sm:text-2xl">
+            <p className="mt-4 text-xl font-normal leading-snug text-foreground sm:text-2xl">
               <GoldText className="font-display font-semibold">4,8 / 5</GoldText>{" "}
               media de valoración entre nuestros alumnos.
             </p>

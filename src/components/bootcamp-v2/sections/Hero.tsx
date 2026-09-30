@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Video } from "lucide-react";
 import { Container } from "@/components/shared/Container";
 import { Reveal } from "@/components/bootcamp-v2/ui/Reveal";
-import { CtaButton } from "@/components/bootcamp-v2/ui/CtaButton";
+import { TactileCtaButton } from "@/components/bootcamp-v2/ui/TactileCtaButton";
 import { ScheduleReferenceCard } from "@/components/bootcamp-v2/ui/ScheduleReferenceCard";
 import { CHECKOUT_URL } from "@/lib/links";
 import bgDesktop from "@/../public/bootcamp-v2/banner-pilar.png";
@@ -101,7 +101,10 @@ export function Hero() {
                 </span>
               </span>
 
-              <span className="inline-flex h-11 items-center gap-2 rounded-full border border-foreground/30 bg-foreground/10 px-4 backdrop-blur-md">
+              {/* En móvil va primero, delante del sello: lo que abre la
+                  pantalla es que el evento es en directo. En escritorio vuelve
+                  a su sitio detrás del sello. */}
+              <span className="order-first inline-flex h-11 items-center gap-2 rounded-full border border-foreground/30 bg-foreground/10 px-4 backdrop-blur-md lg:order-0">
                 <Video size={14} strokeWidth={2.2} className="shrink-0 text-foreground" />
                 <span className="text-[0.72rem] font-semibold uppercase leading-none tracking-[0.13em] text-foreground">
                   Evento en vivo
@@ -116,15 +119,21 @@ export function Hero() {
           </Reveal>
 
           {/* 3 — la promesa. Una sola familia y un solo color: el contraste lo
-              hace el peso, no un cambio de letra a mitad de frase. */}
+              hace el peso, no un cambio de letra a mitad de frase.
+
+              En escritorio "¿por qué" se fuerza a la línea siguiente: sin el
+              corte, la última línea quedaba en "patrones?" sola. Con él las
+              cuatro líneas quedan parejas. text-wrap: pretty cubre lo mismo
+              en los anchos intermedios, donde el corte fijo no aplica. */}
           <Reveal delay={0.1}>
             <h1
               id="hero-title"
-              className="text-[clamp(1.6rem,1.25rem+1.4vw,2rem)] font-medium leading-[1.18] tracking-[-0.02em] text-foreground"
+              className="text-[clamp(1.6rem,1.25rem+1.4vw,2rem)] font-medium leading-[1.18] tracking-[-0.02em] text-pretty text-foreground"
             >
               Llevas años consumiendo espiritualidad.{" "}
-              <span className="font-bold">
-                Entonces, ¿por qué sigues repitiendo los mismos patrones?
+              <span className="bc2-aura font-bold">
+                Entonces, <br className="hidden lg:inline" />
+                ¿por qué sigues repitiendo los mismos patrones?
               </span>
             </h1>
           </Reveal>
@@ -132,7 +141,7 @@ export function Hero() {
           {/* 4 — la descripción, con lo que importa remarcado sobre crema para
               que se pueda escanear sin leerla entera. */}
           <Reveal delay={0.2}>
-            <p className="mt-5 text-[clamp(1rem,0.95rem+0.3vw,1.05rem)] leading-[1.8] text-foreground/90">
+            <p className="mt-5 text-[clamp(1rem,0.95rem+0.3vw,1.05rem)] font-semibold leading-[1.8] text-foreground/90">
               <span className="bc2-realce">
                 Un entrenamiento práctico de 3 días
               </span>{" "}
@@ -152,9 +161,9 @@ export function Hero() {
               centrar respecto a la columna y respecto al botón es lo mismo. */}
           <Reveal delay={0.4}>
             <div className="mt-7 flex w-full flex-col items-center">
-              <CtaButton href={CHECKOUT_URL} external block>
+              <TactileCtaButton href={CHECKOUT_URL} external block>
                 Acceder al Bootcamp
-              </CtaButton>
+              </TactileCtaButton>
               <p className="mt-3.5 text-center text-[0.9rem] text-foreground/70">
                 Inversión de la experiencia:{" "}
                 <span className="font-semibold text-foreground underline decoration-foreground/35 decoration-1 underline-offset-[5px]">

@@ -44,13 +44,25 @@ export const metadata: Metadata = {
     `metadata.icons`: se sirve tal cual desde /public. Si cambia el logotipo hay
     que regenerarla —igual que la de /diagnostico, que se documenta en su
     layout— porque no se entera sola.
+
+    ── EL DE APPLE VA APARTE ──
+
+    iOS no usa `icon`: busca `apple-touch-icon`, y sin él cae al favicon.ico de
+    la raíz, que es el de Vercel. apple-icon.png es 180x180 —el tamaño que pide
+    el iPhone— y OPACO: iOS rellena de negro lo transparente, y el logotipo
+    tiene las esquinas transparentes. Se generó desde el logotipo recortando su
+    filo claro y rellenando con el mismo verde del disco (#013103), para que
+    el círculo no deje costura contra el cuadrado.
   */
-  icons: { icon: "/bootcamp-v2/favicon.png" },
-  title: "Bootcamp Reset Identidad | Pilar Sousa",
+  icons: {
+    icon: "/bootcamp-v2/favicon.png",
+    apple: { url: "/bootcamp-v2/apple-icon.png", sizes: "180x180", type: "image/png" },
+  },
+  title: "Bootcamp Metafísica Práctica | Pilar Sousa",
   description:
     "No manifiestas lo que deseas. Manifiestas quien eres. Un campamento de metafísica práctica para resetear tu identidad y volver al origen.",
   openGraph: {
-    title: "Bootcamp Reset Identidad | Pilar Sousa",
+    title: "Bootcamp Metafísica Práctica | Pilar Sousa",
     description:
       "No manifiestas lo que deseas. Manifiestas quien eres. Un campamento de metafísica práctica para resetear tu identidad.",
     type: "website",

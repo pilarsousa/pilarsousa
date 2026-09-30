@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/shared/Container";
 import { SectionTitle } from "@/components/bootcamp-v2/ui/SectionTitle";
+import { cn } from "@/lib/cn";
 
 // Five recognizable pain points for the right-fit audience. Icons stay
 // symbolic: each one reinforces the pattern without turning the card into a
@@ -74,20 +75,33 @@ export function Patron() {
         </SectionTitle>
 
         {/* Las tarjetas CONTRASTAN con su sección: la sección es crema, así que
-            la cara va en verde. El relieve y la rejilla los pone .bc2-carta-verde. */}
+            la cara va en verde. El relieve y la rejilla los pone .bc2-carta-verde.
+
+            ── BENTO: 3 ARRIBA, 2 ABAJO, MISMO ANCHO TOTAL ──
+
+            En escritorio la rejilla es de 6 columnas: las tres primeras ocupan
+            2 cada una y las dos últimas 3 cada una, así la segunda fila llena
+            el mismo ancho que la primera en vez de dejar un hueco a la derecha.
+
+            A 2 columnas (tablet) la quinta quedaría sola a media fila: ahí
+            ocupa las dos. */}
         <motion.ul
           variants={container}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
-          className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
+          className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-6"
         >
-          {PATTERNS.map(({ icon: Icon, text }) => (
+          {PATTERNS.map(({ icon: Icon, text }, i) => (
             <motion.li
               key={text}
               variants={card}
               whileTap={{ scale: 0.97 }}
-              className="bc2-carta-verde group relative flex items-start gap-4 rounded-2xl p-6 transition-all duration-300 hover:brightness-115 active:brightness-125"
+              className={cn(
+                "bc2-carta-verde group relative flex items-start gap-4 rounded-2xl p-6 transition-all duration-300 hover:brightness-115 active:brightness-125",
+                i < 3 ? "lg:col-span-2" : "lg:col-span-3",
+                i === PATTERNS.length - 1 && "sm:col-span-2 lg:col-span-3",
+              )}
             >
               {/* El medallón se invierte con la tarjeta: sobre la cara verde pasa a
                   ser un disco crema con el icono en verde. Es la única pieza

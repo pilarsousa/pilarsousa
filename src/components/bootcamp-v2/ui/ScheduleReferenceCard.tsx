@@ -58,8 +58,6 @@ export function ScheduleReferenceCard({
           ))}
         </div>
 
-        <div className="relative my-3.5 h-px w-full bg-[linear-gradient(to_right,transparent,var(--bc2-verde-2),transparent)] opacity-25" />
-
         {/*
           Fila 2 — el horario.
 
@@ -67,6 +65,9 @@ export function ScheduleReferenceCard({
           el horario al lado— porque funcionaba: el disco ancla la fila y da
           un punto de entrada, y partirla en dos bloques separados por un
           filete dejaba los elementos sueltos sin eje común.
+
+          Entre las dos filas ya no hay filete: el que había sumaba casi 30px
+          de aire que no separaba nada que las pastillas no separasen solas.
 
           Lo que sí se mantiene de la revisión es la JERARQUÍA: el rótulo va
           arriba, pequeño y espaciado, como etiqueta; y la hora debajo, que es
@@ -76,7 +77,7 @@ export function ScheduleReferenceCard({
           rojigualda es 3:2 y al cubrir un cuadrado se escala por la altura, así
           que se recorta a los lados y las tres franjas se ven enteras.
         */}
-        <div className="relative flex items-center justify-center gap-3.5">
+        <div className="relative mt-3 flex items-center justify-center gap-3.5">
           <div className="relative size-[52px] shrink-0 rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--bc2-verde-2)_32%,transparent),transparent_70%)] p-0.5">
             <div className="relative size-full overflow-hidden rounded-full shadow-[0_2px_8px_rgba(0,47,1,0.4),inset_0_0_0_2px_rgba(0,47,1,0.22)]">
               <Image

@@ -30,7 +30,11 @@ export function SectionTitle({ children, tone = "dark", className }: SectionTitl
         viewport={{ once: true, amount: 0.5 }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className={cn(
-          "mx-auto max-w-3xl font-sans text-2xl font-light leading-tight sm:text-3xl lg:text-4xl",
+          // 400 is the floor for every heading on this landing — at 300 the
+          // cream-on-green titles read washed out.
+          "mx-auto max-w-3xl font-sans text-2xl font-normal leading-tight sm:text-3xl lg:text-4xl",
+          // No single word left alone on the last line (the mobile "si…").
+          "text-balance",
           // Cormorant accents (.font-accent) have a lower x-height than Manrope,
           // so bump them up to read at the same visual size as the body type.
           "[&_.font-accent]:text-[1.25em]",

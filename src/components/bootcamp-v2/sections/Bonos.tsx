@@ -134,11 +134,14 @@ export function Bonos() {
                   <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-forest-700 text-cream shadow-[inset_0_-3px_6px_-4px_rgba(0,0,0,0.7)]">
                     <Icon size={16} strokeWidth={1.75} />
                   </span>
-                  <h3 className="font-display text-sm font-semibold text-forest-900 sm:text-base">
+                  <h3 className="font-display text-base font-semibold text-forest-900">
                     {title}
                   </h3>
                 </div>
-                <p className="relative font-sans text-[0.82rem] leading-relaxed text-forest-900/75">
+                {/* 16px and medium: at 0.82rem light-on-cream the copy was the
+                    faintest text on the page. The title moves to 16px with it so
+                    it never reads smaller than its own description. */}
+                <p className="relative font-sans text-base font-medium leading-relaxed text-forest-900/80">
                   {description}
                 </p>
               </div>

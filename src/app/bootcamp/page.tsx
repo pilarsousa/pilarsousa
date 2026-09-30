@@ -10,6 +10,7 @@ import { Footer } from "@/components/bootcamp-v2/sections/Footer";
 import { Container } from "@/components/shared/Container";
 import { Reveal } from "@/components/bootcamp-v2/ui/Reveal";
 import { PricingCard } from "@/components/bootcamp-v2/ui/PricingCard";
+import { GridScanBackdrop } from "@/components/bootcamp-v2/ui/GridScanBackdrop";
 
 export default function Home() {
   return (
@@ -27,8 +28,11 @@ export default function Home() {
             understands what they will experience, then sees the price. */}
         <section
           id="precio"
-          className="bg-background py-[clamp(4rem,2rem+8vh,7rem)]"
+          className="relative isolate overflow-hidden bg-background py-[clamp(4rem,2rem+8vh,7rem)]"
         >
+          {/* The Diagnóstico's animated grid, behind the card. `isolate` keeps
+              its -z-10 layer inside this section instead of under the page. */}
+          <GridScanBackdrop className="-z-10" />
           <Container>
             <Reveal>
               <PricingCard />

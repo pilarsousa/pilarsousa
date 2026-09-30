@@ -75,12 +75,16 @@ export function Experiencia() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.7, delay: 0.15 }}
-          className="mx-auto mt-4 max-w-2xl text-center text-base leading-relaxed text-foreground/60 sm:mt-8"
+          className="mx-auto mt-4 max-w-2xl text-center text-base leading-[1.8] text-foreground sm:mt-8"
         >
-          Una experiencia práctica de 3 días para identificar por qué tu vieja
-          identidad bloquea tus manifestaciones, romper el patrón que limita tu
-          potencial y acceder a una nueva identidad capaz de manifestar la
-          realidad que deseas.
+          {/* Same .bc2-realce as the Hero description, on the two ideas that
+              carry the promise: the format and the outcome. More than two
+              and the highlight stops pointing at anything. */}
+          <span className="bc2-realce">Una experiencia práctica de 3 días</span>{" "}
+          para identificar por qué tu vieja identidad bloquea tus
+          manifestaciones, romper el patrón que limita tu potencial y acceder a{" "}
+          <span className="bc2-realce">una nueva identidad</span> capaz de
+          manifestar la realidad que deseas.
         </motion.p>
 
         {/* Clean responsive grid: 1 column on mobile, 3 on desktop. The

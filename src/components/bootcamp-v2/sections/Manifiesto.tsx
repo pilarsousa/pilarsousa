@@ -1,13 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import { useRef } from "react";
+import { ArrowDown } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
 import { Container } from "@/components/shared/Container";
-import flecha from "@/../public/bootcamp-v2/flecha.png";
 
 gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
 
@@ -91,7 +90,7 @@ export function Manifiesto() {
         {/* No overflow clip here: the blur halo needs room to breathe as each
             word rises and de-blurs into place. */}
         <h2
-          className="mx-auto max-w-6xl font-sans text-[1.15rem] font-light leading-tight text-foreground sm:text-[clamp(1.55rem,1rem+2.3vw,2.65rem)]"
+          className="mx-auto max-w-6xl font-sans text-[1.15rem] font-normal leading-tight text-foreground sm:text-[clamp(1.55rem,1rem+2.3vw,2.65rem)]"
         >
           <span data-line="1" className="block">
             Has leído libros, visto vídeos y escuchado podcasts…
@@ -115,16 +114,29 @@ export function Manifiesto() {
         </h2>
       </Container>
 
+      {/*
+        La flecha de paso a la sección siguiente.
+
+        ── VA A CABALLO ENTRE DOS FONDOS ──
+
+        Está centrada sobre el corte: la mitad de arriba cae en el verde casi
+        negro de esta sección y la de abajo en el crema del Patrón. El PNG de
+        antes era un disco crema, que sobre el crema de abajo desaparecía.
+
+        Ahora es disco VERDE con aro crema: el aro la despega del fondo oscuro
+        y el disco verde la despega del crema. Se lee entera en los dos lados.
+
+        La flecha es un trazo de 1.5 —la de la imagen era casi el doble— y el
+        conjunto baja de 64 a 48px: es una señal de paso, no un botón.
+      */}
       <a
         href="#patron"
         aria-label="Continuar hacia la siguiente sección"
-        className="group absolute bottom-0 left-1/2 z-20 block size-14 -translate-x-1/2 translate-y-1/2 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--color-ink)] sm:size-16"
+        className="group absolute bottom-0 left-1/2 z-20 block size-11 -translate-x-1/2 translate-y-1/2 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-(--color-ink) sm:size-12"
       >
-        <Image
-          src={flecha}
-          alt=""
-          className="size-full animate-scroll-cue drop-shadow-[0_10px_24px_var(--bc2-brillo-medio)] transition-transform duration-300 group-hover:scale-105"
-        />
+        <span className="flex size-full animate-scroll-cue items-center justify-center rounded-full border-[1.5px] border-cream bg-(--bc2-verde) text-cream shadow-[0_8px_20px_-6px_rgba(0,47,1,0.55)] transition-transform duration-300 group-hover:scale-105">
+          <ArrowDown size={18} strokeWidth={1.5} aria-hidden />
+        </span>
       </a>
     </section>
   );
