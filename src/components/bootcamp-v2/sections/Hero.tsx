@@ -32,6 +32,8 @@ import isotipo from "@/../public/diagnostico/contenido/logo/new-logo.png";
  * Todo el hero va en DM Sans. No se pide en ningún className: lo hace
  * .bc2-hero redefiniendo los tokens de fuente, así que hasta el CtaButton
  * —que más abajo en la página sale en Trajan— cae aquí en DM Sans.
+ *
+ * La única excepción es el rótulo del sello, en Trajan. Ver .bc2-sello.
  */
 export function Hero() {
   return (
@@ -67,7 +69,9 @@ export function Hero() {
       </div>
 
       <Container className="pb-16 pt-[200px] lg:py-[clamp(2.5rem,1rem+5vh,7rem)]">
-        <div className="max-w-2xl">
+        {/* 500px: el ancho que pidio el cliente para todo el bloque. La
+            tarjeta de detalles y el CTA lo ocupan entero. */}
+        <div className="max-w-[500px]">
           {/* 1 y 2 — el sello del programa y la modalidad. */}
           <Reveal>
             <div className="mb-5 flex flex-wrap items-center gap-2.5">
@@ -81,7 +85,7 @@ export function Hero() {
                 sobre el fondo verde y se distingue sólo por el nombre blanco
                 de dentro.
               */}
-              <span className="bc2-carta-clara inline-flex items-center gap-2.5 rounded-full py-1 pl-1 pr-4">
+              <span className="bc2-carta-clara inline-flex h-11 items-center gap-2.5 rounded-full pl-1 pr-4">
                 <Image
                   src={isotipo}
                   alt="Volver al Origen"
@@ -92,12 +96,12 @@ export function Hero() {
                   sizes="36px"
                   className="size-9 shrink-0 rounded-full"
                 />
-                <span className="text-[0.72rem] font-bold uppercase leading-none tracking-[0.13em] text-forest-900">
+                <span className="bc2-sello text-[0.78rem] font-bold uppercase leading-none tracking-[0.1em] text-forest-900">
                   Metafísica Práctica
                 </span>
               </span>
 
-              <span className="inline-flex items-center gap-2 rounded-full border border-foreground/30 bg-foreground/10 px-3.5 py-2.5 backdrop-blur-md">
+              <span className="inline-flex h-11 items-center gap-2 rounded-full border border-foreground/30 bg-foreground/10 px-4 backdrop-blur-md">
                 <Video size={14} strokeWidth={2.2} className="shrink-0 text-foreground" />
                 <span className="text-[0.72rem] font-semibold uppercase leading-none tracking-[0.13em] text-foreground">
                   Evento en vivo
@@ -116,7 +120,7 @@ export function Hero() {
           <Reveal delay={0.1}>
             <h1
               id="hero-title"
-              className="max-w-xl text-[clamp(1.75rem,1.1rem+2.4vw,3rem)] font-medium leading-[1.12] tracking-[-0.025em] text-foreground"
+              className="text-[clamp(1.6rem,1.25rem+1.4vw,2rem)] font-medium leading-[1.18] tracking-[-0.02em] text-foreground"
             >
               Llevas años consumiendo espiritualidad.{" "}
               <span className="font-bold">
@@ -128,30 +132,29 @@ export function Hero() {
           {/* 4 — la descripción, con lo que importa remarcado sobre crema para
               que se pueda escanear sin leerla entera. */}
           <Reveal delay={0.2}>
-            <p className="mt-5 max-w-xl text-[clamp(1rem,0.95rem+0.3vw,1.1rem)] leading-[1.75] text-foreground/90">
-              Un entrenamiento práctico de 3 días para romper{" "}
-              <span className="bc2-realce">el viejo patrón</span> que está
-              creando tu realidad, salir del estancamiento y manifestar{" "}
-              <span className="bc2-realce">resultados tangibles</span>.
+            <p className="mt-5 text-[clamp(1rem,0.95rem+0.3vw,1.05rem)] leading-[1.8] text-foreground/90">
+              <span className="bc2-realce">
+                Un entrenamiento práctico de 3 días
+              </span>{" "}
+              para romper el viejo patrón que está creando tu realidad, salir
+              del estancamiento y manifestar resultados tangibles.
             </p>
           </Reveal>
 
-          {/* 5 y 6 — los detalles. 540px es lo que hace que las tres pastillas
-              de formato entren en una sola fila. */}
+          {/* 5 y 6 — los detalles, a todo el ancho de la columna. Los 500px
+              son lo que hace que las tres pastillas entren en una sola fila. */}
           <Reveal delay={0.3}>
-            <ScheduleReferenceCard className="mt-7 w-full max-w-[540px]" />
+            <ScheduleReferenceCard className="mt-7 w-full" />
           </Reveal>
 
-          {/* 7 y 8 — el CTA y la inversión, centrada debajo.
-              La columna es w-fit en sm+ para que "centrada debajo del botón"
-              signifique respecto AL BOTÓN y no respecto a toda la página. */}
+          {/* 7 y 8 — el CTA, a todo el ancho de la columna (`block`), y la
+              inversión centrada debajo. Como el botón ocupa los 500px enteros,
+              centrar respecto a la columna y respecto al botón es lo mismo. */}
           <Reveal delay={0.4}>
-            <div className="mt-7 flex w-full flex-col items-center sm:w-fit">
-              <div className="w-full [&>a]:flex [&>a]:w-full sm:[&>a]:w-fit">
-                <CtaButton href={CHECKOUT_URL} external>
-                  Acceder al Bootcamp
-                </CtaButton>
-              </div>
+            <div className="mt-7 flex w-full flex-col items-center">
+              <CtaButton href={CHECKOUT_URL} external block>
+                Acceder al Bootcamp
+              </CtaButton>
               <p className="mt-3.5 text-center text-[0.9rem] text-foreground/70">
                 Inversión de la experiencia:{" "}
                 <span className="font-semibold text-foreground underline decoration-foreground/35 decoration-1 underline-offset-[5px]">

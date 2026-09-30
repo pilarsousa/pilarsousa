@@ -315,15 +315,44 @@
   crezca sin separar las líneas del párrafo.
 */
 .bc2-realce {
-  background-color: var(--bc2-panel);
+  /* El degradado corre en diagonal del blanco al crema rebajado: da la misma
+     sensación de pieza física que el CTA, en vez de la mancha plana de un
+     subrayador. */
+  background-image: linear-gradient(
+    105deg,
+    #ffffff 0%,
+    var(--bc2-panel) 46%,
+    color-mix(in srgb, var(--bc2-crema) 86%, var(--bc2-verde)) 100%
+  );
   color: var(--bc2-panel-texto);
-  font-weight: 600;
-  padding: 0.12em 0.36em;
-  margin: 0 0.02em;
-  border-radius: 0.3rem;
+  font-weight: 700;
+  padding: 0.16em 0.42em;
+  margin: 0 0.04em;
+  border-radius: 0.35rem;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
-  box-shadow: inset 0 -2px 6px -4px rgba(0, 47, 1, 0.45);
+  /* Filo de luz arriba, sombra que sube del borde inferior y —la parte que lo
+     saca de lo básico— un halo crema POR FUERA, que sólo existe porque debajo
+     hay verde: es lo que hace que el trozo resaltado parezca encendido. */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -3px 7px -5px rgba(0, 47, 1, 0.45),
+    0 0 16px -2px rgba(255, 248, 240, 0.28);
+}
+
+/*
+  El rótulo del sello de marca.
+
+  Es la ÚNICA excepción a la tipografía única del hero, y es deliberada: el
+  sello no es texto de la página, es la marca del evento, y en la misma letra
+  que el cuerpo se leía como una etiqueta más. Trajan es la display de la guía
+  —la que usa el resto de la landing— así que la excepción no introduce una
+  familia nueva, recupera la que ya está.
+
+  Trajan no tiene caja baja, pero aquí da igual: el rótulo va en versalitas.
+*/
+.bc2-sello {
+  font-family: var(--font-trajan), var(--font-cinzel), Georgia, serif;
 }
 
 .bc2-carta-verde {
