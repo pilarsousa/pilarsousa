@@ -36,7 +36,7 @@ import isotipo from "@/../public/diagnostico/contenido/logo/new-logo.png";
 */
 
 export const metadata: Metadata = {
-  title: "¡Bienvenida! — Bootcamp Metafísica Práctica",
+  title: "¡Bienvenido! — Bootcamp Metafísica Práctica",
   description: "Tu lugar en el Bootcamp Metafísica Práctica está confirmado.",
   // Post-purchase page: never indexed, and links on it are not followed.
   robots: { index: false, follow: false },
@@ -110,7 +110,7 @@ export default function GraciasPage() {
 
           <Reveal delay={0.16}>
             <h1 className="mx-auto mt-7 max-w-3xl text-balance text-[clamp(1.9rem,1.3rem+2.4vw,3.1rem)] font-medium leading-[1.12] tracking-[-0.02em] text-foreground">
-              Bienvenida al{" "}
+              Bienvenido al{" "}
               <span className="bc2-aura font-bold">
                 Bootcamp Metafísica Práctica
               </span>
