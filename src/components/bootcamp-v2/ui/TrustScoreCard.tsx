@@ -14,12 +14,14 @@ import trustpilotLogo from "@/../public/bootcamp-landing/Trustpilot_logo.png";
 const TRUST_GREEN = "#00b67a";
 
 // Star-rating distribution (percent of reviews at each level).
-const DISTRIBUTION: Array<{ label: string; pct: number }> = [
-  { label: "5 estrellas", pct: 93.7 },
-  { label: "4 estrellas", pct: 6.3 },
-  { label: "3 estrellas", pct: 0 },
-  { label: "2 estrellas", pct: 0 },
-  { label: "1 estrella", pct: 0 },
+// Read off the client's Trustpilot profile. Each level keeps Trustpilot's own
+// bar colour: the 4-star bar is lime there, not the 5-star green.
+const DISTRIBUTION: Array<{ label: string; pct: number; color: string }> = [
+  { label: "5 estrellas", pct: 95, color: TRUST_GREEN },
+  { label: "4 estrellas", pct: 5, color: "#73cf11" },
+  { label: "3 estrellas", pct: 0, color: "#ffce00" },
+  { label: "2 estrellas", pct: 0, color: "#ff8622" },
+  { label: "1 estrella", pct: 0, color: "#ff3722" },
 ];
 
 const PROFILE_URL = "https://es.trustpilot.com/review/pilarsousa.es";
@@ -38,7 +40,7 @@ export function TrustScoreCard() {
       {/* Score + label + stars + count. */}
       <div className="text-center">
         <p className="font-display text-5xl font-semibold leading-none text-forest-900">
-          4,8{" "}
+          4,9{" "}
           <span className="align-baseline text-3xl font-medium text-forest-900/70">
             / 5
           </span>
@@ -46,7 +48,7 @@ export function TrustScoreCard() {
         <h3 className="mt-2 text-lg font-semibold text-forest-900">Excelente</h3>
 
         {/* Five filled Trustpilot-green star tiles. */}
-        <div className="mt-3 flex justify-center gap-1" aria-label="TrustScore: 4,8 sobre 5">
+        <div className="mt-3 flex justify-center gap-1" aria-label="TrustScore: 4,9 sobre 5">
           {Array.from({ length: 5 }).map((_, i) => (
             <span
               key={i}
@@ -58,18 +60,18 @@ export function TrustScoreCard() {
           ))}
         </div>
 
-        <p className="mt-3 text-sm text-forest-900/70">80 opiniones</p>
+        <p className="mt-3 text-sm text-forest-900/70">115 opiniones</p>
       </div>
 
       {/* Distribution bars. */}
       <div className="mt-6 space-y-2">
-        {DISTRIBUTION.map(({ label, pct }) => (
+        {DISTRIBUTION.map(({ label, pct, color }) => (
           <div key={label} className="flex items-center gap-3 text-sm">
             <span className="w-20 shrink-0 text-forest-900/80">{label}</span>
             <div className="h-2 flex-1 overflow-hidden rounded-full bg-forest-900/10">
               <span
                 className="block h-full rounded-full"
-                style={{ width: `${pct}%`, backgroundColor: pct > 0 ? TRUST_GREEN : "transparent" }}
+                style={{ width: `${pct}%`, backgroundColor: pct > 0 ? color : "transparent" }}
               />
             </div>
           </div>

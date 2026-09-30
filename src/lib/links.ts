@@ -21,6 +21,11 @@ export const VENTAS_CHECKOUT_URL = VENTAS_CHECKOUT_UNICO;
 // Private WhatsApp group (thank-you page).
 export const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/GO8DZzC2o5bJotgoAZ98Uu";
 
+// Private WhatsApp group of the current Bootcamp edition (/bootcamp thank-you
+// page). Separate from WHATSAPP_GROUP_URL, which /bootcamp-v1/gracias still
+// uses: changing that one would move the previous edition's buyers too.
+export const BOOTCAMP_WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/LDf3th7gTN1AuuQCAnqwi1";
+
 // Direct WhatsApp support line (thank-you page).
 export const WHATSAPP_SUPPORT_URL = "https://wa.link/i8qdol";
 

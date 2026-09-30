@@ -91,7 +91,7 @@ const nextConfig: NextConfig = {
          a la lista de espera: mantenerlo habría mandado a quien buscara la
          página de venta a un formulario de espera, y habría dejado esa landing
          inalcanzable en ese dominio. Ahora /ventas la sirve directamente. */
-      /* ── LA GRACIAS DEL BOOTCAMP ESTÁ EN /bootcamp/acceso-k7q2x9 ──
+      /* ── LA GRACIAS DEL BOOTCAMP ESTÁ EN /bootcamp/gracias-k7q2x9 ──
 
          Salió de /bootcamp/gracias para que no se pueda adivinar. Estas dos
          reglas son la red para el checkout, que todavía puede apuntar a
@@ -100,15 +100,15 @@ const nextConfig: NextConfig = {
 
          ⚠️ SON TEMPORALES. Mientras existan, la ruta vieja sigue llevando a la
          página y ocultarla no sirve de nada. Quitarlas en cuanto la URL de
-         éxito del checkout apunte a /bootcamp/acceso-k7q2x9. */
+         éxito del checkout apunte a /bootcamp/gracias-k7q2x9. */
       {
         source: "/gracias",
-        destination: "/bootcamp/acceso-k7q2x9",
+        destination: "/bootcamp/gracias-k7q2x9",
         permanent: false,
       },
       {
         source: "/bootcamp/gracias",
-        destination: "/bootcamp/acceso-k7q2x9",
+        destination: "/bootcamp/gracias-k7q2x9",
         permanent: false,
       },
 
