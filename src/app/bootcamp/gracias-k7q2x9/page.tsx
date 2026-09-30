@@ -110,9 +110,9 @@ export default function GraciasPage() {
 
           <Reveal delay={0.16}>
             <h1 className="mx-auto mt-7 max-w-3xl text-balance text-[clamp(1.9rem,1.3rem+2.4vw,3.1rem)] font-medium leading-[1.12] tracking-[-0.02em] text-foreground">
-              Bienvenido al{" "}
+              ¡Felicidades!{" "}
               <span className="bc2-aura font-bold">
-                Bootcamp Metafísica Práctica
+                Tu plaza ha sido confirmada
               </span>
             </h1>
           </Reveal>
