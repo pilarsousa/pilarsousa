@@ -162,7 +162,7 @@ export function Hero() {
           <Reveal delay={0.4}>
             <div className="mt-7 flex w-full flex-col items-center">
               <TactileCtaButton href={CHECKOUT_URL} external block>
-                Acceder al Bootcamp
+                Quiero ser parte
               </TactileCtaButton>
               <p className="mt-3.5 text-center text-[0.9rem] text-foreground/70">
                 Inversión de la experiencia:{" "}

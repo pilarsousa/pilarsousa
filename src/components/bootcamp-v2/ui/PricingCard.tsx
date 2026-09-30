@@ -1,10 +1,9 @@
-import { Sparkles } from "lucide-react";
+import { Clock } from "lucide-react";
 import { TactileCtaButton } from "@/components/bootcamp-v2/ui/TactileCtaButton";
 import { GoldText } from "@/components/bootcamp-v2/ui/GoldText";
 import { GlowBadge } from "@/components/bootcamp-v2/ui/GlowBadge";
-import { Countdown } from "@/components/bootcamp-v2/ui/Countdown";
 import { ScheduleReferenceCard } from "@/components/bootcamp-v2/ui/ScheduleReferenceCard";
-import { CHECKOUT_URL, BOOTCAMP_START } from "@/lib/links";
+import { CHECKOUT_URL } from "@/lib/links";
 
 /**
  * PricingCard — the offer, framed as a ritual object.
@@ -39,7 +38,7 @@ export function PricingCard() {
 
         {/* Limited-time pill — glowing rotating border + sheen. */}
         <div className="flex justify-center">
-          <GlowBadge icon={<Sparkles size={13} />}>Por tiempo limitado</GlowBadge>
+          <GlowBadge icon={<Clock size={13} />}>Por tiempo limitado</GlowBadge>
         </div>
 
         {/* Price — the visual peak. Radial halo behind a large GoldText number.
@@ -65,8 +64,14 @@ export function PricingCard() {
             </span>
           </div>
 
-          <p className="mt-4 font-display text-xs uppercase tracking-[0.3em] text-accent">
-            Precio especial de lanzamiento
+          {/* The .bc2-realce highlight (cream face, green ink) used in the Hero
+              and Experiencia copy. At 0.75rem Trajan in cream-on-green this
+              line was the faintest thing in the card and went unread; now it
+              is the one inverted piece right under the price. */}
+          <p className="mt-5">
+            <span className="bc2-realce text-[0.8rem] uppercase tracking-[0.16em] sm:text-sm">
+              Precio especial de lanzamiento
+            </span>
           </p>
         </div>
 
@@ -74,19 +79,13 @@ export function PricingCard() {
           <ScheduleReferenceCard />
         </div>
 
-        {/* Countdown to the bootcamp start — drives urgency. Given its own
-            padded box so the unit tiles breathe instead of hugging the edges. */}
-        <div className="bc2-carta-clara mt-9 rounded-2xl px-4 py-6 sm:px-6">
-          <p className="mb-5 text-balance text-center font-display text-[0.7rem] uppercase tracking-[0.3em] text-forest-900/85">
-            La experiencia comienza en
-          </p>
-          <Countdown target={BOOTCAMP_START} />
-        </div>
+        {/* The countdown used to live here; it moved to the CountdownHeader
+            that slides in while scrolling, so the card stays about the offer. */}
 
         {/* Primary CTA — forced to a single line. */}
         <div className="mt-9 flex justify-center">
           <TactileCtaButton href={CHECKOUT_URL} external block>
-            Acceder al bootcamp
+            Quiero ser parte
           </TactileCtaButton>
         </div>
       </div>

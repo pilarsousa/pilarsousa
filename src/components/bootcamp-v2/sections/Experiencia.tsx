@@ -35,7 +35,7 @@ const DAYS: Array<{ image: StaticImageData; day: string; text: string }> = [
   {
     image: img3,
     day: "Día 3",
-    text: "Salir con un plan de acción concreto para sostener una nueva identidad capaz de manifestar lo que desees.",
+    text: "Sal con un plan de acción concreto para sostener una nueva identidad capaz de manifestar lo que desees.",
   },
 ];
 

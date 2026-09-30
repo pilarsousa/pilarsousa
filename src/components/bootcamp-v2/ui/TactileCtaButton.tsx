@@ -29,7 +29,7 @@ type TactileCtaButtonProps = {
  * La cara es absoluta —tiene que poder inclinarse sin mover lo de alrededor—
  * y por eso no empuja el tamaño del enlace. El .sizer es una copia invisible
  * de la etiqueta, en el flujo, que sí lo hace: el botón crece con su texto
- * ("Quiero acceder al bootcamp" no cabe en un ancho fijo) y nunca baja del
+ * (una etiqueta larga no cabe en un ancho fijo) y nunca baja del
  * mínimo. Va aria-hidden para que el lector de pantalla no lo lea dos veces.
  */
 export function TactileCtaButton({

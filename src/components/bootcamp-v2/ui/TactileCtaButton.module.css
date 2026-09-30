@@ -18,8 +18,8 @@
   --aro-hondo: color-mix(in srgb, var(--bc2-crema) 76%, var(--bc2-verde));
   --aro-filo: color-mix(in srgb, var(--bc2-crema) 58%, var(--bc2-verde));
   --sombra: 0, 47, 1; /* el verde de marca, en canales para darle alfa */
-  /* Aire lateral de la etiqueta: se estrecha en móvil para que "Acceder al
-     bootcamp" no parta en dos líneas dentro del aro. */
+  /* Aire lateral de la etiqueta: se estrecha en móvil para que la etiqueta
+     no parta en dos líneas dentro del aro. */
   --cta-pad-x: clamp(1.75rem, 1rem + 3vw, 2.75rem);
 
   position: relative;
@@ -116,7 +116,7 @@
   position: relative;
   z-index: 3;
   font-family: var(--font-display), sans-serif;
-  /* Crece con la pantalla: en Trajan "Acceder al bootcamp" mide 15,8em y a
+  /* Crece con la pantalla: en Trajan una etiqueta de ~16em (la del precio) a
      0.95rem no cabe en una línea dentro de la tarjeta de precio en móvil. */
   font-size: clamp(0.8rem, 0.65rem + 0.75vw, 0.95rem);
   font-weight: 700;

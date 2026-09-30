@@ -158,7 +158,7 @@ export function Bonos() {
           className="mt-10 flex justify-center"
         >
           <TactileCtaButton href={CHECKOUT_URL} external>
-            Quiero acceder al bootcamp
+            Quiero ser parte
           </TactileCtaButton>
         </motion.div>
       </Container>

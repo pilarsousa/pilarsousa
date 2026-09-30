@@ -11,10 +11,14 @@ import { Container } from "@/components/shared/Container";
 import { Reveal } from "@/components/bootcamp-v2/ui/Reveal";
 import { PricingCard } from "@/components/bootcamp-v2/ui/PricingCard";
 import { GridScanBackdrop } from "@/components/bootcamp-v2/ui/GridScanBackdrop";
+import { CountdownHeader } from "@/components/bootcamp-v2/ui/CountdownHeader";
+import { BOOTCAMP_START } from "@/lib/links";
 
 export default function Home() {
   return (
     <>
+      {/* Countdown bar: slides in while scrolling down, hides on the way up. */}
+      <CountdownHeader target={BOOTCAMP_START} />
       {/* overflow-x-clip: a global belt so decorative overflow (ambient glows,
           sheens, ribbons) can bleed past a section without ever producing a
           horizontal scrollbar on mobile. */}
