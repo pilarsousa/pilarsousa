@@ -207,8 +207,16 @@ fbq('track', 'PageView');`}
         </noscript>
         {/* End Meta Pixel */}
 
-        {/* Microsoft Clarity */}
-        <Script id="clarity" strategy="afterInteractive">
+        {/* Microsoft Clarity
+
+            ⚠️ EL id NO PUEDE SER "clarity". Todo elemento con id se expone
+            como variable global, así que <script id="clarity"> ocupaba
+            window.clarity ANTES de que corriera el snippet: éste veía que ya
+            existía, no creaba la función, y el cargador de Clarity fallaba al
+            llamarla y nunca traía clarity.js. El tag se descargaba pero no se
+            grababa ninguna sesión. Next exige un id en los <Script> inline;
+            cualquier otro nombre sirve. */}
+        <Script id="ms-clarity" strategy="afterInteractive">
           {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","yqllvo6efo");`}
         </Script>
         {/* End Microsoft Clarity */}
