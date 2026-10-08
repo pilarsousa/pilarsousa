@@ -2,7 +2,6 @@
 
 import { Container } from "@/components/shared/Container";
 import { useCountdown, type TimeLeft } from "@/components/bootcamp-v2/ui/useCountdown";
-import { useLocalStartTime } from "@/components/bootcamp-v2/ui/LocalStartTime";
 
 const UNITS: Array<{ key: keyof Omit<TimeLeft, "done">; suffix: string }> = [
   { key: "days", suffix: "d" },
@@ -32,13 +31,10 @@ const LIVE_RED = "#ff4d4d";
  * ── HUSOS HORARIOS ──
  *
  * El contador es igual en todo el mundo porque cuenta hasta un instante
- * absoluto. La hora que se escribe es la de España, y debajo del contador se
- * añade la del visitante cuando es distinta (useLocalStartTime). Es el único
- * sitio de la página que la muestra: en el hero sólo va la de España.
+ * absoluto. La hora que se escribe es la de España.
  */
 export function CountdownHeader({ target }: { target: string }) {
   const time = useCountdown(target);
-  const localTime = useLocalStartTime(target);
   const units = time && time.days === 0 ? UNITS.slice(1) : UNITS;
 
   return (
@@ -90,15 +86,6 @@ export function CountdownHeader({ target }: { target: string }) {
           </>
         )}
       </Container>
-
-      {/* The visitor's own start time, under the timer and only when it
-          differs from Spain's — the one place on the page that shows it. */}
-      {localTime && !time?.done && (
-        <p className="-mt-1 pb-2 text-center text-[0.7rem] font-medium text-foreground/75 sm:text-xs">
-          Hora en tu país:{" "}
-          <span className="font-semibold text-foreground">{localTime}</span>
-        </p>
-      )}
     </div>
   );
 }
