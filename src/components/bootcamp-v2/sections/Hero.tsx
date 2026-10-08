@@ -1,10 +1,11 @@
 import Image from "next/image";
-import { Video } from "lucide-react";
+import { CalendarClock, Video } from "lucide-react";
 import { Container } from "@/components/shared/Container";
 import { Reveal } from "@/components/bootcamp-v2/ui/Reveal";
 import { TactileCtaButton } from "@/components/bootcamp-v2/ui/TactileCtaButton";
 import { ScheduleReferenceCard } from "@/components/bootcamp-v2/ui/ScheduleReferenceCard";
-import { CHECKOUT_URL } from "@/lib/links";
+import { BOOTCAMP_START, CHECKOUT_URL } from "@/lib/links";
+import { LocalStartTime } from "@/components/bootcamp-v2/ui/LocalStartTime";
 import bgDesktop from "@/../public/bootcamp-v2/banner-pilar.png";
 import bgMobile from "@/../public/bootcamp-v2/banner-pilarsousa-mobile.png";
 import isotipo from "@/../public/diagnostico/contenido/logo/new-logo.png";
@@ -103,17 +104,43 @@ export function Hero() {
 
               {/* En móvil va primero, delante del sello: lo que abre la
                   pantalla es que el evento es en directo. En escritorio vuelve
-                  a su sitio detrás del sello. */}
-              <span className="order-first inline-flex h-11 items-center gap-2 rounded-full border border-foreground/30 bg-foreground/10 px-4 backdrop-blur-md lg:order-0">
-                <Video size={14} strokeWidth={2.2} className="shrink-0 text-foreground" />
-                <span className="text-[0.72rem] font-semibold uppercase leading-none tracking-[0.13em] text-foreground">
-                  Evento en vivo
+                  a su sitio detrás del sello.
+
+                  ── EL "EN VIVO" TIENE QUE LLAMAR LA ATENCIÓN ──
+
+                  A un día del evento es la pieza de urgencia del hero. Lleva
+                  un haz rojo y crema que gira por el borde (el mismo anillo
+                  cónico de las tarjetas, con --border-angle), un halo rojo
+                  que respira y el punto "al aire" en rojo: el rojo es la
+                  señal universal de directo y es lo único rojo de la página,
+                  así que el ojo va ahí primero. */}
+              <span className="order-first relative inline-flex animate-border-spin rounded-full bg-[conic-gradient(from_var(--border-angle),transparent_0%,#ff4d4d_14%,var(--bc2-crema)_24%,transparent_38%,transparent_100%)] p-[1.5px] shadow-[0_0_22px_-4px_rgba(255,77,77,0.65)] motion-reduce:animate-none lg:order-0">
+                <span className="inline-flex h-10.5 items-center gap-2 rounded-full bg-ink/85 px-4 backdrop-blur-md">
+                  <span aria-hidden className="relative flex size-2">
+                    <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#ff4d4d] opacity-80 motion-reduce:animate-none" />
+                    <span className="relative inline-flex size-2 rounded-full bg-[#ff4d4d]" />
+                  </span>
+                  <Video size={14} strokeWidth={2.2} className="shrink-0 text-foreground" />
+                  <span className="text-[0.72rem] font-bold uppercase leading-none tracking-[0.13em] text-foreground">
+                    Evento en vivo
+                  </span>
                 </span>
-                {/* Punto "al aire": núcleo fijo y anillo que se expande. */}
-                <span aria-hidden className="relative ml-0.5 flex size-1.5">
-                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-foreground/70" />
-                  <span className="relative inline-flex size-1.5 rounded-full bg-foreground" />
+              </span>
+
+              {/* La fecha y la hora, al lado del "en vivo". La hora es la de
+                  España; si el visitante está en otra zona, se le añade la
+                  suya (LocalStartTime, sólo en el cliente). */}
+              <span className="inline-flex min-h-11 flex-wrap items-center gap-x-2 gap-y-0.5 rounded-full border border-foreground/30 bg-foreground/10 px-4 py-1.5 backdrop-blur-md">
+                <CalendarClock size={14} strokeWidth={2.2} className="shrink-0 text-foreground" />
+                <span className="text-[0.72rem] font-semibold uppercase leading-none tracking-[0.1em] text-foreground">
+                  09 de octubre · 18:00 España
                 </span>
+                <LocalStartTime
+                  target={BOOTCAMP_START}
+                  prefix="("
+                  suffix=")"
+                  className="text-[0.72rem] font-medium leading-none text-foreground/75"
+                />
               </span>
             </div>
           </Reveal>
