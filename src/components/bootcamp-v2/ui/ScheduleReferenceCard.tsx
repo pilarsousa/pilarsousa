@@ -1,8 +1,6 @@
 import Image from "next/image";
 import { CalendarDays, Compass, Radio } from "lucide-react";
 import { cn } from "@/lib/cn";
-import { BOOTCAMP_START } from "@/lib/links";
-import { LocalStartTime } from "@/components/bootcamp-v2/ui/LocalStartTime";
 
 type ScheduleReferenceCardProps = {
   className?: string;
@@ -109,11 +107,6 @@ export function ScheduleReferenceCard({
                 · España
               </span>
             </p>
-            {/* The visitor's own time, only when it differs from Spain's. */}
-            <LocalStartTime
-              target={BOOTCAMP_START}
-              className="mt-1.5 block text-[0.78rem] font-semibold text-forest-700"
-            />
           </div>
         </div>
       </div>

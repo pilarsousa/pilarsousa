@@ -50,25 +50,3 @@ export function useLocalStartTime(target: string): string | null {
   );
 }
 
-/** Inline "· 13:00 en tu hora" hint; renders nothing in Spain or on the server. */
-export function LocalStartTime({
-  target,
-  className,
-  prefix = "",
-  suffix = "",
-}: {
-  target: string;
-  className?: string;
-  prefix?: string;
-  suffix?: string;
-}) {
-  const hint = useLocalStartTime(target);
-  if (!hint) return null;
-  return (
-    <span className={className}>
-      {prefix}
-      {hint} en tu hora
-      {suffix}
-    </span>
-  );
-}

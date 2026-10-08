@@ -2,7 +2,7 @@
 
 import { Container } from "@/components/shared/Container";
 import { useCountdown, type TimeLeft } from "@/components/bootcamp-v2/ui/useCountdown";
-import { LocalStartTime } from "@/components/bootcamp-v2/ui/LocalStartTime";
+import { useLocalStartTime } from "@/components/bootcamp-v2/ui/LocalStartTime";
 
 const UNITS: Array<{ key: keyof Omit<TimeLeft, "done">; suffix: string }> = [
   { key: "days", suffix: "d" },
@@ -32,16 +32,18 @@ const LIVE_RED = "#ff4d4d";
  * ── HUSOS HORARIOS ──
  *
  * El contador es igual en todo el mundo porque cuenta hasta un instante
- * absoluto. La hora que se escribe es la de España, y en escritorio se añade
- * la del visitante cuando es distinta (LocalStartTime).
+ * absoluto. La hora que se escribe es la de España, y debajo del contador se
+ * añade la del visitante cuando es distinta (useLocalStartTime). Es el único
+ * sitio de la página que la muestra: en el hero sólo va la de España.
  */
 export function CountdownHeader({ target }: { target: string }) {
   const time = useCountdown(target);
+  const localTime = useLocalStartTime(target);
   const units = time && time.days === 0 ? UNITS.slice(1) : UNITS;
 
   return (
     <div className="sticky top-0 z-50 border-b border-accent/15 bg-ink/90 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)] backdrop-blur-md">
-      <Container className="flex items-center justify-center gap-2.5 py-2.5 sm:gap-4">
+      <Container className="flex items-center justify-center gap-2.5 py-3 sm:gap-4">
         {time?.done ? (
           <p className="text-[0.8rem] font-semibold text-foreground sm:text-sm">
             El bootcamp ha comenzado
@@ -81,14 +83,22 @@ export function CountdownHeader({ target }: { target: string }) {
               ))}
             </div>
 
-            {/* Desktop only: the Spanish time and, if different, the local one. */}
+            {/* Desktop: the Spanish time next to the timer. */}
             <p className="hidden text-sm font-medium text-foreground/75 lg:block">
               18:00 España
-              <LocalStartTime target={target} prefix=" · " />
             </p>
           </>
         )}
       </Container>
+
+      {/* The visitor's own start time, under the timer and only when it
+          differs from Spain's — the one place on the page that shows it. */}
+      {localTime && !time?.done && (
+        <p className="-mt-1 pb-2 text-center text-[0.7rem] font-medium text-foreground/75 sm:text-xs">
+          Hora en tu país:{" "}
+          <span className="font-semibold text-foreground">{localTime}</span>
+        </p>
+      )}
     </div>
   );
 }

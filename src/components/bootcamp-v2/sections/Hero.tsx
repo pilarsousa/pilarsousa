@@ -4,8 +4,7 @@ import { Container } from "@/components/shared/Container";
 import { Reveal } from "@/components/bootcamp-v2/ui/Reveal";
 import { TactileCtaButton } from "@/components/bootcamp-v2/ui/TactileCtaButton";
 import { ScheduleReferenceCard } from "@/components/bootcamp-v2/ui/ScheduleReferenceCard";
-import { BOOTCAMP_START, CHECKOUT_URL } from "@/lib/links";
-import { LocalStartTime } from "@/components/bootcamp-v2/ui/LocalStartTime";
+import { CHECKOUT_URL } from "@/lib/links";
 import bgDesktop from "@/../public/bootcamp-v2/banner-pilar.png";
 import bgMobile from "@/../public/bootcamp-v2/banner-pilarsousa-mobile.png";
 import isotipo from "@/../public/diagnostico/contenido/logo/new-logo.png";
@@ -127,20 +126,19 @@ export function Hero() {
                 </span>
               </span>
 
-              {/* La fecha y la hora, al lado del "en vivo". La hora es la de
-                  España; si el visitante está en otra zona, se le añade la
-                  suya (LocalStartTime, sólo en el cliente). */}
-              <span className="inline-flex min-h-11 flex-wrap items-center gap-x-2 gap-y-0.5 rounded-full border border-foreground/30 bg-foreground/10 px-4 py-1.5 backdrop-blur-md">
+              {/* La fecha y la hora, al lado del "en vivo". Sólo la de España: la
+                  hora del país del visitante va debajo del contador de la
+                  barra, no aquí, para no cargar el hero. */}
+              <span className="inline-flex h-11 items-center gap-2 rounded-full border border-foreground/30 bg-foreground/10 px-4 backdrop-blur-md">
                 <CalendarClock size={14} strokeWidth={2.2} className="shrink-0 text-foreground" />
-                <span className="text-[0.72rem] font-semibold uppercase leading-none tracking-[0.1em] text-foreground">
-                  09 de octubre · 18:00 España
+                <span className="whitespace-nowrap text-[0.72rem] font-semibold uppercase leading-none tracking-[0.1em] text-foreground">
+                  {/* "09 oct" en móvil: con "de octubre" el badge partía en tres
+                      líneas a 360px y dejaba "España" suelta. */}
+                  <span className="font-bold">Comienza</span> · 09{" "}
+                  <span className="sm:hidden">oct</span>
+                  <span className="hidden sm:inline">de octubre</span> · 18:00
+                  España
                 </span>
-                <LocalStartTime
-                  target={BOOTCAMP_START}
-                  prefix="("
-                  suffix=")"
-                  className="text-[0.72rem] font-medium leading-none text-foreground/75"
-                />
               </span>
             </div>
           </Reveal>
