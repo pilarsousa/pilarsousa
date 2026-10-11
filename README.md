@@ -8,8 +8,9 @@ Vercel project, one deploy**. Next.js 16 (App Router, Turbopack) + Tailwind v4.
 | `/`                        | Volver al Origen — venta             | `src/app/(ventas-root)/`                  |
 | `/mision-origen`           | Misión Origen                        | `src/app/(mision-origen)/mision-origen/`  |
 | `/gracias-mision-origen`   | Misión Origen — gracias              | `src/app/(mision-origen)/gracias-mision-origen/` |
-| `/bootcamp`                | Bootcamp Reset Identidad             | `src/app/bootcamp/`                       |
-| `/bootcamp/gracias`        | Bootcamp — thank you                 | `src/app/bootcamp/gracias/`               |
+| `/bootcamp-v2`             | Bootcamp Metafísica Práctica         | `src/app/bootcamp-v2/`                    |
+| `/bootcamp-v2/gracias-k7q2x9` | Bootcamp — thank you              | `src/app/bootcamp-v2/gracias-k7q2x9/`     |
+| `/bootcamp-v1`             | Bootcamp — versión original          | `src/app/bootcamp-v1/`                    |
 | `/game`                    | Game (código + form)                 | `src/app/game/`                           |
 | `/game/home`, `/game/form` | Game — pantallas internas            | `src/app/game/`                           |
 | `/volver-al-origen`        | **Lista de espera 3.ª ed. (en producción)** | `src/app/volver-al-origen/`        |
@@ -75,7 +76,8 @@ página.
   host: en cualquier otro dominio, `/` sigue siendo la landing de venta.
 - **`/lista-de-espera-3.0` y `/lista-de-espera-3` → `/volver-al-origen`** (y sus
   `/gracias`). Son URLs de pauta antiguas, sin condición de host.
-- **`/gracias` → `/bootcamp/gracias`**, redirect temporal (307). Es una red de
+- **`/gracias`, `/bootcamp/gracias` y `/bootcamp/gracias-k7q2x9` →
+  `/bootcamp-v2/gracias-k7q2x9`**, redirect temporal (307). Es una red de
   seguridad mientras el checkout de Stripe siga apuntando ahí su success URL;
   se puede quitar en cuanto se actualice.
 

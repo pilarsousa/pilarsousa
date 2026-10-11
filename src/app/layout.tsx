@@ -61,7 +61,7 @@ const montserrat = Montserrat({
 
 // ---- Bootcamp V2 ----
 
-/* La ÚNICA familia del hero de /bootcamp.
+/* La ÚNICA familia del hero de /bootcamp-v2.
 
    El hero mezclaba tres —Trajan en el titular, Montserrat en el cuerpo y
    Cormorant en los énfasis— y con tres estilos distintos en media pantalla la

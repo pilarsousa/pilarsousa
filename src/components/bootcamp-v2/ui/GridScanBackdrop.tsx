@@ -22,7 +22,7 @@ import { cn } from "@/lib/cn";
   evitan:
 
   · CARGA DIFERIDA (next/dynamic, sin SSR). three.js y postprocessing no entran
-    en el paquete inicial de /bootcamp; se descargan cuando hace falta.
+    en el paquete inicial de /bootcamp-v2; se descargan cuando hace falta.
 
   · MONTAJE POR VISIBILIDAD. Se monta cuando la sección se acerca a la pantalla
     (200px de margen, para que ya esté pintada al llegar) y se DESMONTA al

@@ -10,19 +10,20 @@ import logotipo from "@/../public/diagnostico/contenido/logo/logo2.png";
 import isotipo from "@/../public/diagnostico/contenido/logo/new-logo.png";
 
 /*
-  Página de gracias del Bootcamp Metafísica Práctica — /bootcamp/gracias-k7q2x9.
+  Página de gracias del Bootcamp Metafísica Práctica — /bootcamp-v2/gracias-k7q2x9.
 
-  ── POR QUÉ ESTA RUTA Y NO /bootcamp/gracias ──
+  ── POR QUÉ ESTA RUTA Y NO /bootcamp-v2/gracias ──
 
-  /bootcamp/gracias es lo primero que prueba cualquiera que quiera entrar al
+  /bootcamp-v2/gracias es lo primero que prueba cualquiera que quiera entrar al
   grupo sin pagar. El código del final no se deduce de nada: sólo lo conoce el
-  checkout, que redirige aquí tras el pago. Sigue colgando de /bootcamp para
+  checkout, que redirige aquí tras el pago. Cuelga de /bootcamp-v2 para
   heredar la paleta y el favicon del layout.
 
   ⚠️ Es ocultación, no seguridad: quien reciba el enlace puede compartirlo. Lo
   que protege el grupo de verdad es que el link de WhatsApp se pueda renovar.
 
-  ⚠️ /gracias y /bootcamp/gracias REDIRIGEN AQUÍ TEMPORALMENTE (next.config.ts),
+  ⚠️ /gracias, /bootcamp/gracias y /bootcamp/gracias-k7q2x9 REDIRIGEN AQUÍ
+  TEMPORALMENTE (next.config.ts),
   hasta que la URL de éxito del checkout apunte a esta ruta. Mientras esa
   redirección exista, la ruta vieja sigue llevando a la página.
 
@@ -32,7 +33,7 @@ import isotipo from "@/../public/diagnostico/contenido/logo/new-logo.png";
   cuerpo y la etiqueta del CTA—. La única excepción es el rótulo del sello, en
   Trajan, igual que en el hero. Los dos badges de arriba, el brillo del
   titular (.bc2-aura) y el realce del texto (.bc2-realce) son las mismas piezas
-  que abren /bootcamp: quien acaba de pagar reconoce la página de la que viene.
+  que abren /bootcamp-v2: quien acaba de pagar reconoce la página de la que viene.
 */
 
 export const metadata: Metadata = {

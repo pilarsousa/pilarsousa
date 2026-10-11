@@ -3,12 +3,13 @@ import "./bootcamp-v2.css";
 
 /*
   Bootcamp Metafísica Práctica (V2) — la versión principal del Bootcamp, servida en
-  /bootcamp. page.tsx es /bootcamp y la gracias vive en
+  /bootcamp-v2. page.tsx es /bootcamp-v2 y la gracias vive en
   gracias-k7q2x9/page.tsx, con una ruta que no se deduce (ver su cabecera).
 
   ⚠️ LA RAÍZ DEL DOMINIO DE PAUTA NO ES ÉSTA. lp.pilarsousa.es/ sigue sirviendo
   la lista de espera, por el rewrite de next.config.ts, y así se queda por
-  ahora. /bootcamp es la única puerta a esta landing.
+  ahora. /bootcamp-v2 es la única puerta a esta landing: /bootcamp se retiró
+  a propósito y ya no lleva a ninguna parte.
 
   ── QUÉ ES LA V2 ──
 
@@ -37,7 +38,7 @@ export const metadata: Metadata = {
   /*
     El favicon de Volver al Origen, el mismo que sirve /diagnostico. El layout
     raíz emite el favicon.ico del sitio para todas las páginas; declararlo aquí
-    es lo que hace que en /bootcamp gane éste, y que la pestaña diga la misma
+    es lo que hace que en /bootcamp-v2 gane éste, y que la pestaña diga la misma
     marca que el sello del hero.
 
     ⚠️ ES UNA COPIA de 128x128, no el logotipo original de 1254x1254. Un favicon
