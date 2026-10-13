@@ -1,6 +1,14 @@
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
-import { Cinzel, Manrope, Cormorant_Garamond, Montserrat, DM_Sans } from "next/font/google";
+import {
+  Cinzel,
+  Manrope,
+  Cormorant_Garamond,
+  Montserrat,
+  DM_Sans,
+  Caveat,
+  Mrs_Saint_Delafield,
+} from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -126,6 +134,29 @@ const jost = localFont({
   display: "swap",
 });
 
+// ---- Científico V3 ----
+
+/* Anotaciones a mano sobre las fotos y el fondo de /cientifico-v3 (el
+   "Confianza F1 → F2" de la referencia). Marcador, no caligrafía.
+   preload: false en las dos de este bloque: el layout raíz cubre todas las
+   rutas y sólo /cientifico-v3 las usa; sin esto se precargarían en todas. */
+const caveat = Caveat({
+  variable: "--font-caveat",
+  subsets: ["latin"],
+  weight: ["500", "700"],
+  display: "swap",
+  preload: false,
+});
+
+/* Firma de Pilar en /cientifico-v3. */
+const firma = Mrs_Saint_Delafield({
+  variable: "--font-firma",
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+  preload: false,
+});
+
 // ---- Game ----
 
 /* Título arcade de /game — pixel-art retro. Sólo la usa esa landing. */
@@ -152,7 +183,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${cinzel.variable} ${trajan.variable} ${manrope.variable} ${cormorant.variable} ${montserrat.variable} ${dmSans.variable} ${zenDots.variable} ${jost.variable} ${pressStart2P.variable} ${pixelifySans.variable} h-full antialiased`}
+      className={`${cinzel.variable} ${trajan.variable} ${manrope.variable} ${cormorant.variable} ${montserrat.variable} ${dmSans.variable} ${zenDots.variable} ${jost.variable} ${pressStart2P.variable} ${pixelifySans.variable} ${caveat.variable} ${firma.variable} h-full antialiased`}
     >
       {/* suppressHydrationWarning: browser extensions (e.g. ColorZilla) inject
           attributes like cz-shortcut-listen on <body> before React hydrates,
