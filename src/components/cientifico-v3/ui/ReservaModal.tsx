@@ -1,8 +1,11 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { CalendarDays, Radio } from "lucide-react";
 import { Wordmark } from "@/components/cientifico-v3/ui/Wordmark";
 import { ReservaForm } from "@/components/cientifico-v3/ui/ReservaForm";
+import { MarcoEntrada } from "@/components/cientifico-v3/ui/MarcoEntrada";
+import { FECHA_CORTA, HORA } from "@/components/cientifico-v3/content";
 
 type ReservaModalContextValue = {
   open: () => void;
@@ -54,49 +57,52 @@ export function ReservaModalProvider({ children }: { children: React.ReactNode }
           role="dialog"
           aria-modal="true"
           aria-labelledby="cv3-modal-titulo"
-          className="fixed inset-0 z-[200] flex items-center justify-center p-4"
+          /* overflow-y-auto + m-auto en el panel: en teléfonos bajos el
+             modal puede ser más alto que la pantalla y se scrollea. */
+          className="fixed inset-0 z-[200] flex overflow-y-auto p-4"
         >
           <button
             type="button"
             aria-label="Cerrar"
             onClick={close}
-            className="absolute inset-0 cursor-default bg-[#07060b]/75 backdrop-blur-sm animate-[fadeIn_0.2s_ease-out]"
+            className="fixed inset-0 cursor-default bg-[#07060b]/80 backdrop-blur-sm animate-[fadeIn_0.2s_ease-out]"
           />
 
-          <div className="relative w-full max-w-md animate-[fadeIn_0.25s_ease-out]">
+          <div className="relative m-auto w-full max-w-md animate-[fadeIn_0.25s_ease-out]">
+            <MarcoEntrada
+              cabecera={
+                <div className="flex flex-col gap-2 pr-8">
+                  <Wordmark className="text-xl" />
+                  <h2 id="cv3-modal-titulo" className="text-[1.6rem] font-extrabold leading-tight text-foreground">
+                    Asegura tu <span className="cv3-grad-texto">entrada gratuita</span>
+                  </h2>
+                  <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm font-semibold text-foreground/80">
+                    <span className="flex items-center gap-1.5">
+                      <CalendarDays aria-hidden size={15} className="text-(--cv3-violeta)" />
+                      {FECHA_CORTA} · {HORA}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <Radio aria-hidden size={15} className="text-(--cv3-violeta)" />
+                      En vivo online
+                    </span>
+                  </p>
+                </div>
+              }
+            >
+              <ReservaForm onSuccess={close} />
+            </MarcoEntrada>
+
+            {/* Cerrar: dentro del marco, arriba a la derecha bajo la pestaña. */}
             <button
               type="button"
               onClick={close}
               aria-label="Cerrar"
-              className="absolute -right-3 -top-3 z-10 flex size-9 items-center justify-center rounded-full border border-white/15 bg-[#1e1a28] text-foreground transition-colors duration-300 hover:border-[#7da89a] hover:text-[#94c7b6] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7da89a]"
+              className="absolute right-4 top-[34px] z-10 flex size-8 items-center justify-center rounded-md text-foreground/60 transition-colors duration-300 hover:bg-white/5 hover:text-[#94c7b6] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7da89a]"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" aria-hidden className="size-4">
                 <path d="M18 6L6 18M6 6l12 12" />
               </svg>
             </button>
-
-            <div className="relative overflow-hidden rounded-[14px] border border-white/10 bg-[#17141f] p-6 shadow-[0_30px_80px_-20px_rgba(75,58,107,0.6)] sm:p-8">
-              {/* Filo superior con el degradado de marca */}
-              <span aria-hidden className="absolute inset-x-0 top-0 h-[3px] bg-[linear-gradient(90deg,#a391b8,#7da89a)]" />
-              <span
-                aria-hidden
-                className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(ellipse_70%_100%_at_50%_0%,rgba(75,58,107,0.45),transparent)]"
-              />
-
-              <div className="relative flex flex-col gap-5">
-                <div className="flex flex-col gap-2">
-                  <Wordmark className="text-xl" />
-                  <h2 id="cv3-modal-titulo" className="text-2xl font-extrabold leading-tight text-foreground">
-                    Asegura tu <span className="cv3-grad-texto">entrada gratuita</span>
-                  </h2>
-                  <p className="text-sm leading-relaxed text-foreground/70">
-                    Completa tus datos y te enviamos el acceso al laboratorio.
-                  </p>
-                </div>
-
-                <ReservaForm onSuccess={close} />
-              </div>
-            </div>
           </div>
         </div>
       )}

@@ -10,22 +10,22 @@ import { OPORTUNIDAD, PARA_TI } from "@/components/cientifico-v3/content";
  */
 export function Oportunidad() {
   return (
-    /* isolate: el "Volver" de fondo (-z-10) queda por encima del fondo de la
+    /* isolate: el "Origen" de fondo (-z-10) queda por encima del fondo de la
        sección y por debajo del contenido. */
     <section aria-labelledby="oportunidad-titulo" className="cv3-halos-bordes relative isolate py-20 sm:py-28">
       <Contenedor className="relative">
-        {/* "Volver" manuscrito y desenfocado, a la derecha en el hueco entre
-            el panel de la magia y el título: el espejo del "Origen" del hero.
+        {/* "Origen" manuscrito y desenfocado, a la derecha en el hueco entre
+            el panel de la magia y el título: el espejo del "Volver" del hero.
             PC: anclado al borde derecho de la pantalla, más arriba e
             inclinado. Acá el bloque de referencia es el Contenedor entero
             (con su padding), cuyo borde está a max(0px, (100vw − 1204px) / 2)
-            del de la pantalla. 4vw y no 2vw: la "r" manuscrita sobresale de
+            del de la pantalla. 4vw y no 2vw: la última letra manuscrita sobresale de
             su caja y se cortaba contra el borde. */}
         <span
           aria-hidden
           className="cv3-mano cv3-desenfocado pointer-events-none absolute -top-[7.5rem] right-[3%] -z-10 -rotate-3 text-[5.5rem] font-bold leading-none sm:-top-[11.5rem] sm:right-[6%] sm:text-[10rem] lg:-top-[17rem] lg:right-[calc(4vw-max(0px,(100vw-1204px)/2))] lg:origin-right lg:-rotate-[11deg] lg:text-[clamp(7rem,8.5vw,10rem)]"
         >
-          Volver
+          Origen
         </span>
 
         <Reveal>

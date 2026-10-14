@@ -128,12 +128,12 @@ function AnotacionesFoto() {
  * Hero + "Tengas o no experiencia…". La barra con la cuenta atrás va encima
  * de la foto, como en la referencia.
  *
- * Mobile: la foto vertical (684 × 2088, Pilar arriba) ocupa la parte de
+ * Mobile: la foto vertical (684 × 1933, Pilar arriba) ocupa la parte de
  * arriba a lo ancho, entera, y el contenido arranca a la altura de sus
  * piernas, sobre el deck. Desktop: la panorámica cubre todo el ancho y el
  * texto va a la izquierda.
  *
- * overflow-x-clip y no overflow-hidden: el "Origen" desenfocado del pie tiene
+ * overflow-x-clip y no overflow-hidden: el "Volver" desenfocado del pie tiene
  * que poder salirse por abajo sobre la sección siguiente. La foto, que sí hay
  * que recortar, lleva su propia capa con overflow-hidden.
  */
@@ -141,15 +141,15 @@ export function Hero() {
   return (
     <section aria-labelledby="hero-titulo" className="relative isolate overflow-x-clip">
       <div className="absolute inset-0 -z-10 overflow-hidden">
-        {/* h mobile: 2088 / 684 = 305vw, la foto entera a lo ancho. */}
-        <div className="absolute inset-x-0 top-0 h-[305vw] lg:h-[860px]">
+        {/* h mobile: 1933 / 684 = 283vw, la foto entera a lo ancho. */}
+        <div className="absolute inset-x-0 top-0 h-[283vw] lg:h-[860px]">
           <div className="cv3-hero-foto absolute inset-0">
             <FotoHero />
             {/* Sombreado de legibilidad, sólo mobile: arranca a la altura de
                 los datos del evento y para la segunda línea del titular ya es
                 casi negro, así todo el texto cae sobre oscuro. En desktop lo
                 hace la máscara (.cv3-hero-foto), de la izquierda hacia el medio. */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(12,10,18,0.15)_0%,rgba(12,10,18,0.05)_20%,rgba(12,10,18,0.6)_30%,rgba(12,10,18,0.9)_41%,rgba(12,10,18,0.94)_100%)] lg:bg-none" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(12,10,18,0.15)_0%,rgba(12,10,18,0.05)_14%,rgba(12,10,18,0.6)_25%,rgba(12,10,18,0.9)_36%,rgba(12,10,18,0.94)_100%)] lg:bg-none" />
           </div>
           {/* Fuera de la máscara: si no, el fundido de abajo apaga el 3D → 5D. */}
           <AnotacionesFoto />
@@ -166,8 +166,8 @@ export function Hero() {
       </BarraSuperior>
 
       {/* pt mobile: arranca a la altura de las rodillas de Pilar (sus pies
-          quedan a ~113vw); el sombreado ya cubre esa zona. */}
-      <Contenedor className="pt-[86vw] lg:pt-[172px]">
+          quedan a ~91vw); el sombreado ya cubre esa zona. */}
+      <Contenedor className="pt-[calc(64vw+20px)] lg:pt-[172px]">
         <div className="lg:max-w-[480px]">
           <Reveal>
             <ul className="flex max-w-[420px] flex-wrap gap-x-4 gap-y-3" aria-label="Datos del evento">
@@ -198,7 +198,8 @@ export function Hero() {
             <p className="mt-6 border-l-2 border-foreground/45 pl-4 text-[1.0625rem] font-medium leading-relaxed text-foreground/90 sm:text-lg">
               {HERO.bajada}
             </p>
-            <p className="cv3-destacado mt-5 text-[1.0625rem] font-semibold sm:text-center sm:text-lg">{HERO.llamado}</p>
+            {/* text-balance: reparte los renglones, que no quede "ahora!" solo. */}
+            <p className="cv3-destacado mt-5 text-balance text-[0.98rem] font-semibold sm:text-center sm:text-[1.0625rem]">{HERO.llamado}</p>
           </Reveal>
 
           <Reveal delay={0.3} className="mt-5 sm:flex sm:justify-center">
@@ -232,7 +233,7 @@ export function Hero() {
             </ul>
           </Reveal>
 
-          {/* "Origen" manuscrito y desenfocado (el "Leads" de la referencia).
+          {/* "Volver" manuscrito y desenfocado (el "Leads" de la referencia).
               PC: sale de la columna y se ancla al borde izquierdo de la
               PANTALLA (2vw), inclinado. El borde del contenido está a
               max(32px, (100vw − 1140px) / 2) del de la pantalla; restándolo,
@@ -245,7 +246,7 @@ export function Hero() {
             aria-hidden
             className="cv3-mano cv3-desenfocado pointer-events-none absolute -bottom-2 left-[2%] -z-10 -rotate-3 text-[7rem] font-bold leading-none sm:text-[10rem] lg:-bottom-20 lg:left-[calc(2vw-max(32px,(100vw-1140px)/2))] lg:origin-left lg:-rotate-[19deg] lg:text-[clamp(7rem,8.5vw,10rem)]"
           >
-            Origen
+            Volver
           </span>
         </div>
       </Contenedor>

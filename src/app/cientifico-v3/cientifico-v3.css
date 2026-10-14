@@ -179,7 +179,7 @@
     0 0 / 190px 100% repeat-x;
 }
 
-/* Pastilla con borde (cupos, "mira el video"). */
+/* Pastilla con borde (cupos del cierre). */
 .cv3-pastilla {
   border: 1.5px solid rgb(244 238 228 / 0.55);
   border-radius: 12px;
@@ -208,7 +208,7 @@
   );
 }
 
-/* Pestaña centrada arriba (panel de la magia, marco del video). */
+/* Pestaña centrada arriba (panel de la magia). */
 .cv3-pestana {
   --t: 18px;
   --tw: 46%;
@@ -1016,7 +1016,7 @@
   .cv3-marquee__pista {
     animation: none;
   }
-  .cv3-barra__reflejos {
+  .cv3-reflejos {
     display: none;
   }
   .cv3-separador__destello,

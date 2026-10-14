@@ -9,13 +9,20 @@ import { cn } from "@/lib/cn";
  * Tres piezas para que la muesca no se deforme con el ancho: tramo izquierdo
  * (flex-1), muesca (SVG de ancho fijo) y tramo derecho (flex-1).
  */
-export function Separador({ className }: { className?: string }) {
+export function Separador({
+  className,
+  id = "cv3-separador",
+}: {
+  className?: string;
+  /** Id del degradado: tiene que ser único si hay varios en la misma página. */
+  id?: string;
+}) {
   return (
     <div aria-hidden className={cn("flex w-full items-start", className)}>
       <span className="h-px flex-1 bg-[linear-gradient(90deg,transparent,#a391b8_70%)]" />
       <svg viewBox="0 0 132 26" className="h-[26px] w-[132px] shrink-0 overflow-visible">
         <defs>
-          <linearGradient id="cv3-separador" x1="0" x2="1" y1="0" y2="0">
+          <linearGradient id={id} x1="0" x2="1" y1="0" y2="0">
             <stop offset="0" stopColor="#a391b8" />
             <stop offset="1" stopColor="#7da89a" />
           </linearGradient>
@@ -23,7 +30,7 @@ export function Separador({ className }: { className?: string }) {
         <path
           d="M0 0.5 H22 L40 18.5 H92 L110 0.5 H132"
           fill="none"
-          stroke="url(#cv3-separador)"
+          stroke={`url(#${id})`}
           strokeWidth={1}
         />
         {/* ✦ dentro de la muesca */}

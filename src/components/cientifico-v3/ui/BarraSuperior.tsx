@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
+import { Reflejos } from "@/components/cientifico-v3/ui/Reflejos";
 
 /*
   Barra con el corte en ángulo de la referencia: una franja rellena arriba que
@@ -14,34 +15,14 @@ import { cn } from "@/lib/cn";
   non-scaling-stroke para que el trazo no se engorde al estirarse. Así la
   altura de la línea es libre en cada tamaño (mobile la lleva mucho más abajo).
 
-  Encima, los reflejos: destellos de la paleta que recorren la línea entera.
-  Necesitan el recorrido en píxeles, así que se mide la barra (ResizeObserver).
-  Hasta medir, la línea fija ya está: los reflejos sólo se suman.
+  Encima, los reflejos (ui/Reflejos.tsx): destellos de la paleta que recorren
+  la línea entera. Necesitan el recorrido en píxeles, así que se mide la barra
+  (ResizeObserver). Hasta medir, la línea fija ya está: los reflejos sólo se
+  suman.
 */
 
 /* ⚠️ Igual que --relleno de .cv3-barra (cientifico-v3.css). */
 const RELLENO = "#17141f";
-
-/* Destellos que recorren la línea, desfasados un tercio de vuelta (la vuelta
-   dura 7,5s: ver .cv3-reflejo__capa). */
-const REFLEJOS = [
-  { color: "salvia", retraso: 0 },
-  { color: "arena", retraso: -2.5 },
-  { color: "violeta", retraso: -5 },
-] as const;
-
-/*
-  Cada destello son capas centradas en el mismo punto: un núcleo corto y
-  brillante y encima tramos cada vez más largos y tenues. Sumadas, las puntas
-  se desvanecen en vez de cortarse seco. Largos en % del recorrido
-  (pathLength=100).
-*/
-const CAPAS = [
-  { largo: 2.5, opacidad: 1, grosor: 2 },
-  { largo: 5, opacidad: 0.5, grosor: 2 },
-  { largo: 8.5, opacidad: 0.24, grosor: 2.2 },
-  { largo: 13, opacidad: 0.1, grosor: 2.4 },
-];
 
 function Diagonal({ lado }: { lado: "izq" | "der" }) {
   const izq = lado === "izq";
@@ -149,31 +130,8 @@ export function BarraSuperior({
       />
 
       {recorrido && (
-        <svg aria-hidden className="cv3-barra__reflejos pointer-events-none absolute inset-x-0 top-0 h-(--alto) w-full overflow-visible">
-          {REFLEJOS.map(({ color, retraso }) => (
-            <g key={color} className={`cv3-reflejo cv3-reflejo--${color}`}>
-              {CAPAS.map(({ largo, opacidad, grosor }) => (
-                <path
-                  key={largo}
-                  d={recorrido}
-                  pathLength={100}
-                  className="cv3-reflejo__capa"
-                  strokeDasharray={`${largo} ${100 - largo}`}
-                  strokeWidth={grosor}
-                  opacity={opacidad}
-                  /* El guion arranca centrado en el inicio del recorrido
-                     (desfase = largo/2) y avanza una vuelta entera. */
-                  style={
-                    {
-                      "--desde": largo / 2,
-                      "--hasta": largo / 2 - 100,
-                      animationDelay: `${retraso}s`,
-                    } as React.CSSProperties
-                  }
-                />
-              ))}
-            </g>
-          ))}
+        <svg aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-(--alto) w-full overflow-visible">
+          <Reflejos d={recorrido} />
         </svg>
       )}
     </div>

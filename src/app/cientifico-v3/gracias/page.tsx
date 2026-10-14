@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import { CalendarDays, CircleAlert, Play, Radio } from "lucide-react";
+import { CalendarDays, Radio } from "lucide-react";
 import { Contenedor } from "@/components/cientifico-v3/ui/Contenedor";
 import { BarraSuperior } from "@/components/cientifico-v3/ui/BarraSuperior";
 import { Wordmark } from "@/components/cientifico-v3/ui/Wordmark";
@@ -8,9 +7,9 @@ import { Destacado } from "@/components/cientifico-v3/ui/Destacado";
 import { Entrada } from "@/components/cientifico-v3/ui/Entrada";
 import { Firma } from "@/components/cientifico-v3/ui/Firma";
 import { Reveal } from "@/components/cientifico-v3/ui/Reveal";
-import { FECHA_CORTA, GRACIAS, VIDEO_URL } from "@/components/cientifico-v3/content";
+import { Footer } from "@/components/cientifico-v3/sections/Footer";
+import { FECHA_CORTA, GRACIAS } from "@/components/cientifico-v3/content";
 import { MO_WHATSAPP_COMMUNITY_URL } from "@/lib/links";
-import poster from "@/../public/volver-origen/public/img/landing/pilarsousa-pc.jpg";
 
 export const metadata: Metadata = {
   title: "[V3 Científico] ¡Gracias por registrarte! — Volver al Origen",
@@ -28,43 +27,10 @@ function WhatsAppIcon({ className }: { className?: string }) {
 }
 
 /**
- * Marco del video con la pestaña arriba y la barra de progreso de la
- * referencia. Mientras VIDEO_URL esté vacío muestra un póster temporal.
+ * Gracias de /cientifico-v3: confirmación, validar la entrada en el grupo de
+ * WhatsApp, recomendaciones y despedida, con el footer de la landing. Esta
+ * edición no lleva video.
  */
-function Video() {
-  return (
-    <div className="cv3-pestana relative bg-[#1d1a26] p-2 pt-[26px] sm:p-3 sm:pt-[30px]">
-      <div className="relative aspect-video overflow-hidden rounded-[10px] bg-black">
-        {VIDEO_URL ? (
-          <iframe
-            src={VIDEO_URL}
-            title="Últimas instrucciones antes del evento"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="absolute inset-0 size-full"
-          />
-        ) : (
-          <>
-            <Image src={poster} alt="" fill sizes="(min-width: 1024px) 945px, 100vw" className="object-cover object-[35%_30%] brightness-[0.6]" />
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-              <span className="flex size-16 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm sm:size-20">
-                <Play aria-hidden className="ml-1 size-7 fill-foreground text-foreground sm:size-9" />
-              </span>
-              <span className="rounded-full bg-black/45 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-foreground/85">
-                Video temporal
-              </span>
-            </div>
-            {/* Barra de progreso de la referencia (decorativa). */}
-            <div aria-hidden className="absolute inset-x-5 bottom-4 h-2 overflow-hidden rounded-full bg-white/25 sm:inset-x-7 sm:bottom-5">
-              <div className="h-full w-[70%] rounded-full bg-[linear-gradient(90deg,#a391b8,#7da89a)]" />
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
-
 export default function GraciasV3() {
   return (
     <main className="relative isolate overflow-hidden">
@@ -88,7 +54,7 @@ export default function GraciasV3() {
         </div>
       </BarraSuperior>
 
-      <Contenedor className="flex flex-col items-center pb-24 pt-10 text-center sm:pt-14">
+      <Contenedor className="flex flex-col items-center pb-8 pt-10 text-center sm:pt-14">
         <Reveal>
           <h1 className="cv3-grad-texto text-[2.4rem] font-extrabold leading-tight tracking-[-0.02em] sm:text-[3.5rem]">
             {GRACIAS.titulo}
@@ -101,33 +67,29 @@ export default function GraciasV3() {
           </p>
         </Reveal>
 
-        <Reveal delay={0.2}>
-          <p className="cv3-pastilla mt-7 flex items-center gap-3 px-5 py-3 text-left text-base text-foreground/85 sm:text-lg">
-            <CircleAlert aria-hidden size={22} className="shrink-0 fill-foreground/75 text-[#0c0a12]" />
-            {GRACIAS.aviso}
-          </p>
-        </Reveal>
-
-        <div className="relative mt-8 w-full max-w-[945px]">
-          <Entrada sizes="240px" className="absolute -left-[150px] -top-14 z-10 hidden w-[240px] -rotate-[16deg] lg:flex" />
-          <Reveal>
-            <Video />
-          </Reveal>
-          <Entrada sizes="330px" className="absolute -bottom-[170px] -right-[250px] z-10 hidden w-[330px] -rotate-[50deg] xl:flex" />
+        {/* Las dos entradas, cruzadas, debajo del texto: la versión para
+            pantallas sin lugar a los costados del bloque de WhatsApp. */}
+        <div aria-hidden className="relative mt-8 h-[min(42vw,200px)] w-full max-w-[460px] xl:hidden">
+          <Entrada sizes="220px" className="absolute -left-1 top-[4%] w-[min(46vw,220px)] -rotate-[14deg]" />
+          <Entrada sizes="220px" className="absolute -right-1 top-[30%] w-[min(46vw,220px)] rotate-[12deg]" />
         </div>
 
-        <Reveal className="mt-10">
-          <h2 className="text-xl font-medium text-foreground sm:text-[1.6rem]">{GRACIAS.whatsappTitulo}</h2>
-          <p className="mx-auto mt-3 max-w-[540px] text-base text-(--cv3-gris) sm:text-lg">{GRACIAS.whatsappTexto}</p>
-          <div className="mt-6 flex flex-col items-center">
-            <a href={MO_WHATSAPP_COMMUNITY_URL} target="_blank" rel="noopener noreferrer" className="cv3-boton-wa">
+        {/* Bloque de WhatsApp. Desde xl, una entrada flotando a cada lado (en
+            la referencia flanqueaban el video). */}
+        <div className="relative mt-8 w-full max-w-[640px] xl:mt-14">
+          <Entrada sizes="240px" className="absolute -left-[290px] -top-6 hidden w-[240px] -rotate-[16deg] xl:flex" />
+          <Reveal>
+            <h2 className="text-balance text-xl font-medium text-foreground sm:text-[1.6rem]">{GRACIAS.whatsappTitulo}</h2>
+            <p className="mx-auto mt-3 max-w-[540px] text-base text-(--cv3-gris) sm:text-lg">{GRACIAS.whatsappTexto}</p>
+            <a href={MO_WHATSAPP_COMMUNITY_URL} target="_blank" rel="noopener noreferrer" className="cv3-boton-wa mt-6 gap-3">
+              <WhatsAppIcon className="size-6 shrink-0" />
               {GRACIAS.whatsappCta}
             </a>
-            <WhatsAppIcon className="-mt-3 size-9 rounded-full bg-[#0c0a12] p-1 text-white" />
-          </div>
-        </Reveal>
+          </Reveal>
+          <Entrada sizes="260px" className="absolute -right-[300px] top-10 hidden w-[260px] rotate-[22deg] xl:flex" />
+        </div>
 
-        <Reveal className="mt-14 w-full max-w-[742px]">
+        <Reveal className="mt-16 w-full max-w-[742px]">
           <h2 className="cv3-grad-texto text-xl font-bold sm:text-2xl">{GRACIAS.recomendacionesTitulo}</h2>
           <ul className="mt-7 grid gap-7 text-left sm:grid-cols-[1.3fr_1fr] sm:gap-6">
             {GRACIAS.recomendaciones.map((texto, i) => (
@@ -139,13 +101,18 @@ export default function GraciasV3() {
           </ul>
         </Reveal>
 
-        <Reveal className="mt-8 flex flex-col items-center">
-          <p className="text-2xl font-bold text-foreground">{GRACIAS.despedida}</p>
-          <Firma className="-mt-1 ml-40 text-[2.2rem]" />
-        </Reveal>
-
-        <Wordmark className="mt-16 text-[2rem] sm:text-[2.25rem]" />
       </Contenedor>
+
+      {/* La despedida va en el footer: columna derecha en PC, primera en
+          mobile. La firma debajo, corrida a la derecha, sin pisar el texto. */}
+      <Footer
+        despedida={
+          <div className="flex flex-col items-center">
+            <p className="text-2xl font-bold text-foreground">{GRACIAS.despedida}</p>
+            <Firma className="ml-24 mt-2 text-[2.4rem]" />
+          </div>
+        }
+      />
     </main>
   );
 }

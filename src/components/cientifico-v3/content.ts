@@ -16,10 +16,6 @@ export const HORA = "19:00 h";
 /* Cupos que muestra la pastilla del cierre. */
 export const ENTRADAS_RESTANTES = 37;
 
-/* Video de la página de gracias. Vacío = muestra el póster temporal. Admite un
-   embed de YouTube/Vimeo (https://www.youtube.com/embed/…). */
-export const VIDEO_URL = "";
-
 export const SOURCE = "cientifico-v3";
 
 /* ── Hero ── */
@@ -118,7 +114,6 @@ export const GRACIAS = {
   intro: "Estás a un solo paso de validar tu entrada al laboratorio donde:",
   promesa:
     "[Voy a compartir contigo] el método que convertirá lo que sabes de manifestación en resultados que puedes comprobar en tu propia vida.",
-  aviso: "Mira el video a continuación para las últimas instrucciones:",
   whatsappTitulo: "Forma parte de nuestro círculo privado en WhatsApp y valida tu entrada.",
   whatsappTexto:
     "En este grupo te enviaré contenido clave y novedades para que llegues preparada al evento.",
