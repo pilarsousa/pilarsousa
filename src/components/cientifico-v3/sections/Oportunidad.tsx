@@ -31,10 +31,12 @@ export function Oportunidad() {
         <Reveal>
           <h2
             id="oportunidad-titulo"
-            className="cv3-grad-texto mx-auto max-w-[620px] text-[1.75rem] font-extrabold leading-[1.22] sm:text-center sm:text-[2rem]"
+            className="mx-auto max-w-[620px] text-[1.75rem] font-extrabold leading-[1.22] sm:text-center sm:text-[2rem]"
           >
             <span className="relative inline-block">
-              {OPORTUNIDAD.tituloMarcado}
+              {/* El degradado va en el texto: Safari no recorta el fondo del
+                  h2 al texto de un descendiente posicionado/inline-block. */}
+              <span className="cv3-grad-texto">{OPORTUNIDAD.tituloMarcado}</span>
               <Anotacion className="pointer-events-none absolute -inset-x-3 -inset-y-4 sm:-inset-x-6" umbral={0.8}>
                 <svg viewBox="0 0 300 80" preserveAspectRatio="none" className="size-full overflow-visible" aria-hidden>
                   <path
@@ -56,7 +58,7 @@ export function Oportunidad() {
                 </svg>
               </Anotacion>
             </span>
-            {OPORTUNIDAD.tituloResto}
+            <span className="cv3-grad-texto">{OPORTUNIDAD.tituloResto}</span>
           </h2>
           <p className="mt-3 text-lg font-bold text-foreground sm:text-center sm:text-[1.375rem]">{OPORTUNIDAD.subtitulo}</p>
         </Reveal>

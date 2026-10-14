@@ -126,7 +126,7 @@ export function ReservaForm({
       setStatus("success");
       setTimeout(() => {
         onSuccess?.();
-        router.push("/cientifico-v3/gracias");
+        router.push("/registro/gracias");
       }, 1800);
     } catch {
       setStatus("error");

@@ -3,39 +3,39 @@
 import Image, { type StaticImageData } from "next/image";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Hand } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { QUE_ESPERAR } from "@/components/cientifico-v3/content";
 import { Wordmark } from "@/components/cientifico-v3/ui/Wordmark";
-import fotoRealidad from "@/../public/mision-origen/fondo-hero-2.jpg";
-import fotoIdentidad from "@/../public/bootcamp-v2/pilar-sousa-2.png";
-import fotoPasos from "@/../public/mision-origen/Fondo-PilarSousaPC.jpg";
-import fotoLaboratorio from "@/../public/volver-origen/public/img/landing/pilarsousa-pc.jpg";
+import fotoRealidad from "@/../public/cientifico-v1/carpetas/vao_1.jpg";
+import fotoIdentidad from "@/../public/cientifico-v1/carpetas/vao_2.jpg";
+import fotoPasos from "@/../public/cientifico-v1/carpetas/vao_3.jpg";
+import fotoLaboratorio from "@/../public/cientifico-v1/carpetas/vao_5.jpg";
 
-/* Fotos de Pilar del repo. Son apaisadas y las cards verticales: `encuadre`
-   centra su cara en el recorte. El duotono las unifica. */
+/* Fotos verticales de Pilar: `encuadre` mantiene su rostro en la parte
+   visible, por encima del texto. El duotono las unifica. */
 const CARDS: Array<{ foto: StaticImageData; encuadre: string; titulo: string; texto: string }> = [
   {
     foto: fotoRealidad,
-    encuadre: "object-[76%_30%]",
+    encuadre: "object-[50%_20%]",
     titulo: "Descubrirás cómo funciona realmente la realidad",
     texto: "y por qué saber más no significa manifestar más. Empezamos por el principio que ordena todo lo demás.",
   },
   {
     foto: fotoIdentidad,
-    encuadre: "object-[66%_40%]",
+    encuadre: "object-[50%_25%]",
     titulo: "Domina el arte de reprogramar tu identidad",
     texto: "para que tus resultados dejen de repetir el mismo patrón, aunque cambies de estrategia.",
   },
   {
     foto: fotoPasos,
-    encuadre: "object-[30%_30%]",
+    encuadre: "object-[50%_20%]",
     titulo: "Aprende los 3 pasos de mi Sistema Práctico de Manifestación",
     texto: "con el que doy un salto cuántico cada 90 días, aunque hoy sientas que estás estancada.",
   },
   {
     foto: fotoLaboratorio,
-    encuadre: "object-[33%_30%]",
+    encuadre: "object-[50%_25%]",
     titulo: "Convierte tu vida en tu propio laboratorio",
     texto: "con un experimento sencillo que puedes empezar esa misma noche y comprobar por ti misma.",
   },
@@ -199,6 +199,13 @@ export function CarruselEsperar() {
           {QUE_ESPERAR.titulo}
         </h2>
         <p className="max-w-[320px] text-[1.0625rem] leading-relaxed text-(--cv3-gris)">{QUE_ESPERAR.bajada}</p>
+        <p
+          id="carpetas-deslizar"
+          className="inline-flex max-w-full items-center gap-2 self-start rounded-full border border-[#94c7b6]/25 bg-[#7da89a]/10 px-3.5 py-2 text-xs font-semibold text-(--cv3-destacado) lg:hidden"
+        >
+          <Hand aria-hidden="true" size={16} strokeWidth={1.6} className="shrink-0" />
+          <span>{QUE_ESPERAR.indicacionMobile}</span>
+        </p>
         {/* Flechas sólo en desktop: en mobile se arrastra con el dedo. */}
         <div className="-ml-3 hidden gap-2 lg:flex">
           <button type="button" aria-label="Anterior" onClick={() => mover(-1)} className={flecha}>
@@ -216,6 +223,7 @@ export function CarruselEsperar() {
       <div
         ref={ventanaRef}
         {...arrastre}
+        aria-describedby="carpetas-deslizar"
         className="-mx-5 cursor-grab touch-pan-y select-none overflow-hidden active:cursor-grabbing sm:-mx-8 lg:mx-0 lg:w-[calc(100%+max(32px,(100vw-1140px)/2))] lg:[mask-image:linear-gradient(to_right,transparent,#000_56px)]"
       >
         <ol ref={pistaRef} className="flex w-max gap-5 px-5 pb-2 will-change-transform sm:px-8 lg:px-0">
@@ -230,7 +238,7 @@ export function CarruselEsperar() {
                   src={card.foto}
                   alt=""
                   fill
-                  sizes="366px"
+                  sizes="(max-width: 435px) 78vw, (max-width: 639px) 340px, 366px"
                   draggable={false}
                   className={cn("object-cover grayscale-[0.85] brightness-[0.75] contrast-[1.05]", card.encuadre)}
                 />

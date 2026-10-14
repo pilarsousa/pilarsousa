@@ -40,6 +40,7 @@ export const PARA_QUIEN = [
 export const QUE_ESPERAR = {
   titulo: "¿Qué puedes esperar de este evento?",
   bajada: "Desliza para ver todo lo que vas a comprobar en esta masterclass gratuita.",
+  indicacionMobile: "Desliza las carpetas para ver más",
 };
 
 /* ── La verdadera magia ── */

@@ -170,10 +170,12 @@ export function Hero() {
       <Contenedor className="pt-[calc(64vw+20px)] lg:pt-[172px]">
         <div className="lg:max-w-[480px]">
           <Reveal>
-            <ul className="flex max-w-[420px] flex-wrap gap-x-4 gap-y-3" aria-label="Datos del evento">
-              <Dato icono={<Video size={18} strokeWidth={1.8} />}>Masterclass online gratuita</Dato>
-              {/* PC: la hora pasa al final, al lado de "En vivo online" (la
-                  de la masterclass queda sola en la primera fila). */}
+            <ul className="grid w-fit max-w-full grid-cols-[auto_auto] gap-x-4 gap-y-3" aria-label="Datos del evento">
+              <Dato icono={<Video size={18} strokeWidth={1.8} />} className="col-span-2 justify-self-start">
+                Masterclass online gratuita
+              </Dato>
+              {/* La masterclass ocupa la primera fila en todos los anchos.
+                  PC: la hora pasa al final, al lado de "En vivo online". */}
               <Dato
                 icono={<Image src="/espana.svg" alt="" width={21} height={14} className="rounded-[2px]" />}
                 className="lg:order-last"

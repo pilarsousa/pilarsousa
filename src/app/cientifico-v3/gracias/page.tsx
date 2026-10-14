@@ -27,9 +27,8 @@ function WhatsAppIcon({ className }: { className?: string }) {
 }
 
 /**
- * Gracias de /cientifico-v3: confirmación, validar la entrada en el grupo de
- * WhatsApp, recomendaciones y despedida, con el footer de la landing. Esta
- * edición no lleva video.
+ * Gracias de /registro: confirmación, validar la entrada en el grupo de
+ * WhatsApp, recomendaciones y despedida. Esta edición no lleva video.
  */
 export default function GraciasV3() {
   return (
@@ -67,17 +66,17 @@ export default function GraciasV3() {
           </p>
         </Reveal>
 
-        {/* Las dos entradas, cruzadas, debajo del texto: la versión para
-            pantallas sin lugar a los costados del bloque de WhatsApp. */}
-        <div aria-hidden className="relative mt-8 h-[min(42vw,200px)] w-full max-w-[460px] xl:hidden">
-          <Entrada sizes="220px" className="absolute -left-1 top-[4%] w-[min(46vw,220px)] -rotate-[14deg]" />
-          <Entrada sizes="220px" className="absolute -right-1 top-[30%] w-[min(46vw,220px)] rotate-[12deg]" />
+        {/* Una entrada a la izquierda, con el tamaño e inclinación de la
+            landing. El espacio reservado evita que pise el texto de WhatsApp. */}
+        <div aria-hidden className="relative mt-8 h-[120px] w-full max-w-[640px] sm:mt-12 sm:h-[180px]">
+          <Entrada
+            sizes="(min-width: 640px) 300px, 180px"
+            className="absolute -left-6 top-12 w-[180px] -rotate-[14deg] sm:left-0 sm:top-0 sm:w-[300px]"
+          />
         </div>
 
-        {/* Bloque de WhatsApp. Desde xl, una entrada flotando a cada lado (en
-            la referencia flanqueaban el video). */}
-        <div className="relative mt-8 w-full max-w-[640px] xl:mt-14">
-          <Entrada sizes="240px" className="absolute -left-[290px] -top-6 hidden w-[240px] -rotate-[16deg] xl:flex" />
+        {/* Bloque de WhatsApp. */}
+        <div className="relative mt-8 w-full max-w-[640px]">
           <Reveal>
             <h2 className="text-balance text-xl font-medium text-foreground sm:text-[1.6rem]">{GRACIAS.whatsappTitulo}</h2>
             <p className="mx-auto mt-3 max-w-[540px] text-base text-(--cv3-gris) sm:text-lg">{GRACIAS.whatsappTexto}</p>
@@ -86,7 +85,6 @@ export default function GraciasV3() {
               {GRACIAS.whatsappCta}
             </a>
           </Reveal>
-          <Entrada sizes="260px" className="absolute -right-[300px] top-10 hidden w-[260px] rotate-[22deg] xl:flex" />
         </div>
 
         <Reveal className="mt-16 w-full max-w-[742px]">

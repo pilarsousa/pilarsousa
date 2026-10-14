@@ -19,10 +19,9 @@ function Legal() {
  * y derechos. Sin enlaces legales: el sitio no tiene esas páginas y un enlace
  * a un 404 es peor que ninguno.
  *
- * Con `despedida` (la gracias) pasa a tres columnas en PC: marca a la
- * izquierda, aviso y derechos al centro, despedida a la derecha. En mobile se
- * apilan (despedida, marca, aviso) con un separador entre cada bloque, para
- * que no se lean como un solo texto.
+ * Con `despedida` (la gracias) pasa a dos columnas en PC: aviso y derechos
+ * a la izquierda, despedida a la derecha. En mobile se apilan con un
+ * separador entre la despedida y el aviso.
  */
 export function Footer({ despedida }: { despedida?: React.ReactNode }) {
   if (!despedida) {
@@ -39,12 +38,10 @@ export function Footer({ despedida }: { despedida?: React.ReactNode }) {
   return (
     <footer className="cv3-brillo-abajo border-b border-white/20 px-5 pb-12 pt-16 text-center sm:px-8">
       {/* El orden del DOM es el de mobile; en PC lo reordena el grid. */}
-      <div className="mx-auto flex max-w-[1140px] flex-col items-center gap-8 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:items-end lg:gap-10">
-        <div className="lg:order-3 lg:justify-self-end">{despedida}</div>
+      <div className="mx-auto flex max-w-[1140px] flex-col items-center gap-8 lg:grid lg:grid-cols-[1fr_auto] lg:items-end lg:gap-10">
+        <div className="lg:order-2 lg:justify-self-end">{despedida}</div>
         <Separador id="cv3-separador-pie-1" className="max-w-[260px] lg:hidden" />
-        <Wordmark className="text-[2rem] sm:text-[2.25rem] lg:order-1 lg:justify-self-start lg:pb-1" />
-        <Separador id="cv3-separador-pie-2" className="max-w-[260px] lg:hidden" />
-        <div className="lg:order-2">
+        <div className="lg:order-1 lg:justify-self-start">
           <Legal />
         </div>
       </div>

@@ -21,6 +21,17 @@ const nextConfig: NextConfig = {
        para sustituir una ruta que ya existe. */
     return {
       beforeFiles: [
+        /* URL pública de la masterclass y su confirmación. Los componentes
+           siguen en cientifico-v3; el visitante conserva /registro. */
+        {
+          source: "/registro",
+          destination: "/cientifico-v3",
+        },
+        {
+          source: "/registro/gracias",
+          destination: "/cientifico-v3/gracias",
+        },
+
       /* En el dominio de pauta la raíz sirve la landing de LISTA DE ESPERA de
          la tercera edición, no la de venta.
 
@@ -86,6 +97,18 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      /* Conserva los enlaces ya compartidos y sus parámetros de campaña. */
+      {
+        source: "/cientifico-v3",
+        destination: "/registro",
+        permanent: false,
+      },
+      {
+        source: "/cientifico-v3/gracias",
+        destination: "/registro/gracias",
+        permanent: false,
+      },
+
       /* NOTA: aquí había un redirect de /ventas a / en el dominio de pauta,
          de cuando la raíz era la landing de venta. Se retiró al pasar la raíz
          a la lista de espera: mantenerlo habría mandado a quien buscara la
