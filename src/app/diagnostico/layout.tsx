@@ -24,24 +24,10 @@ import "./diagnostico.css";
 */
 
 export const metadata: Metadata = {
-  /*
-    Favicon propio de esta ruta, con el logotipo nuevo de Pilar. El layout raíz
-    emite el favicon.ico del sitio para todas las páginas; declararlo aquí es lo
-    que hace que en /diagnostico gane éste.
-
-    ⚠️ NO APUNTA AL ORIGINAL, sino a una copia de 128x128 (10 KB frente a los
-    120 del archivo de 1254x1254). Un favicon se pide en cada página y Next NO
-    optimiza lo que se referencia desde `metadata.icons`: se sirve tal cual
-    desde /public.
-
-    SI CAMBIA EL LOGOTIPO HAY QUE REGENERARLO, porque es una copia y no se
-    entera sola:
-
-      node -e "require('sharp')('public/diagnostico/contenido/logo/new-logo.png')
-        .resize(128,128,{fit:'contain',background:{r:0,g:0,b:0,alpha:0}})
-        .png({compressionLevel:9}).toFile('public/diagnostico/favicon.png')"
-  */
-  icons: { icon: "/diagnostico/favicon.png" },
+  /* El favicon NO se declara aquí: es el de Volver al Origen para todas las
+     landings y sale de los archivos de la raíz de app/ (favicon.ico, icon*.png,
+     apple-icon.png, manifest.ts). Un `icons` en este layout REEMPLAZARÍA los
+     de la raíz enteros, también el de iOS y el de Android. */
   title: "Descubre tu frecuencia dominante | Volver al Origen",
   description:
     "Un diagnóstico de 7 preguntas para descubrir qué frecuencia te está frenando, y el primer paso para cambiarla. Menos de 60 segundos.",

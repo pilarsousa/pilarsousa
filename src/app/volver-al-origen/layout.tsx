@@ -18,23 +18,10 @@ import { WaitlistModalProvider } from "@/components/volver-al-origen/ui/Waitlist
 */
 
 export const metadata: Metadata = {
-  /* Favicon propio de esta landing, aplicado también a /gracias por herencia
-     del layout.
-
-     Se declara aquí en vez de usar el archivo icon.png del segmento porque el
-     original vive en public/ y así se referencia una sola copia, sin duplicar
-     el archivo dentro de app/.
-
-     El layout raíz emite además el favicon.ico del sitio para todas las
-     páginas; declarar éste explícitamente es lo que hace que en estas dos gane
-     el de la marca.
-
-     Es el mismo archivo que usa LogoVao en el hero y en el modal: una sola
-     copia para las dos cosas, así que cambiar el logo cambia también el
-     favicon y no hay dos versiones que se desincronicen. */
-  icons: {
-    icon: "/volver-origen/public/img/Logo-volveralorigen.webp",
-  },
+  /* El favicon NO se declara aquí: es el de Volver al Origen para todas las
+     landings y sale de los archivos de la raíz de app/ (favicon.ico, icon*.png,
+     apple-icon.png, manifest.ts). Un `icons` en este layout REEMPLAZARÍA los
+     de la raíz enteros, también el de iOS y el de Android. */
   title: "Lista de espera — Tercera edición de Volver al Origen | Pilar Sousa",
   description:
     "Apúntate a la lista de espera de la tercera edición de Volver al Origen y accede antes que nadie, con precio especial y bonos exclusivos.",

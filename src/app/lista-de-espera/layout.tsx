@@ -40,18 +40,10 @@ import { WaitlistModalProvider } from "@/components/lista-de-espera/ui/WaitlistM
 */
 
 export const metadata: Metadata = {
-  /* Favicon propio de esta landing, aplicado también a /gracias por herencia del
-     layout.
-
-     Se declara aquí en vez de usar el archivo icon.png del segmento porque el
-     original vive en public/ y así se referencia una sola copia.
-
-     El layout raíz emite además el favicon.ico del sitio para todas las páginas;
-     declarar éste explícitamente es lo que hace que en estas dos gane el de la
-     marca. */
-  icons: {
-    icon: "/volver-origen/public/img/Logo-volveralorigen.webp",
-  },
+  /* El favicon NO se declara aquí: es el de Volver al Origen para todas las
+     landings y sale de los archivos de la raíz de app/ (favicon.ico, icon*.png,
+     apple-icon.png, manifest.ts). Un `icons` en este layout REEMPLAZARÍA los
+     de la raíz enteros, también el de iOS y el de Android. */
   /* noindex: esta ruta es el BORRADOR de la próxima versión de la landing,
      mientras la publicada sigue viviendo en /volver-al-origen. Sin esto Google
      indexaría ambas con el mismo título y descripción, competirían entre sí por

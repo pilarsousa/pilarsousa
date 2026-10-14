@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import {
@@ -174,6 +175,37 @@ const pixelifySans = localFont({
   weight: "400 700",
   display: "swap",
 });
+
+/*
+  ── EL FAVICON ES EL MISMO EN TODAS LAS LANDINGS ──
+
+  El logotipo de Volver al Origen. No se declara con `metadata.icons`: sale de
+  los archivos de esta carpeta, que Next convierte en las etiquetas del <head>
+  y que heredan todas las rutas.
+
+    favicon.ico      16/32/48 — navegadores de escritorio, accesos de Windows
+    icon1.png        32x32    — Chrome, Edge, Firefox y Safari en macOS
+    icon2.png        192x192  — Chrome en Android
+    apple-icon.png   180x180  — pantalla de inicio de iOS/iPadOS; OPACO, porque
+                                iOS pinta de negro lo transparente
+    manifest.ts               — iconos de 192 y 512 y el "maskable" de Android
+
+  Todos se generan desde el logotipo con `node scripts/generate-favicons.mjs`.
+  Si cambia el logotipo se vuelve a correr: son copias y no se enteran solas.
+
+  ⚠️ NINGÚN LAYOUT DE LANDING DEBE DECLARAR `icons`. La metadata se fusiona
+  por clave, no en profundidad: un `icons` más abajo reemplaza los de aquí
+  enteros, y esa landing se queda sin el icono de iOS y sin el de Android.
+
+  Lo único que no tiene archivo propio es el mosaico del menú Inicio de
+  Windows, que se pide con estas dos etiquetas.
+*/
+export const metadata: Metadata = {
+  other: {
+    "msapplication-TileColor": "#013103",
+    "msapplication-TileImage": "/icons/mstile-144.png",
+  },
+};
 
 export default function RootLayout({
   children,
