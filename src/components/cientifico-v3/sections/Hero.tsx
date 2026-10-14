@@ -11,7 +11,7 @@ import { Anotacion } from "@/components/cientifico-v3/ui/Anotacion";
 import { Separador } from "@/components/cientifico-v3/ui/Separador";
 import { Reveal } from "@/components/cientifico-v3/ui/Reveal";
 import { HORA, HERO, PARA_QUIEN, PARA_QUIEN_EYEBROW } from "@/components/cientifico-v3/content";
-import heroEscritorio from "@/../public/cientifico-v1/hero/hero-seccion-v3-pc.png";
+import heroEscritorio from "@/../public/cientifico-v1/hero/hero-seccion-v3-pc.jpg";
 import heroMovil from "@/../public/cientifico-v1/hero/hero-seccion-v3-mobile.png";
 
 function Dato({
@@ -41,7 +41,12 @@ function Dato({
   la izquierda para el texto) y la vertical (Pilar arriba, el deck de madera
   abajo, donde cae el texto). <picture> decide cuál baja el navegador, así que
   se descarga una sola. quality 90: en desktop la panorámica se escala por
-  encima de su tamaño (1672px).
+  encima de su tamaño (1920px).
+
+  La panorámica mide 1920 × 800 y la caja 860 de alto: hasta los 2064px de
+  ancho la foto sobra a los lados y `object-position` decide qué se recorta.
+  50% deja a Pilar en la mitad derecha en todos los anchos; con más, a 1024
+  su mano con el mate se mete debajo de la columna de texto.
 */
 function FotoHero() {
   const comun = {
@@ -66,7 +71,7 @@ function FotoHero() {
         {...resto}
         alt={resto.alt}
         srcSet={movil}
-        className="object-cover object-top brightness-[0.8] saturate-[0.85] lg:object-[72%_40%]"
+        className="object-cover object-top brightness-[0.8] saturate-[0.85] lg:object-[50%_40%]"
       />
     </picture>
   );
@@ -92,12 +97,12 @@ function AnotacionesFoto() {
 
       {/* Cajas 3D → 5D con la flecha. Trazos imperfectos a propósito. Sólo
           desktop: en mobile no hay hueco libre al lado de Pilar.
-          Abajo a la derecha, delante de las piernas de Pilar, sobre la
-          baranda: es el único hueco libre de la mitad derecha en todos los
-          anchos (de 1024 a 1920 Pilar llega al borde derecho de la foto). */}
+          Abajo, sobre la baranda, entre la columna de texto y las piernas
+          de Pilar: es el único hueco libre en todos los anchos. Va atado al
+          `object-position` de la foto: si cambia el encuadre, se revisa. */}
       <svg
         viewBox="0 0 320 110"
-        className="absolute left-[60%] top-[74%] hidden w-[min(16cqw,250px)] overflow-visible lg:block"
+        className="absolute left-[54%] top-[74%] hidden w-[min(16cqw,250px)] overflow-visible lg:block"
         aria-hidden
       >
         <g stroke="#cfe6dc" strokeWidth={3}>
