@@ -11,8 +11,8 @@ import { Anotacion } from "@/components/cientifico-v2/ui/Anotacion";
 import { Separador } from "@/components/cientifico-v2/ui/Separador";
 import { Reveal } from "@/components/cientifico-v2/ui/Reveal";
 import { HORA, HERO, PARA_QUIEN, PARA_QUIEN_EYEBROW } from "@/components/cientifico-v2/content";
-import heroEscritorio from "@/../public/cientifico-v2/hero/hero-seccion-v3-pc.jpg";
-import heroMovil from "@/../public/cientifico-v2/hero/hero-seccion-v3-mobile.png";
+import heroEscritorio from "@/../public/cientifico-v2/hero/hero-section-2.jpg";
+import heroMovil from "@/../public/cientifico-v2/hero/herosection2-mobile.jpg";
 
 function Dato({
   icono,
@@ -38,19 +38,21 @@ function Dato({
 
 /*
   Foto del hero con dos encuadres: la panorámica (Pilar a la derecha, aire a
-  la izquierda para el texto) y la vertical (Pilar arriba, el deck de madera
-  abajo, donde cae el texto). <picture> decide cuál baja el navegador, así que
-  se descarga una sola. quality 90: en desktop la panorámica se escala por
-  encima de su tamaño (1920px).
+  la izquierda para el texto) y la vertical (Pilar arriba y, debajo de su
+  cintura, un fundido verde ya horneado en la foto, donde cae el texto).
+  <picture> decide cuál baja el navegador, así que se descarga una sola.
+  quality 90: en desktop la panorámica se escala por encima de su tamaño.
 
-  La panorámica mide 1920 × 800 y la caja 860 de alto: hasta los 2064px de
+  La panorámica mide 1920 × 750 y la caja 860 de alto: hasta los ~2200px de
   ancho la foto sobra a los lados y `object-position` decide qué se recorta.
-  50% deja a Pilar en la mitad derecha en todos los anchos; con más, a 1024
-  su mano con el mate se mete debajo de la columna de texto.
+  50% deja a Pilar en la mitad derecha en todos los anchos.
+
+  Sin filtros de brillo: Pilar va sin sombra. Lo que oscurece el lado del
+  texto es la máscara de .cv2-hero-foto sobre el verde de .cv2-hero-fondo.
 */
 function FotoHero() {
   const comun = {
-    alt: "Pilar Sousa riendo en la baranda de una cabaña en el bosque",
+    alt: "Pilar Sousa de brazos cruzados en un aula, con una pizarra del sistema nervioso detrás",
     fill: true,
     sizes: "100vw",
     quality: 90,
@@ -71,7 +73,7 @@ function FotoHero() {
         {...resto}
         alt={resto.alt}
         srcSet={movil}
-        className="object-cover object-top brightness-[0.8] saturate-[0.85] lg:object-[50%_40%]"
+        className="object-cover object-top lg:object-[50%_40%]"
       />
     </picture>
   );
@@ -146,15 +148,22 @@ export function Hero() {
   return (
     <section aria-labelledby="hero-titulo" className="relative isolate overflow-x-clip">
       <div className="absolute inset-0 -z-10 overflow-hidden">
-        {/* h mobile: 1933 / 684 = 283vw, la foto entera a lo ancho. */}
-        <div className="absolute inset-x-0 top-0 h-[283vw] lg:h-[860px]">
+        {/* La sombra verde detrás de la foto: es lo que se ve donde la máscara
+            la funde. Más alta que la foto porque el texto sigue debajo (en
+            mobile, unos 600px pasada la foto); se funde al fondo de la página
+            recién después del botón. */}
+        <div className="cv2-hero-fondo absolute inset-x-0 top-0 h-[calc(74vw+1060px)] lg:h-[1000px]" />
+        {/* h mobile: 1500 / 960 = 156.25vw, la foto entera a lo ancho.
+            top-[60px] sólo en mobile: en esta foto la cabeza de Pilar está
+            pegada al borde de arriba y la barra del contador (68px) la tapaba. */}
+        <div className="absolute inset-x-0 top-[60px] h-[156.25vw] lg:top-0 lg:h-[860px]">
           <div className="cv2-hero-foto absolute inset-0">
             <FotoHero />
-            {/* Sombreado de legibilidad, sólo mobile: arranca a la altura de
-                los datos del evento y para la segunda línea del titular ya es
-                casi negro, así todo el texto cae sobre oscuro. En desktop lo
-                hace la máscara (.cv2-hero-foto), de la izquierda hacia el medio. */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(12,10,18,0.15)_0%,rgba(12,10,18,0.05)_14%,rgba(12,10,18,0.6)_25%,rgba(12,10,18,0.9)_36%,rgba(12,10,18,0.94)_100%)] lg:bg-none" />
+            {/* Velo de legibilidad, sólo mobile: nada sobre Pilar; arranca en
+                su cintura, donde empieza el fundido de la foto, y lo lleva al
+                verde de --cv2-sombra para que el texto caiga sobre oscuro. En
+                desktop lo hace la máscara (.cv2-hero-foto), sólo a la izquierda. */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,transparent_40%,rgb(27_36_24/0.6)_47%,rgb(27_36_24/0.9)_55%,rgb(27_36_24/0.95)_100%)] lg:bg-none" />
           </div>
           {/* Fuera de la máscara: si no, el fundido de abajo apaga el 3D → 5D. */}
           <AnotacionesFoto />
@@ -170,9 +179,9 @@ export function Hero() {
         </div>
       </BarraSuperior>
 
-      {/* pt mobile: arranca a la altura de las rodillas de Pilar (sus pies
-          quedan a ~91vw); el sombreado ya cubre esa zona. */}
-      <Contenedor className="pt-[calc(64vw+20px)] lg:pt-[172px]">
+      {/* pt mobile: arranca justo debajo del cinturón de Pilar (~71vw de la
+          foto, más los 60px que baja), donde la foto ya se funde al verde. */}
+      <Contenedor className="pt-[calc(74vw+20px)] lg:pt-[172px]">
         <div className="lg:max-w-[480px]">
           <Reveal>
             <ul className="grid w-fit max-w-full grid-cols-[auto_auto] gap-x-4 gap-y-3" aria-label="Datos del evento">
