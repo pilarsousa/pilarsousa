@@ -5,16 +5,17 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/cn";
-import { DISPUESTA_ITEMS } from "@/components/cientifico-v2/content";
+import { ES_PARA_TI } from "@/components/cientifico-v2/content";
 import { Destacado } from "@/components/cientifico-v2/ui/Destacado";
 import tubo from "@/../public/cientifico-v2/tubo-cientifico-recorte.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
 /*
-  El tubo de ensayo en el lugar del celular de la referencia, con las cuatro
-  cards flotando alrededor. El líquido sube con el scroll y cada card se
-  enciende cuando el nivel llega a su marca.
+  La pócima: el tubo de ensayo con las tres cards de "Es para ti si…"
+  flotando alrededor. El líquido dorado sube con el scroll y cada card se
+  enciende cuando el nivel llega a su marca. Es el único guiño de laboratorio
+  que admite el brief ("como mucho una vez, nunca como hilo conductor").
 
   Dos composiciones con el mismo DOM:
   - Desktop (lg): tubo fijo al centro y cards en zigzag. Cada card está a la
@@ -34,15 +35,14 @@ const ALTO_UTIL = 84.32;
    de POSICIONES_LG salen de estos números con el tubo de 560px a 20px del
    borde: top = 20 + 560 × (1 − (FONDO + nivel × ALTO_UTIL) / 100).
    ⚠️ Si cambia uno, recalcular el otro. */
-const NIVELES_LG = [0.18, 0.4, 0.62, 0.84];
+const NIVELES_LG = [0.22, 0.53, 0.84];
 
 /* Static class strings so Tailwind includes them. Lado de la card y de su
    marca: alternan para formar el zigzag de la referencia. */
 const POSICIONES_LG = [
-  { card: "lg:right-[calc(50%+132px)] lg:top-[468px] lg:w-[min(370px,calc(50%-142px))]", lado: "izq" },
-  { card: "lg:left-[calc(50%+132px)] lg:top-[364px] lg:w-[min(370px,calc(50%-142px))]", lado: "der" },
-  { card: "lg:right-[calc(50%+172px)] lg:top-[260px] lg:w-[min(400px,calc(50%-182px))]", lado: "izq" },
-  { card: "lg:left-[calc(50%+152px)] lg:top-[156px] lg:w-[min(390px,calc(50%-162px))]", lado: "der" },
+  { card: "lg:right-[calc(50%+132px)] lg:top-[449px] lg:w-[min(390px,calc(50%-142px))]", lado: "izq" },
+  { card: "lg:left-[calc(50%+152px)] lg:top-[303px] lg:w-[min(400px,calc(50%-162px))]", lado: "der" },
+  { card: "lg:right-[calc(50%+172px)] lg:top-[156px] lg:w-[min(410px,calc(50%-182px))]", lado: "izq" },
 ] as const;
 
 const BURBUJAS = [
@@ -53,9 +53,9 @@ const BURBUJAS = [
   { x: "74%", t: 3, d: 3.8, retraso: 1.7, deriva: -4 },
 ];
 
-const n = DISPUESTA_ITEMS.length;
+const n = ES_PARA_TI.length;
 /* Mobile: cada card ocupa un tramo de la lista y se enciende en su mitad. */
-const NIVELES_MOBILE = DISPUESTA_ITEMS.map((_, i) => (i + 0.5) / n);
+const NIVELES_MOBILE = ES_PARA_TI.map((_, i) => (i + 0.5) / n);
 
 const alto = (nivel: number) => `${FONDO + nivel * ALTO_UTIL}%`;
 
@@ -178,11 +178,11 @@ export function TuboDispuesta() {
       </div>
 
       <ol className="cv2-dispuesta__lista flex flex-col gap-5 lg:static lg:block">
-        {DISPUESTA_ITEMS.map((texto, i) => (
+        {ES_PARA_TI.map((texto, i) => (
           <li
             key={texto}
             className={cn(
-              "cv2-dispuesta__card rounded-[14px] border border-white/15 bg-[#17141f]/80 px-6 py-5 text-[1.0625rem] leading-relaxed text-foreground backdrop-blur-md",
+              "cv2-dispuesta__card rounded-[14px] border border-white/15 bg-[#173226]/80 px-6 py-5 text-lg leading-relaxed text-foreground backdrop-blur-md",
               "lg:absolute lg:z-20 lg:-translate-y-1/2",
               POSICIONES_LG[i].card,
             )}

@@ -9,7 +9,7 @@ import flags from "react-phone-number-input/flags";
 import "react-phone-number-input/style.css";
 import { cn } from "@/lib/cn";
 import { useVisitorCountry } from "@/lib/useVisitorCountry";
-import { SOURCE } from "@/components/cientifico-v2/content";
+import { MODAL, SOURCE } from "@/components/cientifico-v2/content";
 
 /*
   Copia del formulario de v1 con el estilo de v3. La lógica es la misma y no
@@ -36,10 +36,10 @@ type Errors = {
 type Status = "idle" | "submitting" | "success" | "error";
 
 const FIELD_CLASS =
-  "h-11 w-full rounded-lg border bg-[#f4eee4]/[0.04] px-4 text-sm text-foreground placeholder:text-foreground/45 outline-none transition-all duration-300";
+  "h-11 w-full rounded-lg border bg-[#f3eedc]/[0.04] px-4 text-sm text-foreground placeholder:text-foreground/45 outline-none transition-all duration-300";
 
 const FIELD_OK =
-  "border-[#f4eee4]/14 focus:border-[#7da89a]/70 focus:shadow-[0_0_18px_rgba(125,168,154,0.25)]";
+  "border-[#f3eedc]/14 focus:border-[#e9c46a]/70 focus:shadow-[0_0_18px_rgba(233,196,106,0.25)]";
 
 const FIELD_ERROR = "border-[#e8a598]/80 focus:border-[#e8a598]";
 
@@ -47,7 +47,7 @@ const LABEL_CLASS = "text-xs font-semibold uppercase tracking-[0.12em] text-fore
 
 export function ReservaForm({
   source = SOURCE,
-  submitLabel = "Quiero mi entrada gratuita",
+  submitLabel = MODAL.boton,
   onSuccess,
 }: {
   /** Etiqueta del lead en el CRM según la landing de origen. */
@@ -218,9 +218,9 @@ export function ReservaForm({
         {status === "success" ? (
           <p
             role="status"
-            className="flex min-h-[66px] items-center justify-center rounded-lg border border-[#7da89a]/60 bg-[#7da89a]/10 text-base font-bold text-[#94c7b6]"
+            className="flex min-h-[66px] items-center justify-center rounded-lg border border-[#e9c46a]/60 bg-[#e9c46a]/10 text-base font-bold text-[#f0cf7a]"
           >
-            ¡Entrada reservada! Te llevamos al siguiente paso…
+            {MODAL.exito}
           </p>
         ) : (
           <button

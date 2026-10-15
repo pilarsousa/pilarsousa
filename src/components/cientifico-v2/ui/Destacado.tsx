@@ -1,7 +1,7 @@
 import { cn } from "@/lib/cn";
 
 /**
- * Pinta en salvia las partes del copy marcadas con [corchetes] (content.ts).
+ * Pinta en oro las partes del copy marcadas con [corchetes] (content.ts).
  * Así los textos siguen siendo cadenas planas y el destacado se mueve
  * editando el copy, no el JSX.
  */
@@ -12,7 +12,7 @@ export function Destacado({
 }: {
   texto: string;
   className?: string;
-  /** Clase de las partes marcadas. Por defecto, salvia. */
+  /** Clase de las partes marcadas. Por defecto, oro. */
   claseDestacado?: string;
 }) {
   const partes = texto.split(/(\[[^\]]+\])/g).filter(Boolean);

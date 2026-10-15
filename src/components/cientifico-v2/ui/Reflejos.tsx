@@ -1,5 +1,5 @@
 /*
-  Destellos (Salvia, Arena Dorada, Violeta Alma) que recorren un trazo,
+  Destellos (oro, crema y naranja) que recorren un trazo,
   desfasados un tercio de vuelta (la vuelta dura 7,5s: ver
   .cv2-reflejo__capa). Van DENTRO de un <svg>: reciben el `d` del recorrido.
 
@@ -13,9 +13,9 @@
 */
 
 const REFLEJOS = [
-  { color: "salvia", retraso: 0 },
-  { color: "arena", retraso: -2.5 },
-  { color: "violeta", retraso: -5 },
+  { color: "oro", retraso: 0 },
+  { color: "crema", retraso: -2.5 },
+  { color: "naranja", retraso: -5 },
 ] as const;
 
 const CAPAS = [

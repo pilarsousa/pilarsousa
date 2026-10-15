@@ -4,9 +4,8 @@ import { FECHA_CORTA } from "@/components/cientifico-v2/content";
 import foto from "@/../public/mision-origen-venta/herosection.jpg";
 
 /**
- * Entrada 3D al evento: cuerpo con la foto de Pilar en duotono (círculo de
- * geometría sagrada detrás) y talón de papel con la fecha y el código de
- * barras. Todo escala con el ancho (cqw), así que el tamaño lo da `className`
+ * Entrada al seminario: cuerpo con la foto de Pilar en duotono pizarra → oro
+ * y talón de papel con la fecha y el código de barras. Todo escala con el ancho (cqw), así que el tamaño lo da `className`
  * (w-*), y la inclinación también (rotate-*).
  *
  * `talon="sin"` la dibuja sin talón, para poner al lado un <TalonSuelto>
@@ -34,15 +33,14 @@ export function Entrada({
         />
         <div className="cv2-entrada__velo" />
         <div className="cv2-entrada__texto">
-          <p className="cv2-entrada__vivo">En vivo online</p>
+          <p className="cv2-entrada__vivo">En directo</p>
           <p className="cv2-entrada__marca">
-            <span className="font-light">Volver al </span>
-            <span className="cv2-grad-texto font-extrabold">Origen</span>
+            <span className="cv2-grad-texto font-display font-bold">Neurometafísica</span>
           </p>
           <p className="cv2-entrada__lema">
-            El método para manifestar
+            La ciencia de reprogramar tu identidad
             <br />
-            resultados que puedes comprobar.
+            para manifestar una realidad diferente.
           </p>
         </div>
       </div>

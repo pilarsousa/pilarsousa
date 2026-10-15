@@ -12,7 +12,7 @@ import { Reflejos } from "@/components/cientifico-v2/ui/Reflejos";
   - esquinas en chaflán (la barra superior);
   - muescas semicirculares a los costados y una línea troquelada entre la
     cabecera y el formulario (el botón-entrada);
-  - filo Violeta Alma → Salvia con los reflejos de la barra superior.
+  - filo oro claro → oro con los reflejos de la barra superior.
 
   Todo es un SVG medido en píxeles (ResizeObserver): el alto cambia cuando
   aparecen los errores del formulario, y así la forma y los reflejos siguen
@@ -104,20 +104,20 @@ export function MarcoEntrada({
         <svg
           aria-hidden
           viewBox={`0 0 ${m.w} ${m.h}`}
-          className="pointer-events-none absolute inset-0 size-full overflow-visible drop-shadow-[0_30px_50px_rgba(75,58,107,0.5)]"
+          className="pointer-events-none absolute inset-0 size-full overflow-visible drop-shadow-[0_30px_50px_rgba(233,196,106,0.5)]"
         >
           <defs>
             <linearGradient id="cv2-marco-filo" x1="0" x2="1" y1="0" y2="0">
-              <stop offset="0" stopColor="#a391b8" />
-              <stop offset="1" stopColor="#7da89a" />
+              <stop offset="0" stopColor="#f3d98c" />
+              <stop offset="1" stopColor="#e9c46a" />
             </linearGradient>
             <radialGradient id="cv2-marco-brillo" cx="0.5" cy="0" r="0.75">
-              <stop offset="0" stopColor="#4b3a6b" stopOpacity="0.55" />
-              <stop offset="1" stopColor="#4b3a6b" stopOpacity="0" />
+              <stop offset="0" stopColor="#1e3b2e" stopOpacity="0.55" />
+              <stop offset="1" stopColor="#1e3b2e" stopOpacity="0" />
             </radialGradient>
           </defs>
 
-          <path d={d} fill="#17141f" />
+          <path d={d} fill="#173226" />
           <path d={d} fill="url(#cv2-marco-brillo)" />
 
           {/* Troquel entre muesca y muesca */}
@@ -126,7 +126,7 @@ export function MarcoEntrada({
             x2={m.w - MUESCA - 8}
             y1={m.troquel}
             y2={m.troquel}
-            stroke="rgb(244 238 228 / 0.22)"
+            stroke="rgb(243 238 220 / 0.22)"
             strokeWidth={1.5}
             strokeDasharray="5 6"
           />
@@ -140,7 +140,7 @@ export function MarcoEntrada({
             <path
               className="cv2-separador__destello"
               d="M66 2 C66.9 6.6 68.4 8.1 73 9 C68.4 9.9 66.9 11.4 66 16 C65.1 11.4 63.6 9.9 59 9 C63.6 8.1 65.1 6.6 66 2 Z"
-              fill="#d9c7a7"
+              fill="#e9c46a"
             />
           </g>
         </svg>

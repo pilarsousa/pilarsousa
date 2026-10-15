@@ -1,40 +1,15 @@
-import Image, { getImageProps } from "next/image";
-import { Radio, Video } from "lucide-react";
-import { cn } from "@/lib/cn";
+import { getImageProps } from "next/image";
 import { Contenedor } from "@/components/cientifico-v2/ui/Contenedor";
 import { BarraSuperior } from "@/components/cientifico-v2/ui/BarraSuperior";
 import { Contador } from "@/components/cientifico-v2/ui/Contador";
 import { Wordmark } from "@/components/cientifico-v2/ui/Wordmark";
-import { Destacado } from "@/components/cientifico-v2/ui/Destacado";
-import { BotonEntrada } from "@/components/cientifico-v2/ui/BotonEntrada";
-import { Anotacion } from "@/components/cientifico-v2/ui/Anotacion";
-import { Separador } from "@/components/cientifico-v2/ui/Separador";
+import { Llamado } from "@/components/cientifico-v2/ui/Llamado";
+import { Sello } from "@/components/cientifico-v2/ui/Sello";
 import { Reveal } from "@/components/cientifico-v2/ui/Reveal";
-import { HORA, HERO, PARA_QUIEN, PARA_QUIEN_EYEBROW } from "@/components/cientifico-v2/content";
+import { HERO } from "@/components/cientifico-v2/content";
+import { horarios } from "@/components/cientifico-v2/horario";
 import heroEscritorio from "@/../public/cientifico-v2/hero/hero-section-2.jpg";
 import heroMovil from "@/../public/cientifico-v2/hero/herosection2-mobile.jpg";
-
-function Dato({
-  icono,
-  children,
-  className,
-}: {
-  icono: React.ReactNode;
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <li
-      className={cn(
-        "flex items-center gap-2 rounded-[5px] bg-white/[0.09] px-3.5 py-2 text-[0.9375rem] font-semibold text-foreground backdrop-blur-sm sm:text-base",
-        className,
-      )}
-    >
-      <span className="shrink-0 text-(--cv2-violeta)">{icono}</span>
-      {children}
-    </li>
-  );
-}
 
 /*
   Foto del hero con dos encuadres: la panorámica (Pilar a la derecha, aire a
@@ -49,10 +24,13 @@ function Dato({
 
   Sin filtros de brillo: Pilar va sin sombra. Lo que oscurece el lado del
   texto es la máscara de .cv2-hero-foto sobre el verde de .cv2-hero-fondo.
+
+  ⚠️ FOTO PROVISIONAL. El brief pide un aula con luz dorada y una pizarra
+  verde con el título escrito; esta es la del aula que había.
 */
 function FotoHero() {
   const comun = {
-    alt: "Pilar Sousa de brazos cruzados en un aula, con una pizarra del sistema nervioso detrás",
+    alt: "Pilar Sousa en un aula con luz de tarde, delante de una pizarra verde",
     fill: true,
     sizes: "100vw",
     quality: 90,
@@ -69,84 +47,34 @@ function FotoHero() {
   return (
     <picture>
       <source media="(min-width: 1024px)" srcSet={escritorio} />
-      <img
-        {...resto}
-        alt={resto.alt}
-        srcSet={movil}
-        className="object-cover object-top lg:object-[50%_40%]"
-      />
+      <img {...resto} alt={resto.alt} srcSet={movil} className="object-cover object-top lg:object-[50%_40%]" />
     </picture>
   );
 }
 
-/*
-  Anotaciones a mano sobre la foto (el "Confianza · F1 → F2 · Objeciones" de
-  la referencia). Medidas en cqw de la caja de la foto, así escalan con ella.
-  3D → 5D: el salto de consciencia del que habla Pilar.
-*/
-function AnotacionesFoto() {
-  return (
-    <Anotacion className="absolute inset-0 [container-type:inline-size]" umbral={0.05}>
-      {/* "Frecuencia" e "Identidad": ocultas por ahora (quitar `hidden`
-          para volver a mostrarlas). Tamaños con tope (min) en desktop: en
-          pantallas muy anchas los cqw las agrandaban de más. */}
-      <span className="cv2-mano cv2-trazo-texto absolute left-[3%] top-[11.5%] hidden -rotate-[9deg] text-[10cqw] font-bold leading-none [--dur:1.3s] [--retraso:0.5s] lg:left-[49%] lg:top-[20%] lg:text-[min(4.6cqw,72px)]">
-        Frecuencia
-      </span>
-      <span className="cv2-mano cv2-trazo-texto absolute left-[8%] top-[22%] hidden -rotate-[4deg] text-[8cqw] font-bold leading-none [--retraso:1.6s] lg:left-[55%] lg:top-[45%] lg:text-[min(3.2cqw,50px)]">
-        Identidad
-      </span>
-
-      {/* Cajas 3D → 5D con la flecha. Trazos imperfectos a propósito. Sólo
-          desktop: en mobile no hay hueco libre al lado de Pilar.
-          Abajo, sobre la baranda, entre la columna de texto y las piernas
-          de Pilar: es el único hueco libre en todos los anchos. Va atado al
-          `object-position` de la foto: si cambia el encuadre, se revisa. */}
-      <svg
-        viewBox="0 0 320 110"
-        className="absolute left-[54%] top-[74%] hidden w-[min(16cqw,250px)] overflow-visible lg:block"
-        aria-hidden
-      >
-        <g stroke="#cfe6dc" strokeWidth={3}>
-          <path
-            pathLength={1}
-            className="cv2-trazo cv2-trazo--brillo [--retraso:2.4s]"
-            d="M8 18 C40 12 70 14 92 16 C95 40 94 70 96 92 C64 95 34 94 6 96 C4 70 6 42 8 18"
-          />
-          <path pathLength={1} className="cv2-trazo cv2-trazo--brillo [--dur:0.6s] [--retraso:3.2s]" d="M110 58 C150 52 180 56 214 54 M196 40 L216 54 L196 70" />
-          <path
-            pathLength={1}
-            className="cv2-trazo cv2-trazo--brillo [--retraso:3.7s]"
-            d="M228 10 C258 6 288 8 312 12 C316 40 314 72 316 100 C290 104 258 102 230 104 C226 74 230 40 228 10"
-          />
-        </g>
-        <text x="22" y="72" className="cv2-mano cv2-trazo-texto fill-[#e2f0ea] text-[44px] font-bold [--dur:0.6s] [--retraso:2.9s]">
-          3D
-        </text>
-        <text x="244" y="72" className="cv2-mano cv2-trazo-texto fill-[#e2f0ea] text-[44px] font-bold [--dur:0.6s] [--retraso:4.3s]">
-          5D
-        </text>
-      </svg>
-    </Anotacion>
-  );
-}
-
 /**
- * Hero + "Tengas o no experiencia…". La barra con la cuenta atrás va encima
- * de la foto, como en la referencia.
+ * Bloque 1 · Hero. Objetivo del brief: que en 5 segundos se entienda qué es,
+ * para quién y cuándo. Antetítulo con la fecha, "NEUROMETAFÍSICA" como
+ * inscripción en oro, subtítulo, apoyo, el botón y, debajo, el directo con
+ * la hora en España, México y Argentina (los tres países con más público).
  *
- * Mobile: la foto vertical (684 × 1933, Pilar arriba) ocupa la parte de
- * arriba a lo ancho, entera, y el contenido arranca a la altura de sus
- * piernas, sobre el deck. Desktop: la panorámica cubre todo el ancho y el
- * texto va a la izquierda.
- *
- * overflow-x-clip y no overflow-hidden: el "Volver" desenfocado del pie tiene
- * que poder salirse por abajo sobre la sección siguiente. La foto, que sí hay
- * que recortar, lleva su propia capa con overflow-hidden.
+ * El sello "Seminario oficial" va al lado del antetítulo, como el lacre de
+ * un programa académico.
  */
 export function Hero() {
+  const [espana, mexico, argentina] = horarios();
+  const bajoBoton = [
+    HERO.bajoBotonInicio,
+    `${espana.hora} ${espana.pais}`,
+    `${mexico.hora} ${mexico.pais}`,
+    `${argentina.hora} ${argentina.pais}`,
+    HERO.bajoBotonFin,
+  ].join(" · ");
+
   return (
-    <section aria-labelledby="hero-titulo" className="relative isolate overflow-x-clip">
+    /* lg:min-h: la foto mide 860 y el fondo recorta a la sección; más baja,
+       la foto se cortaba en seco antes de terminar su fundido. */
+    <section aria-labelledby="hero-titulo" className="relative isolate overflow-x-clip lg:min-h-[900px]">
       <div className="absolute inset-0 -z-10 overflow-hidden">
         {/* La sombra verde detrás de la foto: es lo que se ve donde la máscara
             la funde. Más alta que la foto porque el texto sigue debajo (en
@@ -161,12 +89,10 @@ export function Hero() {
             <FotoHero />
             {/* Velo de legibilidad, sólo mobile: nada sobre Pilar; arranca en
                 su cintura, donde empieza el fundido de la foto, y lo lleva al
-                verde de --cv2-sombra para que el texto caiga sobre oscuro. En
-                desktop lo hace la máscara (.cv2-hero-foto), sólo a la izquierda. */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,transparent_40%,rgb(27_36_24/0.6)_47%,rgb(27_36_24/0.9)_55%,rgb(27_36_24/0.95)_100%)] lg:bg-none" />
+                verde pizarra para que el texto caiga sobre oscuro. En desktop
+                lo hace la máscara (.cv2-hero-foto), sólo a la izquierda. */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,transparent_40%,rgb(18_41_31/0.6)_47%,rgb(18_41_31/0.9)_55%,rgb(18_41_31/0.96)_100%)] lg:bg-none" />
           </div>
-          {/* Fuera de la máscara: si no, el fundido de abajo apaga el 3D → 5D. */}
-          <AnotacionesFoto />
         </div>
       </div>
 
@@ -181,89 +107,41 @@ export function Hero() {
 
       {/* pt mobile: arranca justo debajo del cinturón de Pilar (~71vw de la
           foto, más los 60px que baja), donde la foto ya se funde al verde. */}
-      <Contenedor className="pt-[calc(74vw+20px)] lg:pt-[172px]">
-        <div className="lg:max-w-[480px]">
-          <Reveal>
-            <ul className="grid w-fit max-w-full grid-cols-[auto_auto] gap-x-4 gap-y-3" aria-label="Datos del evento">
-              <Dato icono={<Video size={18} strokeWidth={1.8} />} className="col-span-2 justify-self-start">
-                Masterclass online gratuita
-              </Dato>
-              {/* La masterclass ocupa la primera fila en todos los anchos.
-                  PC: la hora pasa al final, al lado de "En vivo online". */}
-              <Dato
-                icono={<Image src="/espana.svg" alt="" width={21} height={14} className="rounded-[2px]" />}
-                className="lg:order-last"
-              >
-                {HORA}
-              </Dato>
-              <Dato icono={<Radio size={18} strokeWidth={1.8} />}>En vivo online</Dato>
-            </ul>
+      <Contenedor className="pt-[calc(74vw+60px)] pb-16 lg:pt-[150px] lg:pb-16">
+        <div className="relative lg:max-w-[600px]">
+          {/* El sello, como lacre, al lado del antetítulo con el punto de directo. */}
+          <Reveal className="flex items-center gap-4">
+            <Sello className="w-[68px] shrink-0 sm:w-[84px] lg:w-[96px]" />
+            <p className="cv2-antetitulo text-[0.8rem] leading-relaxed before:hidden sm:text-[0.95rem]">
+              <span className="relative flex size-2.5 shrink-0">
+                <span className="absolute inset-0 animate-ping rounded-full bg-[#e5484d] opacity-60 motion-reduce:hidden" />
+                <span className="relative size-2.5 rounded-full bg-[#e5484d]" />
+              </span>
+              {HERO.antetitulo}
+            </p>
           </Reveal>
 
           <Reveal delay={0.1}>
             <h1
               id="hero-titulo"
-              className="mt-5 text-balance text-[1.75rem] font-extrabold leading-[1.22] tracking-[-0.01em] text-foreground sm:text-[2.125rem]"
+              className="cv2-titulo mt-5 text-[clamp(1.9rem,8.4vw,2.6rem)] font-bold leading-none tracking-[0.03em] drop-shadow-[0_0_24px_rgba(233,196,106,0.22)] sm:text-[3.4rem] lg:text-[3.55rem]"
             >
-              <Destacado texto={HERO.titulo} />
+              <span className="cv2-grad-texto">{HERO.titulo}</span>
             </h1>
+            <p className="mt-5 text-balance text-[1.375rem] font-semibold leading-snug text-foreground sm:text-[1.625rem]">
+              {HERO.subtitulo}
+            </p>
           </Reveal>
 
           <Reveal delay={0.2}>
-            {/* La línea a la izquierda la separa del titular y la destaca. */}
-            <p className="mt-6 border-l-2 border-foreground/45 pl-4 text-[1.0625rem] font-medium leading-relaxed text-foreground/90 sm:text-lg">
-              {HERO.bajada}
+            <p className="mt-6 border-l-2 border-(--cv2-oro) pl-4 text-lg font-bold leading-relaxed text-foreground/95 sm:text-xl">
+              {HERO.apoyo}
             </p>
-            {/* text-balance: reparte los renglones, que no quede "ahora!" solo. */}
-            <p className="cv2-destacado mt-5 text-balance text-[0.98rem] font-semibold sm:text-center sm:text-[1.0625rem]">{HERO.llamado}</p>
           </Reveal>
 
-          <Reveal delay={0.3} className="mt-5 sm:flex sm:justify-center">
-            <BotonEntrada bloque className="sm:w-auto" />
+          <Reveal delay={0.3}>
+            <Llamado alineado="izquierda" className="mt-8" nota={bajoBoton} />
           </Reveal>
-        </div>
-
-        <Separador className="mt-16 sm:mt-20" />
-
-        {/* ── Tengas o no experiencia… ── */}
-        <div className="relative mt-12 pb-24 sm:mt-14 lg:pb-32">
-          <p className="cv2-destacado max-w-[260px] text-base sm:max-w-none">{PARA_QUIEN_EYEBROW}</p>
-
-          <Reveal>
-            <ul className="mt-7 grid gap-7 sm:grid-cols-2 lg:grid-cols-[1.65fr_1.2fr_1fr_0.93fr] lg:gap-3.5">
-              {PARA_QUIEN.map((texto, i) => (
-                <li
-                  key={texto}
-                  className="cv2-card relative rounded-[6px] px-6 pb-6 pt-7 text-[1.0625rem] leading-[1.45] text-(--cv2-gris)"
-                >
-                  {/* La barrita se redibuja cada pocos segundos, en cascada
-                      de una card a la siguiente (ver .cv2-barrita--viva). */}
-                  <span
-                    aria-hidden
-                    className="cv2-barrita cv2-barrita--viva"
-                    style={{ "--retraso": `${i * 0.45}s` } as React.CSSProperties}
-                  />
-                  <Destacado texto={texto} />
-                </li>
-              ))}
-            </ul>
-          </Reveal>
-
-          {/* "Volver" manuscrito y desenfocado (el "Leads" de la referencia).
-              PC: sale de la columna y se ancla al borde izquierdo de la
-              PANTALLA (2vw), inclinado. El borde del contenido está a
-              max(32px, (100vw − 1140px) / 2) del de la pantalla; restándolo,
-              la posición queda relativa al viewport. En pantallas anchas cae
-              entero en el margen; en las más angostas entra en la franja
-              vacía entre las cards y el carrusel, sin cortarse.
-              Más abajo que en mobile: al girar sobre el borde izquierdo, el
-              final de la palabra sube y llegaba a la altura de las cards. */}
-          <span
-            aria-hidden
-            className="cv2-mano cv2-desenfocado pointer-events-none absolute -bottom-2 left-[2%] -z-10 -rotate-3 text-[7rem] font-bold leading-none sm:text-[10rem] lg:-bottom-20 lg:left-[calc(2vw-max(32px,(100vw-1140px)/2))] lg:origin-left lg:-rotate-[19deg] lg:text-[clamp(7rem,8.5vw,10rem)]"
-          >
-            Volver
-          </span>
         </div>
       </Contenedor>
     </section>

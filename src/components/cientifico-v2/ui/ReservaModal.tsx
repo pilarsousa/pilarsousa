@@ -5,7 +5,8 @@ import { CalendarDays, Radio } from "lucide-react";
 import { Wordmark } from "@/components/cientifico-v2/ui/Wordmark";
 import { ReservaForm } from "@/components/cientifico-v2/ui/ReservaForm";
 import { MarcoEntrada } from "@/components/cientifico-v2/ui/MarcoEntrada";
-import { FECHA_CORTA, HORA } from "@/components/cientifico-v2/content";
+import { FECHA_CORTA, MODAL, ZONA_HORARIA } from "@/components/cientifico-v2/content";
+import { horaEn } from "@/components/cientifico-v2/horario";
 
 type ReservaModalContextValue = {
   open: () => void;
@@ -65,7 +66,7 @@ export function ReservaModalProvider({ children }: { children: React.ReactNode }
             type="button"
             aria-label="Cerrar"
             onClick={close}
-            className="fixed inset-0 cursor-default bg-[#07060b]/80 backdrop-blur-sm animate-[fadeIn_0.2s_ease-out]"
+            className="fixed inset-0 cursor-default bg-[#06120d]/80 backdrop-blur-sm animate-[fadeIn_0.2s_ease-out]"
           />
 
           <div className="relative m-auto w-full max-w-md animate-[fadeIn_0.25s_ease-out]">
@@ -74,16 +75,16 @@ export function ReservaModalProvider({ children }: { children: React.ReactNode }
                 <div className="flex flex-col gap-2 pr-8">
                   <Wordmark className="text-xl" />
                   <h2 id="cv2-modal-titulo" className="text-[1.6rem] font-extrabold leading-tight text-foreground">
-                    Asegura tu <span className="cv2-grad-texto">entrada gratuita</span>
+                    {MODAL.titulo} <span className="cv2-grad-texto">{MODAL.tituloDestacado}</span>
                   </h2>
                   <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm font-semibold text-foreground/80">
                     <span className="flex items-center gap-1.5">
-                      <CalendarDays aria-hidden size={15} className="text-(--cv2-violeta)" />
-                      {FECHA_CORTA} · {HORA}
+                      <CalendarDays aria-hidden size={15} className="text-(--cv2-oro-claro)" />
+                      {FECHA_CORTA} · {horaEn(ZONA_HORARIA)} (España)
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <Radio aria-hidden size={15} className="text-(--cv2-violeta)" />
-                      En vivo online
+                      <Radio aria-hidden size={15} className="text-(--cv2-oro-claro)" />
+                      {MODAL.formato}
                     </span>
                   </p>
                 </div>
@@ -97,7 +98,7 @@ export function ReservaModalProvider({ children }: { children: React.ReactNode }
               type="button"
               onClick={close}
               aria-label="Cerrar"
-              className="absolute right-4 top-[34px] z-10 flex size-8 items-center justify-center rounded-md text-foreground/60 transition-colors duration-300 hover:bg-white/5 hover:text-[#94c7b6] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7da89a]"
+              className="absolute right-4 top-[34px] z-10 flex size-8 items-center justify-center rounded-md text-foreground/60 transition-colors duration-300 hover:bg-white/5 hover:text-[#f0cf7a] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e9c46a]"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" aria-hidden className="size-4">
                 <path d="M18 6L6 18M6 6l12 12" />

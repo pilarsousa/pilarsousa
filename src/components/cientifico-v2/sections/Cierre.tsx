@@ -8,8 +8,8 @@ import { Reveal } from "@/components/cientifico-v2/ui/Reveal";
 import { CIERRE } from "@/components/cientifico-v2/content";
 
 /**
- * Cierre: la entrada grande con el talón suelto, el titular con el corchete a
- * mano, el botón y la pastilla de cupos.
+ * Bloque 12 · Cierre: la entrada al seminario con el talón suelto, el titular
+ * del brief con el corchete de tiza, el botón y el aviso de plazas.
  */
 export function Cierre() {
   return (
@@ -20,29 +20,29 @@ export function Cierre() {
           <TalonSuelto className="-ml-1 mt-12 w-[min(22vw,118px)] rotate-[22deg] sm:ml-6" />
         </Reveal>
 
-        <div className="relative mt-12 max-w-[900px]">
-          {/* Corchete a mano: raya arriba que baja en gancho a la izquierda. */}
-          <Anotacion className="pointer-events-none absolute -left-3 -top-4 h-14 w-[48%] sm:-left-10" umbral={0.9}>
+        <div className="relative mt-14 max-w-[900px]">
+          {/* Corchete de tiza: raya arriba que baja en gancho a la izquierda. */}
+          <Anotacion className="pointer-events-none absolute -left-3 -top-5 h-14 w-[48%] sm:-left-10" umbral={0.9}>
             <svg viewBox="0 0 400 50" preserveAspectRatio="none" className="size-full overflow-visible" aria-hidden>
               <path
                 pathLength={1}
-                className="cv2-trazo [--dur:0.9s]"
-                stroke="#f4eee4"
+                className="cv2-trazo cv2-trazo--brillo [--dur:0.9s]"
+                stroke="#f3eedc"
                 strokeWidth={2.5}
                 vectorEffect="non-scaling-stroke"
                 d="M18 48 C12 30 6 14 4 6 C80 2 250 3 398 2"
               />
             </svg>
           </Anotacion>
-          <h2 id="cierre-titulo" className="text-[1.375rem] font-extrabold leading-[1.32] text-foreground sm:text-[1.75rem]">
+          <h2 id="cierre-titulo" className="cv2-titulo text-[1.85rem] sm:text-[2.75rem]">
             <Destacado texto={CIERRE.titulo} claseDestacado="cv2-grad-texto" />
           </h2>
         </div>
 
-        <BotonEntrada className="mt-8" />
+        <BotonEntrada className="mt-10" />
 
-        <p className="cv2-pastilla mt-7 flex items-center gap-3 px-5 py-3 text-base font-semibold text-foreground/85 sm:text-lg">
-          <CircleAlert aria-hidden size={22} className="shrink-0 fill-foreground/75 text-[#0c0a12]" />
+        <p className="cv2-pastilla mt-8 flex items-center gap-3 px-5 py-3 text-lg font-semibold text-foreground/90">
+          <CircleAlert aria-hidden size={22} className="shrink-0 fill-(--cv2-oro) text-[#12291f]" />
           {CIERRE.aviso}
         </p>
       </Contenedor>

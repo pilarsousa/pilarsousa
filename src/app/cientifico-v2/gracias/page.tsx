@@ -12,8 +12,8 @@ import { FECHA_CORTA, GRACIAS } from "@/components/cientifico-v2/content";
 import { MO_WHATSAPP_COMMUNITY_URL } from "@/lib/links";
 
 export const metadata: Metadata = {
-  title: "[V2 Científico] ¡Gracias por registrarte! — Volver al Origen",
-  description: "Tu entrada a la masterclass gratuita de Pilar Sousa está reservada.",
+  title: "[V2] ¡Tu plaza está reservada! — Seminario de Neurometafísica",
+  description: "Tu plaza en el Seminario de Neurometafísica con Pilar Sousa está reservada.",
   robots: { index: false },
 };
 
@@ -27,35 +27,35 @@ function WhatsAppIcon({ className }: { className?: string }) {
 }
 
 /**
- * Gracias de /cientifico-v2: confirmación, validar la entrada en el grupo de
- * WhatsApp, recomendaciones y despedida. Esta edición no lleva video.
+ * Gracias de /cientifico-v2: confirmación de la plaza, confirmarla en el
+ * grupo de WhatsApp, recomendaciones y despedida. Sin video.
  */
 export default function GraciasV2() {
   return (
     <main className="relative isolate overflow-hidden">
-      {/* Resplandor salvia a la derecha y Cosmos a la izquierda. */}
+      {/* Luz de tarde: verde medio a la derecha y oro tenue a la izquierda. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_35%_45%_at_100%_25%,rgba(46,74,67,0.55),transparent_70%),radial-gradient(ellipse_30%_40%_at_0%_70%,rgba(75,58,107,0.35),transparent_70%)]"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_35%_45%_at_100%_25%,rgba(30,59,46,0.8),transparent_70%),radial-gradient(ellipse_30%_40%_at_0%_70%,rgba(233,196,106,0.12),transparent_70%)]"
       />
 
       <BarraSuperior alineacion="centro">
         <div className="flex items-center gap-3 px-2 py-2 sm:gap-10 sm:px-12">
           <span className="hidden items-center gap-2 text-[0.95rem] font-bold text-foreground/90 sm:flex">
-            <CalendarDays aria-hidden size={18} className="text-(--cv2-violeta)" />
+            <CalendarDays aria-hidden size={18} className="text-(--cv2-oro-claro)" />
             {FECHA_CORTA}
           </span>
           <Wordmark className="text-[1.6rem] sm:text-[2.4rem]" />
           <span className="hidden items-center gap-2 text-[0.95rem] font-bold text-foreground/90 sm:flex">
-            <Radio aria-hidden size={18} className="text-(--cv2-violeta)" />
-            En vivo online
+            <Radio aria-hidden size={18} className="text-(--cv2-oro-claro)" />
+            En directo
           </span>
         </div>
       </BarraSuperior>
 
       <Contenedor className="flex flex-col items-center pb-8 pt-10 text-center sm:pt-14">
         <Reveal>
-          <h1 className="cv2-grad-texto text-[2.4rem] font-extrabold leading-tight tracking-[-0.02em] sm:text-[3.5rem]">
+          <h1 className="cv2-titulo cv2-grad-texto text-[2.2rem] font-bold leading-tight sm:text-[3.25rem]">
             {GRACIAS.titulo}
           </h1>
         </Reveal>
@@ -92,7 +92,7 @@ export default function GraciasV2() {
           <ul className="mt-7 grid gap-7 text-left sm:grid-cols-[1.3fr_1fr] sm:gap-6">
             {GRACIAS.recomendaciones.map((texto, i) => (
               <li key={texto} className="cv2-card relative rounded-[8px] px-6 pb-6 pt-8 text-[1.0625rem] leading-[1.45] text-(--cv2-gris) sm:text-lg">
-                <span aria-hidden className={i === 0 ? "cv2-barrita" : "cv2-barrita cv2-barrita--violeta"} />
+                <span aria-hidden className={i === 0 ? "cv2-barrita" : "cv2-barrita cv2-barrita--clara"} />
                 <Destacado texto={texto} />
               </li>
             ))}

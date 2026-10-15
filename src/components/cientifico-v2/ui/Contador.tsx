@@ -1,45 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FECHA_EVENTO, ZONA_HORARIA } from "@/components/cientifico-v2/content";
+import { instanteEvento } from "@/components/cientifico-v2/horario";
 
 /*
-  Cuenta atrás al evento (FECHA_EVENTO, hora de Madrid). Misma resolución de
-  zona horaria que la AnnouncementBar de v1: se lee qué hora muestra Madrid en
-  ese instante en vez de fijar el desfase, así el cambio de horario de octubre
-  no lo rompe.
+  Cuenta atrás al seminario. El instante sale de horario.ts, el mismo que usan
+  la tabla de horarios por país y el bajo botón del hero.
 */
-
-/** Desfase (ms) de la zona en un instante UTC: hora de la zona − UTC. */
-function desfaseZona(fechaUtc: Date): number {
-  const dtf = new Intl.DateTimeFormat("en-US", {
-    timeZone: ZONA_HORARIA,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-  });
-  const partes = dtf.formatToParts(fechaUtc);
-  const valor = (t: string) => Number(partes.find((p) => p.type === t)?.value);
-  const comoUtc = Date.UTC(
-    valor("year"),
-    valor("month") - 1,
-    valor("day"),
-    valor("hour") === 24 ? 0 : valor("hour"),
-    valor("minute"),
-    valor("second"),
-  );
-  return comoUtc - fechaUtc.getTime();
-}
-
-function instanteEvento(): number {
-  const { year, month, day, hour, minute } = FECHA_EVENTO;
-  const ingenuo = Date.UTC(year, month - 1, day, hour, minute, 0);
-  return ingenuo - desfaseZona(new Date(ingenuo));
-}
 
 function restante(objetivo: number) {
   const diff = Math.max(0, objetivo - Date.now());
@@ -73,7 +40,7 @@ export function Contador() {
 
   return (
     /* Mobile en vw: tiene que entrar al lado de la marca desde 320px. */
-    <div className="flex shrink-0 gap-[clamp(3px,1.2vw,6px)] sm:gap-2.5" role="timer" aria-label="Tiempo hasta el evento">
+    <div className="flex shrink-0 gap-[clamp(3px,1.2vw,6px)] sm:gap-2.5" role="timer" aria-label="Tiempo hasta el seminario">
       {cajas.map(({ valor, etiqueta }) => (
         <div key={etiqueta} className="cv2-contador__caja">
           {/* El servidor y el navegador calculan en instantes distintos: el

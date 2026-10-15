@@ -1,128 +1,265 @@
 /*
-  Copy y datos del evento de /cientifico-v2.
+  Copy y datos del Seminario de Neurometafísica (/cientifico-v2).
 
-  Todo lo que se edita sin tocar diseño vive acá: fecha, cupos, enlaces y
-  textos. Los destacados (las partes en salvia) se marcan con [corchetes] y los
+  Sale del brief de Pilar ("Brief landing · Seminario de Neurometafísica"):
+  doce bloques, en su orden, con su copy. Todo lo que se edita sin tocar diseño
+  vive acá. Los destacados (las partes en oro) se marcan con [corchetes] y los
   pinta <Destacado> (ui/Destacado.tsx), así el copy sigue siendo texto plano.
+
+  Tono del brief: autoridad de mentora, clara y directa. Nada de promesas
+  mágicas: manifestar es un entrenamiento, no una sensación. No usar
+  "doctorado" en el copy público: es la vibra, no un título académico.
 */
 
 /* ── Evento ──
-   ⚠️ FECHA_EVENTO, FECHA_CORTA y HORA tienen que decir lo mismo. */
+   ⚠️ FECHA PROVISIONAL: el brief no trae fecha ni hora todavía. Éstas son las
+   de la masterclass de la que salió esta landing. FECHA_EVENTO manda: la
+   cuenta atrás y la tabla de horarios por país se calculan desde aquí, así
+   que basta con cambiarla. FECHA_CORTA tiene que decir el mismo día. */
 export const FECHA_EVENTO = { year: 2026, month: 10, day: 17, hour: 19, minute: 0 };
 export const ZONA_HORARIA = "Europe/Madrid";
 export const FECHA_CORTA = "17 de octubre";
-export const HORA = "19:00 h";
 
-/* Cupos que muestra la pastilla del cierre. */
-export const ENTRADAS_RESTANTES = 37;
+/* Países del público (formulario del roadmap del Bootcamp: España 144,
+   México 114, Argentina 57, Colombia 35, Chile 26). Los tres primeros van bajo
+   el botón del hero; los cinco, en la plaza y en la pregunta de horarios. */
+export const PAISES = [
+  { pais: "España", zona: "Europe/Madrid" },
+  { pais: "México", zona: "America/Mexico_City" },
+  { pais: "Argentina", zona: "America/Argentina/Buenos_Aires" },
+  { pais: "Colombia", zona: "America/Bogota" },
+  { pais: "Chile", zona: "America/Santiago" },
+] as const;
+
+/* Plazas que muestra el aviso del cierre. */
+export const PLAZAS_RESTANTES = 37;
 
 export const SOURCE = "cientifico-v2";
 
-/* ── Hero ── */
+/* ── Botón único de la página ──
+   El brief pide una sola acción, repetida: después de los bloques 1, 4, 6 y 9,
+   en la plaza y en el cierre. Nada de enlaces que saquen de la página. */
+export const CTA = "Quiero mi plaza";
+
+export const SELLO = "Seminario oficial · Neurometafísica";
+
+/* ── Bloque 1 · Hero ──
+   Objetivo: que en 5 segundos se entienda qué es, para quién y cuándo. */
 export const HERO = {
-  titulo:
-    "Voy a revelarte el método que convirtió mi vida en un laboratorio y que te permitirá [manifestar resultados que puedes comprobar.]",
-  bajada:
-    "Descubre cómo funciona realmente la realidad, por qué tu identidad decide lo que manifiestas y el experimento con el que doy un salto cuántico cada 90 días.",
-  llamado: "¡Regístrate y asegura tu entrada gratuita ahora!",
+  antetitulo: `Seminario en directo · ${FECHA_CORTA}`,
+  titulo: "Neurometafísica",
+  subtitulo: "La ciencia de reprogramar tu identidad para manifestar una realidad diferente.",
+  apoyo:
+    "Por qué tu cerebro y tu sistema nervioso te devuelven siempre al mismo lugar, y cómo entrenarlos para sostener la vida que quieres.",
+  /* Bajo el botón: "Directo con Pilar Sousa · [horas] · Plazas limitadas".
+     Las horas las arma el hero con los tres primeros PAISES. */
+  bajoBotonInicio: "Directo con Pilar Sousa",
+  bajoBotonFin: "Plazas limitadas",
 };
 
-/* ── Para quién (fila de 4 cards bajo el hero) ── */
-export const PARA_QUIEN_EYEBROW = "Tengas o no experiencia y totalmente gratis,";
-export const PARA_QUIEN = [
-  "Para quienes [llevan años estudiando metafísica] y sienten que saben mucho, pero su vida no termina de cambiar.",
-  "Si [manifiestas en algunas áreas] pero siempre vuelves al mismo punto de partida.",
-  "Si quieres [dejar de coleccionar técnicas] y aplicar un método que puedas comprobar.",
-  "Si quieres [vivir alineada con tu propósito] y no desde el miedo que te frena.",
-];
-
-/* ── ¿Qué puedes esperar? (carrusel) ── */
-export const QUE_ESPERAR = {
-  titulo: "¿Qué puedes esperar de este evento?",
-  bajada: "Desliza para ver todo lo que vas a comprobar en esta masterclass gratuita.",
-  indicacionMobile: "Desliza las carpetas para ver más",
+/* ── Bloque 2 · ¿Te suena? ──
+   Frases sacadas de lo que escribieron los alumnos del Bootcamp. */
+export const TE_SUENA = {
+  antetitulo: "¿Te suena?",
+  titulo: "Sabes lo que quieres. Y aun así, vuelves al mismo punto.",
+  items: [
+    "Empiezas con fuerza… [y abandonas.]",
+    "Has leído libros, visto vídeos, hecho cursos y retiros. [Y aquí sigues.]",
+    "Cuando vas a dar el salto, aparece la misma voz: [“¿Y si me equivoco? ¿Y si lo pierdo todo?”]",
+    "Tus relaciones, tu trabajo o tu dinero [terminan siempre de la misma forma.]",
+    "Cambias tú, pero [tu entorno te devuelve a tu versión anterior.]",
+  ],
+  cierre:
+    "No es falta de fuerza de voluntad. [Es tu identidad haciendo exactamente lo que fue programada para hacer.]",
 };
 
-/* ── La verdadera magia ── */
-export const MAGIA = {
-  titulo: "La verdadera magia de este método",
+/* ── Bloque 3 · La revelación ── */
+export const REVELACION = {
+  antetitulo: "La revelación",
+  titulo: "Tu identidad está creando tu realidad.",
+  puntos: [
+    {
+      titulo: "Tu vieja identidad no es una idea. Es química.",
+      texto:
+        "Cuando vuelves a lo conocido, tu cuerpo te premia: baja el cortisol, llega la dopamina de siempre y la oxitocina te hace sentir que perteneces. Por eso tu vieja identidad es adictiva.",
+    },
+    {
+      titulo: "Tu cerebro va por el circuito más fuerte.",
+      texto:
+        "Cada mañana arranca con el camino que lleva años repitiéndose. No es un defecto: es un programa, y se instaló a base de repetición.",
+    },
+    {
+      titulo: "Solo recibes lo que tu sistema nervioso puede sostener.",
+      texto:
+        "Si intentas sentir abundancia con un cuerpo en alerta, durará unos segundos y volverás al miedo.",
+    },
+  ],
+  /* Frase destacada en pizarra. */
+  pizarra: "No puedes crear una realidad nueva siendo la misma persona de siempre.",
+};
+
+/* ── Bloque 4 · Qué es la Neurometafísica ── */
+export const QUE_ES = {
+  /* Entrada de diccionario en la pestaña del panel: guiño de cátedra. */
+  entrada: "neu·ro·me·ta·fí·si·ca",
+  titulo: "Lo que los místicos sabían, hoy lo explica la neurociencia.",
   texto:
-    "Es su capacidad para convertir lo que ya sabes de espiritualidad en una realidad que puedes ver, comprobar y sostener.",
+    "Los principios de la manifestación no son nuevos. Están en las enseñanzas de Jesús, en los textos herméticos y en las tradiciones de Oriente. Lo nuevo es que hoy la neurociencia empieza a explicar cómo funcionan en tu cerebro y en tu cuerpo. [La Neurometafísica une las dos cosas: la verdad espiritual y el entrenamiento de tu sistema nervioso, ordenados en un método paso a paso.]",
 };
 
-/* ── Tu oportunidad / Para ti si… ── */
-export const OPORTUNIDAD = {
-  /* "Tu oportunidad" se separa del resto porque lleva el círculo a mano. */
-  tituloMarcado: "Tu oportunidad",
-  tituloResto: " para dar tu salto cuántico empieza aquí.",
-  subtitulo: "Este evento es para ti, si:",
+/* ── Bloque 5 · Temario del seminario ──
+   Sección 4 del brief. Anuncia cinco módulos pero detalla tres: van los tres
+   que detalla. Ordenados como un programa académico: primero el porqué,
+   después lo que te ata y por último cómo reprogramar y sostener. */
+export const TEMARIO = {
+  antetitulo: "Programa del seminario",
+  titulo: "Temario",
+  intro:
+    "Todo lo que funcionó en el Bootcamp, ordenado como una asignatura: primero el [porqué], después [lo que te ata] y por último cómo [reprogramar y sostener].",
+  modulos: [
+    {
+      numero: "I",
+      titulo: "Identidad y neurociencia: tu identidad está creando tu realidad",
+      texto:
+        "Por qué manifestar es una ciencia exacta y todo pasa por un cambio de identidad, primero en tu cuerpo y en tu cerebro.",
+    },
+    {
+      numero: "II",
+      titulo: "La neuroquímica de la manifestación",
+      texto:
+        "Tu vieja identidad es adictiva: cortisol, dopamina y oxitocina te premian por volver a lo conocido.",
+    },
+    {
+      numero: "III",
+      titulo: "Reprogramar tu neuroquímica para encarnar tu nueva identidad",
+      texto:
+        "Cómo salir del modo supervivencia y reprogramarte para encarnar una nueva identidad y recibir lo que ahora tu cuerpo es capaz de sostener.",
+    },
+  ],
 };
 
-export const PARA_TI = [
-  {
-    frase:
-      "[Llevas años en el camino espiritual] y quieres ver, por fin, ese conocimiento reflejado en tu vida.",
-    detalle:
-      "¿Has leído, estudiado y escuchado de todo, pero tu realidad sigue igual? Descubre por qué saber más no significa manifestar más, y qué cambia cuando empiezas a aplicarlo.",
-  },
-  {
-    frase:
-      "Has probado decretos, visualizaciones y afirmaciones, pero [algo sigue sin cambiar.]",
-    detalle:
-      "¿Sientes que haces todo “bien” y aun así no llega? Vas a entender qué parte de ti está interfiriendo y cómo dejar de ponerle freno a lo que pides.",
-  },
-  {
-    frase: "[Manifiestas a ratos,] pero siempre vuelves al mismo punto de partida.",
-    detalle:
-      "¿Consigues avances que después se desvanecen? Te mostraré por qué tu identidad te devuelve a lo conocido y cómo sostener el cambio en el tiempo.",
-  },
-  {
-    frase:
-      "Has seguido a otros mentores y [terminaste con más información y menos claridad.]",
-    detalle:
-      "¿Tu cabeza está llena de técnicas que compiten entre sí? Aquí no vas a recibir más teoría, sino un experimento sencillo para comprobarlo en tu propia vida.",
-  },
+/* ── Bloque 6 · Lo que te llevas ── */
+export const TE_LLEVAS = {
+  antetitulo: "Lo que te llevas",
+  titulo: "Sales del seminario con tres cosas que hoy no tienes.",
+  items: [
+    "[Entender, por fin, por qué te autosaboteas:] con base neurológica, no con frases bonitas.",
+    "[Un escáner de tu identidad:] los patrones, autoengaños y lealtades que te mantienen en el mismo lugar.",
+    "[Prácticas para regular tu sistema nervioso] y empezar a sostener más.",
+  ],
+};
+
+/* ── Bloque 7 · Para quién es / para quién no es ──
+   El "es para ti si" va en el tubo de ensayo (la pócima): el único guiño de
+   laboratorio que admite el brief. Ordenados de abajo hacia arriba: es el
+   orden en que el líquido los alcanza. */
+export const PARA_QUIEN = {
+  antetitulo: "¿Es para ti?",
+  titulo: "Es para ti si:",
+  noEsTitulo: "No es para ti si:",
+};
+
+export const ES_PARA_TI = [
+  "[Llevas años formándote] y sientes que entiendes, pero no encarnas.",
+  "[Manifiestas a ratos,] pero no logras sostener los resultados.",
+  "[Estás dispuesta a mirar tu vida como un experimento] y a pasar a la acción.",
 ];
 
-/* ── Debes estar dispuesta a… (tubo de ensayo) ──
-   Ordenadas de abajo hacia arriba: es el orden en que el líquido las alcanza. */
-export const DISPUESTA = {
-  /* Espacio duro ( ) entre "dispuesta" y "a:": que nunca quede el "a:"
-     solo en el último renglón. */
-  titulo: "Pero, para aprovechar esta oportunidad, debes estar dispuesta a:",
-};
-
-export const DISPUESTA_ITEMS = [
-  "[Ser tu propio experimento.] Si estás dispuesta a observar tu vida como un laboratorio, este evento es para ti.",
-  "[Soltar la vieja identidad.] Si estás lista para dejar de ser quien te trajo hasta aquí, este evento es para ti.",
-  "[Pasar a la acción.] El miedo se pasa con acción, hábitos y coherencia. Si vienes a aplicar y no sólo a saber, este evento es para ti.",
-  "[Comprometerte con tu salto.] Si estás dispuesta a sostener tu nueva identidad incluso cuando nadie mira, este evento es para ti.",
+export const NO_ES_PARA_TI = [
+  "Buscas otra técnica rápida para sentirte bien un rato.",
+  "Quieres resultados sin cambiar quién eres.",
 ];
 
-/* ── Cierre ── */
+/* ── Bloque 8 · Quién es Pilar Sousa ── */
+export const PILAR = {
+  antetitulo: "Tu profesora",
+  titulo: "Quién es Pilar Sousa",
+  texto:
+    "Casi 10 años enseñando metafísica aplicada. Creadora de [Volver al Origen] y del [sistema de los 13 códigos].",
+  datos: [
+    { valor: "10", etiqueta: "años enseñando metafísica aplicada", prefijo: "Casi" },
+    { valor: "+600.000", etiqueta: "suscriptores" },
+    { valor: "13", etiqueta: "códigos de su sistema" },
+  ],
+  /* Hueco para la foto que pide el brief. */
+  foto: "Foto de Pilar enseñando delante de la pizarra (no posando)",
+};
+
+/* ── Bloque 9 · Prueba social ──
+   Datos y reseñas de Volver al Origen (las mismas de /bootcamp-v2). Siembra
+   que existe un sistema para sostener el cambio, sin venderlo: la landing no
+   vende VAO. */
+export const PRUEBA = {
+  antetitulo: "Prueba social",
+  titulo: "Historias de quienes ya lo entrenaron",
+  intro:
+    "Volver al Origen es el sistema que creé para [sostener el cambio en el tiempo]. Después de 2 ediciones y más de 350 alumnos, esto es lo que cuentan.",
+  nota: "media de valoración entre los alumnos de Volver al Origen.",
+};
+
+/* ── Bloque 10 · Plaza y precio ──
+   Tarjeta única. Es gratis por ahora (sin precio que mostrar). */
+export const PLAZA = {
+  antetitulo: "Tu plaza",
+  titulo: "Ficha de inscripción",
+  formato: "Seminario en directo con Pilar Sousa, online",
+  incluye: [
+    "Los tres módulos del temario, en directo",
+    "El escáner de tu identidad",
+    "Prácticas para regular tu sistema nervioso",
+  ],
+  precio: "Gratis",
+  precioNota: "Plazas limitadas",
+};
+
+/* ── Bloque 11 · Preguntas frecuentes ──
+   Del brief quedan fuera, por ahora, "¿Hice el Bootcamp; me sirve?" y
+   "¿Cómo accedo?". La de los horarios se responde con la tabla de PAISES. */
+export const FAQ = [
+  {
+    pregunta: "¿Necesito saber de metafísica o neurociencia?",
+    respuesta: "No. Se explica desde cero, con lenguaje claro.",
+  },
+  {
+    /* ⚠️ El brief dice "Sí (en principio)": confirmar antes de publicar. */
+    pregunta: "¿Queda grabado?",
+    respuesta: "Sí, en principio queda grabado. Aun así, te recomiendo vivirlo en directo.",
+  },
+  {
+    pregunta: "¿A qué hora es en mi país?",
+    respuesta: "horarios",
+  },
+] as const;
+
+/* ── Bloque 12 · Cierre ── */
 export const CIERRE = {
-  titulo:
-    "No te pierdas la oportunidad de conocer el método que uso para manifestar desde mi nueva identidad, [dando un salto cuántico cada 90 días y viviendo la realidad que durante años soñé.]",
-  aviso: `¡Solamente quedan ${ENTRADAS_RESTANTES} entradas disponibles!`,
+  titulo: "La información sola no te cambia la vida. [El entrenamiento, sí.]",
+  aviso: `Quedan ${PLAZAS_RESTANTES} plazas disponibles`,
 };
 
-/* ── Botón principal ── */
-export const CTA = "Quiero mi entrada gratuita";
+/* ── Modal de registro ── */
+export const MODAL = {
+  titulo: "Reserva tu",
+  tituloDestacado: "plaza",
+  formato: "En directo online",
+  boton: "Reservar mi plaza",
+  exito: "¡Plaza reservada! Te llevamos al siguiente paso…",
+};
 
 /* ── Gracias ── */
 export const GRACIAS = {
-  titulo: "¡Gracias por registrarte!",
-  intro: "Estás a un solo paso de validar tu entrada al laboratorio donde:",
+  titulo: "¡Tu plaza está reservada!",
+  intro: "Estás a un solo paso de confirmar tu plaza en el Seminario de Neurometafísica, donde:",
   promesa:
-    "[Voy a compartir contigo] el método que convertirá lo que sabes de manifestación en resultados que puedes comprobar en tu propia vida.",
-  whatsappTitulo: "Forma parte de nuestro círculo privado en WhatsApp y valida tu entrada.",
+    "[Vas a entender] por qué tu cerebro y tu sistema nervioso te devuelven siempre al mismo lugar, y cómo entrenarlos para sostener la vida que quieres.",
+  whatsappTitulo: "Únete a nuestro círculo privado en WhatsApp y confirma tu plaza.",
   whatsappTexto:
-    "En este grupo te enviaré contenido clave y novedades para que llegues preparada al evento.",
-  whatsappCta: "Quiero validar mi entrada",
+    "En este grupo te enviaré contenido clave y novedades para que llegues preparada al seminario.",
+  whatsappCta: "Quiero confirmar mi plaza",
   recomendacionesTitulo: "Recomendaciones adicionales:",
   recomendaciones: [
-    `[Reserva la fecha en tu calendario y asegúrate de apartar el ${FECHA_CORTA} a las ${HORA}] para no perderte esta oportunidad de dar tu próximo salto.`,
+    `[Reserva la fecha en tu calendario y aparta el ${FECHA_CORTA}] para vivir el seminario en directo.`,
     "[Comparte esta invitación con quien busca] ese cambio en su vida: puede que encuentre aquí justo lo que necesita.",
   ],
-  despedida: "Nos vemos dentro",
+  despedida: "Nos vemos en el aula",
 };

@@ -22,7 +22,7 @@ import { Reflejos } from "@/components/cientifico-v2/ui/Reflejos";
 */
 
 /* ⚠️ Igual que --relleno de .cv2-barra (cientifico-v2.css). */
-const RELLENO = "#17141f";
+const RELLENO = "#173226";
 
 function Diagonal({ lado }: { lado: "izq" | "der" }) {
   const izq = lado === "izq";
@@ -37,7 +37,7 @@ function Diagonal({ lado }: { lado: "izq" | "der" }) {
         <path
           d={izq ? "M0 0.75 L100 99.25" : "M0 99.25 L100 0.75"}
           fill="none"
-          stroke={izq ? "#a391b8" : "#7da89a"}
+          stroke={izq ? "#f3d98c" : "#e9c46a"}
           strokeWidth={1.5}
           vectorEffect="non-scaling-stroke"
         />
@@ -105,7 +105,7 @@ export function BarraSuperior({
       <div
         aria-hidden
         className={cn(
-          "cv2-barra__tramo [--c:#a391b8]",
+          "cv2-barra__tramo [--c:#f3d98c]",
           alineacion === "izquierda"
             ? "w-[clamp(6px,3.5vw,16px)] shrink-0 sm:w-[max(0px,calc((100cqw-1140px)/2-30px-var(--diag)))]"
             : "min-w-[clamp(6px,3.5vw,16px)] flex-1",
@@ -124,7 +124,7 @@ export function BarraSuperior({
       <div
         aria-hidden
         className={cn(
-          "cv2-barra__tramo min-w-0 [--c:#7da89a]",
+          "cv2-barra__tramo min-w-0 [--c:#e9c46a]",
           alineacion === "izquierda" ? "w-[clamp(6px,3.5vw,16px)] shrink-0 sm:w-auto sm:flex-1" : "min-w-[clamp(6px,3.5vw,16px)] flex-1",
         )}
       />

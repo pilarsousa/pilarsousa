@@ -3,9 +3,11 @@ import { ReservaModalProvider } from "@/components/cientifico-v2/ui/ReservaModal
 import "./cientifico-v2.css";
 
 /*
-  Científico V2 — copia de cientifico-v3 (la publicada en /registro) para
-  rediseñarla entera sin tocar la que está en campaña. Arrancó idéntica; el
-  spec de origen es docs/superpowers/specs/2026-10-13-cientifico-v3-design.md.
+  Seminario de Neurometafísica (cientifico-v2). Arrancó como copia de
+  cientifico-v3 (la publicada en /registro) y se rehízo sobre el brief de
+  Pilar: doce bloques, la estética del aula (no del laboratorio), la paleta
+  verde pizarra y oro, y titulares en Cinzel. El copy vive en
+  components/cientifico-v2/content.ts.
 
   Componentes e imágenes propios (components/cientifico-v2/ y
   public/cientifico-v2/): nada se importa de v3, así los cambios de una versión
@@ -18,15 +20,15 @@ import "./cientifico-v2.css";
 */
 
 export const metadata: Metadata = {
-  title: "[V2 Científico] Volver al Origen — Masterclass gratuita con Pilar Sousa",
+  title: "[V2] Seminario de Neurometafísica — Pilar Sousa",
   // Variante en desarrollo: fuera del índice.
   robots: { index: false },
   description:
-    "Una masterclass gratuita con Pilar Sousa para convertir lo que sabes de manifestación en resultados que puedes comprobar en tu propia vida.",
+    "Seminario en directo con Pilar Sousa: la ciencia de reprogramar tu identidad, tu cerebro y tu sistema nervioso para manifestar una realidad diferente.",
   openGraph: {
-    title: "Volver al Origen — Pilar Sousa",
+    title: "Seminario de Neurometafísica — Pilar Sousa",
     description:
-      "El método que convirtió su vida en un laboratorio: manifestar resultados que puedes comprobar. Masterclass online gratuita.",
+      "No puedes crear una realidad nueva siendo la misma persona. Seminario en directo con Pilar Sousa. Plazas limitadas.",
     type: "website",
     locale: "es_ES",
   },
