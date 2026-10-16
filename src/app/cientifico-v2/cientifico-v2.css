@@ -60,8 +60,9 @@
   --cv2-card-alto: #1e3b2e;
   --cv2-borde: rgb(243 238 220 / 0.1);
   --cv2-gris: rgb(243 238 220 / 0.8);
-  /* Degradado de los botones: amarillo → naranja del logo BOOTCAMP. */
-  --cv2-boton: linear-gradient(90deg, #f6c445 0%, #f3a447 55%, #f08a4b 100%);
+  /* Degradado de los botones: el oro de la casa de arriba abajo, como el
+     botón del roadmap de Pilar (referencia estética). */
+  --cv2-boton: linear-gradient(180deg, #f6dc94 0%, #e9c46a 52%, #d9a646 100%);
   /* Degradado de los titulares y el wordmark: oro de luz de tarde. */
   --cv2-grad: linear-gradient(90deg, #f6dc94 0%, #e9c46a 55%, #d9a646 100%);
 
@@ -77,6 +78,32 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+/*
+  Brillo que recorre el oro de izquierda a derecha (el título del hero), como
+  el impulso de luz sobre la foto. Va encima de .cv2-grad-texto: la franja de
+  luz es una capa 2,5 veces más ancha que el texto; en 100% queda a la
+  izquierda, fuera, y en 0% a la derecha. Cruza en ~2,7s y descansa el resto.
+*/
+.cv2-brillo {
+  background-image:
+    linear-gradient(105deg, transparent 44%, rgb(255 248 226 / 0.95) 50%, transparent 56%),
+    var(--cv2-grad);
+  background-size: 250% 100%, 100% 100%;
+  background-repeat: no-repeat;
+  background-position: 100% 0, 0 0;
+  animation: cv2-brillo 6s ease-in-out 1.2s infinite;
+}
+
+@keyframes cv2-brillo {
+  0% {
+    background-position: 100% 0, 0 0;
+  }
+  45%,
+  100% {
+    background-position: 0% 0, 0 0;
+  }
 }
 
 .cv2-destacado {
@@ -196,30 +223,9 @@
   border-radius: 12px;
 }
 
-/*
-  Forma de carpeta: pestaña arriba a la izquierda y el resto del borde
-  superior más abajo. clip-path no redondea, así que las esquinas van
-  achaflanadas (--b); a este tamaño se leen como redondeadas.
-*/
-.cv2-carpeta {
-  --t: 20px;
-  --tw: 46%;
-  --b: 7px;
-  clip-path: polygon(
-    0 var(--b),
-    var(--b) 0,
-    var(--tw) 0,
-    calc(var(--tw) + var(--t)) var(--t),
-    calc(100% - var(--b)) var(--t),
-    100% calc(var(--t) + var(--b)),
-    100% calc(100% - var(--b)),
-    calc(100% - var(--b)) 100%,
-    var(--b) 100%,
-    0 calc(100% - var(--b))
-  );
-}
-
-/* Pestaña centrada arriba (panel de la magia). */
+/* Pestaña centrada arriba (panel de la magia). clip-path no redondea, así
+   que las esquinas van achaflanadas (--b); a este tamaño se leen como
+   redondeadas. */
 .cv2-pestana {
   --t: 18px;
   --tw: 46%;
@@ -242,32 +248,46 @@
 
 /*
   ==========================================================================
-  BOTÓN CON FORMA DE ENTRADA
+  BOTÓN PRINCIPAL
   ==========================================================================
-  Muescas semicirculares a los lados, un talón con código de barras a la
-  derecha separado por dos muescas chicas, y un canto inferior más oscuro.
-  Las muescas son una máscara (cuatro radiales intersectadas), así que el
-  resplandor va en el envoltorio (.cv2-boton): la máscara recortaría un
-  box-shadow del propio billete.
+  Pilar pidió en su audio que el botón no sea una entrada de cine o de
+  concierto, sino algo de clase. Una hoja de oro (la paleta de la casa, con
+  el canto de abajo más oscuro y un filo de luz arriba), con el texto en
+  Cinzel centrado y un resplandor que respira. Al pasar el mouse lo cruza un
+  brillo.
 */
 .cv2-boton {
-  --talon: 46px;
   position: relative;
+  isolation: isolate;
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 66px;
+  padding: 0.6rem 2.6rem;
+  overflow: hidden;
   border: 0;
-  background: none;
-  padding: 0;
+  border-radius: 12px;
+  background: var(--cv2-boton);
+  box-shadow:
+    inset 0 1px 0 rgb(255 248 222 / 0.75),
+    inset 0 -3px 0 rgb(140 92 26 / 0.45),
+    0 0 0 1px rgb(233 196 106 / 0.35),
+    0 10px 30px -8px rgb(233 196 106 / 0.5);
+  color: #12291f;
   cursor: pointer;
-  filter: drop-shadow(0 10px 26px rgb(240 138 75 / 0.35));
   transition:
     transform 0.3s ease,
-    filter 0.3s ease;
+    box-shadow 0.3s ease;
   animation: cv2-boton-respira 3.2s ease-in-out infinite;
 }
 
 .cv2-boton:hover {
   transform: translateY(-2px);
-  filter: drop-shadow(0 14px 34px rgb(246 196 69 / 0.5));
+  box-shadow:
+    inset 0 1px 0 rgb(255 248 222 / 0.85),
+    inset 0 -3px 0 rgb(140 92 26 / 0.45),
+    0 0 0 1px rgb(243 217 140 / 0.6),
+    0 14px 40px -6px rgb(233 196 106 / 0.7);
   animation: none;
 }
 
@@ -277,76 +297,32 @@
 
 .cv2-boton:focus-visible {
   outline: 2px solid var(--cv2-tiza);
-  outline-offset: 6px;
-  border-radius: 4px;
+  outline-offset: 4px;
 }
 
-.cv2-boton__billete {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 66px;
-  padding: 0 calc(var(--talon) + 30px) 0 38px;
-  background: var(--cv2-boton);
-  border-bottom: 4px solid #b65a26;
-  color: #12291f;
-  font-weight: 800;
-  font-size: 1.125rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+/* El brillo que lo cruza al pasar el mouse: por encima del oro (isolation)
+   y por debajo del contenido. */
+.cv2-boton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(105deg, transparent 35%, rgb(255 250 232 / 0.6) 50%, transparent 65%);
+  transform: translateX(-120%);
+  transition: transform 0.7s ease;
+}
+
+.cv2-boton:hover::after {
+  transform: translateX(120%);
+}
+
+.cv2-boton__texto {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.05em;
   white-space: nowrap;
-  -webkit-mask:
-    radial-gradient(circle 8px at 0 50%, #0000 7.5px, #000 8px),
-    radial-gradient(circle 8px at 100% 50%, #0000 7.5px, #000 8px),
-    radial-gradient(circle 5px at calc(100% - var(--talon)) 0, #0000 4.5px, #000 5px),
-    radial-gradient(circle 5px at calc(100% - var(--talon)) 100%, #0000 4.5px, #000 5px);
-  -webkit-mask-composite: source-in;
-  mask:
-    radial-gradient(circle 8px at 0 50%, #0000 7.5px, #000 8px),
-    radial-gradient(circle 8px at 100% 50%, #0000 7.5px, #000 8px),
-    radial-gradient(circle 5px at calc(100% - var(--talon)) 0, #0000 4.5px, #000 5px),
-    radial-gradient(circle 5px at calc(100% - var(--talon)) 100%, #0000 4.5px, #000 5px);
-  mask-composite: intersect;
-}
-
-/* Troquel entre el billete y el talón. */
-.cv2-boton__billete::before {
-  content: "";
-  position: absolute;
-  top: 6px;
-  bottom: 6px;
-  right: var(--talon);
-  border-left: 1.5px dashed rgb(18 41 31 / 0.35);
-}
-
-/* Código de barras del talón: barras horizontales de grosor irregular. */
-.cv2-boton__billete::after {
-  content: "";
-  position: absolute;
-  right: calc(var(--talon) / 2 - 9px);
-  top: 50%;
-  width: 18px;
-  height: 36px;
-  transform: translateY(-50%);
-  background: linear-gradient(
-    to bottom,
-    #12291f 0 9%,
-    transparent 9% 15%,
-    #12291f 15% 20%,
-    transparent 20% 27%,
-    #12291f 27% 41%,
-    transparent 41% 47%,
-    #12291f 47% 52%,
-    transparent 52% 60%,
-    #12291f 60% 70%,
-    transparent 70% 76%,
-    #12291f 76% 80%,
-    transparent 80% 87%,
-    #12291f 87% 100%
-  );
-  opacity: 0.85;
 }
 
 .cv2-boton--bloque {
@@ -357,31 +333,169 @@
 @keyframes cv2-boton-respira {
   0%,
   100% {
-    filter: drop-shadow(0 10px 26px rgb(240 138 75 / 0.35));
+    box-shadow:
+      inset 0 1px 0 rgb(255 248 222 / 0.75),
+      inset 0 -3px 0 rgb(140 92 26 / 0.45),
+      0 0 0 1px rgb(233 196 106 / 0.35),
+      0 10px 30px -8px rgb(233 196 106 / 0.5);
   }
   50% {
-    filter: drop-shadow(0 12px 34px rgb(246 196 69 / 0.55));
+    box-shadow:
+      inset 0 1px 0 rgb(255 248 222 / 0.75),
+      inset 0 -3px 0 rgb(140 92 26 / 0.45),
+      0 0 0 1px rgb(243 217 140 / 0.55),
+      0 12px 40px -4px rgb(233 196 106 / 0.75);
   }
 }
 
-/* Botón verde de WhatsApp (gracias): mismo canto inferior que la referencia. */
+/* Botón verde de WhatsApp (gracias): la misma píldora que el principal, en
+   el verde de WhatsApp para que se reconozca. */
 .cv2-boton-wa {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: 60px;
-  padding: 0 2.25rem;
-  border-radius: 8px;
+  /* Mobile: padding y letra en vw para que "Quiero confirmar mi plaza"
+     entre en un renglón dentro del panel desde 320px. */
+  padding: 0 clamp(1rem, 5vw, 1.4rem);
+  border-radius: 999px;
   background: linear-gradient(90deg, #4fbe5f 0%, #3a9e4a 55%, #2b7d39 100%);
   border-bottom: 4px solid #1f5c2a;
   color: #fff;
   font-weight: 700;
-  font-size: 1.0625rem;
+  font-size: clamp(0.875rem, 4.1vw, 1rem);
+  text-wrap: balance;
   box-shadow: 0 12px 30px -12px rgb(79 190 95 / 0.6);
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease;
+}
+
+@media (min-width: 640px) {
+  .cv2-boton-wa {
+    padding: 0 2.25rem;
+    font-size: 1.0625rem;
+  }
+}
+
+/*
+  "Plaza confirmada" (ConfirmacionPlaza.tsx), entre el registro y la gracias.
+  0s: entra el fondo · 0,15s: se estampa el sello, con dos ondas de luz ·
+  0,9s en adelante: el texto · 1,5s: la línea de carga (1,4s). La navegación
+  sale a los 2,9s (ReservaModal.tsx); al llegar a la gracias se desvanece.
+*/
+.cv2-confirmacion {
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 45%, rgb(233 196 106 / 0.14), transparent 70%),
+    rgb(10 24 18 / 0.94);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  animation: fadeIn 0.4s ease-out both;
+  transition: opacity 0.7s ease;
+}
+
+.cv2-confirmacion.is-saliendo {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cv2-confirmacion__sello {
+  filter: drop-shadow(0 0 24px rgb(233 196 106 / 0.45));
+  animation: cv2-estampa 0.6s cubic-bezier(0.3, 1.45, 0.5, 1) 0.15s both;
+}
+
+@keyframes cv2-estampa {
+  from {
+    opacity: 0;
+    transform: scale(2.2) rotate(-28deg);
+  }
+  45% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(-8deg);
+  }
+}
+
+.cv2-confirmacion__onda {
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid rgb(243 217 140 / 0.7);
+  border-radius: 50%;
+  opacity: 0;
+  animation: cv2-onda-sello 1.4s ease-out 0.45s both;
+}
+
+@keyframes cv2-onda-sello {
+  from {
+    opacity: 0.9;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+
+.cv2-confirmacion__texto {
+  animation: cv2-sube 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.9s both;
+}
+
+@keyframes cv2-sube {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.cv2-confirmacion__carga {
+  background: linear-gradient(90deg, #f3d98c, #e9c46a);
+  box-shadow: 0 0 10px rgb(233 196 106 / 0.8);
+  transform-origin: left center;
+  animation: cv2-carga 1.4s ease-in-out 1.5s both;
+}
+
+@keyframes cv2-carga {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cv2-confirmacion__sello,
+  .cv2-confirmacion__texto,
+  .cv2-confirmacion__carga {
+    animation: none;
+  }
+  .cv2-confirmacion__onda {
+    display: none;
+  }
+}
+
+/* El panel del paso de WhatsApp (gracias): vidrio con un filo de oro y una
+   luz verde que sale del botón, para que sea lo que se mira. */
+.cv2-wa-panel {
+  position: relative;
+  border: 1px solid rgb(233 196 106 / 0.3);
+  border-radius: 22px;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 100%, rgb(79 190 95 / 0.14), transparent 70%),
+    linear-gradient(150deg, rgb(243 238 220 / 0.08), rgb(243 238 220 / 0.02) 45%, rgb(18 41 31 / 0.55));
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.1),
+    0 30px 60px -30px rgb(0 0 0 / 0.8),
+    0 0 50px -20px rgb(233 196 106 / 0.3);
 }
 
 .cv2-boton-wa:hover {
@@ -391,175 +505,137 @@
 
 /*
   ==========================================================================
-  ENTRADA 3D (ticket con foto)
+  APUNTE DE CLASE (cierre)
   ==========================================================================
-  Todo se mide en cqw del propio ticket: se usa a tamaños muy distintos (el
-  del cierre mide cuatro veces el del panel) y así el texto, el troquel y el
-  código de barras escalan juntos.
+  La foto de Pilar revelada, pegada con dos tiras de cinta, y la ficha de
+  asistencia de cartulina apoyada encima (ApunteClase.tsx). Se mide en cqw
+  del conjunto, así escala entero con el ancho que le da el cierre.
 */
-.cv2-entrada {
+.cv2-apunte {
   container-type: inline-size;
-  display: flex;
-  gap: 0.6cqw;
-  filter: drop-shadow(0 18px 28px rgb(0 0 0 / 0.55));
 }
 
-/* Borde perforado arriba y abajo: dos tiras de semicírculos. */
-.cv2-entrada__cuerpo,
-.cv2-entrada__talon {
-  --r: 1.15cqw;
-  --p: 3.3cqw;
-  -webkit-mask:
-    radial-gradient(circle var(--r) at 50% 0, #0000 96%, #000) 0 0 / var(--p) 51% repeat-x,
-    radial-gradient(circle var(--r) at 50% 100%, #0000 96%, #000) 0 100% / var(--p) 51% repeat-x;
-  mask:
-    radial-gradient(circle var(--r) at 50% 0, #0000 96%, #000) 0 0 / var(--p) 51% repeat-x,
-    radial-gradient(circle var(--r) at 50% 100%, #0000 96%, #000) 0 100% / var(--p) 51% repeat-x;
-}
-
-.cv2-entrada__cuerpo {
+/* La foto: papel de revelado crema, con margen ancho abajo para la leyenda. */
+.cv2-apunte__foto {
   position: relative;
-  flex: 1;
-  aspect-ratio: 1.62;
-  overflow: hidden;
-  background: #12291f;
-  border-radius: 1.2cqw;
+  width: 78cqw;
+  padding: 3.6cqw 3.6cqw 0;
+  background: linear-gradient(170deg, #fbf7ea 0%, #efe6cc 100%);
+  border-radius: 2px;
+  box-shadow:
+    0 2cqw 5cqw rgb(0 0 0 / 0.5),
+    0 0 0 1px rgb(0 0 0 / 0.06);
+  rotate: -6deg;
 }
 
-.cv2-entrada__foto {
-  object-fit: cover;
-  filter: saturate(0.55) contrast(1.05) brightness(0.82);
-}
-
-/* Duotono pizarra → oro: la foto toma el verde del aula y la luz de tarde. */
-.cv2-entrada__velo {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(to top, rgb(18 41 31 / 0.9) 0%, rgb(18 41 31 / 0.2) 55%, transparent 75%),
-    linear-gradient(35deg, rgb(18 41 31 / 0.85) 0%, rgb(30 59 46 / 0.35) 50%, rgb(233 196 106 / 0.35) 100%);
-}
-
-.cv2-entrada__texto {
-  position: absolute;
-  left: 6cqw;
-  right: 6cqw;
-  bottom: 6.5cqw;
-  color: #f3eedc;
-}
-
-.cv2-entrada__vivo {
-  display: flex;
-  align-items: center;
-  gap: 1cqw;
-  font-size: 2.3cqw;
-  font-weight: 700;
-}
-
-.cv2-entrada__vivo::before {
-  content: "";
-  width: 1.6cqw;
-  height: 1.6cqw;
-  border-radius: 50%;
-  background: #e5484d;
-  box-shadow: 0 0 1.2cqw #e5484d;
-}
-
-.cv2-entrada__marca {
-  margin-top: 0.6cqw;
-  font-size: 6cqw;
+.cv2-apunte__leyenda {
+  padding: 3cqw 0 3.6cqw 1cqw;
+  font-family: var(--font-caveat), cursive;
+  font-size: 5.6cqw;
   line-height: 1;
-  letter-spacing: -0.02em;
-}
-
-.cv2-entrada__lema {
-  margin-top: 1cqw;
-  font-size: 2.3cqw;
-  font-weight: 600;
-  line-height: 1.25;
-  color: rgb(243 238 220 / 0.85);
-}
-
-.cv2-entrada__talon {
-  position: relative;
-  width: 27%;
-  background: linear-gradient(160deg, #fbf8f2 0%, #ece5d8 100%);
-  border-radius: 1.2cqw;
-  overflow: hidden;
-}
-
-/* Fecha vertical a la izquierda del talón. */
-.cv2-entrada__fecha {
-  position: absolute;
-  left: 21%;
-  top: 50%;
-  transform: translate(-50%, -50%) rotate(-90deg);
-  font-size: 2.6cqw;
-  font-weight: 800;
   color: #12291f;
+}
+
+/* Cinta: tiras translúcidas de papel engomado en las esquinas de arriba. */
+.cv2-apunte__cinta {
+  position: absolute;
+  z-index: 1;
+  top: -3cqw;
+  width: 22cqw;
+  height: 7cqw;
+  background: linear-gradient(rgb(243 230 190 / 0.72), rgb(233 214 160 / 0.62));
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.18);
+  /* Bordes rasgados: dientes chicos a los costados. */
+  -webkit-mask:
+    conic-gradient(from -45deg at left, #0000 25%, #000 0) 0 0 / 51% 1.6cqw repeat-y,
+    conic-gradient(from 135deg at right, #0000 25%, #000 0) 100% 0 / 51% 1.6cqw repeat-y;
+  mask:
+    conic-gradient(from -45deg at left, #0000 25%, #000 0) 0 0 / 51% 1.6cqw repeat-y,
+    conic-gradient(from 135deg at right, #0000 25%, #000 0) 100% 0 / 51% 1.6cqw repeat-y;
+}
+
+.cv2-apunte__cinta--izq {
+  left: -5cqw;
+  rotate: -32deg;
+}
+
+.cv2-apunte__cinta--der {
+  right: -5cqw;
+  rotate: 34deg;
+}
+
+/* La ficha de asistencia: cartulina rayada con margen terracota, apoyada
+   sobre la foto, a la derecha y por encima de la franja de la leyenda. */
+.cv2-apunte__ficha {
+  position: absolute;
+  right: -8cqw;
+  bottom: 13cqw;
+  width: 50cqw;
+  padding: 3.4cqw 3.4cqw 2.4cqw 6.4cqw;
+  background:
+    linear-gradient(90deg, transparent 4.6cqw, rgb(182 90 38 / 0.55) 4.6cqw 4.9cqw, transparent 4.9cqw),
+    linear-gradient(170deg, #fbf7ea 0%, #f1e9d2 100%);
+  border-radius: 2px;
+  box-shadow:
+    0 2cqw 4.5cqw rgb(0 0 0 / 0.5),
+    0 0 0 1px rgb(0 0 0 / 0.05);
+  color: #12291f;
+  rotate: 7deg;
+}
+
+/* "Asistencia" y, debajo, la fecha escrita a mano. */
+.cv2-apunte__ficha-titulo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6cqw;
+  font-family: var(--font-display);
+  font-size: 3.3cqw;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.cv2-apunte__ficha-titulo span {
+  font-family: var(--font-caveat), cursive;
+  font-size: 3.8cqw;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
   white-space: nowrap;
+  color: #b65a26;
 }
 
-.cv2-entrada__barras {
+.cv2-apunte__renglones li {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 2cqw;
+  height: 7.4cqw;
+  border-bottom: 1px solid rgb(18 41 31 / 0.2);
+}
+
+.cv2-apunte__num {
   position: absolute;
-  top: 13%;
-  bottom: 13%;
-  left: 38%;
-  width: 34%;
-  background: linear-gradient(
-    to bottom,
-    #12291f 0 7%,
-    transparent 7% 12%,
-    #12291f 12% 16%,
-    transparent 16% 22%,
-    #12291f 22% 34%,
-    transparent 34% 39%,
-    #12291f 39% 43%,
-    transparent 43% 50%,
-    #12291f 50% 61%,
-    transparent 61% 66%,
-    #12291f 66% 70%,
-    transparent 70% 77%,
-    #12291f 77% 86%,
-    transparent 86% 91%,
-    #12291f 91% 100%
-  );
+  left: -4.6cqw;
+  bottom: 0.6cqw;
+  font-size: 2.6cqw;
+  font-weight: 700;
+  opacity: 0.5;
 }
 
-/* Letra chica junto al código: líneas grises, no texto real. */
-.cv2-entrada__letra {
-  position: absolute;
-  top: 16%;
-  bottom: 16%;
-  right: 12%;
-  width: 7%;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgb(18 41 31 / 0.45) 0 0.5cqw,
-    transparent 0.5cqw 1.1cqw
-  );
+.cv2-apunte__firma {
+  font-family: var(--font-firma), cursive;
+  font-size: 6cqw;
+  line-height: 1.1;
+  rotate: -4deg;
+  translate: 0 0.8cqw;
 }
 
-/* Talón suelto (cierre). Su contenedor de medida es el propio talón, que en
-   la entrada ocupa el 27%: todas sus medidas en cqw se multiplican por 1/0,27. */
-.cv2-entrada--talon .cv2-entrada__talon {
-  --r: 4.26cqw;
-  --p: 12.2cqw;
-  width: 100%;
-  aspect-ratio: 0.6;
-  border-radius: 4.4cqw;
-}
-
-.cv2-entrada--talon .cv2-entrada__fecha {
-  font-size: 9.6cqw;
-}
-
-.cv2-entrada--talon .cv2-entrada__letra {
-  background: repeating-linear-gradient(
-    to bottom,
-    rgb(18 41 31 / 0.45) 0 1.85cqw,
-    transparent 1.85cqw 4cqw
-  );
+.cv2-apunte__tu {
+  font-family: var(--font-caveat), cursive;
+  font-size: 4cqw;
+  line-height: 1.2;
+  opacity: 0.45;
 }
 
 /*
@@ -719,6 +795,24 @@
   to {
     transform: translateX(-50%);
   }
+}
+
+/* Cinta de horarios del hero: el mismo loop que el marquee, más lento por
+   vuelta para que se lea, fundida en los bordes y quieta bajo el mouse. */
+.cv2-cinta {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+.cv2-cinta__pista {
+  display: flex;
+  width: max-content;
+  animation: cv2-marquee 26s linear infinite;
+  will-change: transform;
+}
+
+.cv2-cinta:hover .cv2-cinta__pista {
+  animation-play-state: paused;
 }
 
 /*
@@ -1031,9 +1125,20 @@
 
 @layer components {
 @media (prefers-reduced-motion: reduce) {
+  .cv2-boton::after {
+    transition: none;
+  }
   .cv2-boton,
-  .cv2-marquee__pista {
+  .cv2-marquee__pista,
+  .cv2-cinta__pista,
+  .cv2-brillo {
     animation: none;
+  }
+  /* La cinta quieta: una sola fila que se acomoda en renglones (el resto, en
+     CintaHorarios.tsx con motion-reduce:). */
+  .cv2-cinta {
+    -webkit-mask-image: none;
+    mask-image: none;
   }
   .cv2-reflejos {
     display: none;
@@ -1149,6 +1254,87 @@
   box-shadow: 0 8px 14px -4px rgb(0 0 0 / 0.6);
 }
 
+/*
+  Tiza amarilla de la pizarra (Revelacion.tsx). Vive en la caja del
+  subrayado (100% = el ancho del trazo) y, en reposo, está acostada en la
+  repisa, bajo el final del trazo. --caida: de su lugar en el renglón a la
+  repisa = alto de la caja (16) + pb de la figura + 11px hasta el borde de la
+  repisa − 3px (mitad de la tiza, hundida 1px) − 8px (centro de la caja).
+  Mobile pb-12 → 64px; sm pb-16 → 80px.
+
+  Al aparecer: sube de la repisa, va al comienzo del renglón, subraya a la
+  par del trazo (mismo ease-in-out y los mismos 0,8s: del 29% al 72% de
+  1,86s, con 1,76s de espera → de 2,3s a 3,1s, como el trazo) y vuelve a la
+  repisa con un rebote corto. Inclinada, la punta (su borde izquierdo) queda
+  sobre la línea.
+*/
+.cv2-tiza-barra {
+  --caida: 64px;
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: calc(100% - 22px);
+  width: 30px;
+  height: 8px;
+  margin-top: -4px;
+  border-radius: 2px 3px 3px 2px;
+  background: linear-gradient(#fdf0c2, #e9c46a 55%, #c9a24a);
+  box-shadow: 0 2px 3px rgb(0 0 0 / 0.45);
+  transform: translateY(var(--caida));
+  transform-origin: 0 50%;
+}
+
+@media (min-width: 640px) {
+  .cv2-tiza-barra {
+    --caida: 80px;
+  }
+}
+
+.is-visible .cv2-tiza-barra {
+  animation: cv2-tiza-escribe 1.86s 1.76s both;
+}
+
+@keyframes cv2-tiza-escribe {
+  0% {
+    left: calc(100% - 22px);
+    transform: translateY(var(--caida)) rotate(0deg);
+  }
+  8% {
+    left: calc(100% - 22px);
+    transform: translateY(calc(var(--caida) - 14px)) rotate(-25deg);
+  }
+  24% {
+    left: 0%;
+    transform: translateY(-10px) rotate(-55deg);
+  }
+  29% {
+    left: 0%;
+    transform: translateY(0) rotate(-55deg);
+    animation-timing-function: ease-in-out;
+  }
+  72% {
+    left: 100%;
+    transform: translateY(0) rotate(-55deg);
+  }
+  78% {
+    left: 100%;
+    transform: translateY(-10px) rotate(-40deg);
+    animation-timing-function: ease-in;
+  }
+  93% {
+    left: calc(100% - 22px);
+    transform: translateY(var(--caida)) rotate(0deg);
+  }
+  96.5% {
+    left: calc(100% - 22px);
+    transform: translateY(calc(var(--caida) - 3px)) rotate(-4deg);
+  }
+  100% {
+    left: calc(100% - 22px);
+    transform: translateY(var(--caida)) rotate(0deg);
+  }
+}
+
 /* ---- Fondo de cuadrícula (pizarra medio) ----
    Para secciones enteras: verde medio, cuadrícula sutil y polvo, fundido
    arriba y abajo al verde oscuro de la página para que no haya costura. */
@@ -1179,28 +1365,13 @@
   }
 }
 
-/* ---- Módulos del temario ----
-   Carpeta de asignatura (.cv2-carpeta) con el numeral romano gigante de
-   fondo, como la portada de un programa. */
+/* ---- Panel con polvo de tiza (el de "Qué es") ---- */
 .cv2-modulo {
   position: relative;
   overflow: hidden;
   background:
     var(--cv2-polvo),
     linear-gradient(180deg, #24493c 0%, #183528 100%);
-}
-
-.cv2-modulo__fantasma {
-  position: absolute;
-  right: -0.06em;
-  bottom: -0.22em;
-  font-family: var(--font-display);
-  font-size: 11rem;
-  font-weight: 700;
-  line-height: 1;
-  color: rgb(233 196 106 / 0.07);
-  pointer-events: none;
-  user-select: none;
 }
 
 /* ---- Ficha de inscripción (plaza) ----
@@ -1231,6 +1402,103 @@
   border-top: 1.5px dashed rgb(18 41 31 / 0.22);
 }
 
+/*
+  Pergamino de la ficha (Rollo.tsx). Dos rodillos de papel crema con
+  remates de oro: uno fijo sobre el borde de arriba y otro que, enrollado,
+  está pegado debajo y al desenrollarse baja hasta el borde de abajo. El
+  papel se recorta (clip-path) justo en el centro del rodillo de abajo, así
+  nunca se ve papel "todavía enrollado" debajo de él.
+
+  Estados (data-rollo): "enrollado" → "desenrollando" (2,8s, despacio) →
+  "abierto", que suelta el recorte para que se vea la sombra de la ficha.
+  Sin estado especial (el del servidor) la ficha está abierta.
+*/
+.cv2-rollo {
+  --rodillo: 26px;
+  --rollo-dur: 2.8s;
+  --rollo-ease: cubic-bezier(0.33, 0, 0.2, 1);
+}
+
+.cv2-rollo__rodillo {
+  position: absolute;
+  z-index: 2;
+  left: -12px;
+  right: -12px;
+  height: var(--rodillo);
+  border-radius: calc(var(--rodillo) / 2);
+  /* El cilindro de papel: luz arriba, sombra abajo. */
+  background: linear-gradient(to bottom, #cdbf98 0%, #fbf7ea 30%, #efe5c8 55%, #c8b688 85%, #a3915f 100%);
+  box-shadow: 0 8px 14px -6px rgb(0 0 0 / 0.55);
+}
+
+/* Los remates de oro en las puntas. */
+.cv2-rollo__rodillo::before,
+.cv2-rollo__rodillo::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 16px;
+  border-radius: 6px;
+  background: linear-gradient(to bottom, #f6dc94 0%, #e9c46a 45%, #b98a35 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 248 222 / 0.7),
+    0 4px 8px -2px rgb(0 0 0 / 0.5);
+}
+
+.cv2-rollo__rodillo::before {
+  left: -6px;
+}
+
+.cv2-rollo__rodillo::after {
+  right: -6px;
+}
+
+.cv2-rollo__rodillo--arriba {
+  top: calc(var(--rodillo) / -2);
+}
+
+.cv2-rollo__rodillo--abajo {
+  top: calc(100% - var(--rodillo) / 2);
+}
+
+/* Enrollada: el rodillo de abajo, pegado al de arriba; del papel sólo queda
+   la franja que tapan los dos. */
+.cv2-rollo[data-rollo="enrollado"] .cv2-rollo__rodillo--abajo {
+  top: calc(var(--rodillo) / 2);
+}
+
+.cv2-rollo[data-rollo="enrollado"] .cv2-rollo__papel {
+  clip-path: inset(0 -80px calc(100% - var(--rodillo)) -80px);
+}
+
+.cv2-rollo[data-rollo="desenrollando"] .cv2-rollo__papel {
+  clip-path: inset(0 -80px 0 -80px);
+  transition: clip-path var(--rollo-dur) var(--rollo-ease);
+}
+
+/* Mientras baja, una sombra hacia arriba sobre el papel: la curva donde el
+   papel sale del rodillo. */
+.cv2-rollo[data-rollo="desenrollando"] .cv2-rollo__rodillo--abajo {
+  box-shadow:
+    0 8px 14px -6px rgb(0 0 0 / 0.55),
+    0 -16px 22px -12px rgb(90 66 24 / 0.45);
+  transition: top var(--rollo-dur) var(--rollo-ease);
+}
+
+/* El sello se estampa al final: llega grande y transparente y cae con un
+   rebote corto. (La inclinación va en `rotate`, aparte de transform.) */
+.cv2-rollo[data-rollo="enrollado"] .cv2-rollo__sello {
+  opacity: 0;
+  transform: scale(1.9);
+}
+
+.cv2-rollo[data-rollo="desenrollando"] .cv2-rollo__sello {
+  transition:
+    opacity 0.2s ease-out calc(var(--rollo-dur) - 0.1s),
+    transform 0.45s cubic-bezier(0.3, 1.5, 0.5, 1) calc(var(--rollo-dur) - 0.1s);
+}
+
 /* Puntos guía entre el país y la hora. */
 .cv2-guia {
   flex: 1;
@@ -1258,26 +1526,429 @@
   transform: rotate(45deg);
 }
 
-/* ---- Hueco para una foto que todavía no está ----
-   Marco de tiza punteado con la descripción de la foto: se ve que falta algo
-   a propósito, no que se rompió. */
-.cv2-hueco {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1.5px dashed rgb(243 238 220 / 0.35);
-  border-radius: 8px;
+/* ---- Láminas de "La revelación" (LaminasRevelacion.tsx) ----
+   Vidrio esmerilado: casi transparente, con un reflejo en diagonal y el
+   filo de arriba iluminado. --cubierta (0 → 1, desde el script) achica y
+   oscurece la lámina mientras la siguiente se le apoya encima. */
+.cv2-lamina {
+  --cubierta: 0;
+  border: 1px solid rgb(243 238 220 / 0.14);
+  border-radius: 22px;
+  background: linear-gradient(150deg, rgb(243 238 220 / 0.11), rgb(243 238 220 / 0.03) 40%, rgb(18 41 31 / 0.4));
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(16px) saturate(150%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.14),
+    inset 0 -1px 0 rgb(0 0 0 / 0.25),
+    0 30px 60px -28px rgb(0 0 0 / 0.75);
+  transform: scale(calc(1 - var(--cubierta) * 0.05));
+  transform-origin: 50% 0;
+  will-change: transform;
+}
+
+/* Sin desenfoque, el vidrio dejaría leer las láminas de abajo: más opaco. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .cv2-lamina {
+    background: rgb(23 50 38 / 0.96);
+  }
+}
+
+.cv2-lamina::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(115deg, rgb(255 255 255 / 0.1) 0%, transparent 28%, transparent 72%, rgb(233 196 106 / 0.07) 100%);
+}
+
+.cv2-lamina__velo {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: #0b1a13;
+  opacity: calc(var(--cubierta) * 0.5);
+}
+
+/* Fondo de la pila (red y halos): se funde arriba y abajo; en desktop
+   también a los costados, para que no corte en seco al lado de la columna. */
+.cv2-laminas__fondo {
+  -webkit-mask-image: linear-gradient(transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(transparent, #000 10%, #000 90%, transparent);
+}
+
+@media (min-width: 1024px) {
+  .cv2-laminas__fondo {
+    -webkit-mask-image:
+      linear-gradient(to right, transparent, #000 24%, #000 76%, transparent),
+      linear-gradient(transparent, #000 10%, #000 90%, transparent);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to right, transparent, #000 24%, #000 76%, transparent),
+      linear-gradient(transparent, #000 10%, #000 90%, transparent);
+    mask-composite: intersect;
+  }
+}
+
+/* ---- Módulos del temario (ModulosTemario.tsx) ----
+   Paneles de vidrio oscuro. El abierto se enciende: borde de oro, una luz
+   desde su numeral y el campo de ondas. En desktop crecen con flex-grow. */
+.cv2-tema {
+  border: 1px solid rgb(243 238 220 / 0.1);
+  background: linear-gradient(160deg, rgb(36 73 60 / 0.72), rgb(18 41 31 / 0.88));
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 24px 50px -30px rgb(0 0 0 / 0.9);
+  transition:
+    flex-grow 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.5s,
+    box-shadow 0.5s;
+}
+
+.cv2-tema::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
   background:
-    repeating-linear-gradient(-45deg, rgb(243 238 220 / 0.035) 0 12px, transparent 12px 24px),
-    var(--cv2-card);
-  color: rgb(243 238 220 / 0.7);
-  text-align: center;
+    radial-gradient(circle at 16% 14%, rgb(233 196 106 / 0.24), transparent 55%),
+    radial-gradient(ellipse at 95% 110%, rgb(240 138 75 / 0.12), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+
+.cv2-tema:hover {
+  border-color: rgb(233 196 106 / 0.28);
+}
+
+.cv2-tema.is-activa {
+  border-color: rgb(233 196 106 / 0.5);
+  box-shadow:
+    0 0 0 1px rgb(233 196 106 / 0.08),
+    0 30px 70px -30px rgb(233 196 106 / 0.4);
+}
+
+.cv2-tema.is-activa::before {
+  opacity: 1;
+}
+
+.cv2-tema__numeral {
+  opacity: 0.72;
+  transition:
+    opacity 0.5s,
+    font-size 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cv2-tema:hover .cv2-tema__numeral,
+.cv2-tema:hover .cv2-tema__abrir {
+  opacity: 1;
+}
+
+.cv2-tema__abrir {
+  opacity: 0.7;
+}
+
+.cv2-tema.is-activa .cv2-tema__numeral {
+  opacity: 1;
+  filter: drop-shadow(0 0 18px rgb(233 196 106 / 0.4));
+}
+
+/* El campo: centrado en el numeral (mobile, en la fila; desktop, arriba a
+   la izquierda del panel). Sólo late en el abierto. */
+.cv2-tema__campo {
+  position: absolute;
+  top: 46px;
+  left: 48px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s;
+}
+
+@media (min-width: 1024px) {
+  .cv2-tema__campo {
+    top: 92px;
+    left: 82px;
+  }
+}
+
+.cv2-tema.is-activa .cv2-tema__campo {
+  opacity: 1;
+}
+
+.cv2-tema__onda {
+  position: absolute;
+  top: -90px;
+  left: -90px;
+  width: 180px;
+  height: 180px;
+  border: 1px solid rgb(233 196 106 / 0.4);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.cv2-tema.is-activa .cv2-tema__onda {
+  animation: cv2-campo 4.5s ease-out infinite;
+  animation-delay: var(--retraso, 0s);
+}
+
+@keyframes cv2-campo {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+/* Cuánto scroll falta para abrir el siguiente: --avance (0 → 1) lo pone el
+   script en la lista. */
+.cv2-tema__progreso {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #f3d98c, #e9c46a);
+  box-shadow: 0 0 10px rgb(233 196 106 / 0.8);
+  transform: scaleX(var(--avance, 0));
+  transform-origin: left center;
+}
+
+/* ---- Tu profesora (SobrePilar.tsx) ---- */
+
+/* Marco de la foto: esquinas de oro por fuera y un resplandor cálido. */
+.cv2-marco {
+  position: relative;
+  border-radius: 12px;
+  box-shadow: 0 40px 90px -40px rgb(233 196 106 / 0.35);
+}
+
+.cv2-marco::before {
+  --l: 44px;
+  --g: 1.5px;
+  --c: var(--cv2-oro);
+  content: "";
+  position: absolute;
+  inset: -14px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--c), var(--c)) top left / var(--l) var(--g) no-repeat,
+    linear-gradient(var(--c), var(--c)) top left / var(--g) var(--l) no-repeat,
+    linear-gradient(var(--c), var(--c)) top right / var(--l) var(--g) no-repeat,
+    linear-gradient(var(--c), var(--c)) top right / var(--g) var(--l) no-repeat,
+    linear-gradient(var(--c), var(--c)) bottom left / var(--l) var(--g) no-repeat,
+    linear-gradient(var(--c), var(--c)) bottom left / var(--g) var(--l) no-repeat,
+    linear-gradient(var(--c), var(--c)) bottom right / var(--l) var(--g) no-repeat,
+    linear-gradient(var(--c), var(--c)) bottom right / var(--g) var(--l) no-repeat;
+  filter: drop-shadow(0 0 6px rgb(233 196 106 / 0.6));
+}
+
+/* Credenciales: vidrio con una luz de oro en la esquina; se levantan al
+   pasar el mouse. */
+.cv2-credencial {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgb(243 238 220 / 0.12);
+  border-radius: 18px;
+  background: linear-gradient(150deg, rgb(243 238 220 / 0.08), rgb(243 238 220 / 0.02) 45%, rgb(18 41 31 / 0.4));
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.1),
+    0 20px 40px -24px rgb(0 0 0 / 0.7);
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.4s,
+    box-shadow 0.4s;
+}
+
+.cv2-credencial::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 0% 0%, rgb(233 196 106 / 0.18), transparent 60%);
+}
+
+.cv2-credencial:hover {
+  transform: translateY(-3px);
+  border-color: rgb(233 196 106 / 0.35);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.12),
+    0 0 40px -12px rgb(233 196 106 / 0.35),
+    0 20px 40px -24px rgb(0 0 0 / 0.7);
+}
+
+/* La firma se escribe sola: se descubre de izquierda a derecha, al ritmo de
+   una mano, cuando la credencial entra en pantalla (Anotacion). */
+.cv2-firma-trazo {
+  clip-path: inset(-40% 100% -40% -10%);
+  transition: clip-path 1.8s cubic-bezier(0.55, 0.1, 0.45, 0.9) 0.5s;
+}
+
+.is-visible .cv2-firma-trazo {
+  clip-path: inset(-40% -10% -40% -10%);
+}
+
+/* El recuadro del diagrama: papel milimetrado oscuro. */
+.cv2-lamina__diagrama {
+  border: 1px solid rgb(243 238 220 / 0.08);
+  border-radius: 14px;
+  background-color: rgb(8 20 14 / 0.35);
+  background-image:
+    linear-gradient(rgb(243 238 220 / 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(243 238 220 / 0.045) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+/* Índice de la columna izquierda (desktop): se enciende la lámina de arriba. */
+.cv2-indice {
+  color: rgb(243 238 220 / 0.4);
+  transition: color 0.4s;
+}
+
+.cv2-indice__linea {
+  width: 1.25rem;
+  height: 1px;
+  background: currentColor;
+  transition:
+    width 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.5s;
+}
+
+.cv2-indice.is-activa {
+  color: var(--cv2-oro);
+}
+
+.cv2-indice.is-activa .cv2-indice__linea {
+  width: 3rem;
+  box-shadow: 0 0 10px rgb(233 196 106 / 0.8);
+}
+
+/* Sinapsis de la red de fondo: se encienden de a una, cada una a su tiempo. */
+.cv2-red__sinapsis {
+  opacity: 0.12;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cv2-sinapsis 4.8s ease-in-out infinite;
+  animation-delay: var(--retraso, 0s);
+}
+
+@keyframes cv2-sinapsis {
+  0%,
+  100% {
+    opacity: 0.12;
+    transform: scale(0.5);
+  }
+  12% {
+    opacity: 0.85;
+    transform: scale(1.5);
+  }
+  32% {
+    opacity: 0.12;
+    transform: scale(0.5);
+  }
+}
+
+/* Impulsos de la red (gracias): un destello corto (7% de la dendrita) que la
+   recorre de punta a punta y descansa antes de volver a salir. Con
+   pathLength 1, el dash arranca escondido antes del inicio (offset 0,07) y
+   termina pasado el final (−1). */
+.cv2-red__impulso {
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 0.07 1;
+  stroke-dashoffset: 0.07;
+  animation: cv2-impulso var(--dur, 4s) linear var(--retraso, 0s) infinite;
+}
+
+@keyframes cv2-impulso {
+  0% {
+    stroke-dashoffset: 0.07;
+  }
+  55%,
+  100% {
+    stroke-dashoffset: -1;
+  }
+}
+
+/* Diagrama 01: la fórmula respira. */
+.cv2-molecula {
+  filter: drop-shadow(0 0 4px rgb(233 196 106 / 0.55));
+  animation: cv2-molecula 4s ease-in-out infinite;
+}
+
+@keyframes cv2-molecula {
+  0%,
+  100% {
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Diagrama 03: la onda se dibuja como en un monitor, queda un momento y
+   vuelve a empezar. */
+.cv2-onda {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: cv2-onda 5.5s linear infinite;
+}
+
+@keyframes cv2-onda {
+  0% {
+    stroke-dashoffset: 1;
+    opacity: 1;
+  }
+  55%,
+  85% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  95% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+  100% {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cv2-sello__anillo {
+  .cv2-sello__anillo,
+  .cv2-red__sinapsis,
+  .cv2-molecula,
+  .is-visible .cv2-tiza-barra {
     animation: none;
+  }
+  .cv2-onda {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .cv2-impulso,
+  .cv2-red__impulso {
+    display: none;
+  }
+  .cv2-tema.is-activa .cv2-tema__onda {
+    animation: none;
+  }
+  .cv2-tema,
+  .cv2-tema__numeral,
+  .cv2-credencial {
+    transition: none;
+  }
+  .cv2-firma-trazo {
+    clip-path: none;
+    transition: none;
   }
 }
 

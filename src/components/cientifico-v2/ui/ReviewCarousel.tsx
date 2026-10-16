@@ -5,6 +5,7 @@ import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Plus, Quote } from "lucide-react";
 import type { Testimonial } from "@/components/mision-origen/ui/testimonials";
+import { lenisActual } from "@/components/cientifico-v2/ui/ScrollSuave";
 
 /*
   Carrusel de reseñas de Volver al Origen. Copia del de /bootcamp-v2 (misma
@@ -88,9 +89,12 @@ export function ReviewCarousel({ items }: { items: Testimonial[] }) {
     document.addEventListener("keydown", onKey);
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    /* El scroll suave mueve la página aunque el body esté bloqueado. */
+    lenisActual()?.stop();
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prev;
+      lenisActual()?.start();
     };
   }, [active]);
 
@@ -214,7 +218,9 @@ export function ReviewCarousel({ items }: { items: Testimonial[] }) {
                 </svg>
               </button>
 
-              <div className="relative overflow-y-auto p-8 sm:p-9">
+              {/* data-lenis-prevent: sin esto Lenis se queda con la rueda y
+                  el texto largo no scrollea (ver ScrollSuave). */}
+              <div data-lenis-prevent className="relative overflow-y-auto p-8 sm:p-9">
                 <div className="flex items-center gap-3.5">
                   <Avatar t={active} size={52} />
                   <div className="min-w-0">

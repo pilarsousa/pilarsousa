@@ -12,7 +12,7 @@ const SPANS = ["lg:col-span-2", "lg:col-span-2", "lg:col-span-2", "lg:col-span-3
 /**
  * Bloque 2 · ¿Te suena? Que se reconozca: frases de los alumnos del Bootcamp
  * en tarjetas con la barrita dorada que se redibuja en cascada, y el cierre
- * subrayado a mano con tiza.
+ * con su primera frase encerrada en un círculo de tiza a mano.
  */
 export function TeSuena() {
   return (
@@ -38,22 +38,37 @@ export function TeSuena() {
         </ul>
 
         <Reveal className="mx-auto mt-14 max-w-[820px] text-center">
-          <p className="text-balance text-[1.375rem] font-semibold leading-snug text-foreground sm:text-[1.75rem]">
-            <Destacado texto={TE_SUENA.cierre} />
-          </p>
-          {/* Subrayado de tiza bajo el cierre. */}
-          <Anotacion className="mx-auto mt-3 h-4 w-[min(80%,520px)]" umbral={0.9}>
-            <svg viewBox="0 0 400 16" preserveAspectRatio="none" className="size-full overflow-visible" aria-hidden>
-              <path
-                pathLength={1}
-                className="cv2-trazo cv2-trazo--brillo [--dur:1s]"
-                stroke="#f3eedc"
-                strokeWidth={2.5}
-                vectorEffect="non-scaling-stroke"
-                d="M4 10 C80 4 170 12 250 7 C320 3 370 9 396 6"
-              />
-            </svg>
-          </Anotacion>
+          {/* Mobile en vw: "No es falta de fuerza de voluntad." entra en un
+              solo renglón desde 320px, con el círculo alrededor. */}
+          <div className="text-[clamp(0.95rem,4.7vw,1.375rem)] font-semibold leading-snug text-foreground sm:text-[1.75rem]">
+            <span className="relative inline-block whitespace-nowrap">
+              {TE_SUENA.cierreMarcado}
+              {/* Círculo de tiza a mano alrededor de la primera frase. No es
+                  una elipse: con una frase larga y baja, la elipse corta las
+                  puntas del texto. Es un óvalo de lados casi rectos y puntas
+                  redondas que arranca arriba, da la vuelta hacia la izquierda
+                  y se pasa un poco del comienzo, como hecho a mano.
+                  Sin non-scaling-stroke: con él, Chrome mide el trazo en
+                  pantalla y, si el SVG se estira más que su viewBox, el
+                  dibujo queda a medias. Por eso el viewBox tiene casi la
+                  proporción de la frase (≈6,5:1): se escala parejo y el
+                  grosor no se deforma. */}
+              <Anotacion className="pointer-events-none absolute -inset-x-4 -inset-y-3 sm:-inset-x-7 sm:-inset-y-4" umbral={0.8}>
+                <svg viewBox="0 0 400 60" preserveAspectRatio="none" className="size-full overflow-visible" aria-hidden>
+                  <path
+                    pathLength={1}
+                    className="cv2-trazo cv2-trazo--brillo [--dur:1.1s] [--retraso:0.3s]"
+                    stroke="#f3eedc"
+                    strokeWidth={3}
+                    d="M273 4.5 C200 1.5 93 2.3 40 5.3 C11 7.5 0 20 2.7 31 C5.3 44 21 55 53 56 C133 59 280 58.5 357 55 C389 52.5 399 42 397 30 C396 16.5 381 7.5 349 5.3 C320 3 267 3.8 224 7.5"
+                  />
+                </svg>
+              </Anotacion>
+            </span>
+            <span className="mt-5 block text-balance sm:mt-6">
+              <Destacado texto={TE_SUENA.cierreResto} />
+            </span>
+          </div>
         </Reveal>
       </Contenedor>
     </section>

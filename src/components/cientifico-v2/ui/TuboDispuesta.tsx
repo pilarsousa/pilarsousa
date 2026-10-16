@@ -114,7 +114,20 @@ function useTubo() {
       return () => gsap.killTweensOf(estado);
     });
 
+    /* ScrollTrigger mide dónde empieza y termina el llenado al crearse. Las
+       secciones de arriba cambian su alto después (la pista del temario, las
+       láminas de la revelación, la tipografía al cargar): sin volver a medir,
+       el tubo quedaba lleno antes de llegar a él. */
+    let espera = 0;
+    const ro = new ResizeObserver(() => {
+      clearTimeout(espera);
+      espera = window.setTimeout(() => ScrollTrigger.refresh(), 150);
+    });
+    ro.observe(document.body);
+
     return () => {
+      ro.disconnect();
+      clearTimeout(espera);
       mm.revert();
       raiz.classList.remove("is-listo");
     };

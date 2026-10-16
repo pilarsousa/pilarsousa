@@ -6,17 +6,21 @@ import { Anotacion } from "@/components/cientifico-v2/ui/Anotacion";
 import { Reveal } from "@/components/cientifico-v2/ui/Reveal";
 import { NO_ES_PARA_TI, PARA_QUIEN } from "@/components/cientifico-v2/content";
 
-/** Cruz de tiza para el "no es para ti": dos trazos a mano. */
+/** Cruz de tiza roja para el "no es para ti": dos trazos a mano, en el rojo
+    del punto de "en directo" del hero. */
 function CruzTiza({ retraso }: { retraso: number }) {
   return (
     <Anotacion className="mt-0.5 size-7 shrink-0" umbral={0.9}>
-      <svg viewBox="0 0 28 28" className="size-full overflow-visible" aria-hidden>
+      <svg
+        viewBox="0 0 28 28"
+        className="size-full overflow-visible drop-shadow-[0_0_6px_rgb(229_72_77/0.45)]"
+        aria-hidden
+      >
         <path
           pathLength={1}
           className="cv2-trazo [--dur:0.35s]"
           style={{ "--retraso": `${retraso}s` } as React.CSSProperties}
-          stroke="#f3eedc"
-          strokeOpacity={0.75}
+          stroke="#e5484d"
           strokeWidth={3}
           d="M5 5 C11 11 17 17 23 24"
         />
@@ -24,8 +28,7 @@ function CruzTiza({ retraso }: { retraso: number }) {
           pathLength={1}
           className="cv2-trazo [--dur:0.35s]"
           style={{ "--retraso": `${retraso + 0.3}s` } as React.CSSProperties}
-          stroke="#f3eedc"
-          strokeOpacity={0.75}
+          stroke="#e5484d"
           strokeWidth={3}
           d="M23 4 C17 11 11 17 5 23"
         />

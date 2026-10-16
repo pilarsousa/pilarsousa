@@ -1,23 +1,23 @@
 import { CircleAlert } from "lucide-react";
 import { Contenedor } from "@/components/cientifico-v2/ui/Contenedor";
 import { BotonEntrada } from "@/components/cientifico-v2/ui/BotonEntrada";
-import { Entrada, TalonSuelto } from "@/components/cientifico-v2/ui/Entrada";
+import { ApunteClase } from "@/components/cientifico-v2/ui/ApunteClase";
 import { Destacado } from "@/components/cientifico-v2/ui/Destacado";
 import { Anotacion } from "@/components/cientifico-v2/ui/Anotacion";
 import { Reveal } from "@/components/cientifico-v2/ui/Reveal";
 import { CIERRE } from "@/components/cientifico-v2/content";
 
 /**
- * Bloque 12 · Cierre: la entrada al seminario con el talón suelto, el titular
- * del brief con el corchete de tiza, el botón y el aviso de plazas.
+ * Bloque 12 · Cierre: el apunte de clase (la foto de Pilar en el aula y la
+ * ficha de asistencia, ui/ApunteClase.tsx), el titular del brief con el
+ * corchete de tiza, el botón y el aviso de plazas.
  */
 export function Cierre() {
   return (
     <section aria-labelledby="cierre-titulo" className="relative py-20 sm:py-28">
       <Contenedor className="flex flex-col items-center text-center">
-        <Reveal className="flex items-center justify-center">
-          <Entrada talon="sin" sizes="340px" className="w-[min(64vw,340px)] -rotate-[16deg]" />
-          <TalonSuelto className="-ml-1 mt-12 w-[min(22vw,118px)] rotate-[22deg] sm:ml-6" />
+        <Reveal className="flex justify-center">
+          <ApunteClase className="w-[min(80vw,380px)]" />
         </Reveal>
 
         <div className="relative mt-14 max-w-[900px]">

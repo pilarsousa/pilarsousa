@@ -1,10 +1,13 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { CalendarDays, Radio } from "lucide-react";
 import { Wordmark } from "@/components/cientifico-v2/ui/Wordmark";
 import { ReservaForm } from "@/components/cientifico-v2/ui/ReservaForm";
-import { MarcoEntrada } from "@/components/cientifico-v2/ui/MarcoEntrada";
+import { MarcoInscripcion } from "@/components/cientifico-v2/ui/MarcoInscripcion";
+import { ConfirmacionPlaza } from "@/components/cientifico-v2/ui/ConfirmacionPlaza";
+import { lenisActual } from "@/components/cientifico-v2/ui/ScrollSuave";
 import { FECHA_CORTA, MODAL, ZONA_HORARIA } from "@/components/cientifico-v2/content";
 import { horaEn } from "@/components/cientifico-v2/horario";
 
@@ -24,16 +27,51 @@ export function useReservaModal() {
   return ctx;
 }
 
+const GRACIAS = "/cientifico-v2/gracias";
+
+/** Lo que se ve "Plaza confirmada" antes de ir a la gracias. */
+const ESPERA_CONFIRMACION = 2900;
+
 /**
  * Modal de registro de /cientifico-v2 (misma mecánica que v1: se cierra con el
  * fondo, la X o Escape, y bloquea el scroll mientras está abierto). Todos los
  * BotonEntrada lo abren.
+ *
+ * Al registrarse, el modal deja lugar a "Plaza confirmada"
+ * (ConfirmacionPlaza.tsx) y después se navega a la gracias. El provider vive
+ * en el layout, así que sigue montado al cambiar de página: la pantalla tapa
+ * la carga y se desvanece recién cuando la gracias ya está.
  */
 export function ReservaModalProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const [confirmada, setConfirmada] = useState<{ nombre: string; saliendo: boolean } | null>(null);
 
   const open = useCallback(() => setIsOpen(true), []);
   const close = useCallback(() => setIsOpen(false), []);
+
+  const confirmar = useCallback(
+    (nombre: string) => {
+      setIsOpen(false);
+      setConfirmada({ nombre, saliendo: false });
+      router.prefetch(GRACIAS);
+      setTimeout(() => router.push(GRACIAS), ESPERA_CONFIRMACION);
+    },
+    [router],
+  );
+
+  /* Ya en la gracias: se desvanece (0,7s, .cv2-confirmacion) y se desmonta. */
+  const enGracias = pathname === GRACIAS;
+  useEffect(() => {
+    if (!enGracias) return;
+    const salir = setTimeout(() => setConfirmada((c) => c && { ...c, saliendo: true }), 150);
+    const quitar = setTimeout(() => setConfirmada(null), 900);
+    return () => {
+      clearTimeout(salir);
+      clearTimeout(quitar);
+    };
+  }, [enGracias]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -43,9 +81,13 @@ export function ReservaModalProvider({ children }: { children: React.ReactNode }
     document.addEventListener("keydown", onKey);
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    /* Con el scroll suave, la página de atrás la mueve Lenis: hay que
+       frenarlo también (overflow: hidden no lo para). */
+    lenisActual()?.stop();
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevOverflow;
+      lenisActual()?.start();
     };
   }, [isOpen]);
 
@@ -55,6 +97,7 @@ export function ReservaModalProvider({ children }: { children: React.ReactNode }
 
       {isOpen && (
         <div
+          data-lenis-prevent
           role="dialog"
           aria-modal="true"
           aria-labelledby="cv2-modal-titulo"
@@ -70,7 +113,7 @@ export function ReservaModalProvider({ children }: { children: React.ReactNode }
           />
 
           <div className="relative m-auto w-full max-w-md animate-[fadeIn_0.25s_ease-out]">
-            <MarcoEntrada
+            <MarcoInscripcion
               cabecera={
                 <div className="flex flex-col gap-2 pr-8">
                   <Wordmark className="text-xl" />
@@ -90,8 +133,8 @@ export function ReservaModalProvider({ children }: { children: React.ReactNode }
                 </div>
               }
             >
-              <ReservaForm onSuccess={close} />
-            </MarcoEntrada>
+              <ReservaForm onSuccess={confirmar} />
+            </MarcoInscripcion>
 
             {/* Cerrar: dentro del marco, arriba a la derecha bajo la pestaña. */}
             <button
@@ -107,6 +150,8 @@ export function ReservaModalProvider({ children }: { children: React.ReactNode }
           </div>
         </div>
       )}
+
+      {confirmada && <ConfirmacionPlaza nombre={confirmada.nombre} saliendo={confirmada.saliendo} />}
     </ReservaModalContext.Provider>
   );
 }

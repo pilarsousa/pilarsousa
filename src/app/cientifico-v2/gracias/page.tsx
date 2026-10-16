@@ -4,8 +4,9 @@ import { Contenedor } from "@/components/cientifico-v2/ui/Contenedor";
 import { BarraSuperior } from "@/components/cientifico-v2/ui/BarraSuperior";
 import { Wordmark } from "@/components/cientifico-v2/ui/Wordmark";
 import { Destacado } from "@/components/cientifico-v2/ui/Destacado";
-import { Entrada } from "@/components/cientifico-v2/ui/Entrada";
 import { Firma } from "@/components/cientifico-v2/ui/Firma";
+import { RedNeuronal } from "@/components/cientifico-v2/ui/RedNeuronal";
+import { Separador } from "@/components/cientifico-v2/ui/Separador";
 import { Reveal } from "@/components/cientifico-v2/ui/Reveal";
 import { Footer } from "@/components/cientifico-v2/sections/Footer";
 import { FECHA_CORTA, GRACIAS } from "@/components/cientifico-v2/content";
@@ -27,8 +28,9 @@ function WhatsAppIcon({ className }: { className?: string }) {
 }
 
 /**
- * Gracias de /cientifico-v2: confirmación de la plaza, confirmarla en el
- * grupo de WhatsApp, recomendaciones y despedida. Sin video.
+ * Gracias de /cientifico-v2: confirmación de la plaza, recomendaciones,
+ * confirmarla en el grupo de WhatsApp y despedida. Sin video. De fondo, la
+ * red neuronal con impulsos que viajan.
  */
 export default function GraciasV2() {
   return (
@@ -37,6 +39,14 @@ export default function GraciasV2() {
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_35%_45%_at_100%_25%,rgba(30,59,46,0.8),transparent_70%),radial-gradient(ellipse_30%_40%_at_0%_70%,rgba(233,196,106,0.12),transparent_70%)]"
+      />
+      {/* Impulsos nerviosos: la red de la landing, fija detrás de todo, con
+          destellos que viajan por sus dendritas. Más tenue en el centro,
+          donde va el texto. */}
+      <RedNeuronal
+        variante="apaisada"
+        impulsos
+        className="fixed inset-0 -z-10 size-full opacity-70 [mask-image:radial-gradient(ellipse_at_center,rgb(0_0_0/0.3),#000_75%)]"
       />
 
       <BarraSuperior alineacion="centro">
@@ -53,43 +63,46 @@ export default function GraciasV2() {
         </div>
       </BarraSuperior>
 
-      <Contenedor className="flex flex-col items-center pb-8 pt-10 text-center sm:pt-14">
-        <Reveal>
+      {/*
+        Mobile, una columna en el orden del DOM: confirmación, separador,
+        WhatsApp (la acción: no puede quedar al fondo) y recomendaciones.
+        PC, una grilla: confirmación | división | recomendaciones arriba, y
+        abajo, aparte y centrado, el bloque de WhatsApp con su separador.
+      */}
+      <Contenedor className="grid grid-cols-1 gap-12 pb-12 pt-10 text-center sm:pt-14 lg:grid-cols-[minmax(0,1fr)_1px_minmax(0,1fr)] lg:items-center lg:gap-x-16 lg:gap-y-14 lg:pt-20 lg:text-left">
+        <Reveal className="lg:col-start-1 lg:row-start-1">
           <h1 className="cv2-titulo cv2-grad-texto text-[2.2rem] font-bold leading-tight sm:text-[3.25rem]">
             {GRACIAS.titulo}
           </h1>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <p className="mt-3 text-base text-(--cv2-gris) sm:text-[1.0625rem]">{GRACIAS.intro}</p>
-          <p className="mx-auto mt-3 max-w-[840px] text-xl font-bold leading-snug text-foreground sm:text-2xl">
+          <p className="mt-4 text-base text-(--cv2-gris) sm:text-[1.0625rem]">{GRACIAS.intro}</p>
+          <p className="mx-auto mt-3 max-w-[840px] text-xl font-bold leading-snug text-foreground sm:text-2xl lg:mx-0">
             <Destacado texto={GRACIAS.promesa} claseDestacado="cv2-grad-texto" />
           </p>
         </Reveal>
 
-        {/* Una entrada a la izquierda, con el tamaño e inclinación de la
-            landing. El espacio reservado evita que pise el texto de WhatsApp. */}
-        <div aria-hidden className="relative mt-8 h-[120px] w-full max-w-[640px] sm:mt-12 sm:h-[180px]">
-          <Entrada
-            sizes="(min-width: 640px) 300px, 180px"
-            className="absolute -left-6 top-12 w-[180px] -rotate-[14deg] sm:left-0 sm:top-0 sm:w-[300px]"
-          />
-        </div>
+        {/* La división entre las dos columnas (sólo PC). */}
+        <span
+          aria-hidden
+          className="hidden h-full min-h-[260px] w-px bg-linear-to-b from-transparent via-(--cv2-oro)/55 to-transparent lg:col-start-2 lg:row-start-1 lg:block"
+        />
 
-        {/* Bloque de WhatsApp. */}
-        <div className="relative mt-8 w-full max-w-[640px]">
-          <Reveal>
-            <h2 className="text-balance text-xl font-medium text-foreground sm:text-[1.6rem]">{GRACIAS.whatsappTitulo}</h2>
+        <Separador id="cv2-separador-gracias" className="mx-auto max-w-[420px] lg:col-span-3 lg:row-start-2 lg:max-w-[560px]" />
+
+        {/* Bloque de WhatsApp: el paso que confirma la plaza. */}
+        <Reveal className="lg:col-span-3 lg:row-start-3">
+          <div className="cv2-wa-panel mx-auto max-w-[680px] px-4 py-9 text-center sm:px-12">
+            <h2 className="text-balance text-xl font-semibold text-foreground sm:text-[1.6rem]">{GRACIAS.whatsappTitulo}</h2>
             <p className="mx-auto mt-3 max-w-[540px] text-base text-(--cv2-gris) sm:text-lg">{GRACIAS.whatsappTexto}</p>
-            <a href={MO_WHATSAPP_COMMUNITY_URL} target="_blank" rel="noopener noreferrer" className="cv2-boton-wa mt-6 gap-3">
+            <a href={MO_WHATSAPP_COMMUNITY_URL} target="_blank" rel="noopener noreferrer" className="cv2-boton-wa mt-7 gap-3">
               <WhatsAppIcon className="size-6 shrink-0" />
               {GRACIAS.whatsappCta}
             </a>
-          </Reveal>
-        </div>
+          </div>
+        </Reveal>
 
-        <Reveal className="mt-16 w-full max-w-[742px]">
+        <Reveal delay={0.1} className="mx-auto w-full max-w-[742px] lg:col-start-3 lg:row-start-1 lg:mx-0">
           <h2 className="cv2-grad-texto text-xl font-bold sm:text-2xl">{GRACIAS.recomendacionesTitulo}</h2>
-          <ul className="mt-7 grid gap-7 text-left sm:grid-cols-[1.3fr_1fr] sm:gap-6">
+          <ul className="mt-7 grid gap-7 text-left sm:grid-cols-[1.3fr_1fr] sm:gap-6 lg:grid-cols-1">
             {GRACIAS.recomendaciones.map((texto, i) => (
               <li key={texto} className="cv2-card relative rounded-[8px] px-6 pb-6 pt-8 text-[1.0625rem] leading-[1.45] text-(--cv2-gris) sm:text-lg">
                 <span aria-hidden className={i === 0 ? "cv2-barrita" : "cv2-barrita cv2-barrita--clara"} />
@@ -98,7 +111,6 @@ export default function GraciasV2() {
             ))}
           </ul>
         </Reveal>
-
       </Contenedor>
 
       {/* La despedida va en el footer: columna derecha en PC, primera en

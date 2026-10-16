@@ -21,8 +21,8 @@ export const ZONA_HORARIA = "Europe/Madrid";
 export const FECHA_CORTA = "17 de octubre";
 
 /* Países del público (formulario del roadmap del Bootcamp: España 144,
-   México 114, Argentina 57, Colombia 35, Chile 26). Los tres primeros van bajo
-   el botón del hero; los cinco, en la plaza y en la pregunta de horarios. */
+   México 114, Argentina 57, Colombia 35, Chile 26). Los cinco van en la cinta
+   de horarios del hero, en la plaza y en la pregunta de horarios. */
 export const PAISES = [
   { pais: "España", zona: "Europe/Madrid" },
   { pais: "México", zona: "America/Mexico_City" },
@@ -46,15 +46,22 @@ export const SELLO = "Seminario oficial · Neurometafísica";
 /* ── Bloque 1 · Hero ──
    Objetivo: que en 5 segundos se entienda qué es, para quién y cuándo. */
 export const HERO = {
-  antetitulo: `Seminario en directo · ${FECHA_CORTA}`,
+  /* Las fichas de arriba del título. Las horas por país van aparte, en la
+     cinta bajo el botón (ui/CintaHorarios.tsx). */
+  fichas: {
+    directo: "Seminario en directo",
+    fecha: FECHA_CORTA,
+    con: "Con Pilar Sousa",
+    plazas: "Plazas limitadas",
+  },
   titulo: "Neurometafísica",
+  /* La inscripción bajo el título: lo que decía el sello redondo. */
+  credencial: "Seminario oficial · MMXXVI",
   subtitulo: "La ciencia de reprogramar tu identidad para manifestar una realidad diferente.",
   apoyo:
     "Por qué tu cerebro y tu sistema nervioso te devuelven siempre al mismo lugar, y cómo entrenarlos para sostener la vida que quieres.",
-  /* Bajo el botón: "Directo con Pilar Sousa · [horas] · Plazas limitadas".
-     Las horas las arma el hero con los tres primeros PAISES. */
-  bajoBotonInicio: "Directo con Pilar Sousa",
-  bajoBotonFin: "Plazas limitadas",
+  /* Rótulo de la cinta de horarios, bajo el botón. */
+  horarios: "Hora del directo en tu país",
 };
 
 /* ── Bloque 2 · ¿Te suena? ──
@@ -69,26 +76,32 @@ export const TE_SUENA = {
     "Tus relaciones, tu trabajo o tu dinero [terminan siempre de la misma forma.]",
     "Cambias tú, pero [tu entorno te devuelve a tu versión anterior.]",
   ],
-  cierre:
-    "No es falta de fuerza de voluntad. [Es tu identidad haciendo exactamente lo que fue programada para hacer.]",
+  /* El cierre en dos partes: la primera va encerrada en un círculo de tiza. */
+  cierreMarcado: "No es falta de fuerza de voluntad.",
+  cierreResto: "[Es tu identidad haciendo exactamente lo que fue programada para hacer.]",
 };
 
 /* ── Bloque 3 · La revelación ── */
 export const REVELACION = {
   antetitulo: "La revelación",
   titulo: "Tu identidad está creando tu realidad.",
+  /* Cada punto es una lámina de vidrio con su diagrama (ver
+     ui/LaminasRevelacion.tsx); la etiqueta nombra el plano que muestra. */
   puntos: [
     {
+      etiqueta: "Química",
       titulo: "Tu vieja identidad no es una idea. Es química.",
       texto:
         "Cuando vuelves a lo conocido, tu cuerpo te premia: baja el cortisol, llega la dopamina de siempre y la oxitocina te hace sentir que perteneces. Por eso tu vieja identidad es adictiva.",
     },
     {
+      etiqueta: "Circuito",
       titulo: "Tu cerebro va por el circuito más fuerte.",
       texto:
         "Cada mañana arranca con el camino que lleva años repitiéndose. No es un defecto: es un programa, y se instaló a base de repetición.",
     },
     {
+      etiqueta: "Sistema nervioso",
       titulo: "Solo recibes lo que tu sistema nervioso puede sostener.",
       texto:
         "Si intentas sentir abundancia con un cuerpo en alerta, durará unos segundos y volverás al miedo.",
@@ -116,21 +129,26 @@ export const TEMARIO = {
   titulo: "Temario",
   intro:
     "Todo lo que funcionó en el Bootcamp, ordenado como una asignatura: primero el [porqué], después [lo que te ata] y por último cómo [reprogramar y sostener].",
+  /* La fase de cada módulo sale de la intro (el porqué, lo que te ata,
+     reprogramar y sostener): es lo que se lee con el módulo cerrado. */
   modulos: [
     {
       numero: "I",
+      fase: "El porqué",
       titulo: "Identidad y neurociencia: tu identidad está creando tu realidad",
       texto:
         "Por qué manifestar es una ciencia exacta y todo pasa por un cambio de identidad, primero en tu cuerpo y en tu cerebro.",
     },
     {
       numero: "II",
+      fase: "Lo que te ata",
       titulo: "La neuroquímica de la manifestación",
       texto:
         "Tu vieja identidad es adictiva: cortisol, dopamina y oxitocina te premian por volver a lo conocido.",
     },
     {
       numero: "III",
+      fase: "Reprogramar y sostener",
       titulo: "Reprogramar tu neuroquímica para encarnar tu nueva identidad",
       texto:
         "Cómo salir del modo supervivencia y reprogramarte para encarnar una nueva identidad y recibir lo que ahora tu cuerpo es capaz de sostener.",
@@ -181,8 +199,10 @@ export const PILAR = {
     { valor: "+600.000", etiqueta: "suscriptores" },
     { valor: "13", etiqueta: "códigos de su sistema" },
   ],
-  /* Hueco para la foto que pide el brief. */
-  foto: "Foto de Pilar enseñando delante de la pizarra (no posando)",
+  /* Bajo la firma, en la cuarta credencial. */
+  firma: "Creadora de Volver al Origen",
+  /* Texto alternativo de la foto (carpetas/img-pizarron.jpeg). */
+  foto: "Pilar Sousa en el aula, con una tiza en la mano junto a la pizarra",
 };
 
 /* ── Bloque 9 · Prueba social ──
@@ -194,7 +214,6 @@ export const PRUEBA = {
   titulo: "Historias de quienes ya lo entrenaron",
   intro:
     "Volver al Origen es el sistema que creé para [sostener el cambio en el tiempo]. Después de 2 ediciones y más de 350 alumnos, esto es lo que cuentan.",
-  nota: "media de valoración entre los alumnos de Volver al Origen.",
 };
 
 /* ── Bloque 10 · Plaza y precio ──
@@ -244,6 +263,16 @@ export const MODAL = {
   formato: "En directo online",
   boton: "Reservar mi plaza",
   exito: "¡Plaza reservada! Te llevamos al siguiente paso…",
+};
+
+/* ── Plaza confirmada ──
+   La pantalla entre el registro y la gracias (ui/ConfirmacionPlaza.tsx). El
+   saludo lleva delante el nombre de quien se registró. */
+export const CONFIRMACION = {
+  titulo: "Plaza confirmada",
+  saludo: "nos vemos en el aula.",
+  saludoSinNombre: "Nos vemos en el aula.",
+  carga: "Te llevamos al siguiente paso",
 };
 
 /* ── Gracias ── */
