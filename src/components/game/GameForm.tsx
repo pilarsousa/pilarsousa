@@ -10,6 +10,7 @@ import "react-phone-number-input/style.css";
 import { Download } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useVisitorCountry } from "@/lib/useVisitorCountry";
+import { leerAtribucion } from "@/components/sierra-tracking";
 import { REWARD_PDF } from "@/components/game/game-config";
 
 /*
@@ -98,6 +99,8 @@ export function GameForm({ source = "game", onSuccess }: GameFormProps) {
           email: email.trim(),
           telefono: telefono.trim(),
           source,
+          // Ruta y UTM para el panel de Sierra: el servidor no los reenvía a GHL.
+          ...leerAtribucion(),
         }),
       });
       // Sólo mostramos éxito si el lead se guardó de verdad.

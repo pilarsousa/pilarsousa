@@ -10,6 +10,7 @@ import flags from "react-phone-number-input/flags";
 import "react-phone-number-input/style.css";
 import { cn } from "@/lib/cn";
 import { useVisitorCountry } from "@/lib/useVisitorCountry";
+import { leerAtribucion } from "@/components/sierra-tracking";
 
 /*
   Email validation: requires local part, "@", a domain with at least one dot,
@@ -119,6 +120,8 @@ export function ReservaForm({
           email: email.trim(),
           telefono: telefono.trim(),
           source,
+          // Ruta y UTM para el panel de Sierra: el servidor no los reenvía a GHL.
+          ...leerAtribucion(),
         }),
       });
       // Only show success once the lead is actually stored — never on a failed

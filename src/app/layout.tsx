@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
+import { SierraTracking } from "@/components/sierra-tracking";
 import {
   Cinzel,
   Manrope,
@@ -285,6 +286,8 @@ fbq('track', 'PageView');`}
         {/* End Microsoft Clarity */}
 
         <Analytics />
+        {/* Visitas de todas las rutas para el panel de Sierra (sin cookies). */}
+        <SierraTracking />
       </body>
     </html>
   );

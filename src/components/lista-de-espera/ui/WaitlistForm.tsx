@@ -11,6 +11,7 @@ import flags from "react-phone-number-input/flags";
 import "react-phone-number-input/style.css";
 import { cn } from "@/lib/cn";
 import { useVisitorCountry } from "@/lib/useVisitorCountry";
+import { leerAtribucion } from "@/components/sierra-tracking";
 import { BotonVo } from "@/components/lista-de-espera/ui/BotonVo";
 import { FORM, GRACIAS_PATH } from "@/components/lista-de-espera/content";
 
@@ -137,6 +138,8 @@ export function WaitlistForm({ onSuccess }: WaitlistFormProps) {
           email: cleanEmail,
           telefono: cleanTelefono,
           source: LEAD_SOURCE,
+          // Ruta y UTM para el panel de Sierra: el servidor no los reenvía a GHL.
+          ...leerAtribucion(),
         }),
       });
       /* Sin esto la confirmación mentiría: el check saldría igual con el lead

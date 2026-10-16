@@ -60,6 +60,8 @@ import {
   PREGUNTAS,
   type Frecuencia,
 } from "@/components/diagnostico/contenido";
+import { registrarLead, type Atribucion } from "@/lib/sierra";
+import { atribucionDeJson } from "@/lib/sierra-atribucion";
 
 /* Mismas reglas que valida FlujoTest en el navegador. Se repiten aquí porque
    el cliente nunca es de fiar: una petición puede llegar sin pasar por la
@@ -256,6 +258,25 @@ function registrarFallback(envio: Envio, motivo: string, extra?: object) {
   );
 }
 
+/*
+  Avisa el lead al panel de Sierra (registros en vivo del lanzamiento).
+
+  Sólo en la etapa "formulario": la misma persona vuelve a pasar por aquí en
+  la etapa "resultado", y avisarla dos veces la contaría como dos registros.
+  Va DESPUÉS de que el lead quedó guardado —aceptado por GHL o respaldado en
+  Supabase— y con await (en Vercel lo que no se espera se corta). Nunca lanza
+  y corta a los 4 s.
+*/
+async function avisarSierra(envio: Envio, atribucion: Atribucion) {
+  if (envio.etapa !== "formulario") return;
+  await registrarLead({
+    email: envio.email,
+    name: envio.nombre,
+    phone: envio.telefono,
+    ...atribucion,
+  });
+}
+
 async function marcar(
   id: string | null,
   estado: "sent" | "failed",
@@ -317,6 +338,8 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
+  // Ruta y UTM para Sierra: no entran en la carga que va a GHL.
+  const atribucion = atribucionDeJson(cuerpo);
 
   /*
     EL DIAGNÓSTICO SE RECALCULA AQUÍ, no se acepta el que mande el navegador.
@@ -381,6 +404,7 @@ export async function POST(request: Request) {
       frecuencia: diagnostico?.dominante,
     });
     await marcar(leadId, "failed", "sin_webhook");
+    if (leadId) await avisarSierra(envio, atribucion);
     /* 200 a propósito: el dato está respaldado y el visitante no tiene por qué
        enterarse de que falta una variable de entorno. */
     return Response.json({ ok: true, encolado: true });
@@ -461,6 +485,7 @@ export async function POST(request: Request) {
         "failed",
         `ghl_${respuesta.status}: ${detalle.slice(0, 300)}`,
       );
+      if (leadId) await avisarSierra(envio, atribucion);
       return Response.json({ ok: true, encolado: true });
     }
   } catch (err) {
@@ -469,10 +494,12 @@ export async function POST(request: Request) {
       frecuencia: diagnostico?.dominante,
     });
     await marcar(leadId, "failed", "ghl_inalcanzable");
+    if (leadId) await avisarSierra(envio, atribucion);
     return Response.json({ ok: true, encolado: true });
   }
 
   await marcar(leadId, "sent");
+  await avisarSierra(envio, atribucion);
   return Response.json({
     ok: true,
     frecuencia: diagnostico?.dominante ?? null,

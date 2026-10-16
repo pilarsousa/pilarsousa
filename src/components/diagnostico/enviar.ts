@@ -3,6 +3,7 @@ import {
   type DatosContacto,
 } from "@/components/diagnostico/almacen";
 import type { Respuestas } from "@/components/diagnostico/puntaje";
+import { leerAtribucion } from "@/components/sierra-tracking";
 
 /*
   El envío al servidor, en un solo sitio.
@@ -32,7 +33,8 @@ function postear(cuerpo: Record<string, unknown>) {
   fetch("/api/diagnostico", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(cuerpo),
+    // Ruta y UTM para el panel de Sierra: el servidor no los reenvía a GHL.
+    body: JSON.stringify({ ...cuerpo, ...leerAtribucion() }),
     keepalive: true,
   }).catch(() => {
     /* Silencio deliberado. Ver arriba. */

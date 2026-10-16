@@ -11,6 +11,8 @@
 */
 
 import { saveLead, updateLeadStatus } from "@/lib/leads";
+import { registrarLead, type Atribucion } from "@/lib/sierra";
+import { atribucionDeJson } from "@/lib/sierra-atribucion";
 
 // Kept in sync with the client-side checks in ReservaForm.tsx.
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -64,6 +66,22 @@ async function markLead(
   }
 }
 
+/*
+  Avisa el lead al panel de Sierra (registros en vivo del lanzamiento). Va
+  DESPUÉS de que el lead quedó guardado —aceptado por GHL o, si GHL falló,
+  respaldado en Supabase— y con await: en Vercel una llamada sin esperar se
+  corta al terminar la función. registrarLead nunca lanza y corta a los 4 s,
+  así que no puede romper ni trabar el registro.
+*/
+async function avisarSierra(lead: Lead, atribucion: Atribucion) {
+  await registrarLead({
+    email: lead.email,
+    name: lead.nombre,
+    phone: lead.telefono,
+    ...atribucion,
+  });
+}
+
 function logLeadFallback(lead: Lead, reason: string) {
   console.error(
     `LEAD_FALLBACK ${JSON.stringify({ ...lead, reason, at: new Date().toISOString() })}`,
@@ -95,6 +113,8 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
+  // Ruta y UTM para Sierra: no forman parte del lead que va a GHL.
+  const atribucion = atribucionDeJson(body);
 
   /*
     El lead se respalda en Supabase ANTES de intentar el envío a GHL. Ese orden
@@ -133,15 +153,18 @@ export async function POST(request: Request) {
       console.error(`GHL webhook responded ${res.status}: ${detail.slice(0, 300)}`);
       logLeadFallback(lead, `ghl_${res.status}`);
       await markLead(leadId, "failed", `ghl_${res.status}: ${detail.slice(0, 300)}`);
+      if (leadId) await avisarSierra(lead, atribucion);
       return Response.json({ ok: true, queued: true });
     }
   } catch (err) {
     console.error("Failed to reach the GHL webhook:", err);
     logLeadFallback(lead, "ghl_unreachable");
     await markLead(leadId, "failed", "ghl_unreachable");
+    if (leadId) await avisarSierra(lead, atribucion);
     return Response.json({ ok: true, queued: true });
   }
 
   await markLead(leadId, "sent");
+  await avisarSierra(lead, atribucion);
   return Response.json({ ok: true });
 }

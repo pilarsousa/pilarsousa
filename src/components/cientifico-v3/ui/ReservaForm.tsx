@@ -9,6 +9,7 @@ import flags from "react-phone-number-input/flags";
 import "react-phone-number-input/style.css";
 import { cn } from "@/lib/cn";
 import { useVisitorCountry } from "@/lib/useVisitorCountry";
+import { leerAtribucion } from "@/components/sierra-tracking";
 import { SOURCE } from "@/components/cientifico-v3/content";
 
 /*
@@ -98,6 +99,8 @@ export function ReservaForm({
           email: email.trim(),
           telefono: telefono.trim(),
           source,
+          // Ruta y UTM para el panel de Sierra: el servidor no los reenvía a GHL.
+          ...leerAtribucion(),
         }),
       });
       // Sólo se confirma si el lead quedó guardado.
