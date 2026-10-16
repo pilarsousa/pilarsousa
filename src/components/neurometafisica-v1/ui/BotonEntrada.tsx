@@ -1,0 +1,32 @@
+"use client";
+
+import { cn } from "@/lib/cn";
+import { CTA } from "@/components/neurometafisica-v1/content";
+import { useReservaModal } from "@/components/neurometafisica-v1/ui/ReservaModal";
+
+/**
+ * El botón principal: la hoja de oro con el texto en Cinzel (ver .cv2-boton
+ * en neurometafisica-v1.css). Siempre abre el modal de registro.
+ */
+export function BotonEntrada({
+  children = CTA,
+  bloque,
+  className,
+}: {
+  children?: React.ReactNode;
+  /** Ocupa todo el ancho del contenedor (mobile). */
+  bloque?: boolean;
+  className?: string;
+}) {
+  const { open } = useReservaModal();
+
+  return (
+    <button
+      type="button"
+      onClick={open}
+      className={cn("cv2-boton", bloque && "cv2-boton--bloque", className)}
+    >
+      <span className="cv2-boton__texto">{children}</span>
+    </button>
+  );
+}

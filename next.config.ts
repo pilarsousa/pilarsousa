@@ -21,15 +21,17 @@ const nextConfig: NextConfig = {
        para sustituir una ruta que ya existe. */
     return {
       beforeFiles: [
-        /* URL pública de la masterclass y su confirmación. Los componentes
-           siguen en cientifico-v3; el visitante conserva /registro. */
+        /* URL pública del Seminario de Neurometafísica y su confirmación.
+           Los componentes viven en neurometafisica-v1; el visitante conserva
+           /registro. La versión anterior de /registro (la masterclass) vive
+           en /metafisica-v2 como respaldo. */
         {
           source: "/registro",
-          destination: "/cientifico-v3",
+          destination: "/neurometafisica-v1",
         },
         {
           source: "/registro/gracias",
-          destination: "/cientifico-v3/gracias",
+          destination: "/neurometafisica-v1/gracias",
         },
 
       /* En el dominio de pauta la raíz sirve la landing de LISTA DE ESPERA de
@@ -97,15 +99,42 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
-      /* Conserva los enlaces ya compartidos y sus parámetros de campaña. */
+      /* /registro es la única URL pública del seminario: la interna
+         (/neurometafisica-v1) lleva ahí, con sus parámetros de campaña.
+         /metafisica-v2 (la masterclass que estaba antes en /registro) NO
+         redirige: sigue accesible como respaldo, con noindex. */
       {
-        source: "/cientifico-v3",
+        source: "/neurometafisica-v1",
         destination: "/registro",
         permanent: false,
       },
       {
-        source: "/cientifico-v3/gracias",
+        source: "/neurometafisica-v1/gracias",
         destination: "/registro/gracias",
+        permanent: false,
+      },
+
+      /* Nombres anteriores (cientifico-v2 y cientifico-v3): llevan cada uno
+         a su landing con el nombre nuevo, así ningún enlace ya compartido
+         termina en un 404. */
+      {
+        source: "/cientifico-v2",
+        destination: "/registro",
+        permanent: false,
+      },
+      {
+        source: "/cientifico-v2/gracias",
+        destination: "/registro/gracias",
+        permanent: false,
+      },
+      {
+        source: "/cientifico-v3",
+        destination: "/metafisica-v2",
+        permanent: false,
+      },
+      {
+        source: "/cientifico-v3/gracias",
+        destination: "/metafisica-v2/gracias",
         permanent: false,
       },
 

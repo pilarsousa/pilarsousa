@@ -136,12 +136,12 @@ const jost = localFont({
   display: "swap",
 });
 
-// ---- Científico V3 ----
+// ---- Metafísica v2 ----
 
-/* Anotaciones a mano sobre las fotos y el fondo de /cientifico-v3 (el
+/* Anotaciones a mano sobre las fotos y el fondo de /metafisica-v2 (el
    "Confianza F1 → F2" de la referencia). Marcador, no caligrafía.
    preload: false en las dos de este bloque: el layout raíz cubre todas las
-   rutas y sólo /cientifico-v3 las usa; sin esto se precargarían en todas. */
+   rutas y sólo /metafisica-v2 las usa; sin esto se precargarían en todas. */
 const caveat = Caveat({
   variable: "--font-caveat",
   subsets: ["latin"],
@@ -150,7 +150,7 @@ const caveat = Caveat({
   preload: false,
 });
 
-/* Firma de Pilar en /cientifico-v3. */
+/* Firma de Pilar en /metafisica-v2. */
 const firma = Mrs_Saint_Delafield({
   variable: "--font-firma",
   subsets: ["latin"],
