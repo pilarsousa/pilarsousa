@@ -330,6 +330,24 @@
   width: 100%;
 }
 
+/* Ancho: en mobile ocupa toda la columna en todos los usos (también el del
+   cierre, que no pasa `bloque`); desde 640px tiene un mínimo más generoso que
+   el texto solo. min(100%, …): en un contenedor angosto, como el modal, nunca
+   se sale. */
+@media (max-width: 639.98px) {
+  .cv2-boton {
+    display: flex;
+    width: 100%;
+  }
+}
+
+@media (min-width: 640px) {
+  .cv2-boton {
+    min-width: min(100%, 23rem);
+    padding-inline: 3.4rem;
+  }
+}
+
 @keyframes cv2-boton-respira {
   0%,
   100% {
