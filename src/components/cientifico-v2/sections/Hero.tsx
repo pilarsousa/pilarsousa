@@ -1,4 +1,4 @@
-import { getImageProps } from "next/image";
+import Image, { getImageProps } from "next/image";
 import { Contenedor } from "@/components/cientifico-v2/ui/Contenedor";
 import { BarraSuperior } from "@/components/cientifico-v2/ui/BarraSuperior";
 import { Contador } from "@/components/cientifico-v2/ui/Contador";
@@ -10,6 +10,8 @@ import { HERO } from "@/components/cientifico-v2/content";
 import { horarios } from "@/components/cientifico-v2/horario";
 import heroEscritorio from "@/../public/cientifico-v2/hero/hero-section-2.jpg";
 import heroMovil from "@/../public/cientifico-v2/hero/herosection2-mobile.jpg";
+import efectoLuz from "@/../public/cientifico-v2/hero/efecto-luz.png";
+import efectoLuzMovil from "@/../public/cientifico-v2/hero/efecto-luz-mobile.png";
 
 /*
   Foto del hero con dos encuadres: la panorámica (Pilar a la derecha, aire a
@@ -52,6 +54,42 @@ function FotoHero() {
   );
 }
 
+/*
+  El impulso nervioso sobre Pilar (ver "EFECTO LUZ" en cientifico-v2.css).
+  Dos capas (halo y pulso) con el mismo encuadre que su foto, así el cerebro
+  y la columna calzan justo encima de los de Pilar:
+  - escritorio: efecto-luz.png (1920 × 750) sobre la panorámica, 50% 40%;
+  - mobile: efecto-luz-mobile.png (960 × 1500) sobre la vertical, arriba.
+  Cada juego se oculta en el otro ancho; las imágenes ocultas con
+  loading="lazy" no se descargan. En mobile la columna ocupa sólo la mitad
+  de arriba, así que el pulso tiene su propio recorrido (.cv2-luz--movil).
+*/
+function EfectoLuz() {
+  const juegos = [
+    { src: efectoLuzMovil, clase: "object-cover object-top cv2-luz--movil", caja: "lg:hidden" },
+    { src: efectoLuz, clase: "object-cover object-[50%_40%]", caja: "hidden lg:block" },
+  ];
+  return (
+    <>
+      {juegos.map(({ src, clase, caja }) => (
+        <div key={src.src} aria-hidden className={`absolute inset-0 ${caja}`}>
+          {(["halo", "pulso"] as const).map((tipo) => (
+            <Image
+              key={tipo}
+              src={src}
+              alt=""
+              fill
+              sizes="100vw"
+              quality={90}
+              className={`cv2-luz cv2-luz--${tipo} ${clase}`}
+            />
+          ))}
+        </div>
+      ))}
+    </>
+  );
+}
+
 /**
  * Bloque 1 · Hero. Objetivo del brief: que en 5 segundos se entienda qué es,
  * para quién y cuándo. Antetítulo con la fecha, "NEUROMETAFÍSICA" como
@@ -87,6 +125,7 @@ export function Hero() {
         <div className="absolute inset-x-0 top-[60px] h-[156.25vw] lg:top-0 lg:h-[860px]">
           <div className="cv2-hero-foto absolute inset-0">
             <FotoHero />
+            <EfectoLuz />
             {/* Velo de legibilidad, sólo mobile: nada sobre Pilar; arranca en
                 su cintura, donde empieza el fundido de la foto, y lo lleva al
                 verde pizarra para que el texto caiga sobre oscuro. En desktop

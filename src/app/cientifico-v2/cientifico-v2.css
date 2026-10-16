@@ -1282,3 +1282,125 @@
 }
 
 } /* @layer components — el aula */
+
+/*
+  ==========================================================================
+  EFECTO LUZ DEL HERO — el impulso nervioso
+  ==========================================================================
+  efecto-luz.png es el cerebro y la columna recortados de la foto del hero
+  (mismo 1920 × 750, fondo transparente), así que calza encima de Pilar con
+  el mismo encuadre y el efecto sólo toca esa pieza. Tres capas de la misma
+  imagen (el navegador la baja una vez); van dos:
+
+  - (sin capa base: la foto ya trae la red; sumarla otra vez en screen la
+    sobreexponía y el cerebro quedaba como una mancha)
+  - __halo:  la misma red difuminada y sobreexpuesta: el bloom. Su filtro es
+             fijo y sólo anima la opacidad, que es barato.
+  - __pulso: la red muy encendida, recortada por una franja de máscara que la
+             recorre de arriba abajo: el destello que nace en el cerebro y
+             baja por la columna. El halo llega a su pico cuando el pulso pasa
+             por el cerebro (≈18% del ciclo).
+
+  screen: la luz suma sobre la foto en vez de taparla.
+*/
+@layer components {
+
+.cv2-luz {
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.cv2-luz--halo {
+  filter: blur(5px) brightness(1.5) saturate(1.3);
+  opacity: 0.2;
+  animation: cv2-luz-respira 4.6s ease-in-out infinite;
+}
+
+.cv2-luz--pulso {
+  filter: brightness(2.4) saturate(1.15) drop-shadow(0 0 6px #fff1c2);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 42%, #000 48%, #000 52%, transparent 58%);
+  mask-image: linear-gradient(to bottom, transparent 42%, #000 48%, #000 52%, transparent 58%);
+  -webkit-mask-size: 100% 260%;
+  mask-size: 100% 260%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  animation: cv2-luz-pulso 4.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@keyframes cv2-luz-respira {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  18% {
+    opacity: 0.75;
+  }
+  45% {
+    opacity: 0.35;
+  }
+}
+
+/* Con la máscara a 260% de alto, 100% deja la franja por encima de la foto
+   y 0% por debajo: de 100% a 0% el pulso baja. */
+@keyframes cv2-luz-pulso {
+  0% {
+    -webkit-mask-position: 0 100%;
+    mask-position: 0 100%;
+    opacity: 0;
+  }
+  6% {
+    opacity: 1;
+  }
+  70% {
+    -webkit-mask-position: 0 0%;
+    mask-position: 0 0%;
+    opacity: 1;
+  }
+  76%,
+  100% {
+    -webkit-mask-position: 0 0%;
+    mask-position: 0 0%;
+    opacity: 0;
+  }
+}
+
+/* Mobile: la columna llega sólo hasta la mitad de la foto vertical. Con la
+   misma máscara, la franja arranca un poco más abajo (90%) y termina en la
+   cintura (47%) en vez de recorrer la foto entera. */
+.cv2-luz--pulso.cv2-luz--movil {
+  animation-name: cv2-luz-pulso-movil;
+}
+
+@keyframes cv2-luz-pulso-movil {
+  0% {
+    -webkit-mask-position: 0 90%;
+    mask-position: 0 90%;
+    opacity: 0;
+  }
+  6% {
+    opacity: 1;
+  }
+  70% {
+    -webkit-mask-position: 0 47%;
+    mask-position: 0 47%;
+    opacity: 1;
+  }
+  76%,
+  100% {
+    -webkit-mask-position: 0 47%;
+    mask-position: 0 47%;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cv2-luz--halo {
+    animation: none;
+    opacity: 0.4;
+  }
+  .cv2-luz--pulso {
+    display: none;
+  }
+}
+
+} /* @layer components — efecto luz */
