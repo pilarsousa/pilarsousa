@@ -37,7 +37,12 @@ export function TeLlevas() {
         <ul className="mt-12 grid gap-8 lg:grid-cols-3 lg:gap-10">
           {TE_LLEVAS.items.map((texto, i) => (
             <li key={texto}>
-              <Reveal delay={0.08 * i} className="flex gap-4 border-t border-(--cv2-oro)/25 pt-6">
+              {/* PC: también una línea abajo, como la de arriba. h-full: las
+                  tres columnas miden lo mismo y las líneas quedan parejas. */}
+              <Reveal
+                delay={0.08 * i}
+                className="flex gap-4 border-t border-(--cv2-oro)/25 pt-6 lg:h-full lg:border-b lg:pb-8"
+              >
                 <TildeTiza retraso={0.15 * i} />
                 <p className="text-lg leading-relaxed text-foreground sm:text-xl">
                   <Destacado texto={texto} />

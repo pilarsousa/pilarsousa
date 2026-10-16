@@ -5,8 +5,8 @@ import { CTA } from "@/components/cientifico-v2/content";
 import { useReservaModal } from "@/components/cientifico-v2/ui/ReservaModal";
 
 /**
- * El botón principal con forma de entrada (ver .cv2-boton en
- * cientifico-v2.css). Siempre abre el modal de registro.
+ * El botón principal: la hoja de oro con el texto en Cinzel (ver .cv2-boton
+ * en cientifico-v2.css). Siempre abre el modal de registro.
  */
 export function BotonEntrada({
   children = CTA,
@@ -26,7 +26,7 @@ export function BotonEntrada({
       onClick={open}
       className={cn("cv2-boton", bloque && "cv2-boton--bloque", className)}
     >
-      <span className="cv2-boton__billete">{children}</span>
+      <span className="cv2-boton__texto">{children}</span>
     </button>
   );
 }

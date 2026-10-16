@@ -24,7 +24,7 @@ export function Llamado({
       )}
     >
       <BotonEntrada bloque className="sm:w-auto" />
-      {nota && <p className="text-base font-semibold text-foreground/85">{nota}</p>}
+      {nota && <p className="text-[0.8125rem] font-semibold tracking-[0.04em] text-foreground/70">{nota}</p>}
     </div>
   );
 }

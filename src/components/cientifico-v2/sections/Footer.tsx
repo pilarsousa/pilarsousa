@@ -4,10 +4,7 @@ import { Separador } from "@/components/cientifico-v2/ui/Separador";
 function Legal() {
   return (
     <div>
-      <p className="mx-auto max-w-[420px] text-[0.8125rem] leading-snug text-foreground/75">
-        Este sitio no forma parte ni está respaldado por Meta. Facebook es una marca comercial de Meta Platforms, Inc.
-      </p>
-      <p className="mt-5 text-[0.9375rem] text-foreground/75">
+      <p className="text-[0.9375rem] text-foreground/75">
         Pilar Sousa® · Todos los derechos reservados {new Date().getFullYear()}
       </p>
     </div>
@@ -15,13 +12,13 @@ function Legal() {
 }
 
 /**
- * Footer de la referencia: brillo Cosmos desde abajo, wordmark, aviso de Meta
- * y derechos. Sin enlaces legales: el sitio no tiene esas páginas y un enlace
- * a un 404 es peor que ninguno.
+ * Footer de la referencia: brillo Cosmos desde abajo, wordmark y derechos.
+ * Sin enlaces legales: el sitio no tiene esas páginas y un enlace a un 404
+ * es peor que ninguno.
  *
- * Con `despedida` (la gracias) pasa a dos columnas en PC: aviso y derechos
- * a la izquierda, despedida a la derecha. En mobile se apilan con un
- * separador entre la despedida y el aviso.
+ * Con `despedida` (la gracias) pasa a dos columnas en PC: derechos a la
+ * izquierda, despedida a la derecha. En mobile se apilan con un separador
+ * entre la despedida y los derechos.
  */
 export function Footer({ despedida }: { despedida?: React.ReactNode }) {
   if (!despedida) {

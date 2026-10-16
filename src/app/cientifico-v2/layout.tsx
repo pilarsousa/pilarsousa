@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ReservaModalProvider } from "@/components/cientifico-v2/ui/ReservaModal";
+import { ScrollSuave } from "@/components/cientifico-v2/ui/ScrollSuave";
 import "./cientifico-v2.css";
 
 /*
@@ -44,6 +45,7 @@ export default function CientificoV2Layout({
        100% no resuelve y en páginas cortas (la gracias) asomaba el fondo del
        body debajo. */
     <div className="cv2-scope min-h-svh overflow-x-clip bg-background text-foreground antialiased">
+      <ScrollSuave />
       <ReservaModalProvider>{children}</ReservaModalProvider>
     </div>
   );

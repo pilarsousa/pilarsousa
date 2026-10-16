@@ -1,13 +1,13 @@
 import Image, { getImageProps } from "next/image";
+import { CalendarDays, Mic, Users } from "lucide-react";
 import { Contenedor } from "@/components/cientifico-v2/ui/Contenedor";
 import { BarraSuperior } from "@/components/cientifico-v2/ui/BarraSuperior";
 import { Contador } from "@/components/cientifico-v2/ui/Contador";
 import { Wordmark } from "@/components/cientifico-v2/ui/Wordmark";
 import { Llamado } from "@/components/cientifico-v2/ui/Llamado";
-import { Sello } from "@/components/cientifico-v2/ui/Sello";
+import { CintaHorarios } from "@/components/cientifico-v2/ui/CintaHorarios";
 import { Reveal } from "@/components/cientifico-v2/ui/Reveal";
 import { HERO } from "@/components/cientifico-v2/content";
-import { horarios } from "@/components/cientifico-v2/horario";
 import heroEscritorio from "@/../public/cientifico-v2/hero/hero-section-2.jpg";
 import heroMovil from "@/../public/cientifico-v2/hero/herosection2-mobile.jpg";
 import efectoLuz from "@/../public/cientifico-v2/hero/efecto-luz.png";
@@ -90,24 +90,51 @@ function EfectoLuz() {
   );
 }
 
+/* Ficha de arriba del título: una cajita como las del contador, con su ícono.
+   Mobile en vw, como la barra: dos por fila desde 320px. */
+function Ficha({ icono, children }: { icono: React.ReactNode; children: React.ReactNode }) {
+  return (
+    <li className="flex items-center gap-[clamp(5px,1.5vw,8px)] rounded-md border border-[rgb(233_196_106/0.3)] bg-[rgb(23_50_38/0.8)] px-[clamp(6px,2.2vw,10px)] py-1.5 text-[clamp(0.55rem,2.8vw,0.7rem)] font-bold uppercase leading-none tracking-[0.1em] text-foreground/90 backdrop-blur-sm sm:px-2.5 sm:text-xs sm:tracking-[0.12em]">
+      {icono}
+      {children}
+    </li>
+  );
+}
+
+/* El punto rojo de "en directo", con su latido. */
+function PuntoDirecto() {
+  return (
+    <span aria-hidden className="relative flex size-[0.75em] shrink-0">
+      <span className="absolute inset-0 animate-ping rounded-full bg-[#e5484d] opacity-60 motion-reduce:hidden" />
+      <span className="relative size-full rounded-full bg-[#e5484d]" />
+    </span>
+  );
+}
+
+/* La ✦ de la casa (la del Separador y el marquee). */
+function Estrella() {
+  return (
+    <svg viewBox="59 2 14 14" aria-hidden className="size-2.5 shrink-0">
+      <path
+        d="M66 2 C66.9 6.6 68.4 8.1 73 9 C68.4 9.9 66.9 11.4 66 16 C65.1 11.4 63.6 9.9 59 9 C63.6 8.1 65.1 6.6 66 2 Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
 /**
  * Bloque 1 · Hero. Objetivo del brief: que en 5 segundos se entienda qué es,
- * para quién y cuándo. Antetítulo con la fecha, "NEUROMETAFÍSICA" como
- * inscripción en oro, subtítulo, apoyo, el botón y, debajo, el directo con
- * la hora en España, México y Argentina (los tres países con más público).
+ * para quién y cuándo. Fichas con el directo, la fecha, Pilar y el cupo;
+ * "NEUROMETAFÍSICA" como inscripción en oro con un brillo que la recorre;
+ * subtítulo, apoyo, el botón y, debajo, la cinta con la hora en cada país.
  *
- * El sello "Seminario oficial" va al lado del antetítulo, como el lacre de
- * un programa académico.
+ * Bajo el título, "Seminario oficial · MMXXVI" entre dos filetes, como la
+ * línea que acompaña el nombre en un diploma: lo que antes era el sello.
  */
 export function Hero() {
-  const [espana, mexico, argentina] = horarios();
-  const bajoBoton = [
-    HERO.bajoBotonInicio,
-    `${espana.hora} ${espana.pais}`,
-    `${mexico.hora} ${mexico.pais}`,
-    `${argentina.hora} ${argentina.pais}`,
-    HERO.bajoBotonFin,
-  ].join(" · ");
+  const { fichas } = HERO;
+  const icono = "size-[1.25em] shrink-0 text-(--cv2-oro)";
 
   return (
     /* lg:min-h: la foto mide 860 y el fondo recorta a la sección; más baja,
@@ -133,6 +160,15 @@ export function Hero() {
             <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,transparent_40%,rgb(18_41_31/0.6)_47%,rgb(18_41_31/0.9)_55%,rgb(18_41_31/0.96)_100%)] lg:bg-none" />
           </div>
         </div>
+        {/* Mobile: los 60px que la foto baja quedaban verdes y se veían en las
+            esquinas de la barra, por debajo de su línea. Los llena la misma
+            foto reflejada desde su borde de arriba: sólo asoma ahí; arriba de
+            la línea va la franja verde de la barra y el centro lo tapa ella. */}
+        <div aria-hidden className="absolute inset-x-0 top-0 h-[60px] overflow-hidden lg:hidden">
+          <div className="absolute inset-x-0 top-[60px] h-[156.25vw] origin-top -scale-y-100">
+            <FotoHero />
+          </div>
+        </div>
       </div>
 
       {/* Una fila: marca a la izquierda y contador a la derecha. En mobile los
@@ -148,26 +184,34 @@ export function Hero() {
           foto, más los 60px que baja), donde la foto ya se funde al verde. */}
       <Contenedor className="pt-[calc(74vw+60px)] pb-16 lg:pt-[150px] lg:pb-16">
         <div className="relative lg:max-w-[600px]">
-          {/* El sello, como lacre, al lado del antetítulo con el punto de directo. */}
-          <Reveal className="flex items-center gap-4">
-            <Sello className="w-[68px] shrink-0 sm:w-[84px] lg:w-[96px]" />
-            <p className="cv2-antetitulo text-[0.8rem] leading-relaxed before:hidden sm:text-[0.95rem]">
-              <span className="relative flex size-2.5 shrink-0">
-                <span className="absolute inset-0 animate-ping rounded-full bg-[#e5484d] opacity-60 motion-reduce:hidden" />
-                <span className="relative size-2.5 rounded-full bg-[#e5484d]" />
-              </span>
-              {HERO.antetitulo}
-            </p>
+          <Reveal>
+            {/* sm:max-w: en ancho también van dos por fila, como en mobile. */}
+            <ul className="flex flex-wrap gap-[clamp(5px,1.8vw,8px)] sm:max-w-[420px] sm:gap-2">
+              <Ficha icono={<PuntoDirecto />}>{fichas.directo}</Ficha>
+              <Ficha icono={<CalendarDays aria-hidden className={icono} />}>{fichas.fecha}</Ficha>
+              <Ficha icono={<Mic aria-hidden className={icono} />}>{fichas.con}</Ficha>
+              <Ficha icono={<Users aria-hidden className={icono} />}>{fichas.plazas}</Ficha>
+            </ul>
           </Reveal>
 
           <Reveal delay={0.1}>
-            <h1
-              id="hero-titulo"
-              className="cv2-titulo mt-5 text-[clamp(1.9rem,8.4vw,2.6rem)] font-bold leading-none tracking-[0.03em] drop-shadow-[0_0_24px_rgba(233,196,106,0.22)] sm:text-[3.4rem] lg:text-[3.55rem]"
-            >
-              <span className="cv2-grad-texto">{HERO.titulo}</span>
-            </h1>
-            <p className="mt-5 text-balance text-[1.375rem] font-semibold leading-snug text-foreground sm:text-[1.625rem]">
+            {/* w-fit: los filetes de la credencial miden lo mismo que el título. */}
+            <div className="mt-7 w-fit max-w-full">
+              <h1
+                id="hero-titulo"
+                className="cv2-titulo text-[clamp(1.9rem,8.4vw,2.6rem)] font-bold leading-none tracking-[0.03em] drop-shadow-[0_0_18px_rgba(233,196,106,0.4)] sm:text-[3.4rem] lg:text-[3.55rem]"
+              >
+                <span className="cv2-grad-texto cv2-brillo">{HERO.titulo}</span>
+              </h1>
+              <p className="mt-3 flex items-center gap-2.5 font-display text-[clamp(0.55rem,2.6vw,0.62rem)] font-bold uppercase tracking-[0.2em] text-(--cv2-oro-claro) sm:text-[0.72rem] sm:tracking-[0.28em]">
+                <span aria-hidden className="h-px flex-1 bg-linear-to-r from-transparent to-(--cv2-oro)" />
+                <Estrella />
+                <span className="shrink-0">{HERO.credencial}</span>
+                <Estrella />
+                <span aria-hidden className="h-px flex-1 bg-linear-to-l from-transparent to-(--cv2-oro)" />
+              </p>
+            </div>
+            <p className="cv2-grad-texto mt-6 text-balance text-[1.375rem] font-semibold leading-snug sm:text-[1.625rem]">
               {HERO.subtitulo}
             </p>
           </Reveal>
@@ -179,7 +223,8 @@ export function Hero() {
           </Reveal>
 
           <Reveal delay={0.3}>
-            <Llamado alineado="izquierda" className="mt-8" nota={bajoBoton} />
+            <Llamado alineado="izquierda" className="mt-8" nota={null} />
+            <CintaHorarios rotulo={HERO.horarios} className="mt-6 lg:max-w-[520px]" />
           </Reveal>
         </div>
       </Contenedor>

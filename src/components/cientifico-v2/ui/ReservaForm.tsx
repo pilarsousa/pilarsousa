@@ -54,8 +54,12 @@ export function ReservaForm({
   /** Etiqueta del lead en el CRM según la landing de origen. */
   source?: string;
   submitLabel?: string;
-  /** Se llama tras registrar, antes de navegar (el modal se cierra). */
-  onSuccess?: () => void;
+  /**
+   * Se llama tras registrar con el primer nombre de la persona: el modal lo
+   * usa para mostrar "Plaza confirmada" y navegar a la gracias. Sin él, el
+   * formulario muestra su aviso y navega solo.
+   */
+  onSuccess?: (nombre: string) => void;
 }) {
   const defaultCountry = useVisitorCountry();
   const router = useRouter();
@@ -125,12 +129,14 @@ export function ReservaForm({
         },
       });
 
-      // La confirmación se ve un momento y después se pasa a la gracias.
       setStatus("success");
-      setTimeout(() => {
-        onSuccess?.();
-        router.push("/cientifico-v2/gracias");
-      }, 1800);
+      if (onSuccess) {
+        /* "Plaza confirmada" con el nombre como lo escribió, sólo el primero. */
+        onSuccess(cleanName.split(/\s+/)[0] ?? "");
+      } else {
+        // La confirmación se ve un momento y después se pasa a la gracias.
+        setTimeout(() => router.push("/cientifico-v2/gracias"), 1800);
+      }
     } catch {
       setStatus("error");
     }
@@ -231,9 +237,7 @@ export function ReservaForm({
             disabled={status === "submitting"}
             className="cv2-boton cv2-boton--bloque disabled:cursor-wait disabled:opacity-70"
           >
-            <span className="cv2-boton__billete">
-              {status === "submitting" ? "Reservando…" : submitLabel}
-            </span>
+            <span className="cv2-boton__texto">{status === "submitting" ? "Reservando…" : submitLabel}</span>
           </button>
         )}
       </div>
