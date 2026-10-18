@@ -6,11 +6,13 @@ import { Firma } from "@/components/neurometafisica-v1/ui/Firma";
 import { Anotacion } from "@/components/neurometafisica-v1/ui/Anotacion";
 import { Reveal } from "@/components/neurometafisica-v1/ui/Reveal";
 import { PILAR } from "@/components/neurometafisica-v1/content";
-import fotoPizarron from "@/../public/neurometafisica-v1/carpetas/img-pizarron.jpeg";
+import fotoPilar from "@/../public/neurometafisica-v1/pilarsousa.jpg";
+import luzPilar from "@/../public/neurometafisica-v1/efecto-luz-pilarsousa.png";
 
 /**
- * Bloque 8 · Quién es Pilar Sousa. La foto que pide el brief (enseñando en
- * la pizarra, no posando), en un marco con esquinas de oro. Al lado, su
+ * Bloque 8 · Quién es Pilar Sousa. Pilar leyendo en el aula, con su sistema
+ * nervioso encendido, en un marco con esquinas de oro: encima va el mismo
+ * impulso de luz del hero (ver "EFECTO LUZ" en el CSS). Al lado, su
  * historia contada por ella, para que se conecte con la persona y no con
  * un currículum, y al pie su firma, que se escribe sola.
  *
@@ -34,26 +36,38 @@ export function SobrePilar() {
           el medio de la columna. */}
       <Contenedor className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:gap-16">
         <Reveal className="lg:sticky lg:top-24">
-          {/* La foto es apaisada (Pilar a la derecha, la pizarra a la
-              izquierda): el recorte vertical se queda con ella y con la mano
-              de la tiza. */}
           {/* El marco dibuja sus esquinas por fuera: el recorte va adentro. */}
           <div className="cv2-marco">
-            {/* sizes es el ancho que la foto DIBUJA, no el del marco: al ser
-                apaisada (16:9) en un marco 4:5, object-cover la escala por la
-                altura y queda 2,2 veces más ancha que el marco (~1.050px en
-                escritorio, ~200vw en mobile). Con el ancho del marco el
-                navegador bajaba una versión chica y la estiraba: se veía
-                pixelada. quality 90: es un retrato grande, la cara se nota. */}
+            {/* La foto (1122 × 1402) ya es 4:5, como el marco: entra entera,
+                y sizes es el ancho del marco (~460px en escritorio, el
+                ancho de la pantalla en mobile). quality 90: es un retrato
+                grande, la cara se nota. */}
             <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[12px]">
               <Image
-                src={fotoPizarron}
+                src={fotoPilar}
                 alt={PILAR.foto}
                 fill
-                sizes="(min-width: 1024px) 1050px, 200vw"
+                sizes="(min-width: 1024px) 460px, 100vw"
                 quality={90}
-                className="object-cover object-[72%_50%]"
+                className="object-cover"
               />
+              {/* El impulso nervioso: el cerebro y la columna recortados de
+                  la misma foto (mismo tamaño, fondo transparente), en halo y
+                  pulso como en el hero. El pulso tiene su propio recorrido
+                  (.cv2-luz--pilar): la columna termina a media foto. */}
+              <div aria-hidden className="absolute inset-0">
+                {(["halo", "pulso"] as const).map((tipo) => (
+                  <Image
+                    key={tipo}
+                    src={luzPilar}
+                    alt=""
+                    fill
+                    sizes="(min-width: 1024px) 460px, 100vw"
+                    quality={90}
+                    className={`cv2-luz cv2-luz--${tipo} cv2-luz--pilar object-cover`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </Reveal>

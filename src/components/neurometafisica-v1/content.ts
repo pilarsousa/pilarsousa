@@ -211,8 +211,8 @@ export const PILAR = {
   ],
   /* Bajo la firma, al pie de la historia. */
   firma: "Creadora de Volver al Origen",
-  /* Texto alternativo de la foto (carpetas/img-pizarron.jpeg). */
-  foto: "Pilar Sousa en el aula, con una tiza en la mano junto a la pizarra",
+  /* Texto alternativo de la foto (pilarsousa.jpg). */
+  foto: "Pilar Sousa leyendo un libro en el aula, con su sistema nervioso iluminado",
 };
 
 /* ── Bloque 9 · Prueba social ──

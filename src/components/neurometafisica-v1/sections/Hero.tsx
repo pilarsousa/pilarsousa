@@ -217,9 +217,9 @@ export function Hero() {
                 <span aria-hidden className="h-px flex-1 bg-linear-to-l from-transparent to-(--cv2-oro)" />
               </p>
             </div>
-            {/* La promesa: el degradado va en el párrafo y las partes
-                [marcadas] en negrita, que heredan el degradado. */}
-            <p className="cv2-grad-texto mt-4 text-balance text-[1.3rem] sm:mt-6 font-medium leading-snug sm:text-[1.625rem]">
+            {/* La promesa: blanca con la franja dorada que la recorre, en el
+                párrafo; las partes [marcadas] van en negrita y la heredan. */}
+            <p className="cv2-promesa cv2-brillo mt-4 text-balance text-[1.3rem] sm:mt-6 font-medium leading-snug sm:text-[1.625rem]">
               <Destacado texto={HERO.subtitulo} claseDestacado="font-extrabold" />
             </p>
           </Reveal>

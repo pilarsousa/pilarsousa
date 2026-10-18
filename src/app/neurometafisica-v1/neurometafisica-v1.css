@@ -106,6 +106,20 @@
   }
 }
 
+/*
+  La promesa del hero: blanco puro, para que se despegue del oro del título,
+  y la misma franja de luz pero dorada, con el ritmo de .cv2-brillo (se usan
+  juntas: ésta pisa sus capas, aquélla pone la animación y su reduced-motion).
+*/
+.cv2-promesa {
+  background-image:
+    linear-gradient(105deg, transparent 44%, var(--cv2-oro-claro) 50%, transparent 56%),
+    linear-gradient(#fff, #fff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 .cv2-destacado {
   color: var(--cv2-destacado);
 }
@@ -1109,6 +1123,17 @@
 
 } /* @layer components */
 
+/* ---- Textos en celulares angostos — sin capa, para ganarle a las utilidades ----
+   Hasta 480px (celulares, grandes incluidos), text-balance iguala los
+   renglones y deja media línea vacía a la derecha: el párrafo se ve angosto
+   y largo. Ahí cada renglón se llena y pretty sólo cuida que la última
+   palabra no quede sola. */
+@media (max-width: 480px) {
+  .cv2-scope p.text-balance {
+    text-wrap: pretty;
+  }
+}
+
 /* ---- Formulario (modal) — sin capa, ver la cabecera ---- */
 
 .cv2-scope .mo-phone {
@@ -2078,6 +2103,36 @@
   100% {
     -webkit-mask-position: 0 47%;
     mask-position: 0 47%;
+    opacity: 0;
+  }
+}
+
+/* Sección de Pilar (efecto-luz-pilarsousa.png, 4:5): el cerebro está a
+   ~10% de la altura y la columna baja hasta ~60%. El centro de la franja
+   cae en (1,3 − 1,6 × posición) de la altura: 85% la deja justo encima del
+   cerebro y 42% al final de la columna. */
+.cv2-luz--pulso.cv2-luz--pilar {
+  animation-name: cv2-luz-pulso-pilar;
+}
+
+@keyframes cv2-luz-pulso-pilar {
+  0% {
+    -webkit-mask-position: 0 85%;
+    mask-position: 0 85%;
+    opacity: 0;
+  }
+  6% {
+    opacity: 1;
+  }
+  70% {
+    -webkit-mask-position: 0 42%;
+    mask-position: 0 42%;
+    opacity: 1;
+  }
+  76%,
+  100% {
+    -webkit-mask-position: 0 42%;
+    mask-position: 0 42%;
     opacity: 0;
   }
 }
