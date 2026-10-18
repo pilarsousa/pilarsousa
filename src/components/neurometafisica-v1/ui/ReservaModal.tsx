@@ -27,7 +27,16 @@ export function useReservaModal() {
   return ctx;
 }
 
-const GRACIAS = "/neurometafisica-v1/gracias";
+/* La URL PÚBLICA de la gracias: /registro/gracias es un rewrite de
+   /neurometafisica-v1/gracias (next.config.ts). Navegar a la interna pasaría
+   por un redirect de más. */
+const GRACIAS = "/registro/gracias";
+
+/* Si estamos en la gracias. usePathname devuelve la URL que ve el navegador
+   (/registro/gracias, no la interna), así que no se compara contra una ruta
+   fija: cualquier /gracias de esta landing sirve. Comparar contra la interna
+   dejaba "Plaza confirmada" tapando la gracias para siempre. */
+const esGracias = (ruta: string | null) => Boolean(ruta?.endsWith("/gracias"));
 
 /** Lo que se ve "Plaza confirmada" antes de ir a la gracias. */
 const ESPERA_CONFIRMACION = 2900;
@@ -62,7 +71,7 @@ export function ReservaModalProvider({ children }: { children: React.ReactNode }
   );
 
   /* Ya en la gracias: se desvanece (0,7s, .cv2-confirmacion) y se desmonta. */
-  const enGracias = pathname === GRACIAS;
+  const enGracias = esGracias(pathname);
   useEffect(() => {
     if (!enGracias) return;
     const salir = setTimeout(() => setConfirmada((c) => c && { ...c, saliendo: true }), 150);
