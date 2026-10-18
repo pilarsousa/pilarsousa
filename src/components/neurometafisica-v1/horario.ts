@@ -43,7 +43,7 @@ export function instanteEvento(): number {
   return ingenuo - desfaseZona(new Date(ingenuo), ZONA_HORARIA);
 }
 
-/** "19:00 h" en la zona dada. */
+/** "18:00 hs" en la zona dada. */
 export function horaEn(zona: string): string {
   const hora = new Intl.DateTimeFormat("es-ES", {
     timeZone: zona,
@@ -51,7 +51,7 @@ export function horaEn(zona: string): string {
     minute: "2-digit",
     hour12: false,
   }).format(new Date(instanteEvento()));
-  return `${hora} h`;
+  return `${hora} hs`;
 }
 
 /** "sáb 17 oct." en la zona dada: en América puede caer otro día. */

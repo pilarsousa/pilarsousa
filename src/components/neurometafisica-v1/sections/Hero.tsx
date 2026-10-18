@@ -158,7 +158,7 @@ export function Hero() {
                 su cintura, donde empieza el fundido de la foto, y lo lleva al
                 verde pizarra para que el texto caiga sobre oscuro. En desktop
                 lo hace la máscara (.cv2-hero-foto), sólo a la izquierda. */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,transparent_40%,rgb(18_41_31/0.6)_47%,rgb(18_41_31/0.9)_55%,rgb(18_41_31/0.96)_100%)] lg:bg-none" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,transparent_35%,rgb(18_41_31/0.6)_42%,rgb(18_41_31/0.9)_50%,rgb(18_41_31/0.96)_100%)] lg:bg-none" />
           </div>
         </div>
         {/* Mobile: los 60px que la foto baja quedaban verdes y se veían en las
@@ -181,9 +181,12 @@ export function Hero() {
         </div>
       </BarraSuperior>
 
-      {/* pt mobile: arranca justo debajo del cinturón de Pilar (~71vw de la
-          foto, más los 60px que baja), donde la foto ya se funde al verde. */}
-      <Contenedor className="pt-[calc(74vw+60px)] pb-16 lg:pt-[150px] lg:pb-16">
+      {/* pt mobile: arranca a la altura del cinturón de Pilar (66vw de la
+          foto, más los 60px que baja), donde el velo ya la funde al verde. Más
+          arriba que eso, el texto pisa sus manos. Con el resto de los
+          márgenes ajustados, el botón entra en la primera pantalla de un
+          celular de ~390 × 800. */}
+      <Contenedor className="pt-[calc(66vw+60px)] pb-16 lg:pt-[150px] lg:pb-16">
         {/* lg:max-w 540: la columna termina antes de la ventana iluminada de
             la foto (~48% del ancho), donde la sombra ya no alcanza. */}
         <div className="relative lg:max-w-[540px]">
@@ -199,14 +202,14 @@ export function Hero() {
 
           <Reveal delay={0.1}>
             {/* w-fit: los filetes de la credencial miden lo mismo que el título. */}
-            <div className="mt-7 w-fit max-w-full">
+            <div className="mt-5 w-fit max-w-full sm:mt-7">
               <h1
                 id="hero-titulo"
-                className="cv2-titulo text-[clamp(1.9rem,8.4vw,2.6rem)] font-bold leading-none tracking-[0.03em] drop-shadow-[0_0_18px_rgba(233,196,106,0.4)] sm:text-[3.4rem] lg:text-[3.15rem]"
+                className="cv2-titulo text-[clamp(1.65rem,7.4vw,2.6rem)] font-bold leading-none tracking-[0.03em] drop-shadow-[0_0_18px_rgba(233,196,106,0.4)] sm:text-[3.4rem] lg:text-[3.15rem]"
               >
                 <span className="cv2-grad-texto cv2-brillo">{HERO.titulo}</span>
               </h1>
-              <p className="mt-3 flex items-center gap-2.5 font-display text-[clamp(0.55rem,2.6vw,0.62rem)] font-bold uppercase tracking-[0.2em] text-(--cv2-oro-claro) sm:text-[0.72rem] sm:tracking-[0.28em]">
+              <p className="mt-2 flex items-center gap-2.5 font-display sm:mt-3 text-[clamp(0.55rem,2.6vw,0.62rem)] font-bold uppercase tracking-[0.2em] text-(--cv2-oro-claro) sm:text-[0.72rem] sm:tracking-[0.28em]">
                 <span aria-hidden className="h-px flex-1 bg-linear-to-r from-transparent to-(--cv2-oro)" />
                 <Estrella />
                 <span className="shrink-0">{HERO.credencial}</span>
@@ -216,7 +219,7 @@ export function Hero() {
             </div>
             {/* La promesa: el degradado va en el párrafo y las partes
                 [marcadas] en negrita, que heredan el degradado. */}
-            <p className="cv2-grad-texto mt-6 text-balance text-[1.375rem] font-medium leading-snug sm:text-[1.625rem]">
+            <p className="cv2-grad-texto mt-4 text-balance text-[1.3rem] sm:mt-6 font-medium leading-snug sm:text-[1.625rem]">
               <Destacado texto={HERO.subtitulo} claseDestacado="font-extrabold" />
             </p>
           </Reveal>
@@ -225,13 +228,13 @@ export function Hero() {
             {/* text-balance: renglones parejos, sin "la" colgando ni un último
                 renglón corto. La sombra oscura lo despega de las zonas claras
                 de la foto. */}
-            <p className="mt-6 text-balance border-l-2 border-(--cv2-oro) pl-4 text-lg font-medium leading-relaxed text-foreground/95 [text-shadow:0_2px_14px_rgb(10_26_19/0.85)] sm:text-xl">
+            <p className="mt-4 text-balance border-l-2 border-(--cv2-oro) pl-4 text-[1.0625rem] sm:mt-6 font-medium leading-relaxed text-foreground/95 [text-shadow:0_2px_14px_rgb(10_26_19/0.85)] sm:text-xl">
               <Destacado texto={HERO.apoyo} claseDestacado="font-extrabold text-foreground" />
             </p>
           </Reveal>
 
           <Reveal delay={0.3}>
-            <Llamado alineado="izquierda" className="mt-8" nota={null} />
+            <Llamado alineado="izquierda" className="mt-6 sm:mt-8" nota={null} />
             <CintaHorarios rotulo={HERO.horarios} className="mt-6 lg:max-w-[520px]" />
           </Reveal>
         </div>

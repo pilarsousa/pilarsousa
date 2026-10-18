@@ -12,18 +12,18 @@
 */
 
 /* ── Evento ──
-   Domingo 25 de octubre de 2026, 19:00 h de España. FECHA_EVENTO manda: la
+   Domingo 25 de octubre de 2026, 18:00 h de España. FECHA_EVENTO manda: la
    cuenta atrás y la tabla de horarios por país se calculan desde aquí, así
    que basta con cambiarla. FECHA_CORTA tiene que decir el mismo día.
 
-   Ese domingo Europa vuelve al horario de invierno (a las 3:00): las 19:00 de
-   Madrid son las 18:00 UTC, y las horas de América quedan una más que con una
-   fecha anterior (México 12:00, Argentina 15:00, Colombia 13:00, Chile 15:00).
-   horario.ts lo resuelve solo con Intl.
+   Ese domingo Europa vuelve al horario de invierno (a las 3:00): las 18:00 de
+   Madrid son las 17:00 UTC, y quedan México 11:00, Argentina 14:00, Colombia
+   12:00 y Chile 14:00. Ojo: con el horario de verano (hasta el 24) serían una
+   hora menos en América; horario.ts lo resuelve solo con Intl.
 
    ⚠️ El email de registro (plantilla de GHL) tiene la fecha y las horas
    escritas a mano: si cambia esto, cambiarlo también allí. */
-export const FECHA_EVENTO = { year: 2026, month: 10, day: 25, hour: 19, minute: 0 };
+export const FECHA_EVENTO = { year: 2026, month: 10, day: 25, hour: 18, minute: 0 };
 export const ZONA_HORARIA = "Europe/Madrid";
 export const FECHA_CORTA = "25 de octubre";
 
@@ -65,7 +65,7 @@ export const HERO = {
   /* La inscripción bajo el título: lo que decía el sello redondo. */
   credencial: "Seminario oficial · MMXXVI",
   /* Las partes entre [corchetes] van en negrita en el hero. */
-  subtitulo: "[Manifestar] una realidad distinta [es una ciencia exacta] como las matemáticas",
+  subtitulo: "[Manifestar] una realidad distinta, [es una ciencia exacta] como las matemáticas",
   apoyo:
     "Reprograma tu mente y sistema nervioso para convertirte en la persona [capaz de manifestar y sostener] la realidad que deseas.",
   /* Rótulo de la cinta de horarios, bajo el botón. */
@@ -196,18 +196,20 @@ export const NO_ES_PARA_TI = [
   "Quieres resultados sin cambiar quién eres.",
 ];
 
-/* ── Bloque 8 · Quién es Pilar Sousa ── */
+/* ── Bloque 8 · Quién es Pilar Sousa ──
+   Su historia en primera persona, la misma de /bootcamp-v2 (Pilar.tsx): es su
+   voz, va textual; sólo ella decide cómo se presenta. */
 export const PILAR = {
   antetitulo: "Tu profesora",
   titulo: "Quién es Pilar Sousa",
-  texto:
-    "Casi 10 años enseñando metafísica aplicada. Creadora de [Volver al Origen] y del [sistema de los 13 códigos].",
-  datos: [
-    { valor: "10", etiqueta: "años enseñando metafísica aplicada", prefijo: "Casi" },
-    { valor: "+600.000", etiqueta: "suscriptores" },
-    { valor: "13", etiqueta: "códigos de su sistema" },
+  historia: [
+    "Hubo un tiempo en el que me sentía perdida, sin un rumbo ni un objetivo claro en la vida.",
+    "No encontraba sentido a lo que hacía y sentía que algo importante me faltaba. Fue al adentrarme en el mundo de la espiritualidad cuando todo empezó a cambiar. Comprendí que la transformación que buscaba fuera tenía que empezar dentro de mí.",
+    "Ese camino me trajo una plenitud que no conocía: en lo personal y también en lo económico. Aprendí a confiar, a cuidar mi energía y a alinear mi vida con lo que de verdad quería.",
+    "Hoy vivo viajando por el mundo, dedicándome a lo que amo y acompañando a otras personas en su propio proceso. Ese es, para mí, el mayor regalo de todo este camino: poder devolver lo que aprendí.",
+    "De esa experiencia nace [Volver al Origen], la formación en la que comparto, paso a paso, las herramientas que me ayudaron a reencontrarme y a manifestar la realidad de mis sueños.",
   ],
-  /* Bajo la firma, en la cuarta credencial. */
+  /* Bajo la firma, al pie de la historia. */
   firma: "Creadora de Volver al Origen",
   /* Texto alternativo de la foto (carpetas/img-pizarron.jpeg). */
   foto: "Pilar Sousa en el aula, con una tiza en la mano junto a la pizarra",

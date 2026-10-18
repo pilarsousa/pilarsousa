@@ -2,10 +2,11 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import PhoneInput, { isValidPhoneNumber, type Country } from "react-phone-number-input";
+import PhoneInput, { getCountryCallingCode, isValidPhoneNumber, type Country } from "react-phone-number-input";
 /* Banderas empaquetadas: por defecto la librería las pide a un dominio de
    terceros y, si falla, el formulario se queda sin banderas. */
 import flags from "react-phone-number-input/flags";
+import es from "react-phone-number-input/locale/es.json";
 import "react-phone-number-input/style.css";
 import { cn } from "@/lib/cn";
 import { useVisitorCountry } from "@/lib/useVisitorCountry";
@@ -17,6 +18,26 @@ import { MODAL, SOURCE } from "@/components/neurometafisica-v1/content";
   conviene que diverja: /api/register, el evento lead_registered para GTM y la
   redirección a la gracias de esta versión.
 */
+
+/*
+  Prefijos: sólo el público del seminario, para que elegir sea rápido. España
+  y EEUU arriba, después los países de América de habla hispana (por nombre)
+  y, al final, "Otro país": la opción internacional de la librería, donde se
+  escribe cualquier prefijo a mano. Así nadie queda afuera por vivir en
+  otro lado. Si la geolocalización da un país que no está en la lista, el
+  campo arranca directamente en "Otro país".
+
+  Por eso el prefijo es editable (sin countryCallingCodeEditable={false}):
+  bloqueado, la librería no agrega la opción internacional. Si alguien borra
+  o cambia el prefijo, isValidPhoneNumber lo frena igual al enviar.
+*/
+const PAISES: Country[] = [
+  "ES", "US", "AR", "BO", "CL", "CO", "CR", "CU", "DO", "EC", "SV",
+  "GT", "HN", "MX", "NI", "PA", "PY", "PE", "PR", "UY", "VE",
+];
+const ORDEN_PAISES = ["ES", "US", "|", "...", "|", "🌐"] as const;
+const ETIQUETAS = { ...es, ZZ: "Otro país (escribe el prefijo)" };
+const PREFIJOS_LISTA = PAISES.map((pais) => getCountryCallingCode(pais));
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -66,6 +87,24 @@ export function ReservaForm({
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
+  /* "Otro país": la librería deja escrito el prefijo anterior (+34) y, al
+     seguir tecleando, vuelve a deducir ese país. Al elegirlo, el campo se
+     reinicia vacío (prop reset de la librería) y sin país por defecto,
+     listo para escribir "+39…".
+     onCountryChange también salta cuando el país se deduce de lo escrito
+     (al teclear "+39" queda sin país): sólo se limpia si el campo todavía
+     tiene el prefijo de un país de la lista, o sea, si lo eligieron en el
+     desplegable. */
+  const [otroPais, setOtroPais] = useState(0);
+  const elegirPais = (pais?: Country) => {
+    if (pais) return;
+    const escrito = (document.getElementById("cv2-telefono") as HTMLInputElement | null)?.value ?? "";
+    const digitos = escrito.replace(/\D/g, "");
+    if (!PREFIJOS_LISTA.some((prefijo) => digitos.startsWith(prefijo))) return;
+    setTelefono("");
+    setOtroPais((n) => n + 1);
+    requestAnimationFrame(() => document.getElementById("cv2-telefono")?.focus());
+  };
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<Status>("idle");
 
@@ -200,8 +239,13 @@ export function ReservaForm({
           name="telefono"
           international
           flags={flags}
-          countryCallingCodeEditable={false}
-          defaultCountry={defaultCountry as Country}
+          countries={PAISES}
+          countryOptionsOrder={[...ORDEN_PAISES]}
+          addInternationalOption
+          labels={ETIQUETAS}
+          reset={otroPais}
+          defaultCountry={otroPais ? undefined : (defaultCountry as Country)}
+          onCountryChange={elegirPais}
           autoComplete="tel"
           placeholder="600 000 000"
           value={telefono}
