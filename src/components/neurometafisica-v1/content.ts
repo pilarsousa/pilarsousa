@@ -12,13 +12,20 @@
 */
 
 /* ── Evento ──
-   ⚠️ FECHA PROVISIONAL: el brief no trae fecha ni hora todavía. Éstas son las
-   de la masterclass de la que salió esta landing. FECHA_EVENTO manda: la
+   Domingo 25 de octubre de 2026, 19:00 h de España. FECHA_EVENTO manda: la
    cuenta atrás y la tabla de horarios por país se calculan desde aquí, así
-   que basta con cambiarla. FECHA_CORTA tiene que decir el mismo día. */
-export const FECHA_EVENTO = { year: 2026, month: 10, day: 17, hour: 19, minute: 0 };
+   que basta con cambiarla. FECHA_CORTA tiene que decir el mismo día.
+
+   Ese domingo Europa vuelve al horario de invierno (a las 3:00): las 19:00 de
+   Madrid son las 18:00 UTC, y las horas de América quedan una más que con una
+   fecha anterior (México 12:00, Argentina 15:00, Colombia 13:00, Chile 15:00).
+   horario.ts lo resuelve solo con Intl.
+
+   ⚠️ El email de registro (plantilla de GHL) tiene la fecha y las horas
+   escritas a mano: si cambia esto, cambiarlo también allí. */
+export const FECHA_EVENTO = { year: 2026, month: 10, day: 25, hour: 19, minute: 0 };
 export const ZONA_HORARIA = "Europe/Madrid";
-export const FECHA_CORTA = "17 de octubre";
+export const FECHA_CORTA = "25 de octubre";
 
 /* Países del público (formulario del roadmap del Bootcamp: España 144,
    México 114, Argentina 57, Colombia 35, Chile 26). Los cinco van en la cinta
