@@ -1068,7 +1068,7 @@
    Mobile: la foto vertical lleva a Pilar arriba y su propio fundido abajo,
    donde va el texto; sólo se funde al pie (el velo del texto va en Hero.tsx).
    Desktop: la sombra va sólo del lado del contenido. Desde la izquierda casi
-   no se ve la foto hasta el ~30% y aparece entera hacia el 60%; de ahí a la
+   no se ve la foto hasta el ~34% y aparece entera hacia el 59% (la columna de texto termina en ~48%, antes de la ventana iluminada); de ahí a la
    derecha, donde está Pilar, no hay sombra. Abajo se funde recién en el
    último 20%, por debajo de su cintura. */
 .cv2-hero-fondo {
@@ -1083,11 +1083,11 @@
 @media (min-width: 1024px) {
   .cv2-hero-foto {
     -webkit-mask-image:
-      linear-gradient(to right, transparent 0%, rgb(0 0 0 / 0.1) 31%, rgb(0 0 0 / 0.6) 45%, #000 60%),
+      linear-gradient(to right, transparent 0%, rgb(0 0 0 / 0.06) 34%, rgb(0 0 0 / 0.35) 45%, rgb(0 0 0 / 0.8) 53%, #000 59%),
       linear-gradient(to bottom, #000 80%, transparent 100%);
     -webkit-mask-composite: source-in;
     mask-image:
-      linear-gradient(to right, transparent 0%, rgb(0 0 0 / 0.1) 31%, rgb(0 0 0 / 0.6) 45%, #000 60%),
+      linear-gradient(to right, transparent 0%, rgb(0 0 0 / 0.06) 34%, rgb(0 0 0 / 0.35) 45%, rgb(0 0 0 / 0.8) 53%, #000 59%),
       linear-gradient(to bottom, #000 80%, transparent 100%);
     mask-composite: intersect;
   }

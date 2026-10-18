@@ -183,7 +183,9 @@ export function Hero() {
       {/* pt mobile: arranca justo debajo del cinturón de Pilar (~71vw de la
           foto, más los 60px que baja), donde la foto ya se funde al verde. */}
       <Contenedor className="pt-[calc(74vw+60px)] pb-16 lg:pt-[150px] lg:pb-16">
-        <div className="relative lg:max-w-[600px]">
+        {/* lg:max-w 540: la columna termina antes de la ventana iluminada de
+            la foto (~48% del ancho), donde la sombra ya no alcanza. */}
+        <div className="relative lg:max-w-[540px]">
           <Reveal>
             {/* sm:max-w: en ancho también van dos por fila, como en mobile. */}
             <ul className="flex flex-wrap gap-[clamp(5px,1.8vw,8px)] sm:max-w-[420px] sm:gap-2">
@@ -199,7 +201,7 @@ export function Hero() {
             <div className="mt-7 w-fit max-w-full">
               <h1
                 id="hero-titulo"
-                className="cv2-titulo text-[clamp(1.9rem,8.4vw,2.6rem)] font-bold leading-none tracking-[0.03em] drop-shadow-[0_0_18px_rgba(233,196,106,0.4)] sm:text-[3.4rem] lg:text-[3.55rem]"
+                className="cv2-titulo text-[clamp(1.9rem,8.4vw,2.6rem)] font-bold leading-none tracking-[0.03em] drop-shadow-[0_0_18px_rgba(233,196,106,0.4)] sm:text-[3.4rem] lg:text-[3.15rem]"
               >
                 <span className="cv2-grad-texto cv2-brillo">{HERO.titulo}</span>
               </h1>
@@ -217,7 +219,10 @@ export function Hero() {
           </Reveal>
 
           <Reveal delay={0.2}>
-            <p className="mt-6 border-l-2 border-(--cv2-oro) pl-4 text-lg font-bold leading-relaxed text-foreground/95 sm:text-xl">
+            {/* text-balance: renglones parejos, sin "la" colgando ni un último
+                renglón corto. La sombra oscura lo despega de las zonas claras
+                de la foto. */}
+            <p className="mt-6 text-balance border-l-2 border-(--cv2-oro) pl-4 text-lg font-bold leading-relaxed text-foreground/95 [text-shadow:0_2px_14px_rgb(10_26_19/0.85)] sm:text-xl">
               {HERO.apoyo}
             </p>
           </Reveal>
