@@ -278,8 +278,9 @@ export const CONFIRMACION = {
 /* ── Gracias ── */
 export const GRACIAS = {
   /* El titular se escribe con tiza en la pizarra; el antetítulo va arriba. */
-  antetitulo: "Plaza reservada",
-  titulo: "¡Tu plaza está reservada!",
+  antetitulo: "Te falta un paso",
+  /* "Casi": la plaza se confirma en el grupo de WhatsApp (paso 01). */
+  titulo: "¡Tu plaza está casi reservada!",
   /* Los pasos, como la tarea de una clase: 01 es el grupo de WhatsApp (la
      acción que confirma la plaza); 02 y 03, las recomendaciones. */
   tareaAntetitulo: "Siguiente paso",

@@ -12,8 +12,8 @@ import { FECHA_CORTA, GRACIAS } from "@/components/neurometafisica-v1/content";
 import { NEUROMETAFISICA_WHATSAPP_GROUP_URL } from "@/lib/links";
 
 export const metadata: Metadata = {
-  title: "[Neurometafísica v1] ¡Tu plaza está reservada! — Seminario de Neurometafísica",
-  description: "Tu plaza en el Seminario de Neurometafísica con Pilar Sousa está reservada.",
+  title: "[Neurometafísica v1] ¡Tu plaza está casi reservada! — Seminario de Neurometafísica",
+  description: "Tu plaza en el Seminario de Neurometafísica con Pilar Sousa está casi reservada: falta unirte al grupo de WhatsApp.",
   robots: { index: false },
 };
 
@@ -109,8 +109,10 @@ export default function GraciasNeurometafisica() {
           </div>
         </Reveal>
 
-        {/* ── La promesa ── */}
-        <Reveal className="mx-auto mt-14 max-w-[760px] text-center sm:mt-16">
+        {/* ── La promesa ──
+            Mobile a la izquierda: en angosto, varios renglones centrados se
+            leen peor; desde sm, centrada bajo la pizarra. */}
+        <Reveal className="mx-auto mt-14 max-w-[760px] text-left sm:mt-16 sm:text-center">
           <p className="text-lg text-(--cv2-gris) sm:text-xl">{GRACIAS.intro}</p>
           <p className="mt-3 text-balance text-xl font-bold leading-snug text-foreground sm:text-2xl">
             <Destacado texto={GRACIAS.promesa} claseDestacado="cv2-grad-texto" />
