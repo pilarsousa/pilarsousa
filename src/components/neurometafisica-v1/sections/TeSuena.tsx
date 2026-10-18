@@ -4,6 +4,7 @@ import { Encabezado } from "@/components/neurometafisica-v1/ui/Encabezado";
 import { Destacado } from "@/components/neurometafisica-v1/ui/Destacado";
 import { Anotacion } from "@/components/neurometafisica-v1/ui/Anotacion";
 import { Reveal } from "@/components/neurometafisica-v1/ui/Reveal";
+import { Llamado } from "@/components/neurometafisica-v1/ui/Llamado";
 import { TE_SUENA } from "@/components/neurometafisica-v1/content";
 
 /* Desktop: tres arriba y dos abajo, centradas (grilla de 6 columnas). */
@@ -12,7 +13,8 @@ const SPANS = ["lg:col-span-2", "lg:col-span-2", "lg:col-span-2", "lg:col-span-3
 /**
  * Bloque 2 · ¿Te suena? Que se reconozca: frases de los alumnos del Bootcamp
  * en tarjetas con la barrita dorada que se redibuja en cascada, y el cierre
- * con su primera frase encerrada en un círculo de tiza a mano.
+ * con su primera frase encerrada en un círculo de tiza a mano. Al final, el
+ * botón de registro: quien se reconoció tiene ahí mismo dónde anotarse.
  */
 export function TeSuena() {
   return (
@@ -69,6 +71,10 @@ export function TeSuena() {
               <Destacado texto={TE_SUENA.cierreResto} />
             </span>
           </div>
+        </Reveal>
+
+        <Reveal delay={0.1}>
+          <Llamado className="mt-12" />
         </Reveal>
       </Contenedor>
     </section>

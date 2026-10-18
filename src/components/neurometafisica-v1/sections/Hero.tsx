@@ -158,7 +158,7 @@ export function Hero() {
                 su cintura, donde empieza el fundido de la foto, y lo lleva al
                 verde pizarra para que el texto caiga sobre oscuro. En desktop
                 lo hace la máscara (.cv2-hero-foto), sólo a la izquierda. */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,transparent_35%,rgb(18_41_31/0.6)_42%,rgb(18_41_31/0.9)_50%,rgb(18_41_31/0.96)_100%)] lg:bg-none" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,transparent_27%,rgb(18_41_31/0.6)_34%,rgb(18_41_31/0.9)_42%,rgb(18_41_31/0.96)_100%)] lg:bg-none" />
           </div>
         </div>
         {/* Mobile: los 60px que la foto baja quedaban verdes y se veían en las
@@ -181,12 +181,12 @@ export function Hero() {
         </div>
       </BarraSuperior>
 
-      {/* pt mobile: arranca a la altura del cinturón de Pilar (66vw de la
-          foto, más los 60px que baja), donde el velo ya la funde al verde. Más
-          arriba que eso, el texto pisa sus manos. Con el resto de los
-          márgenes ajustados, el botón entra en la primera pantalla de un
-          celular de ~390 × 800. */}
-      <Contenedor className="pt-[calc(66vw+60px)] pb-16 lg:pt-[150px] lg:pb-16">
+      {/* pt mobile: arranca a la altura de los brazos cruzados de Pilar
+          (52vw de la foto, más los 60px que baja): las fichas pisan sus
+          manos a propósito, y el velo de la foto ya oscurece desde ahí para
+          que el texto caiga sobre verde. Así el botón entra en la primera
+          pantalla del celular. */}
+      <Contenedor className="pt-[calc(52vw+60px)] pb-16 lg:pt-[150px] lg:pb-16">
         {/* lg:max-w 540: la columna termina antes de la ventana iluminada de
             la foto (~48% del ancho), donde la sombra ya no alcanza. */}
         <div className="relative lg:max-w-[540px]">

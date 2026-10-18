@@ -110,9 +110,9 @@ export const REVELACION = {
     },
     {
       etiqueta: "Sistema nervioso",
-      titulo: "Solo recibes lo que tu sistema nervioso puede sostener.",
+      titulo: "Solo manifiestas lo que tu sistema nervioso puede sostener.",
       texto:
-        "Si intentas sentir abundancia con un cuerpo en alerta, durará unos segundos y volverás al miedo.",
+        "No puedes manifestar mejores relaciones, abundancia y salud con un sistema nervioso programado para sabotear todo.",
     },
   ],
   /* Frase destacada en pizarra. */
@@ -125,7 +125,7 @@ export const QUE_ES = {
   entrada: "neu·ro·me·ta·fí·si·ca",
   titulo: "Lo que los místicos sabían, hoy lo explica la neurociencia.",
   texto:
-    "Los principios de la manifestación no son nuevos. Están en las enseñanzas de Jesús, en los textos herméticos y en las tradiciones de Oriente. Lo nuevo es que hoy la neurociencia empieza a explicar cómo funcionan en tu cerebro y en tu cuerpo. [La Neurometafísica une las dos cosas: la verdad espiritual y el entrenamiento de tu sistema nervioso, ordenados en un método paso a paso.]",
+    "Los principios de la manifestación no son nuevos. Están en las enseñanzas de Jesús, en los textos herméticos y en las tradiciones de Oriente. Lo nuevo es que hoy la neurociencia empieza a explicar cómo funcionan en tu cerebro y en tu cuerpo. [La Neurometafísica une las dos cosas: la verdad espiritual y el entrenamiento de tu sistema nervioso, ordenados en un método paso a paso que garantiza la manifestación.]",
 };
 
 /* ── Bloque 5 · Temario del seminario ──
@@ -136,7 +136,7 @@ export const TEMARIO = {
   antetitulo: "Programa del seminario",
   titulo: "Temario",
   intro:
-    "Todo lo que funcionó en el Bootcamp, ordenado como una asignatura: primero el [porqué], después [lo que te ata] y por último cómo [reprogramar y sostener].",
+    "Aprende la ciencia exacta detrás de la manifestación. Primero el [porqué], después [lo que te ata] y por último cómo [reprogramar y sostener].",
   /* La fase de cada módulo sale de la intro (el porqué, lo que te ata,
      reprogramar y sostener): es lo que se lee con el módulo cerrado. */
   modulos: [
@@ -159,7 +159,7 @@ export const TEMARIO = {
       fase: "Reprogramar y sostener",
       titulo: "Reprogramar tu neuroquímica para encarnar tu nueva identidad",
       texto:
-        "Cómo salir del modo supervivencia y reprogramarte para encarnar una nueva identidad y recibir lo que ahora tu cuerpo es capaz de sostener.",
+        "El sistema de los 13 códigos originales para salir del modo supervivencia y reprogramarte para la grandeza en relaciones, salud y dinero.",
     },
   ],
 };
@@ -171,7 +171,7 @@ export const TE_LLEVAS = {
   items: [
     "[Entender, por fin, por qué te autosaboteas:] con base neurológica, no con frases bonitas.",
     "[Un escáner de tu identidad:] los patrones, autoengaños y lealtades que te mantienen en el mismo lugar.",
-    "[Prácticas para regular tu sistema nervioso] y empezar a sostener más.",
+    "[El sistema de los 13 códigos originales] de la manifestación.",
   ],
 };
 
@@ -235,7 +235,7 @@ export const PLAZA = {
   incluye: [
     "Los tres módulos del temario, en directo",
     "El escáner de tu identidad",
-    "Prácticas para regular tu sistema nervioso",
+    "El sistema de los 13 códigos originales de la manifestación",
   ],
   precio: "Gratis",
   precioNota: "Plazas limitadas",
@@ -264,6 +264,9 @@ export const FAQ = [
 export const CIERRE = {
   titulo: "La información sola no te cambia la vida. [El entrenamiento, sí.]",
   aviso: `Quedan ${PLAZAS_RESTANTES} plazas disponibles`,
+  /* Debajo del aviso: lo que pasa al terminar el seminario. */
+  edicion:
+    "Al final del seminario abriré [100 espacios] para acceder a la [3.ª edición de Volver al Origen].",
 };
 
 /* ── Modal de registro ── */
