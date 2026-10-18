@@ -854,6 +854,11 @@
   El texto se descubre de izquierda a derecha como si se escribiera; los
   trazos SVG (cajas, flechas, círculos) se dibujan con stroke-dashoffset sobre
   pathLength=1. Arrancan cuando la clase is-visible llega (Anotacion.tsx).
+
+  Ocultos SÓLO con .cv2-hidratado (la pone ui/Hidratado.tsx cuando React
+  arrancó): si el JS no corre —iOS viejo, el navegador de Instagram que
+  falla, un bloqueador—, el texto y los trazos se ven ya escritos. Antes se
+  ocultaban siempre y, sin JS, titulares como el de la gracias no aparecían.
 */
 .cv2-trazo-texto {
   color: var(--cv2-tiza);
@@ -861,8 +866,11 @@
   text-shadow:
     0 0 1px rgb(243 238 220 / 0.6),
     0 0 14px rgb(243 238 220 / 0.22);
-  clip-path: inset(-20% 100% -20% 0);
   transition: clip-path var(--dur, 1.1s) cubic-bezier(0.55, 0.1, 0.45, 0.9) var(--retraso, 0s);
+}
+
+.cv2-hidratado .cv2-trazo-texto {
+  clip-path: inset(-20% 100% -20% 0);
 }
 
 .is-visible .cv2-trazo-texto,
@@ -875,8 +883,11 @@
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-dasharray: 1;
-  stroke-dashoffset: 1;
   transition: stroke-dashoffset var(--dur, 0.9s) ease-in-out var(--retraso, 0s);
+}
+
+.cv2-hidratado .cv2-trazo {
+  stroke-dashoffset: 1;
 }
 
 .is-visible .cv2-trazo,
@@ -1122,6 +1133,32 @@
 }
 
 } /* @layer components */
+
+/* ---- Aparición al hacer scroll (ui/Reveal.tsx) ----
+   El bloque llega VISIBLE del servidor. Recién con React andando, Reveal le
+   pone is-oculto si está fuera de pantalla y se lo saca al entrar: la
+   transición vive en el estado visible, así que ocultarse es instantáneo y
+   aparecer, animado. Sin JS, todo se ve (antes quedaba en opacity 0). */
+.cv2-reveal {
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-retraso, 0s),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-retraso, 0s);
+}
+
+.cv2-reveal.is-oculto {
+  opacity: 0;
+  transform: translateY(var(--reveal-y, 24px));
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cv2-reveal,
+  .cv2-reveal.is-oculto {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
 
 /* ---- Textos en celulares angostos — sin capa, para ganarle a las utilidades ----
    Hasta 480px (celulares, grandes incluidos), text-balance iguala los
@@ -1830,10 +1867,14 @@
 }
 
 /* La firma se escribe sola: se descubre de izquierda a derecha, al ritmo de
-   una mano, cuando la credencial entra en pantalla (Anotacion). */
+   una mano, cuando entra en pantalla (Anotacion). Oculta sólo con React
+   andando (.cv2-hidratado, ver "ANOTACIONES A MANO"). */
 .cv2-firma-trazo {
-  clip-path: inset(-40% 100% -40% -10%);
   transition: clip-path 1.8s cubic-bezier(0.55, 0.1, 0.45, 0.9) 0.5s;
+}
+
+.cv2-hidratado .cv2-firma-trazo {
+  clip-path: inset(-40% 100% -40% -10%);
 }
 
 .is-visible .cv2-firma-trazo {

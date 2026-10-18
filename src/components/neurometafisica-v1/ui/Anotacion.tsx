@@ -6,8 +6,9 @@ import { cn } from "@/lib/cn";
 /**
  * Contenedor de trazos a mano (.cv2-trazo, .cv2-trazo-texto). Cuando entra en
  * pantalla agrega is-visible y los trazos se dibujan solos, cada uno con su
- * --retraso. Sin JS los trazos quedan ocultos, por eso sólo se usan como
- * adorno: nunca llevan información que no esté también en el texto.
+ * --retraso. Sin JS se ven ya escritos: sólo se ocultan para animarse con
+ * .cv2-hidratado puesta (ui/Hidratado.tsx), así que también pueden llevar
+ * texto, como el titular de la gracias.
  */
 export function Anotacion({
   children,

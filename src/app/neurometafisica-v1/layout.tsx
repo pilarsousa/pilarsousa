@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ReservaModalProvider } from "@/components/neurometafisica-v1/ui/ReservaModal";
 import { ScrollSuave } from "@/components/neurometafisica-v1/ui/ScrollSuave";
+import { Hidratado } from "@/components/neurometafisica-v1/ui/Hidratado";
 import "./neurometafisica-v1.css";
 
 /*
@@ -46,6 +47,7 @@ export default function NeurometafisicaV1Layout({
        body debajo. */
     <div className="cv2-scope min-h-svh overflow-x-clip bg-background text-foreground antialiased">
       <ScrollSuave />
+      <Hidratado />
       <ReservaModalProvider>{children}</ReservaModalProvider>
     </div>
   );
