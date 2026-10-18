@@ -5,6 +5,7 @@ import { Destacado } from "@/components/neurometafisica-v1/ui/Destacado";
 import { Firma } from "@/components/neurometafisica-v1/ui/Firma";
 import { Anotacion } from "@/components/neurometafisica-v1/ui/Anotacion";
 import { Reveal } from "@/components/neurometafisica-v1/ui/Reveal";
+import { Pliegue } from "@/components/neurometafisica-v1/ui/Pliegue";
 import { PILAR } from "@/components/neurometafisica-v1/content";
 import fotoPilar from "@/../public/neurometafisica-v1/pilarsousa.jpg";
 import luzPilar from "@/../public/neurometafisica-v1/efecto-luz-pilarsousa.png";
@@ -74,15 +75,31 @@ export function SobrePilar() {
 
         <div>
           <Encabezado id="pilar-titulo" antetitulo={PILAR.antetitulo} titulo={PILAR.titulo} />
-          <div className="mt-6 space-y-5 text-lg leading-relaxed text-foreground/90">
-            {PILAR.historia.map((parrafo, i) => (
-              <Reveal key={i} delay={0.05 * i}>
-                <p>
-                  <Destacado texto={parrafo} />
-                </p>
-              </Reveal>
-            ))}
-          </div>
+          {/* Los dos primeros párrafos a la vista; el resto se abre con
+              "Leer más", para que la landing no se haga larga. */}
+          <Pliegue
+            className="mt-6 text-lg leading-relaxed text-foreground/90"
+            inicio={
+              <div className="space-y-5">
+                {PILAR.historia.slice(0, 2).map((parrafo, i) => (
+                  <Reveal key={i} delay={0.05 * i}>
+                    <p>
+                      <Destacado texto={parrafo} />
+                    </p>
+                  </Reveal>
+                ))}
+              </div>
+            }
+            resto={
+              <div className="space-y-5 pt-5">
+                {PILAR.historia.slice(2).map((parrafo, i) => (
+                  <p key={i}>
+                    <Destacado texto={parrafo} />
+                  </p>
+                ))}
+              </div>
+            }
+          />
 
           {/* La firma al pie, sobre su línea, como quien firma una carta. */}
           <Reveal delay={0.1} className="mt-10">
