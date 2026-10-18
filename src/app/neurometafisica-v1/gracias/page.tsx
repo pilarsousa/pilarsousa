@@ -4,9 +4,8 @@ import { Contenedor } from "@/components/neurometafisica-v1/ui/Contenedor";
 import { BarraSuperior } from "@/components/neurometafisica-v1/ui/BarraSuperior";
 import { Wordmark } from "@/components/neurometafisica-v1/ui/Wordmark";
 import { Destacado } from "@/components/neurometafisica-v1/ui/Destacado";
+import { Anotacion } from "@/components/neurometafisica-v1/ui/Anotacion";
 import { Firma } from "@/components/neurometafisica-v1/ui/Firma";
-import { RedNeuronal } from "@/components/neurometafisica-v1/ui/RedNeuronal";
-import { Separador } from "@/components/neurometafisica-v1/ui/Separador";
 import { Reveal } from "@/components/neurometafisica-v1/ui/Reveal";
 import { Footer } from "@/components/neurometafisica-v1/sections/Footer";
 import { FECHA_CORTA, GRACIAS } from "@/components/neurometafisica-v1/content";
@@ -27,28 +26,43 @@ function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
-/**
- * Gracias de /neurometafisica-v1: confirmación de la plaza, recomendaciones,
- * confirmarla en el grupo de WhatsApp y despedida. Sin video. De fondo, la
- * red neuronal con impulsos que viajan.
- */
-export default function GraciasV2() {
+/** Numeral de lección (01, 02, 03), el mismo de "La revelación" en la landing. */
+function Numeral({ n }: { n: number }) {
   return (
-    <main className="relative isolate overflow-hidden">
-      {/* Luz de tarde: verde medio a la derecha y oro tenue a la izquierda. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_35%_45%_at_100%_25%,rgba(30,59,46,0.8),transparent_70%),radial-gradient(ellipse_30%_40%_at_0%_70%,rgba(233,196,106,0.12),transparent_70%)]"
-      />
-      {/* Impulsos nerviosos: la red de la landing, fija detrás de todo, con
-          destellos que viajan por sus dendritas. Más tenue en el centro,
-          donde va el texto. */}
-      <RedNeuronal
-        variante="apaisada"
-        impulsos
-        className="fixed inset-0 -z-10 size-full opacity-70 [mask-image:radial-gradient(ellipse_at_center,rgb(0_0_0/0.3),#000_75%)]"
-      />
+    <span aria-hidden className="cv2-titulo text-[2.5rem] font-bold leading-none sm:text-[3.5rem]">
+      {String(n).padStart(2, "0")}
+    </span>
+  );
+}
 
+/**
+ * Gracias de /registro (neurometafisica-v1), en el aula, como la landing:
+ *
+ * 1. El titular escrito con tiza en la pizarra de marco de madera: se
+ *    descubre como si se escribiera en el momento y una tiza amarilla lo
+ *    subraya y vuelve a la repisa (la misma pieza que la frase de "La
+ *    revelación").
+ * 2. La promesa del seminario, debajo de la pizarra.
+ * 3. "Tu tarea antes de la clase": tres pasos numerados como una lección. El
+ *    01 es el grupo de WhatsApp —la acción que confirma la plaza, con su
+ *    botón—; el 02 y el 03 son las recomendaciones.
+ *
+ * Fondo de cuadrícula de pizarra, como el temario. La pizarra repite los
+ * márgenes de la de la landing (pb-12 / sm:pb-16): de eso depende que la
+ * tiza caiga justo en la repisa (--caida de .cv2-tiza-barra).
+ */
+export default function GraciasNeurometafisica() {
+  const pasos = [
+    {
+      titulo: GRACIAS.whatsappTitulo,
+      texto: GRACIAS.whatsappTexto,
+      boton: true,
+    },
+    ...GRACIAS.recomendaciones.map((texto) => ({ titulo: null, texto, boton: false })),
+  ];
+
+  return (
+    <main className="cv2-cuadricula relative isolate overflow-hidden">
       <BarraSuperior alineacion="centro">
         <div className="flex items-center gap-3 px-2 py-2 sm:gap-10 sm:px-12">
           <span className="hidden items-center gap-2 text-[0.95rem] font-bold text-foreground/90 sm:flex">
@@ -63,54 +77,90 @@ export default function GraciasV2() {
         </div>
       </BarraSuperior>
 
-      {/*
-        Mobile, una columna en el orden del DOM: confirmación, separador,
-        WhatsApp (la acción: no puede quedar al fondo) y recomendaciones.
-        PC, una grilla: confirmación | división | recomendaciones arriba, y
-        abajo, aparte y centrado, el bloque de WhatsApp con su separador.
-      */}
-      <Contenedor className="grid grid-cols-1 gap-12 pb-12 pt-10 text-center sm:pt-14 lg:grid-cols-[minmax(0,1fr)_1px_minmax(0,1fr)] lg:items-center lg:gap-x-16 lg:gap-y-14 lg:pt-20 lg:text-left">
-        <Reveal className="lg:col-start-1 lg:row-start-1">
-          <h1 className="cv2-titulo cv2-grad-texto text-[2.2rem] font-bold leading-tight sm:text-[3.25rem]">
-            {GRACIAS.titulo}
-          </h1>
-          <p className="mt-4 text-base text-(--cv2-gris) sm:text-[1.0625rem]">{GRACIAS.intro}</p>
-          <p className="mx-auto mt-3 max-w-[840px] text-xl font-bold leading-snug text-foreground sm:text-2xl lg:mx-0">
+      <Contenedor className="pb-20 pt-10 sm:pt-14 lg:pt-16">
+        {/* ── El titular, con tiza en la pizarra ── */}
+        <Reveal className="flex flex-col items-center">
+          <p className="cv2-antetitulo cv2-antetitulo--centro">{GRACIAS.antetitulo}</p>
+        </Reveal>
+
+        <Reveal className="mt-8">
+          <div className="cv2-pizarra mx-auto max-w-[920px] px-6 pb-12 pt-10 sm:px-14 sm:pb-16 sm:pt-12">
+            <Anotacion umbral={0.4}>
+              <h1 className="cv2-tiza cv2-trazo-texto text-balance text-center text-[2.4rem] leading-[1.1] [--dur:1.8s] [--retraso:0.3s] sm:text-[3.6rem] lg:text-[4.2rem]">
+                {GRACIAS.titulo}
+              </h1>
+              {/* El subrayado y la tiza que lo escribe: descansa en la repisa,
+                  sube, subraya a la par del trazo y vuelve (.cv2-tiza-barra). */}
+              <div className="relative mx-auto mt-4 h-4 w-[60%]">
+                <svg viewBox="0 0 400 20" preserveAspectRatio="none" className="size-full overflow-visible" aria-hidden>
+                  {/* Sin non-scaling-stroke: con él, Chrome deja el trazo a
+                      medias cuando el SVG mide más que su viewBox. */}
+                  <path
+                    pathLength={1}
+                    className="cv2-trazo cv2-trazo--brillo [--dur:0.8s] [--retraso:2.3s]"
+                    stroke="#e9c46a"
+                    strokeWidth={3}
+                    d="M6 12 C110 5 230 15 394 8"
+                  />
+                </svg>
+                <span aria-hidden className="cv2-tiza-barra" />
+              </div>
+            </Anotacion>
+          </div>
+        </Reveal>
+
+        {/* ── La promesa ── */}
+        <Reveal className="mx-auto mt-14 max-w-[760px] text-center sm:mt-16">
+          <p className="text-lg text-(--cv2-gris) sm:text-xl">{GRACIAS.intro}</p>
+          <p className="mt-3 text-balance text-xl font-bold leading-snug text-foreground sm:text-2xl">
             <Destacado texto={GRACIAS.promesa} claseDestacado="cv2-grad-texto" />
           </p>
         </Reveal>
 
-        {/* La división entre las dos columnas (sólo PC). */}
-        <span
-          aria-hidden
-          className="hidden h-full min-h-[260px] w-px bg-linear-to-b from-transparent via-(--cv2-oro)/55 to-transparent lg:col-start-2 lg:row-start-1 lg:block"
-        />
+        {/* ── Tu tarea antes de la clase ── */}
+        <section aria-labelledby="tarea-titulo" className="mx-auto mt-16 max-w-[920px] sm:mt-20">
+          <Reveal>
+            <p className="cv2-antetitulo">{GRACIAS.tareaAntetitulo}</p>
+            <h2 id="tarea-titulo" className="cv2-titulo mt-4 text-[1.85rem] sm:text-[2.5rem]">
+              {GRACIAS.tareaTitulo}
+            </h2>
+          </Reveal>
 
-        <Separador id="cv2-separador-gracias" className="mx-auto max-w-[420px] lg:col-span-3 lg:row-start-2 lg:max-w-[560px]" />
-
-        {/* Bloque de WhatsApp: el paso que confirma la plaza. */}
-        <Reveal className="lg:col-span-3 lg:row-start-3">
-          <div className="cv2-wa-panel mx-auto max-w-[680px] px-4 py-9 text-center sm:px-12">
-            <h2 className="text-balance text-xl font-semibold text-foreground sm:text-[1.6rem]">{GRACIAS.whatsappTitulo}</h2>
-            <p className="mx-auto mt-3 max-w-[540px] text-base text-(--cv2-gris) sm:text-lg">{GRACIAS.whatsappTexto}</p>
-            <a href={NEUROMETAFISICA_WHATSAPP_GROUP_URL} target="_blank" rel="noopener noreferrer" className="cv2-boton-wa mt-7 gap-3">
-              <WhatsAppIcon className="size-6 shrink-0" />
-              {GRACIAS.whatsappCta}
-            </a>
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.1} className="mx-auto w-full max-w-[742px] lg:col-start-3 lg:row-start-1 lg:mx-0">
-          <h2 className="cv2-grad-texto text-xl font-bold sm:text-2xl">{GRACIAS.recomendacionesTitulo}</h2>
-          <ul className="mt-7 grid gap-7 text-left sm:grid-cols-[1.3fr_1fr] sm:gap-6 lg:grid-cols-1">
-            {GRACIAS.recomendaciones.map((texto, i) => (
-              <li key={texto} className="cv2-card relative rounded-[8px] px-6 pb-6 pt-8 text-[1.0625rem] leading-[1.45] text-(--cv2-gris) sm:text-lg">
-                <span aria-hidden className={i === 0 ? "cv2-barrita" : "cv2-barrita cv2-barrita--clara"} />
-                <Destacado texto={texto} />
+          <ol className="mt-10 divide-y divide-(--cv2-oro)/25 border-y border-(--cv2-oro)/25">
+            {pasos.map((paso, i) => (
+              <li key={paso.texto}>
+                <Reveal delay={0.06 * i} className="grid grid-cols-[3.25rem_1fr] gap-x-4 py-8 sm:grid-cols-[5rem_1fr] sm:gap-x-8">
+                  <Numeral n={i + 1} />
+                  <div>
+                    {paso.titulo && (
+                      <h3 className="text-xl font-bold leading-snug text-foreground sm:text-[1.5rem]">{paso.titulo}</h3>
+                    )}
+                    <p
+                      className={
+                        paso.titulo
+                          ? "mt-3 text-lg leading-relaxed text-(--cv2-gris)"
+                          : "text-lg leading-relaxed text-(--cv2-gris) sm:text-xl"
+                      }
+                    >
+                      <Destacado texto={paso.texto} />
+                    </p>
+                    {paso.boton && (
+                      <a
+                        href={NEUROMETAFISICA_WHATSAPP_GROUP_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="cv2-boton-wa mt-6 gap-3"
+                      >
+                        <WhatsAppIcon className="size-6 shrink-0" />
+                        {GRACIAS.whatsappCta}
+                      </a>
+                    )}
+                  </div>
+                </Reveal>
               </li>
             ))}
-          </ul>
-        </Reveal>
+          </ol>
+        </section>
       </Contenedor>
 
       {/* La despedida va en el footer: columna derecha en PC, primera en

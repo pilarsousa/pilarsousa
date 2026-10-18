@@ -1,12 +1,14 @@
 "use client";
 
+import Image from "next/image";
 import { cn } from "@/lib/cn";
-import { Sello } from "@/components/neurometafisica-v1/ui/Sello";
+import logoOrigen from "@/../public/diagnostico/contenido/logo/new-logo.png";
 import { CONFIRMACION } from "@/components/neurometafisica-v1/content";
 
 /**
  * Pantalla de "Plaza confirmada" entre el registro y la gracias (la monta
- * ReservaModalProvider). El sello oficial se estampa con una onda de luz,
+ * ReservaModalProvider). El logo de Volver al Origen (el disco verde) se
+ * estampa con una onda de luz,
  * aparece "Plaza confirmada" con el nombre de quien se registró y una línea
  * de oro se llena mientras se carga la gracias. Al llegar a la gracias se
  * desvanece (`saliendo`) y deja ver la página nueva.
@@ -22,7 +24,13 @@ export function ConfirmacionPlaza({ nombre, saliendo }: { nombre: string; salien
         <div className="relative grid place-items-center">
           <span aria-hidden className="cv2-confirmacion__onda" />
           <span aria-hidden className="cv2-confirmacion__onda [animation-delay:1.05s]" />
-          <Sello className="cv2-confirmacion__sello w-[132px] sm:w-[156px]" />
+          <Image
+            src={logoOrigen}
+            alt="Volver al Origen"
+            sizes="156px"
+            priority
+            className="cv2-confirmacion__sello h-auto w-[132px] rounded-full sm:w-[156px]"
+          />
         </div>
 
         <p className="cv2-confirmacion__texto cv2-titulo mt-9 text-[2rem] font-bold leading-tight sm:text-[2.75rem]">
