@@ -10,7 +10,7 @@ import { Separador } from "@/components/neurometafisica-v1/ui/Separador";
 import { Reveal } from "@/components/neurometafisica-v1/ui/Reveal";
 import { Footer } from "@/components/neurometafisica-v1/sections/Footer";
 import { FECHA_CORTA, GRACIAS } from "@/components/neurometafisica-v1/content";
-import { MO_WHATSAPP_COMMUNITY_URL } from "@/lib/links";
+import { NEUROMETAFISICA_WHATSAPP_GROUP_URL } from "@/lib/links";
 
 export const metadata: Metadata = {
   title: "[Neurometafísica v1] ¡Tu plaza está reservada! — Seminario de Neurometafísica",
@@ -93,7 +93,7 @@ export default function GraciasV2() {
           <div className="cv2-wa-panel mx-auto max-w-[680px] px-4 py-9 text-center sm:px-12">
             <h2 className="text-balance text-xl font-semibold text-foreground sm:text-[1.6rem]">{GRACIAS.whatsappTitulo}</h2>
             <p className="mx-auto mt-3 max-w-[540px] text-base text-(--cv2-gris) sm:text-lg">{GRACIAS.whatsappTexto}</p>
-            <a href={MO_WHATSAPP_COMMUNITY_URL} target="_blank" rel="noopener noreferrer" className="cv2-boton-wa mt-7 gap-3">
+            <a href={NEUROMETAFISICA_WHATSAPP_GROUP_URL} target="_blank" rel="noopener noreferrer" className="cv2-boton-wa mt-7 gap-3">
               <WhatsAppIcon className="size-6 shrink-0" />
               {GRACIAS.whatsappCta}
             </a>

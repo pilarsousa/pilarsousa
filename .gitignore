@@ -53,3 +53,6 @@ AGENTS.md
 
 # Capturas de trabajo de sesiones de agente — no son del proyecto.
 .codex/
+
+# Plantillas de email (se pegan en GoHighLevel): no se versionan.
+docs/emails/

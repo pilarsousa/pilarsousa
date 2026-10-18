@@ -39,6 +39,10 @@ export const VENTAS_WHATSAPP_EQUIPO_URL = "https://wa.link/90avqa";
 // Volver al Origen — WhatsApp community (post-registration thank-you page).
 export const MO_WHATSAPP_COMMUNITY_URL = "https://chat.whatsapp.com/FBFK1l0bsHW4pmbqVi2Z6u";
 
+// Seminario de Neurometafísica (/registro) — grupo de WhatsApp de la gracias
+// y del email de registro (la plantilla vive en GoHighLevel, no en el repo).
+export const NEUROMETAFISICA_WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/Cw0Nk46rUlV2VcwVV3ewCJ";
+
 /* Bootcamp start — the countdown target. 9 de octubre de 2026, 18:00 hora de
    España, que es la referencia que se le da al público hispanohablante.
 

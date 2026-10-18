@@ -11,6 +11,7 @@
 */
 
 import { saveLead, updateLeadStatus } from "@/lib/leads";
+import { guardarContactoGhl, usaApiGhl } from "@/lib/ghl";
 import { registrarLead, type Atribucion } from "@/lib/sierra";
 import { atribucionDeJson } from "@/lib/sierra-atribucion";
 
@@ -89,16 +90,6 @@ function logLeadFallback(lead: Lead, reason: string) {
 }
 
 export async function POST(request: Request) {
-  const webhookUrl = process.env.GHL_WEBHOOK_URL;
-  if (!webhookUrl) {
-    // Misconfiguration, not a client error: surface it in the server logs.
-    console.error("GHL_WEBHOOK_URL is not set — cannot forward the lead.");
-    return Response.json(
-      { error: "El registro no está disponible en este momento." },
-      { status: 500 },
-    );
-  }
-
   let body: unknown;
   try {
     body = await request.json();
@@ -115,6 +106,27 @@ export async function POST(request: Request) {
   }
   // Ruta y UTM para Sierra: no forman parte del lead que va a GHL.
   const atribucion = atribucionDeJson(body);
+
+  /*
+    Dos caminos a GHL según la landing (el `source` del formulario):
+    - API v2 (lib/ghl.ts): las landings con integración propia en GHL, hoy
+      /registro. Crea o actualiza el contacto y le suma su etiqueta, que es la
+      que dispara el email de registro. Sólo si GHL_API_KEY y GHL_LOCATION_ID
+      están cargadas; si faltan, la landing vuelve sola al webhook.
+    - Webhook entrante (GHL_WEBHOOK_URL): todas las demás, como siempre.
+    Nunca los dos a la vez: el workflow del webhook también crea contactos y
+    el registro se duplicaría.
+  */
+  const viaApi = usaApiGhl(lead.source);
+  const webhookUrl = process.env.GHL_WEBHOOK_URL;
+  if (!viaApi && !webhookUrl) {
+    // Misconfiguration, not a client error: surface it in the server logs.
+    console.error("GHL_WEBHOOK_URL is not set — cannot forward the lead.");
+    return Response.json(
+      { error: "El registro no está disponible en este momento." },
+      { status: 500 },
+    );
+  }
 
   /*
     El lead se respalda en Supabase ANTES de intentar el envío a GHL. Ese orden
@@ -138,8 +150,22 @@ export async function POST(request: Request) {
     así que mostrarle un error lo empujaría a irse o a reintentar en loop. El
     fallo es nuestro y se resuelve de nuestro lado.
   */
+  if (viaApi) {
+    const resultado = await guardarContactoGhl(lead);
+    if (!resultado.ok) {
+      console.error(`GHL API rechazó el lead: ${resultado.motivo}`);
+      logLeadFallback(lead, resultado.motivo);
+      await markLead(leadId, "failed", resultado.motivo);
+      if (leadId) await avisarSierra(lead, atribucion);
+      return Response.json({ ok: true, queued: true });
+    }
+    await markLead(leadId, "sent", `ghl_contacto ${resultado.contactId}`);
+    await avisarSierra(lead, atribucion);
+    return Response.json({ ok: true });
+  }
+
   try {
-    const res = await fetch(webhookUrl, {
+    const res = await fetch(webhookUrl as string, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
