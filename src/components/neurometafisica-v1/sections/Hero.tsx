@@ -7,6 +7,7 @@ import { Wordmark } from "@/components/neurometafisica-v1/ui/Wordmark";
 import { Llamado } from "@/components/neurometafisica-v1/ui/Llamado";
 import { CintaHorarios } from "@/components/neurometafisica-v1/ui/CintaHorarios";
 import { Reveal } from "@/components/neurometafisica-v1/ui/Reveal";
+import { Destacado } from "@/components/neurometafisica-v1/ui/Destacado";
 import { HERO } from "@/components/neurometafisica-v1/content";
 import heroEscritorio from "@/../public/neurometafisica-v1/hero/hero-section-2.jpg";
 import heroMovil from "@/../public/neurometafisica-v1/hero/herosection2-mobile.jpg";
@@ -213,8 +214,10 @@ export function Hero() {
                 <span aria-hidden className="h-px flex-1 bg-linear-to-l from-transparent to-(--cv2-oro)" />
               </p>
             </div>
-            <p className="cv2-grad-texto mt-6 text-balance text-[1.375rem] font-semibold leading-snug sm:text-[1.625rem]">
-              {HERO.subtitulo}
+            {/* La promesa: el degradado va en el párrafo y las partes
+                [marcadas] en negrita, que heredan el degradado. */}
+            <p className="cv2-grad-texto mt-6 text-balance text-[1.375rem] font-medium leading-snug sm:text-[1.625rem]">
+              <Destacado texto={HERO.subtitulo} claseDestacado="font-extrabold" />
             </p>
           </Reveal>
 
@@ -222,8 +225,8 @@ export function Hero() {
             {/* text-balance: renglones parejos, sin "la" colgando ni un último
                 renglón corto. La sombra oscura lo despega de las zonas claras
                 de la foto. */}
-            <p className="mt-6 text-balance border-l-2 border-(--cv2-oro) pl-4 text-lg font-bold leading-relaxed text-foreground/95 [text-shadow:0_2px_14px_rgb(10_26_19/0.85)] sm:text-xl">
-              {HERO.apoyo}
+            <p className="mt-6 text-balance border-l-2 border-(--cv2-oro) pl-4 text-lg font-medium leading-relaxed text-foreground/95 [text-shadow:0_2px_14px_rgb(10_26_19/0.85)] sm:text-xl">
+              <Destacado texto={HERO.apoyo} claseDestacado="font-extrabold text-foreground" />
             </p>
           </Reveal>
 

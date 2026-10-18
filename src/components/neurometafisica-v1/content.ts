@@ -64,9 +64,10 @@ export const HERO = {
   titulo: "Neurometafísica",
   /* La inscripción bajo el título: lo que decía el sello redondo. */
   credencial: "Seminario oficial · MMXXVI",
-  subtitulo: "La ciencia de reprogramar tu identidad para manifestar una realidad diferente.",
+  /* Las partes entre [corchetes] van en negrita en el hero. */
+  subtitulo: "[Manifestar] una realidad distinta [es una ciencia exacta] como las matemáticas",
   apoyo:
-    "Por qué tu cerebro y tu sistema nervioso te devuelven siempre al mismo lugar, y cómo entrenarlos para sostener la vida que quieres.",
+    "Reprograma tu mente y sistema nervioso para convertirte en la persona [capaz de manifestar y sostener] la realidad que deseas.",
   /* Rótulo de la cinta de horarios, bajo el botón. */
   horarios: "Hora del directo en tu país",
 };
