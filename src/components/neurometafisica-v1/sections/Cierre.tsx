@@ -1,4 +1,3 @@
-import { CircleAlert } from "lucide-react";
 import { Contenedor } from "@/components/neurometafisica-v1/ui/Contenedor";
 import { BotonEntrada } from "@/components/neurometafisica-v1/ui/BotonEntrada";
 import { ApunteClase } from "@/components/neurometafisica-v1/ui/ApunteClase";
@@ -10,8 +9,8 @@ import { CIERRE } from "@/components/neurometafisica-v1/content";
 /**
  * Bloque 12 · Cierre: el apunte de clase (la foto de Pilar en el aula y la
  * ficha de asistencia, ui/ApunteClase.tsx), el titular del brief con el
- * corchete de tiza, el botón, el aviso de plazas y, debajo, los espacios
- * que se abren para Volver al Origen al terminar.
+ * corchete de tiza, el botón y, debajo, los espacios que se abren para
+ * Volver al Origen al terminar.
  */
 export function Cierre() {
   return (
@@ -42,11 +41,7 @@ export function Cierre() {
 
         <BotonEntrada className="mt-10" />
 
-        <p className="cv2-pastilla mt-8 flex items-center gap-3 px-5 py-3 text-lg font-semibold text-foreground/90">
-          <CircleAlert aria-hidden size={22} className="shrink-0 fill-(--cv2-oro) text-[#12291f]" />
-          {CIERRE.aviso}
-        </p>
-        <p className="mt-5 max-w-[440px] text-balance text-base leading-relaxed text-foreground/80 sm:text-lg">
+        <p className="mt-8 max-w-[440px] text-balance text-base leading-relaxed text-foreground/80 sm:text-lg">
           <Destacado texto={CIERRE.edicion} />
         </p>
       </Contenedor>

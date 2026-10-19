@@ -12,9 +12,11 @@ import { Faq } from "@/components/neurometafisica-v1/sections/Faq";
 import { Cierre } from "@/components/neurometafisica-v1/sections/Cierre";
 import { Footer } from "@/components/neurometafisica-v1/sections/Footer";
 
-/* Los doce bloques del brief, en su orden. El botón único ("Quiero mi
-   plaza") va en el hero, tras Qué es (4), Lo que te llevas (6) y la prueba
-   social (9), en la plaza y en el cierre. */
+/* Los doce bloques del brief. El cierre ("La información sola no te cambia
+   la vida") va antes de la plaza y no al final, a pedido del cliente: la
+   ficha con el precio queda como último empujón antes de las dudas. El botón
+   único ("Quiero mi plaza") va en el hero, tras ¿Te suena?, Qué es, Lo que
+   te llevas y la prueba social, en el cierre y en la plaza. */
 export default function SeminarioNeurometafisica() {
   return (
     <main>
@@ -27,9 +29,9 @@ export default function SeminarioNeurometafisica() {
       <ParaQuien />
       <SobrePilar />
       <PruebaSocial />
+      <Cierre />
       <Plaza />
       <Faq />
-      <Cierre />
       <Footer />
     </main>
   );

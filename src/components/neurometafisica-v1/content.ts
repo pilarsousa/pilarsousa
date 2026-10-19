@@ -38,9 +38,6 @@ export const PAISES = [
   { pais: "Chile", zona: "America/Santiago" },
 ] as const;
 
-/* Plazas que muestra el aviso del cierre. */
-export const PLAZAS_RESTANTES = 37;
-
 export const SOURCE = "neurometafisica-v1";
 
 /* ── Botón único de la página ──
@@ -263,8 +260,7 @@ export const FAQ = [
 /* ── Bloque 12 · Cierre ── */
 export const CIERRE = {
   titulo: "La información sola no te cambia la vida. [El entrenamiento, sí.]",
-  aviso: `Quedan ${PLAZAS_RESTANTES} plazas disponibles`,
-  /* Debajo del aviso: lo que pasa al terminar el seminario. */
+  /* Debajo del botón: lo que pasa al terminar el seminario. */
   edicion:
     "Al final del seminario abriré [100 espacios] para acceder a la [3.ª edición de Volver al Origen].",
 };
