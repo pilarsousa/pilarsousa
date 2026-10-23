@@ -10,7 +10,7 @@ import "react-phone-number-input/style.css";
 import { Download } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useVisitorCountry } from "@/lib/useVisitorCountry";
-import { leerAtribucion } from "@/components/sierra-tracking";
+import { leerAtribucion, recordarPersona } from "@/components/sierra-tracking";
 import { REWARD_PDF } from "@/components/game/game-config";
 
 /*
@@ -105,6 +105,9 @@ export function GameForm({ source = "game", onSuccess }: GameFormProps) {
       });
       // Sólo mostramos éxito si el lead se guardó de verdad.
       if (!res.ok) throw new Error(`register failed: ${res.status}`);
+
+      // Sierra: recuerda a la persona registrada para atribuir sus clics posteriores.
+      recordarPersona(email.trim());
 
       // Avisar a la capa de analítica que se registró un lead real (GTM escucha
       // este evento y dispara la conversión de Meta), igual que en Volver al Origen.

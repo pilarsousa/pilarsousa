@@ -10,7 +10,7 @@ import flags from "react-phone-number-input/flags";
 import "react-phone-number-input/style.css";
 import { cn } from "@/lib/cn";
 import { useVisitorCountry } from "@/lib/useVisitorCountry";
-import { leerAtribucion } from "@/components/sierra-tracking";
+import { leerAtribucion, recordarPersona } from "@/components/sierra-tracking";
 
 /*
   Email validation: requires local part, "@", a domain with at least one dot,
@@ -127,6 +127,9 @@ export function ReservaForm({
       // Only show success once the lead is actually stored — never on a failed
       // request, or the visitor thinks they reserved a spot that was never saved.
       if (!res.ok) throw new Error(`register failed: ${res.status}`);
+
+      // Sierra: recuerda a la persona registrada para atribuir sus clics posteriores.
+      recordarPersona(email.trim());
 
       // Notify the analytics layer that a real lead was stored. GTM listens for
       // this event and fires the Meta "Lead" conversion; keeping it here (not on

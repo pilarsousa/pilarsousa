@@ -11,7 +11,7 @@ import flags from "react-phone-number-input/flags";
 import "react-phone-number-input/style.css";
 import { cn } from "@/lib/cn";
 import { useVisitorCountry } from "@/lib/useVisitorCountry";
-import { leerAtribucion } from "@/components/sierra-tracking";
+import { leerAtribucion, recordarPersona } from "@/components/sierra-tracking";
 import { VoCta } from "@/components/volver-al-origen/ui/VoCta";
 import { FORM, GRACIAS_PATH } from "@/components/volver-al-origen/content";
 
@@ -145,6 +145,9 @@ export function WaitlistForm({ onSuccess }: WaitlistFormProps) {
       /* Sin esto la confirmación mentiría: el check saldría igual con el lead
          perdido, y el visitante se iría creyendo que quedó en la lista. */
       if (!res.ok) throw new Error(`register failed: ${res.status}`);
+
+      // Sierra: recuerda a la persona registrada para atribuir sus clics posteriores.
+      recordarPersona(cleanEmail);
 
       /* GTM escucha este evento para disparar la conversión "Lead" de Meta.
          Va antes del router.push porque el redirect desmonta la página.

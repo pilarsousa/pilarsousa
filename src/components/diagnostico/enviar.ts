@@ -3,7 +3,7 @@ import {
   type DatosContacto,
 } from "@/components/diagnostico/almacen";
 import type { Respuestas } from "@/components/diagnostico/puntaje";
-import { leerAtribucion } from "@/components/sierra-tracking";
+import { leerAtribucion, recordarPersona } from "@/components/sierra-tracking";
 
 /*
   El envío al servidor, en un solo sitio.
@@ -36,9 +36,14 @@ function postear(cuerpo: Record<string, unknown>) {
     // Ruta y UTM para el panel de Sierra: el servidor no los reenvía a GHL.
     body: JSON.stringify({ ...cuerpo, ...leerAtribucion() }),
     keepalive: true,
-  }).catch(() => {
-    /* Silencio deliberado. Ver arriba. */
-  });
+  })
+    .then((res) => {
+      // Sierra: el contacto quedó registrado, se recuerda para atribuir sus clics.
+      if (res.ok && typeof cuerpo.email === "string") recordarPersona(cuerpo.email);
+    })
+    .catch(() => {
+      /* Silencio deliberado. Ver arriba. */
+    });
 }
 
 export type ResultadoExistente = {

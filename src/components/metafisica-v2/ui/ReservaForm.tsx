@@ -9,7 +9,7 @@ import flags from "react-phone-number-input/flags";
 import "react-phone-number-input/style.css";
 import { cn } from "@/lib/cn";
 import { useVisitorCountry } from "@/lib/useVisitorCountry";
-import { leerAtribucion } from "@/components/sierra-tracking";
+import { leerAtribucion, recordarPersona } from "@/components/sierra-tracking";
 import { SOURCE } from "@/components/metafisica-v2/content";
 
 /*
@@ -105,6 +105,9 @@ export function ReservaForm({
       });
       // Sólo se confirma si el lead quedó guardado.
       if (!res.ok) throw new Error(`register failed: ${res.status}`);
+
+      // Sierra: recuerda a la persona registrada para atribuir sus clics posteriores.
+      recordarPersona(email.trim());
 
       // GTM escucha este evento para la conversión "Lead" de Meta. Va ANTES de
       // navegar, o la redirección desmonta la página antes del push. Datos en
