@@ -1,5 +1,11 @@
 import type { NextConfig } from "next";
 
+/* Link personal del webinar (/vivo/<token>?e=<email>): lo atiende el panel de
+   Sierra, pero el contacto ve el dominio de la landing. El panel registra el
+   ingreso y redirige al Zoom; la redirección pasa tal cual por el rewrite. */
+const panelSierra = process.env.NEXT_PUBLIC_SIERRA_URL?.replace(/\/+$/, "");
+const webinarSierra = panelSierra ? [{ source: "/vivo/:token", destination: `${panelSierra}/w/:token` }] : [];
+
 const nextConfig: NextConfig = {
   images: {
     /* Next 16 solo permite los valores de quality declarados acá; pedir uno
@@ -21,6 +27,8 @@ const nextConfig: NextConfig = {
        para sustituir una ruta que ya existe. */
     return {
       beforeFiles: [
+        ...webinarSierra,
+
         /* URL pública del Seminario de Neurometafísica y su confirmación.
            Los componentes viven en neurometafisica-v1; el visitante conserva
            /registro. La versión anterior de /registro (la masterclass) vive
