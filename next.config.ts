@@ -4,7 +4,14 @@ import type { NextConfig } from "next";
    Sierra, pero el contacto ve el dominio de la landing. El panel registra el
    ingreso y redirige al Zoom; la redirección pasa tal cual por el rewrite. */
 const panelSierra = process.env.NEXT_PUBLIC_SIERRA_URL?.replace(/\/+$/, "");
-const webinarSierra = panelSierra ? [{ source: "/vivo/:token", destination: `${panelSierra}/w/:token` }] : [];
+/* Grupo de WhatsApp fijo del lanzamiento (/grupo/<token>): el panel manda a
+   cada persona al grupo vigente y rota solo cuando uno se llena. */
+const webinarSierra = panelSierra
+  ? [
+      { source: "/vivo/:token", destination: `${panelSierra}/w/:token` },
+      { source: "/grupo/:token", destination: `${panelSierra}/g/:token` },
+    ]
+  : [];
 
 const nextConfig: NextConfig = {
   images: {
